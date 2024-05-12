@@ -486,12 +486,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14af4fdbcc74f454e995f186dfe954df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAttack: 0
   walkSpeed: 8
+  dashSpeed: 12
   gravityPower: -5
   triggerTiming: 0.5
   smoothTime: 0.1
   jumpPower: 7
+  dashMaterial: {fileID: 2100000, guid: 97d02315d8cf95b419e341b24b623593, type: 2}
 --- !u!54 &1157840293
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,63 +1,84 @@
-//古澤
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
+
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;
     private Vector3 m_Velocity;
-
-    //地面の上なら歩きモーション、違うなら落下モーション              
-
-    private bool isJump = false;         
-    private bool isFall = false;
-    public bool isAttack = false;
-    private bool canMove = true;
-    // private bool onlyFirst = false;
-    //private bool isKnockBack = false;
-
-    [Header("移動スピード")]
+    private float m_moveSpeed;
+    //地面の上なら歩きモーション、違うなら落下モーション 
+    
+    [Header("通常時移動速度")]
     [SerializeField] private float walkSpeed = 4f;
+    [Header("ダッシュ時の速度")]
+    [SerializeField] private float dashSpeed = 8f;
     [Header("落下速度の調整　-つける")]
     [SerializeField] float gravityPower = default!;
- 
-
     [Header("トリガーの反応タイミング")]
-    [SerializeField] float triggerTiming = 0.5f;         //トリガーがどこまで押し込まれたら反応するか 要調整 
+    [SerializeField]　private float triggerTiming = 0.5f;         //トリガーがどこまで押し込まれたら反応するか 要調整 
     [Header("回転時間")]
-    [SerializeField] float smoothTime = 0.3f;                //進行方向への回転にかかる時間
+    [SerializeField] private　float smoothTime = 0.3f;                //進行方向への回転にかかる時間
     [Header("ジャンプの強さ")]
-    [SerializeField] private float jumpPower = 5f;            
+    [SerializeField] private float jumpPower = 5f; 
+    
+    [Header("ダッシュ時のマテリアル")]
+    [SerializeField] Material dashMaterial = default!;
+    
+    private Material defaultMaterial;
     // [Header("ノックバックの強さ")]
     // [SerializeField] private float knockBackP = 5f;              
     // [Header("ノックバック時上方向の力")]
     // [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
 
 
-    float inputHorizontal;      //水平方向の入力値
-    float inputVertical;        //垂直方向の入力値
-    //float L_inputTrigger;
-    float R_inputTrigger;
-    bool inputAttack;
-
-    bool R_isReset;
-    //  bool L_isReset;
-    float targetRotation;   //回転に使う
-    float yVelocity = 0.0f;
+    //入力値
+    private float inputHorizontal;      //水平方向の入力値
+    private float inputVertical;        //垂直方向の入力値
+    private float inputTrigger_L;
+    private float inputTrigger_R;
+    
+    //flag アニメーション実装したら減らしたい
+    private bool isEnteredAttack;
+    private bool isResetTrigger_R;
+    private bool isResetTrigger_L;
+    private bool isJumping = false;         
+    private bool isFalling = false;
+    private bool isAttacking = false;
+    private bool isDashing = false;
+    private bool canMove = true;
+    // private bool onlyFirst = false;
+    //private bool isKnockBack = false;
+    
+    
+    private float targetRotation;   //回転に使う
+    private float yVelocity = 0.0f;
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        defaultMaterial = GetComponent<Renderer>().material;
+        m_moveSpeed = walkSpeed;
     }
 
     void Update()
     {
         Input();
         Jump();
-       //Attack(); //プロトタイプは現状攻撃なし
+        if (inputHorizontal != 0 || inputVertical != 0)
+        {
+            
+        }
+        //Attack(); //プロトタイプは現状攻撃なし
     }
     private void FixedUpdate()
     {
         Gravity();
-        Move();
+        if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
+        {
+            Move(); 
+            Dash();
+        }
+          
     }
 
     private void Input()
@@ -76,20 +97,21 @@ public class PlayerController : MonoBehaviour
         //入力値の格納
         inputHorizontal = UnityEngine.Input.GetAxisRaw("Horizontal");   
         inputVertical = UnityEngine.Input.GetAxisRaw("Vertical");
-        R_inputTrigger = UnityEngine.Input.GetAxis("R_Trigger");
-        inputAttack = UnityEngine.Input.GetButtonDown("Attack");    
+        inputTrigger_R = UnityEngine.Input.GetAxis("R_Trigger");
+        inputTrigger_L = UnityEngine.Input.GetAxis("L_Trigger");
+        isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
        
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         //難しい方法はできないからTriggerで判定したい
-        if (isJump == true || isFall == true)
+        if (isJumping == true || isFalling == true)
         {
             if (collision.gameObject.CompareTag("Ground"))  //着地した時
             {
-                isJump = false;
-                isFall = false;
+                isJumping = false;
+                isFalling = false;
                 canMove = true;
                 //Debug.Log("toLanding" );
             }
@@ -104,6 +126,27 @@ public class PlayerController : MonoBehaviour
                 _MainGameManager.Miss();
             }
         }*/
+    }
+
+    private void Dash()
+    {
+        if (inputTrigger_L == 0 && isResetTrigger_L == false)
+        {
+            GetComponent<Renderer>().material = defaultMaterial;
+            m_moveSpeed = walkSpeed;
+            isResetTrigger_L = true;
+            isDashing = false;
+        }
+        if (isAttacking == true || isDashing == true)
+            return;
+
+        if (inputTrigger_L  > triggerTiming)  
+        {
+            GetComponent<Renderer>().material = dashMaterial;
+            m_moveSpeed = dashSpeed;
+            isResetTrigger_L = false;
+            isDashing = true;
+        }
     }
 
     /*void Attack()   //ジャンプ中は攻撃できない
@@ -145,21 +188,19 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        if (!canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
-            return;
-
-        if (isAttack == true)
+        if (isAttacking == true)
         {
             inputHorizontal = 0;
             inputVertical = 0;
         }
 
+        //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
+        
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
-
 
         //移動速度の計算
         //clampは値の範囲制限
@@ -168,7 +209,7 @@ public class PlayerController : MonoBehaviour
         var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);   
                                                                     
 
-        m_Velocity = clampedInput * walkSpeed;
+        m_Velocity = clampedInput * m_moveSpeed;
         // transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
 
         //Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
@@ -177,7 +218,7 @@ public class PlayerController : MonoBehaviour
         m_Velocity = m_Velocity - m_Rigidbody.velocity;
 
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
-        m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -walkSpeed, walkSpeed), 0f, Mathf.Clamp(m_Velocity.z, -walkSpeed, walkSpeed));
+        m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -m_moveSpeed, m_moveSpeed), 0f, Mathf.Clamp(m_Velocity.z, -m_moveSpeed, m_moveSpeed));
 
         if (moveForward != Vector3.zero)
         {
@@ -199,23 +240,23 @@ public class PlayerController : MonoBehaviour
        
     }
 
-    void Jump()
+    private void Jump()
     {
         //落下中と攻撃中はジャンプをさせない
-        if (isJump == true || isFall == true || isAttack == true) return;  
+        if (isJumping == true || isFalling == true || isAttacking == true) return;  
 
         if (UnityEngine.Input.GetButtonDown("Jump"))
         {
             //移動中またはその場でジャンプした時の遷移
             m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            isJump = true;
+            isJumping = true;
         }
     }
 
-    void Gravity()
+    private void Gravity()
     {
         //落下速度の調整用
-        if (isJump == true)
+        if (isJumping == true)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
         }
