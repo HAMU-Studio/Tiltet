@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // ŒÅ’è‚µ‚½‚¢Y²‚Ì‰ñ“]Šp“x
+    public float fixedYRotation = 0f;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // Œ»İ‚Ì‰ñ“]‚ğæ“¾
+        Quaternion currentRotation = transform.rotation;
+
+        // ƒIƒCƒ‰[Šp‚É•ÏŠ·
+        Vector3 euler = currentRotation.eulerAngles;
+
+        // Y²‚Ì‰ñ“]‚ğŒÅ’è
+        euler.y = fixedYRotation;
+
+        // ‰ñ“]‚ğXV
+        transform.rotation = Quaternion.Euler(euler);
     }
 }
