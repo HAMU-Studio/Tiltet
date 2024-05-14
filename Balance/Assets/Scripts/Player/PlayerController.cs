@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private Vector3 m_Velocity;
     private float m_moveSpeed;
+    
+     private Transform m_player;
+    private Ray m_ray;
+    private RaycastHit m_hit;
+    private Quaternion m_rot;
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
@@ -55,6 +60,7 @@ public class PlayerController : MonoBehaviour
     private float yVelocity = 0.0f;
     void Start()
     {
+        m_player = GetComponent<Transform>();
         m_Rigidbody = GetComponent<Rigidbody>();
         defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
@@ -64,11 +70,8 @@ public class PlayerController : MonoBehaviour
     {
         Input();
         Jump();
-        if (inputHorizontal != 0 || inputVertical != 0)
-        {
-            
-        }
         //Attack(); //プロトタイプは現状攻撃なし
+        GetNormal();
     }
     private void FixedUpdate()
     {
@@ -78,7 +81,6 @@ public class PlayerController : MonoBehaviour
             Move(); 
             Dash();
         }
-          
     }
 
     private void Input()
@@ -99,8 +101,7 @@ public class PlayerController : MonoBehaviour
         inputVertical = UnityEngine.Input.GetAxisRaw("Vertical");
         inputTrigger_R = UnityEngine.Input.GetAxis("R_Trigger");
         inputTrigger_L = UnityEngine.Input.GetAxis("L_Trigger");
-        isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
-       
+     //   isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -149,6 +150,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void GetNormal()
+    {
+        //プレイヤーの真下方向にRayを飛ばす
+        m_ray = new Ray(m_player.position, -transform.up);
+        Physics.Raycast(m_ray, out m_hit, 2);
+    }
     /*void Attack()   //ジャンプ中は攻撃できない
     {
         if (R_inputTrigger == 0 && inputAttack == false)
@@ -201,13 +208,16 @@ public class PlayerController : MonoBehaviour
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        
+        //平面に投影したいベクトルmoveForwardとGetNormalで取得した平面の法線ベクトルから
+        //平面に沿ったベクトルを計算
+        moveForward = Vector3.ProjectOnPlane(moveForward, m_hit.normal);
 
         //移動速度の計算
         //clampは値の範囲制限
         //GetAxisは0から1で入力値を管理する、斜め移動でWとAを同時押しすると
         //1以上の値が入ってくるからVector3.ClampMagnitudeメソッドを使って入力値を１に制限する(多分)
-        var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);   
-                                                                    
+        var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);  
 
         m_Velocity = clampedInput * m_moveSpeed;
         // transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
@@ -220,6 +230,7 @@ public class PlayerController : MonoBehaviour
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
         m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -m_moveSpeed, m_moveSpeed), 0f, Mathf.Clamp(m_Velocity.z, -m_moveSpeed, m_moveSpeed));
 
+      
         if (moveForward != Vector3.zero)
         {
             //SmoothDampAngleで滑らかな回転をするためには引数（moveForwardとvelocityだけ）をVector3からfloatに変換しなければいけない
