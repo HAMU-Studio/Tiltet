@@ -38,8 +38,10 @@ public class PlayerController : MonoBehaviour
 
 
     //入力値
-    private float inputHorizontal;      //水平方向の入力値
-    private float inputVertical;        //垂直方向の入力値
+    private Vector2 inputMove;
+    /*private float inputHorizontal;      //水平方向の入力値
+    private float inputVertical;        //垂直方向の入力値*/
+    
     private float inputTrigger_L;
     private float inputTrigger_R;
     
@@ -68,10 +70,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Input();
-        Jump();
+        //Input();
+      //  Jump();
         //Attack(); //プロトタイプは現状攻撃なし
-        GetNormal();
+       
     }
     private void FixedUpdate()
     {
@@ -83,27 +85,63 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Input()
+    public void  PlayerMoveInput(InputAction.CallbackContext context)
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.X))    //デバッグ用無敵モードon
-        {
-           // _MainGameManager.isInvincible = true;
-            Debug.Log("無敵");
-        }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.M))    //デバッグ用無敵モードoff
-        {
-            //_MainGameManager.isInvincible = false;
-            Debug.Log("無敵解除");
-        }
+        // if (UnityEngine.Input.GetKeyDown(KeyCode.X))    //デバッグ用無敵モードon
+        // {
+        //    // _MainGameManager.isInvincible = true;
+        //     Debug.Log("無敵");
+        // }
+        // if (UnityEngine.Input.GetKeyDown(KeyCode.M))    //デバッグ用無敵モードoff
+        // {
+        //     //_MainGameManager.isInvincible = false;
+        //     Debug.Log("無敵解除");
+        // }
         
         //入力値の格納
-        inputHorizontal = UnityEngine.Input.GetAxisRaw("Horizontal");   
-        inputVertical = UnityEngine.Input.GetAxisRaw("Vertical");
-        inputTrigger_R = UnityEngine.Input.GetAxis("R_Trigger");
-        inputTrigger_L = UnityEngine.Input.GetAxis("L_Trigger");
-     //   isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
+        if (context.phase == InputActionPhase.Performed)
+        {
+            inputMove = context.ReadValue<Vector2>();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            inputMove = Vector2.zero;
+        }
+        //isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
     }
 
+    public void PlayerDashInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            inputTrigger_L = context.ReadValue<float>();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            inputTrigger_L = 0;
+        }
+    }
+    public void Jump(InputAction.CallbackContext context)
+    {
+        //落下中と攻撃中はジャンプをさせない
+        if (isJumping == true || isFalling == true || isAttacking == true) return;  
+
+        if (context.phase == InputActionPhase.Started)
+        {
+            //移動中またはその場でジャンプした時の遷移
+            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            isJumping = true;
+        }
+    }
+
+    private void Gravity()
+    {
+        //落下速度の調整用
+        if (isJumping == true)
+        {
+            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         //難しい方法はできないからTriggerで判定したい
@@ -150,11 +188,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void GetNormal()
+    /// <summary>
+    /// Rayを元に法線の計算をして滑らかに坂を上り下りできるように
+    /// </summary>
+    private Vector3 GetNormal(Vector3　moveForward)
     {
         //プレイヤーの真下方向にRayを飛ばす
         m_ray = new Ray(m_player.position, -transform.up);
         Physics.Raycast(m_ray, out m_hit, 2);
+        //平面に投影したいベクトルmoveForwardとrayを飛ばして取得した平面の法線ベクトルから
+        //平面に沿ったベクトルを計算
+        return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
     }
     /*void Attack()   //ジャンプ中は攻撃できない
     {
@@ -195,11 +239,11 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        if (isAttacking == true)
+        /*if (isAttacking == true)
         {
             inputHorizontal = 0;
             inputVertical = 0;
-        }
+        }*/
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
         
@@ -207,11 +251,11 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        Vector3 moveForward = cameraForward * inputMove.y + Camera.main.transform.right * inputMove.x;
         
-        //平面に投影したいベクトルmoveForwardとGetNormalで取得した平面の法線ベクトルから
-        //平面に沿ったベクトルを計算
-        moveForward = Vector3.ProjectOnPlane(moveForward, m_hit.normal);
+      
+     
+        moveForward =  GetNormal(moveForward);
 
         //移動速度の計算
         //clampは値の範囲制限
@@ -249,27 +293,5 @@ public class PlayerController : MonoBehaviour
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
         m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
        
-    }
-
-    private void Jump()
-    {
-        //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true || isAttacking == true) return;  
-
-        if (UnityEngine.Input.GetButtonDown("Jump"))
-        {
-            //移動中またはその場でジャンプした時の遷移
-            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            isJumping = true;
-        }
-    }
-
-    private void Gravity()
-    {
-        //落下速度の調整用
-        if (isJumping == true)
-        {
-            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
-        }
     }
 }
