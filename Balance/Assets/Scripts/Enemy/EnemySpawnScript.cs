@@ -67,7 +67,6 @@ public class EnemySpawnScript : MonoBehaviour
         }
     }
 
-
     private void enemySpawn()
     {
         GameObject newEnemy = Instantiate(enemy);
