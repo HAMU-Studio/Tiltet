@@ -4,11 +4,35 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    // 固定したいY軸の回転角度
-    public float fixedYRotation = 0f;
+    //固定したいY軸の回転
+    public float FixedYRotation = 0f;
+
+    // AddForceで使用する力の大きさ
+    public Vector3 ForceDirection = new Vector3(0, 0, 10);
+    public ForceMode forceMode = ForceMode.Force;
+
+    private Rigidbody rb;
+
+    void Start()
+    {
+        // Rigidbodyコンポーネントを取得
+        rb = GetComponent<Rigidbody>();
+
+        // nullチェック
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbodyが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
+        }
+    }
 
     void Update()
     {
+        // Update内で力を加える（ここでは毎フレーム力を加える例）
+        if (rb != null)
+        {
+            rb.AddForce(ForceDirection, forceMode);
+        }
+
         // 現在の回転を取得
         Quaternion currentRotation = transform.rotation;
 
@@ -16,7 +40,7 @@ public class Stage : MonoBehaviour
         Vector3 euler = currentRotation.eulerAngles;
 
         // Y軸の回転を固定
-        euler.y = fixedYRotation;
+        euler.y = FixedYRotation;
 
         // X軸とZ軸の回転を制限
         euler.x = ClampAngle(euler.x, -30f, 30f);
@@ -39,4 +63,5 @@ public class Stage : MonoBehaviour
         }
         return angle;
     }
+
 }
