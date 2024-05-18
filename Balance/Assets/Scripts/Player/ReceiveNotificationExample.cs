@@ -22,7 +22,12 @@ public class ReceiveNotificationExample : MonoBehaviour
     {
         print($"プレイヤー#{playerInput.user.index}が退室！");
         //終了処理として入れ替えたplayerのmaterialを元に戻す
-        _playerInputManager.playerPrefab.gameObject.GetComponent<Renderer>().material = m_defaultMaterial;
+        // _playerInputManager.playerPrefab.gameObject.GetComponent<Renderer>().material = m_defaultMaterial;
      
+    }
+
+    private void OnApplicationQuit()
+    {
+        _playerInputManager.playerPrefab.gameObject.GetComponent<Renderer>().material = m_defaultMaterial;
     }
 }
