@@ -48,7 +48,7 @@ MonoBehaviour:
   m_NotificationBehavior: 2
   m_MaxPlayerCount: 3
   m_AllowJoining: 1
-  m_JoinBehavior: 2
+  m_JoinBehavior: 1
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls:
@@ -115,3 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6502b450d2ccb7b459dee0486c621b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerInputManager: {fileID: 7249596636241904845}
+  _playerController: {fileID: 6180727587083873517, guid: 43825079cbf40d3468ca9c687c7eafc4,
+    type: 3}
+  m_defaultMaterial: {fileID: 2100000, guid: 74e66b3ba04fe684abe50ce8cc34dd5c, type: 2}
