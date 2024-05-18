@@ -89,17 +89,6 @@ public class PlayerController : MonoBehaviour
 
     public void  PlayerMoveInput(InputAction.CallbackContext context)
     {
-        // if (UnityEngine.Input.GetKeyDown(KeyCode.X))    //デバッグ用無敵モードon
-        // {
-        //    // _MainGameManager.isInvincible = true;
-        //     Debug.Log("無敵");
-        // }
-        // if (UnityEngine.Input.GetKeyDown(KeyCode.M))    //デバッグ用無敵モードoff
-        // {
-        //     //_MainGameManager.isInvincible = false;
-        //     Debug.Log("無敵解除");
-        // }
-        
         //入力値の格納
         if (context.phase == InputActionPhase.Performed)
         {
@@ -109,7 +98,6 @@ public class PlayerController : MonoBehaviour
         {
             inputMove = Vector2.zero;
         }
-        //isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
     }
 
     public void PlayerDashInput(InputAction.CallbackContext context)
@@ -157,16 +145,6 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("toLanding" );
             }
         }
-
-        /*if (_MainGameManager.isInvincible == false)
-        {
-            if (collision.gameObject.CompareTag("Enemy") )     //無敵時間中はダメージを食らわない
-            {
-                canMove = false;
-                KnockBack(collision);
-                _MainGameManager.Miss();
-            }
-        }*/
     }
 
     private void Dash()
@@ -241,11 +219,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        /*if (isAttacking == true)
-        {
-            inputHorizontal = 0;
-            inputVertical = 0;
-        }*/
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
         
@@ -254,8 +227,6 @@ public class PlayerController : MonoBehaviour
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputMove.y + Camera.main.transform.right * inputMove.x;
-        
-      
      
         moveForward =  GetNormal(moveForward);
 
@@ -294,7 +265,6 @@ public class PlayerController : MonoBehaviour
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
         m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
-       
     }
 
     public void Change2PColor(int index)
