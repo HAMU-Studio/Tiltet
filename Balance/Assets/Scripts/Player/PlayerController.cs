@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [Header("ダッシュ時のマテリアル")]
     [SerializeField] Material dashMaterial = default!;
     
+    [SerializeField] private Material m_material_2P = default!;
+    
     private Material defaultMaterial;
     // [Header("ノックバックの強さ")]
     // [SerializeField] private float knockBackP = 5f;              
@@ -293,5 +295,16 @@ public class PlayerController : MonoBehaviour
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
         m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
        
+    }
+
+    public void Change2PColor(int index)
+    {
+        //inputManager側で2Pのカラー変更が上手くいかないのでプレイヤーのスクリプトで試みる
+      
+        if (index == 0)
+        {
+            defaultMaterial = m_material_2P;
+            GetComponent<Renderer>().material = m_material_2P;
+        }
     }
 }
