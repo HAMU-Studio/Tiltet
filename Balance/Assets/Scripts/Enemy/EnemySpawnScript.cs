@@ -58,7 +58,7 @@ public class EnemySpawnScript : MonoBehaviour
 
         if (spawnTime > spawnInterval)
         {
-            for (int i = 0; 4 > i; i++)
+            for (int i = 0; 1 > i; i++)
             {
                 enemySpawn();
             }
