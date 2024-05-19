@@ -9,6 +9,9 @@ jobs:
     - name: Request manual activation file # Licenceを要求する部分
       id: getManualLicenseFile
       uses: game-ci/unity-request-activation-file@v2
+      with: 
+      # Unity プロジェクトのバージョンを指定する
+        unityVersion: 2021.3.23f1
     - name: Expose as artifact #取得した.alfファイルをアップロードする部分
       uses: actions/upload-artifact@v2
       with: 
