@@ -1,0 +1,57 @@
+name: Windows Build     
+on:   # mainにpullreqまたは手動で実行
+  pull_request:
+    branches: main
+  workflow_dispatch: {}
+  
+# 連続して実行されたときに一つ前の実行中のジョブが停止されるようにする  
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Unity-Build:  #checkout->cache->build->uploadの順番
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unity-editor-version: [2021.3.23f1]
+        root-project-path: [Balance]
+        targetPlatform:
+          - StandaloneWindows64
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          
+      # Cache  LibraryをCache(一時的に別の場所に保管)して高速化する
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Balance/Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+
+      # WindowsBuild    
+      - name: Run the Windows build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          customImage: 'unityci/editor:2021.3.23f1-base-0'
+          targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: ${{ matrix.root-project-path }}
+          unityVersion: ${{matrix.unity-editor-version}}
+          allowDirtyBuild: true
+
+       # Output
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          
