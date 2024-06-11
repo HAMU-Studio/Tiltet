@@ -11,9 +11,7 @@ public class Enemy : MonoBehaviour
     private GameObject[] players;
     private GameObject[] enemys;
     private GameObject target;
-    private Vector3 enemyPosition;
-    private Vector3 targetPosition;
-    private Rigidbody Enemyrb;
+    private Rigidbody enemyRb;
 
     // Start is called before the first frame update
     void Start()
@@ -27,21 +25,24 @@ public class Enemy : MonoBehaviour
             distance = new float[players.Length];
         }
 
-        Enemyrb = GetComponent<Rigidbody>();
+        enemyRb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         SearchPlayer();
+    }
 
+    void FixedUpdate()
+    {
         // targetがnullでないことを確認
         if (target != null)
         {
             //進行方向
             Vector3 Direction = (target.transform.position - transform.position).normalized;
 
-            Enemyrb.AddForce(Direction * moveSpeed);
+            enemyRb.AddForce(Direction * moveSpeed);
         }
     }
 
@@ -51,11 +52,12 @@ public class Enemy : MonoBehaviour
         if (players.Length == 0)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
-            return;
+            //return;
         }
         //playerが1人の時
         if (players.Length == 1)
         {
+            players = GameObject.FindGameObjectsWithTag("Player");
             target = players[0];
             return;
         }
@@ -77,24 +79,13 @@ public class Enemy : MonoBehaviour
         }
 
         //どっちのplayerのほうが近いか
-        if (distance[0] < distance[1])
+        if (distance[0] <= distance[1])
         {
             target = players[0];
-            targetPosition = target.transform.position;
         }
         else if (distance[1] < distance[0])
         {
             target = players[1];
-            targetPosition = target.transform.position;
-        }
-    }
-
-    //DestroyAreaに触れたら消える
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Destroy"))
-        {
-            Destroy(gameObject);
         }
     }
 }

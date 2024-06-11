@@ -26,8 +26,8 @@ public class EnemySpawnScript : MonoBehaviour
     private float highestPositionZ;
 
     //“G‚Ì”ŒŸ’m
-    private GameObject[] enemys;
-    private int enemyNum;
+    private GameObject[] enemies;
+    //private int enemyNum;
     private bool ableSpawn;
 
     //“G‚ÌƒXƒ|[ƒ“êŠ
@@ -74,7 +74,7 @@ public class EnemySpawnScript : MonoBehaviour
             {
                 for (int i = 0; spawnNum > i; i++)
                 {
-                    enemySpawn();
+                    EnemySpawn();
                 }
             }
 
@@ -82,7 +82,7 @@ public class EnemySpawnScript : MonoBehaviour
         }
     }
 
-    private void enemySpawn()
+    private void EnemySpawn()
     {
         GameObject newEnemy = Instantiate(enemy);
 
@@ -95,10 +95,10 @@ public class EnemySpawnScript : MonoBehaviour
 
     private void CheakEnemy()
     {
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        enemyNum = enemys.Length;
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //enemyNum = enemies.Length;
 
-        if (2 < enemys.Length)
+        if (2 < enemies.Length)
         {
             ableSpawn = false;
         }
