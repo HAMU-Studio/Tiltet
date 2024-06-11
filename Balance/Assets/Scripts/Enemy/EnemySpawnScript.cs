@@ -14,6 +14,9 @@ public class EnemySpawnScript : MonoBehaviour
     //敵がスポーンするインターバル
     [SerializeField] private float spawnInterval = 3.0f;
 
+    //一度にスポーンする数
+    [SerializeField] private int spawnNum = 1;
+
     private float spawnTime;
 
     //スポーンの範囲
@@ -21,6 +24,11 @@ public class EnemySpawnScript : MonoBehaviour
     private float lowestPositionZ;
     private float highestPositionX;
     private float highestPositionZ;
+
+    //敵の数検知
+    private GameObject[] enemies;
+    //private int enemyNum;
+    private bool ableSpawn;
 
     //敵のスポーン場所
     Vector3 enemyPos = new Vector3();
@@ -49,6 +57,8 @@ public class EnemySpawnScript : MonoBehaviour
 
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
+
+        ableSpawn = true;
     }
 
     // Update is called once per frame
@@ -58,17 +68,21 @@ public class EnemySpawnScript : MonoBehaviour
 
         if (spawnTime > spawnInterval)
         {
-            for (int i = 0; 4 > i; i++)
+            CheakEnemy();
+
+            if (ableSpawn)
             {
-                enemySpawn();
+                for (int i = 0; spawnNum > i; i++)
+                {
+                    EnemySpawn();
+                }
             }
 
             spawnTime = 0;
         }
     }
 
-
-    private void enemySpawn()
+    private void EnemySpawn()
     {
         GameObject newEnemy = Instantiate(enemy);
 
@@ -77,6 +91,22 @@ public class EnemySpawnScript : MonoBehaviour
         //enemyPos = new Vector3(ramdomPositionX, 0, ramdomPositionZ);
 
         newEnemy.transform.position = enemyPos;
+    }
+
+    private void CheakEnemy()
+    {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //enemyNum = enemies.Length;
+
+        if (2 < enemies.Length)
+        {
+            ableSpawn = false;
+        }
+        else
+        {
+            ableSpawn = true;
+        }
 
     }
+
 }

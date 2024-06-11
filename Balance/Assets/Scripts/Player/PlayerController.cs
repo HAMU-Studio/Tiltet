@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private Vector3 m_Velocity;
     private float m_moveSpeed;
+    
+     private Transform m_player;
+    private Ray m_ray;
+    private RaycastHit m_hit;
+    private Quaternion m_rot;
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
@@ -25,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [Header("ダッシュ時のマテリアル")]
     [SerializeField] Material dashMaterial = default!;
     
+    [SerializeField] private Material m_material_2P = default!;
+    
     private Material defaultMaterial;
     // [Header("ノックバックの強さ")]
     // [SerializeField] private float knockBackP = 5f;              
@@ -33,8 +40,10 @@ public class PlayerController : MonoBehaviour
 
 
     //入力値
-    private float inputHorizontal;      //水平方向の入力値
-    private float inputVertical;        //垂直方向の入力値
+    private Vector2 inputMove;
+    /*private float inputHorizontal;      //水平方向の入力値
+    private float inputVertical;        //垂直方向の入力値*/
+    
     private float inputTrigger_L;
     private float inputTrigger_R;
     
@@ -55,6 +64,7 @@ public class PlayerController : MonoBehaviour
     private float yVelocity = 0.0f;
     void Start()
     {
+        m_player = GetComponent<Transform>();
         m_Rigidbody = GetComponent<Rigidbody>();
         defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
@@ -62,13 +72,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Input();
-        Jump();
-        if (inputHorizontal != 0 || inputVertical != 0)
-        {
-            
-        }
+        //Input();
+      //  Jump();
         //Attack(); //プロトタイプは現状攻撃なし
+       
     }
     private void FixedUpdate()
     {
@@ -78,31 +85,53 @@ public class PlayerController : MonoBehaviour
             Move(); 
             Dash();
         }
-          
     }
 
-    private void Input()
+    public void  PlayerMoveInput(InputAction.CallbackContext context)
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.X))    //デバッグ用無敵モードon
-        {
-           // _MainGameManager.isInvincible = true;
-            Debug.Log("無敵");
-        }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.M))    //デバッグ用無敵モードoff
-        {
-            //_MainGameManager.isInvincible = false;
-            Debug.Log("無敵解除");
-        }
-        
         //入力値の格納
-        inputHorizontal = UnityEngine.Input.GetAxisRaw("Horizontal");   
-        inputVertical = UnityEngine.Input.GetAxisRaw("Vertical");
-        inputTrigger_R = UnityEngine.Input.GetAxis("R_Trigger");
-        inputTrigger_L = UnityEngine.Input.GetAxis("L_Trigger");
-        isEnteredAttack = UnityEngine.Input.GetButtonDown("Attack");    
-       
+        if (context.phase == InputActionPhase.Performed)
+        {
+            inputMove = context.ReadValue<Vector2>();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            inputMove = Vector2.zero;
+        }
     }
 
+    public void PlayerDashInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            inputTrigger_L = context.ReadValue<float>();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            inputTrigger_L = 0;
+        }
+    }
+    public void Jump(InputAction.CallbackContext context)
+    {
+        //落下中と攻撃中はジャンプをさせない
+        if (isJumping == true || isFalling == true || isAttacking == true) return;  
+
+        if (context.phase == InputActionPhase.Started)
+        {
+            //移動中またはその場でジャンプした時の遷移
+            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            isJumping = true;
+        }
+    }
+
+    private void Gravity()
+    {
+        //落下速度の調整用
+        if (isJumping == true)
+        {
+            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         //難しい方法はできないからTriggerで判定したい
@@ -116,16 +145,6 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("toLanding" );
             }
         }
-
-        /*if (_MainGameManager.isInvincible == false)
-        {
-            if (collision.gameObject.CompareTag("Enemy") )     //無敵時間中はダメージを食らわない
-            {
-                canMove = false;
-                KnockBack(collision);
-                _MainGameManager.Miss();
-            }
-        }*/
     }
 
     private void Dash()
@@ -149,6 +168,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Rayを元に法線の計算をして滑らかに坂を上り下りできるように
+    /// </summary>
+    private Vector3 GetNormal(Vector3　moveForward)
+    {
+        //プレイヤーの真下方向にRayを飛ばす
+        m_ray = new Ray(m_player.position, -transform.up);
+        Physics.Raycast(m_ray, out m_hit, 2);
+        //平面に投影したいベクトルmoveForwardとrayを飛ばして取得した平面の法線ベクトルから
+        //平面に沿ったベクトルを計算
+        return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
+    }
     /*void Attack()   //ジャンプ中は攻撃できない
     {
         if (R_inputTrigger == 0 && inputAttack == false)
@@ -188,11 +219,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        if (isAttacking == true)
-        {
-            inputHorizontal = 0;
-            inputVertical = 0;
-        }
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
         
@@ -200,14 +226,15 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        Vector3 moveForward = cameraForward * inputMove.y + Camera.main.transform.right * inputMove.x;
+     
+        moveForward =  GetNormal(moveForward);
 
         //移動速度の計算
         //clampは値の範囲制限
         //GetAxisは0から1で入力値を管理する、斜め移動でWとAを同時押しすると
         //1以上の値が入ってくるからVector3.ClampMagnitudeメソッドを使って入力値を１に制限する(多分)
-        var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);   
-                                                                    
+        var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);  
 
         m_Velocity = clampedInput * m_moveSpeed;
         // transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
@@ -220,6 +247,7 @@ public class PlayerController : MonoBehaviour
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
         m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -m_moveSpeed, m_moveSpeed), 0f, Mathf.Clamp(m_Velocity.z, -m_moveSpeed, m_moveSpeed));
 
+      
         if (moveForward != Vector3.zero)
         {
             //SmoothDampAngleで滑らかな回転をするためには引数（moveForwardとvelocityだけ）をVector3からfloatに変換しなければいけない
@@ -237,28 +265,16 @@ public class PlayerController : MonoBehaviour
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
         m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
-       
     }
 
-    private void Jump()
+    public void Change2PColor(int index)
     {
-        //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true || isAttacking == true) return;  
-
-        if (UnityEngine.Input.GetButtonDown("Jump"))
+        //inputManager側で2Pのカラー変更が上手くいかないのでプレイヤーのスクリプトで試みる
+      
+        if (index == 0)
         {
-            //移動中またはその場でジャンプした時の遷移
-            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            isJumping = true;
-        }
-    }
-
-    private void Gravity()
-    {
-        //落下速度の調整用
-        if (isJumping == true)
-        {
-            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+            defaultMaterial = m_material_2P;
+            GetComponent<Renderer>().material = m_material_2P;
         }
     }
 }
