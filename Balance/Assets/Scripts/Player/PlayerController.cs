@@ -27,12 +27,13 @@ public class PlayerController : MonoBehaviour
     [Header("ジャンプの強さ")]
     [SerializeField] private float jumpPower = 5f; 
     
+    [FormerlySerializedAs("dashMaterial")]
     [Header("ダッシュ時のマテリアル")]
-    [SerializeField] Material dashMaterial = default!;
+    [SerializeField] Material m_dashMaterial = default!;
     
     [SerializeField] private Material m_material_2P = default!;
     
-    private Material defaultMaterial;
+    private Material m_defaultMaterial;
     // [Header("ノックバックの強さ")]
     // [SerializeField] private float knockBackP = 5f;              
     // [Header("ノックバック時上方向の力")]
@@ -40,12 +41,12 @@ public class PlayerController : MonoBehaviour
 
 
     //入力値
-    private Vector2 inputMove;
+    private Vector2 m_inputMove;
     /*private float inputHorizontal;      //水平方向の入力値
     private float inputVertical;        //垂直方向の入力値*/
     
-    private float inputTrigger_L;
-    private float inputTrigger_R;
+    private float m_inputTrigger_L;
+    private float m_inputTrigger_R;
     
     //flag アニメーション実装したら減らしたい
     private bool isEnteredAttack;
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
     {
         m_player = GetComponent<Transform>();
         m_Rigidbody = GetComponent<Rigidbody>();
-        defaultMaterial = GetComponent<Renderer>().material;
+        m_defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
     }
 
@@ -92,11 +93,11 @@ public class PlayerController : MonoBehaviour
         //入力値の格納
         if (context.phase == InputActionPhase.Performed)
         {
-            inputMove = context.ReadValue<Vector2>();
+            m_inputMove = context.ReadValue<Vector2>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            inputMove = Vector2.zero;
+            m_inputMove = Vector2.zero;
         }
     }
 
@@ -104,11 +105,11 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            inputTrigger_L = context.ReadValue<float>();
+            m_inputTrigger_L = context.ReadValue<float>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            inputTrigger_L = 0;
+            m_inputTrigger_L = 0;
         }
     }
     public void Jump(InputAction.CallbackContext context)
@@ -149,9 +150,9 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (inputTrigger_L == 0 && isResetTrigger_L == false)
+        if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
-            GetComponent<Renderer>().material = defaultMaterial;
+            GetComponent<Renderer>().material = m_defaultMaterial;
             m_moveSpeed = walkSpeed;
             isResetTrigger_L = true;
             isDashing = false;
@@ -159,9 +160,9 @@ public class PlayerController : MonoBehaviour
         if (isAttacking == true || isDashing == true)
             return;
 
-        if (inputTrigger_L  > triggerTiming)  
+        if (m_inputTrigger_L  > triggerTiming)  
         {
-            GetComponent<Renderer>().material = dashMaterial;
+            GetComponent<Renderer>().material = m_dashMaterial;
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
@@ -226,7 +227,7 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveForward = cameraForward * inputMove.y + Camera.main.transform.right * inputMove.x;
+        Vector3 moveForward = cameraForward * m_inputMove.y + Camera.main.transform.right * m_inputMove.x;
      
         moveForward =  GetNormal(moveForward);
 
@@ -273,7 +274,7 @@ public class PlayerController : MonoBehaviour
       
         if (index == 0)
         {
-            defaultMaterial = m_material_2P;
+            m_defaultMaterial = m_material_2P;
             GetComponent<Renderer>().material = m_material_2P;
         }
     }
