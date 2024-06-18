@@ -5,21 +5,21 @@ using UnityEngine;
 public class Stage : MonoBehaviour
 {
     //固定したいY軸の回転
-    public float FixedYRotation = 0f;
+    [SerializeField] float FixedYRotation = 0f;
 
     // AddForceで使用する力の大きさ
-    public Vector3 ForceDirection = new Vector3(0, 0, 10);
-    public ForceMode forceMode = ForceMode.Force;
+    private Vector3 m_forceDirection = new Vector3(0, 0, 10);
+    private ForceMode m_forceMode = ForceMode.Force;
 
-    private Rigidbody rb;
+    private Rigidbody m_rb;
 
     void Start()
     {
         // Rigidbodyコンポーネントを取得
-        rb = GetComponent<Rigidbody>();
+        m_rb = GetComponent<Rigidbody>();
 
         // nullチェック
-        if (rb == null)
+        if (m_rb == null)
         {
             Debug.LogError("Rigidbodyが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
         }
@@ -27,10 +27,11 @@ public class Stage : MonoBehaviour
 
     void Update()
     {
-        // Update内で力を加える（ここでは毎フレーム力を加える例）
-        if (rb != null)
+        //外部で別のRigidbodyを参照したときに発生する問題を防止するために毎フレームNullチェックしている
+        // Update内で力を加える（ForceModeがForce以外の場合）
+        if (m_rb != null && m_forceMode != ForceMode.Force)
         {
-            rb.AddForce(ForceDirection, forceMode);
+            m_rb.AddForce(m_forceDirection, m_forceMode);
         }
 
         // 現在の回転を取得
@@ -48,6 +49,40 @@ public class Stage : MonoBehaviour
 
         // 回転を更新
         transform.rotation = Quaternion.Euler(euler);
+    }
+
+    void FixedUpdate()
+    {
+        // ForceModeがForceの場合はFixedUpdate内で力を加える
+        if (m_rb != null && m_forceMode == ForceMode.Force)
+        {
+            m_rb.AddForce(m_forceDirection, m_forceMode);
+        }
+    }
+
+    //外部からm_forceDirectionとm_forceModeを取得する場合に使うアクセサメソッド（今は使用していない）
+    // 力の方向と大きさを設定するメソッド
+    public void SetForceDirection(Vector3 direction)
+    {
+        m_forceDirection = direction;
+    }
+
+    // 力の方向と大きさを取得するメソッド
+    public Vector3 GetForceDirection()
+    {
+        return m_forceDirection;
+    }
+
+    // ForceModeを設定するメソッド
+    public void SetForceMode(ForceMode mode)
+    {
+        m_forceMode = mode;
+    }
+
+    // ForceModeを取得するメソッド
+    public ForceMode GetForceMode()
+    {
+        return m_forceMode;
     }
 
     // 角度をクランプするヘルパーメソッド
