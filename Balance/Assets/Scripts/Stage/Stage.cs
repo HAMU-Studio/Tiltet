@@ -1,56 +1,91 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    //ŒÅ’è‚µ‚½‚¢Y²‚Ì‰ñ“]
-    public float FixedYRotation = 0f;
+    //å›ºå®šã—ãŸã„Yè»¸ã®å›è»¢
+    [SerializeField] float FixedYRotation = 0f;
 
-    // AddForce‚Åg—p‚·‚é—Í‚Ì‘å‚«‚³
-    public Vector3 ForceDirection = new Vector3(0, 0, 10);
-    public ForceMode forceMode = ForceMode.Force;
+    // AddForceã§ä½¿ç”¨ã™ã‚‹åŠ›ã®å¤§ãã•
+    private Vector3 m_forceDirection = new Vector3(0, 0, 10);
+    private ForceMode m_forceMode = ForceMode.Force;
 
-    private Rigidbody rb;
+    private Rigidbody m_rb;
 
     void Start()
     {
-        // RigidbodyƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
-        rb = GetComponent<Rigidbody>();
+        // Rigidbodyã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
+        m_rb = GetComponent<Rigidbody>();
 
-        // nullƒ`ƒFƒbƒN
-        if (rb == null)
+        // nullãƒã‚§ãƒƒã‚¯
+        if (m_rb == null)
         {
-            Debug.LogError("Rigidbody‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒXƒNƒŠƒvƒg‚ğ“KØ‚ÈƒIƒuƒWƒFƒNƒg‚ÉƒAƒ^ƒbƒ`‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogError("RigidbodyãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’é©åˆ‡ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¢ã‚¿ãƒƒãƒã—ã¦ãã ã•ã„ã€‚");
         }
     }
 
     void Update()
     {
-        // Update“à‚Å—Í‚ğ‰Á‚¦‚éi‚±‚±‚Å‚Í–ˆƒtƒŒ[ƒ€—Í‚ğ‰Á‚¦‚é—áj
-        if (rb != null)
+        //å¤–éƒ¨ã§åˆ¥ã®Rigidbodyã‚’å‚ç…§ã—ãŸã¨ãã«ç™ºç”Ÿã™ã‚‹å•é¡Œã‚’é˜²æ­¢ã™ã‚‹ãŸã‚ã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ Nullãƒã‚§ãƒƒã‚¯ã—ã¦ã„ã‚‹
+        // Updateå†…ã§åŠ›ã‚’åŠ ãˆã‚‹ï¼ˆForceModeãŒForceä»¥å¤–ã®å ´åˆï¼‰
+        if (m_rb != null && m_forceMode != ForceMode.Force)
         {
-            rb.AddForce(ForceDirection, forceMode);
+            m_rb.AddForce(m_forceDirection, m_forceMode);
         }
 
-        // Œ»İ‚Ì‰ñ“]‚ğæ“¾
+        // ç¾åœ¨ã®å›è»¢ã‚’å–å¾—
         Quaternion currentRotation = transform.rotation;
 
-        // ƒIƒCƒ‰[Šp‚É•ÏŠ·
+        // ã‚ªã‚¤ãƒ©ãƒ¼è§’ã«å¤‰æ›
         Vector3 euler = currentRotation.eulerAngles;
 
-        // Y²‚Ì‰ñ“]‚ğŒÅ’è
+        // Yè»¸ã®å›è»¢ã‚’å›ºå®š
         euler.y = FixedYRotation;
 
-        // X²‚ÆZ²‚Ì‰ñ“]‚ğ§ŒÀ
+        // Xè»¸ã¨Zè»¸ã®å›è»¢ã‚’åˆ¶é™
         euler.x = ClampAngle(euler.x, -30f, 30f);
         euler.z = ClampAngle(euler.z, -30f, 30f);
 
-        // ‰ñ“]‚ğXV
+        // å›è»¢ã‚’æ›´æ–°
         transform.rotation = Quaternion.Euler(euler);
     }
 
-    // Šp“x‚ğƒNƒ‰ƒ“ƒv‚·‚éƒwƒ‹ƒp[ƒƒ\ƒbƒh
+    void FixedUpdate()
+    {
+        // ForceModeãŒForceã®å ´åˆã¯FixedUpdateå†…ã§åŠ›ã‚’åŠ ãˆã‚‹
+        if (m_rb != null && m_forceMode == ForceMode.Force)
+        {
+            m_rb.AddForce(m_forceDirection, m_forceMode);
+        }
+    }
+    
+    //å¤–éƒ¨ã‹ã‚‰m_forceDirectionã¨m_forceModeã‚’å–å¾—ã™ã‚‹å ´åˆã«ä½¿ã†ã‚¢ã‚¯ã‚»ã‚µãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆä»Šã¯ä½¿ç”¨ã—ã¦ã„ãªã„ï¼‰
+    // åŠ›ã®æ–¹å‘ã¨å¤§ãã•ã‚’è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public void SetForceDirection(Vector3 direction)
+    {
+        m_forceDirection = direction;
+    }
+
+    // åŠ›ã®æ–¹å‘ã¨å¤§ãã•ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public Vector3 GetForceDirection()
+    {
+        return m_forceDirection;
+    }
+
+    // ForceModeã‚’è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public void SetForceMode(ForceMode mode)
+    {
+        m_forceMode = mode;
+    }
+
+    // ForceModeã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public ForceMode GetForceMode()
+    {
+        return m_forceMode;
+    }
+
+    // è§’åº¦ã‚’ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹ãƒ˜ãƒ«ãƒ‘ãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
     float ClampAngle(float angle, float min, float max)
     {
         if (angle < 180f)
