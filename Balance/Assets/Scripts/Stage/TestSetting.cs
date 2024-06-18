@@ -1,15 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TestSetting : MonoBehaviour
 {
-    [SerializeField] private Vector3 velocity;              // ˆÚ“®•ûŒü
-    [SerializeField] private float moveSpeed = 5.0f;        // ˆÚ“®‘¬“x
+    [SerializeField] private Vector3 velocity;              // ç§»å‹•æ–¹å‘
+    [SerializeField] private float moveSpeed = 5.0f;        // ç§»å‹•é€Ÿåº¦
 
     void Update()
     {
-        // WASD“ü—Í‚©‚çAXZ•½–Ê(…•½‚È’n–Ê)‚ğˆÚ“®‚·‚é•ûŒü(velocity)‚ğ“¾‚Ü‚·
+        // WASDå…¥åŠ›ã‹ã‚‰ã€XZå¹³é¢(æ°´å¹³ãªåœ°é¢)ã‚’ç§»å‹•ã™ã‚‹æ–¹å‘(velocity)ã‚’å¾—ã¾ã™
         velocity = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
             velocity.z += 1;
@@ -20,14 +20,14 @@ public class TestSetting : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
             velocity.x += 1;
 
-        // ‘¬“xƒxƒNƒgƒ‹‚Ì’·‚³‚ğ1•b‚ÅmoveSpeed‚¾‚¯i‚Ş‚æ‚¤‚É’²®‚µ‚Ü‚·
+        // é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’1ç§’ã§moveSpeedã ã‘é€²ã‚€ã‚ˆã†ã«èª¿æ•´ã—ã¾ã™
         velocity = velocity.normalized * moveSpeed * Time.deltaTime;
 
-        // ‚¢‚¸‚ê‚©‚Ì•ûŒü‚ÉˆÚ“®‚µ‚Ä‚¢‚éê‡
+        // ã„ãšã‚Œã‹ã®æ–¹å‘ã«ç§»å‹•ã—ã¦ã„ã‚‹å ´åˆ
         if (velocity.magnitude > 0)
         {
-            // ƒvƒŒƒCƒ„[‚ÌˆÊ’u(transform.position)‚ÌXV
-            // ˆÚ“®•ûŒüƒxƒNƒgƒ‹(velocity)‚ğ‘«‚µ‚İ‚Ü‚·
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®(transform.position)ã®æ›´æ–°
+            // ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«(velocity)ã‚’è¶³ã—è¾¼ã¿ã¾ã™
             transform.position += velocity;
         }
     }
