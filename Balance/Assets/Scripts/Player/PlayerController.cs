@@ -266,6 +266,9 @@ public class PlayerController : MonoBehaviour
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
         if (MoveDuaringJump() == true)
         {
+            
+            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
+            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
             m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
             m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
@@ -276,16 +279,17 @@ public class PlayerController : MonoBehaviour
        
     }
 
+    private const float truncate = 0.5f;
     private bool MoveDuaringJump()
     {
         if (isJumping == true)
         {
-            if (m_inputMove.y < -0.5 || m_inputMove.y > 0.5)
+            if (m_inputMove.y < -truncate || m_inputMove.y > truncate)
             {
                 return true;
             }
 
-            if (m_inputMove.x < -0.5 || m_inputMove.x > 0.5)
+            if (m_inputMove.x < -truncate || m_inputMove.x > truncate)
             {
                 return true;
             }
