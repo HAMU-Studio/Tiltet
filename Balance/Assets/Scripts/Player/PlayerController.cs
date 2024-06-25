@@ -94,6 +94,7 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             m_inputMove = context.ReadValue<Vector2>();
+            Debug.Log("value = " + m_inputMove);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -121,9 +122,13 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
+            
+            //ジャンプする直前の加速度加えて慣性を表現
             m_Rigidbody.AddForce(m_Rigidbody.velocity.normalized, ForceMode.Impulse);
+            
+            //ジャンプ
             m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            canMove = false;
+           // canMove = false;
             isJumping = true;
         }
     }
@@ -211,6 +216,7 @@ public class PlayerController : MonoBehaviour
         //落下モーションへの遷移
     }*/
 
+    private const float controlPower = 0.1f;
     void Move()
     {
 
@@ -258,8 +264,36 @@ public class PlayerController : MonoBehaviour
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
-        m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        if (MoveDuaringJump() == true)
+        {
+            m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+        else if (isJumping == false)
+        {
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+       
     }
+
+    private bool MoveDuaringJump()
+    {
+        if (isJumping == true)
+        {
+            if (m_inputMove.y < -0.5 || m_inputMove.y > 0.5)
+            {
+                return true;
+            }
+
+            if (m_inputMove.x < -0.5 || m_inputMove.x > 0.5)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
 
     public void Change2PColor(int index)
     {
