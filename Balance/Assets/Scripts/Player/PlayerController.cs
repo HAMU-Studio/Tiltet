@@ -40,7 +40,8 @@ public class PlayerController : MonoBehaviour
     [Header("ノックバック時上方向の力")]
     [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
 
-
+  
+    
     //入力値
     private Vector2 m_inputMove;
     /*private float inputHorizontal;      //水平方向の入力値
@@ -157,7 +158,7 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            KnockBack(collision.gameObject);
+            KnockBack(collision);
         }
     }
 
@@ -195,13 +196,15 @@ public class PlayerController : MonoBehaviour
         return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
     }
 
-    void KnockBack(GameObject gameObject)
+    void KnockBack(Collision collision)
     {
         isJumping = true;
         Debug.Log("isKnockBack");
-        Vector3 direction = gameObject.transform.forward;
-
-        m_Rigidbody.AddForce(-direction * knockBackP, ForceMode.Impulse);      
+        
+        //加速度を反転して力を加える
+        Vector3 direction = collision.rigidbody.velocity.normalized;
+        direction.y = 0;
+        m_Rigidbody.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
     }
