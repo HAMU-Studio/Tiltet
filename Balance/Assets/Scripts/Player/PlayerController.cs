@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -34,17 +35,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Material m_material_2P = default!;
     
     private Material m_defaultMaterial;
-    // [Header("ノックバックの強さ")]
-    // [SerializeField] private float knockBackP = 5f;              
-    // [Header("ノックバック時上方向の力")]
-    // [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
+    [Header("ノックバックの強さ")]
+    [SerializeField] private float knockBackP = 5f;              
+    [Header("ノックバック時上方向の力")]
+    [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
 
 
     //入力値
     private Vector2 m_inputMove;
     /*private float inputHorizontal;      //水平方向の入力値
     private float inputVertical;        //垂直方向の入力値*/
-    
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
@@ -115,12 +115,15 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true || isAttacking == true) return;  
+        if (isJumping == true || isFalling == true) return;  
 
+        
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
+            m_Rigidbody.AddForce(m_Rigidbody.velocity.normalized, ForceMode.Impulse);
             m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            canMove = false;
             isJumping = true;
         }
     }
@@ -145,6 +148,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 //Debug.Log("toLanding" );
             }
+        }
+        
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            KnockBack(collision.gameObject);
         }
     }
 
@@ -181,34 +189,19 @@ public class PlayerController : MonoBehaviour
         //平面に沿ったベクトルを計算
         return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
     }
-    /*void Attack()   //ジャンプ中は攻撃できない
-    {
-        if (R_inputTrigger == 0 && inputAttack == false)
-        {
-            R_isReset = true;
-            return;
-        }
-        if (isAttack == true || isJump == true || R_isReset == false)
-            return;
 
-        if (R_inputTrigger > triggerTiming || inputAttack)  //AボタンかRTで攻撃
-        {
-            isAttack = true;
-            R_isReset = false;
-        }
-    }*/
-    
-    /*void KnockBack(Collision collision)
+    void KnockBack(GameObject gameObject)
     {
-        isJump = true;
+        isJumping = true;
         Debug.Log("isKnockBack");
-        Vector3 direction = collision.gameObject.transform.forward;
+        Vector3 direction = gameObject.transform.forward;
 
         m_Rigidbody.AddForce(-direction * knockBackP, ForceMode.Impulse);      
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
-    }*/
+    }
 
+    
     /*public void fall()  //落下判定エリアで使う
     {
         isFall = true;
