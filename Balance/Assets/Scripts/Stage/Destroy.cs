@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,12 +16,12 @@ public class Destroy : MonoBehaviour
         
     }
 
-    //DestroyAreaÇ…êGÇÍÇΩÇÁè¡Ç¶ÇÈ
-    private void OnCollisionEnter(Collision collision)
+    //DestroyArea„Å´Ëß¶„Çå„Åü„ÇâÊ∂à„Åà„Çã
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if(other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject);
+            Destroy(other.gameObject);
         }
     }
 }

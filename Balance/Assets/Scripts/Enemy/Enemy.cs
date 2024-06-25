@@ -1,25 +1,26 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 0.3f;
+    [SerializeField] private float moveSpeed = 0.5f;
 
     private float[] distance;
     private GameObject[] players;
-    private GameObject[] enemys;
     private GameObject target;
     private Rigidbody enemyRb;
+
+    Vector3 Direction = new Vector3();
 
     // Start is called before the first frame update
     void Start()
     {
-        //player‚Ìƒ^ƒO‚ª‚Â‚¢‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğ‘ã“ü
+        //playerã®ã‚¿ã‚°ãŒã¤ã„ã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä»£å…¥
         players = GameObject.FindGameObjectsWithTag("Player");
 
-        // players”z—ñ‚Ì’·‚³‚ÉŠî‚Ã‚¢‚Ädistance”z—ñ‚ğ‰Šú‰»
+        // playersé…åˆ—ã®é•·ã•ã«åŸºã¥ã„ã¦distanceé…åˆ—ã‚’åˆæœŸåŒ–
         if (players.Length > 0)
         {
             distance = new float[players.Length];
@@ -32,29 +33,31 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         SearchPlayer();
-    }
 
-    void FixedUpdate()
-    {
-        // target‚ªnull‚Å‚È‚¢‚±‚Æ‚ğŠm”F
+        // targetãŒnullã§ãªã„ã“ã¨ã‚’ç¢ºèª
         if (target != null)
         {
-            //is•ûŒü
-            Vector3 Direction = (target.transform.position - transform.position).normalized;
+            //é€²è¡Œæ–¹å‘
+            Direction = (target.transform.position - transform.position).normalized;
 
             enemyRb.AddForce(Direction * moveSpeed);
         }
     }
 
+    void FixedUpdate()
+    {
+
+    }
+
     private void SearchPlayer()
     {
-        //player‚ª1l‚à‚¢‚È‚¢
+        //playerãŒ1äººã‚‚ã„ãªã„æ™‚
         if (players.Length == 0)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
-            //return;
+            return; 
         }
-        //player‚ª1l‚Ì
+        //playerãŒ1äººã®æ™‚
         if (players.Length == 1)
         {
             players = GameObject.FindGameObjectsWithTag("Player");
@@ -62,28 +65,15 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        //‹——£‚ğ’²¸
-        int count = 0;
-        foreach (GameObject player in players)
+        //è·é›¢ã‚’èª¿æŸ»
+        for (int i = 0; i < players.Length; i++)
         {
-            distance[count] = Vector3.Distance(this.transform.position, player.transform.position);
-
-            if (count == 0)
-            {
-                count = 1;
-            }
-           /* else if (count == 1)
-            {
-                count = 0;
-            }*/
+            distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
         }
 
-        //‚Ç‚Á‚¿‚Ìplayer‚Ì‚Ù‚¤‚ª‹ß‚¢‚©
-        if (distance[0] <= distance[1])
-        {
-            target = players[0];
-        }
-        else if (distance[1] < distance[0])
+        //ã©ã£ã¡ã®playerã®ã»ã†ãŒè¿‘ã„ã‹
+        target = players[0];
+        if (distance[1] < distance[0])
         {
             target = players[1];
         }
