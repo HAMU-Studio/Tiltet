@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Velocity;
     private float m_moveSpeed;
     
-     private Transform m_player;
+    private Transform m_player;
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
@@ -95,7 +95,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             m_inputMove = context.ReadValue<Vector2>();
-            Debug.Log("value = " + m_inputMove);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -201,8 +200,8 @@ public class PlayerController : MonoBehaviour
         isJumping = true;
         Debug.Log("isKnockBack");
         
-        //加速度を反転して力を加える
-        Vector3 direction = collision.rigidbody.velocity.normalized;
+        //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
+        Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
         direction.y = 0;
         m_Rigidbody.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
@@ -299,8 +298,6 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
-    
-    
 
     public void Change2PColor(int index)
     {
