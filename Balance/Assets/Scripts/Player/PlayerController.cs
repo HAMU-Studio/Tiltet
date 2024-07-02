@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Velocity;
     private float m_moveSpeed;
     
-     private Transform m_player;
+    private Transform m_player;
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
@@ -40,7 +40,8 @@ public class PlayerController : MonoBehaviour
     [Header("ノックバック時上方向の力")]
     [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
 
-
+  
+    
     //入力値
     private Vector2 m_inputMove;
     /*private float inputHorizontal;      //水平方向の入力値
@@ -94,7 +95,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             m_inputMove = context.ReadValue<Vector2>();
-            Debug.Log("value = " + m_inputMove);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            KnockBack(collision.gameObject);
+            KnockBack(collision);
         }
     }
 
@@ -195,13 +195,15 @@ public class PlayerController : MonoBehaviour
         return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
     }
 
-    void KnockBack(GameObject gameObject)
+    void KnockBack(Collision collision)
     {
         isJumping = true;
         Debug.Log("isKnockBack");
-        Vector3 direction = gameObject.transform.forward;
-
-        m_Rigidbody.AddForce(-direction * knockBackP, ForceMode.Impulse);      
+        
+        //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
+        Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
+        direction.y = 0;
+        m_Rigidbody.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
     }
@@ -296,8 +298,6 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
-    
-    
 
     public void Change2PColor(int index)
     {
