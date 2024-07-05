@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Security.Cryptography;
-using System.Linq;
-using System;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 public class TestSetting : MonoBehaviour
 {

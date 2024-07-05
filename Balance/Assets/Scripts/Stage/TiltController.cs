@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TiltController : MonoBehaviour
 {
-
     //固定したいY軸の回転
     [SerializeField] float FixedYRotation = 0f;
 
@@ -13,6 +12,11 @@ public class TiltController : MonoBehaviour
     private ForceMode m_forceMode = ForceMode.Force;
 
     private Rigidbody m_rb;
+
+    // (※デバッグ用) オブジェクトの動作を一時停止するためのフラグ
+    private bool isPaused = false;
+    private Vector3 savedPosition;
+    private Quaternion savedRotation;
 
     void Start()
     {
@@ -28,6 +32,20 @@ public class TiltController : MonoBehaviour
 
     void Update()
     {
+        // (※デバッグ用) Oキーが押されたときに一時停止を実行
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            TogglePause();
+        }
+
+        // (※デバッグ用) 一時停止中は位置と回転を保存した値に固定
+        if (isPaused)
+        {
+            transform.position = savedPosition;
+            transform.rotation = savedRotation;
+            return;
+        }
+
         //外部で別のRigidbodyを参照したときに発生する問題を防止するために毎フレームNullチェックしている
         // Update内で力を加える（ForceModeがForce以外の場合）
         if (m_rb != null && m_forceMode != ForceMode.Force)
@@ -54,13 +72,19 @@ public class TiltController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // (※デバッグ用) 一時停止中は処理を中断
+        if (isPaused)
+        {
+            return;
+        }
+
         // ForceModeがForceの場合はFixedUpdate内で力を加える
         if (m_rb != null && m_forceMode == ForceMode.Force)
         {
             m_rb.AddForce(m_forceDirection, m_forceMode);
         }
     }
-    
+
     //外部からm_forceDirectionとm_forceModeを取得する場合に使うアクセサメソッド（今は使用していない）
     // 力の方向と大きさを設定するメソッド
     public void SetForceDirection(Vector3 direction)
@@ -100,4 +124,21 @@ public class TiltController : MonoBehaviour
         return angle;
     }
 
+    // (※デバッグ用) オブジェクトの動作を一時停止または再開するメソッド
+    private void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            savedPosition = transform.position;
+            savedRotation = transform.rotation;
+
+            Debug.Log("処理を一時停止");
+        }
+        if (!isPaused)
+        {
+            Debug.Log("処理を再開");
+        }
+    }
 }
