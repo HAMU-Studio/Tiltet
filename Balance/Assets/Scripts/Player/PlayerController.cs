@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
             if (elapsedTime >= canMoveTime)
             {
-                //移動不能だけ解除
+                //移動不能だけ解除、低減した重力は着地までそのまま
                 canMove = true;
                 elapsedTime = 0;
             }
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Gravity();
-        if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
+        if (canMove) 
         {
             MoveCalc(); 
             if (isJumping || isKnockBack)
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
     private void Gravity()
     {   //落下速度の調整用
        
-        //ジャンプ中のみ重力 -> ノックバック時以外重力
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減
         if (isKnockBack == false)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
       
         if (isJumping|| isKnockBack || canMove == false)
         {
-            if (collision.gameObject.CompareTag("Ground"))  //着地した時
+            if (collision.gameObject.CompareTag("Ground"))  
             {
                 isJumping = false;
                 isKnockBack = false;
