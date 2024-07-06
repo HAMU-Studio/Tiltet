@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
     private bool isResetTrigger_R;
     private bool isResetTrigger_L;
     private bool isJumping = false;         
-    private bool isFalling = false;
     private bool isKnockBack = false;
     private bool isAttacking = false;
     private bool isDashing = false;
@@ -66,11 +65,22 @@ public class PlayerController : MonoBehaviour
         m_moveSpeed = walkSpeed;
     }
 
+    private float elapsedTime;
+    [Header("ノックバックされてから動けるようになるまでの時間")]
+    [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
-        //Input();
-      //  Jump();
-        //Attack(); //プロトタイプは現状攻撃なし
+        if (isKnockBack && canMove == false)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime >= canMoveTime)
+            {
+                //移動不能だけ解除
+                canMove = true;
+                elapsedTime = 0;
+            }
+        }
        
     }
     private void FixedUpdate()
@@ -78,11 +88,16 @@ public class PlayerController : MonoBehaviour
         Gravity();
         if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
         {
-            if (isJumping)
+            MoveCalc(); 
+            if (isJumping || isKnockBack)
             { 
                 AirMovement();
             }
-            Move(); 
+            else
+            {
+                NormalMovement();
+            }
+           
             DashSwitch();
         }
     }
@@ -114,7 +129,7 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true) return;  
+        if (isJumping|| canMove == false || isKnockBack) return;  
 
         
         if (context.phase == InputActionPhase.Started)
@@ -148,15 +163,14 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
       
-        if (isJumping == true || isFalling == true || canMove == false)
+        if (isJumping|| isKnockBack || canMove == false)
         {
             if (collision.gameObject.CompareTag("Ground"))  //着地した時
             {
                 isJumping = false;
-                isFalling = false;
                 isKnockBack = false;
                 canMove = true;
-                //Debug.Log("toLanding" );
+                Debug.Log("toLanding" );
             }
         }
         
@@ -214,7 +228,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private const float controlPower = 0.1f;
-    void Move()
+    void MoveCalc()
     {
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
@@ -255,23 +269,27 @@ public class PlayerController : MonoBehaviour
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
-        
+    }
+
+    
+    //AddForceの部分を通常移動と空中移動で分けた
+    private void NormalMovement()
+    {
         // F・・・力  
         // m・・・質量  
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
       
-        if (isJumping == false)
+        if (isJumping == false && isKnockBack == false)
         {
             m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
-       
     }
 
     private void AirMovement()
     {
-        if (MoveDuaringJump() == true)
+        if (MoveDuaringAir())
         {
             //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
             //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
@@ -280,11 +298,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private const float reference = 0.5f;
-    private bool MoveDuaringJump()
+    private const float reference = 0.2f;
+    private bool MoveDuaringAir()
     {
         //入力が小さい時は切り捨てて空中移動を制限
-        if (isJumping == true)
+        if (isJumping || isKnockBack && canMove)
         {
             if (m_inputMove.y < -reference || m_inputMove.y > reference)
             {
