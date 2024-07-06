@@ -39,13 +39,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
     [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
-
-  
     
     //入力値
     private Vector2 m_inputMove;
-    /*private float inputHorizontal;      //水平方向の入力値
-    private float inputVertical;        //垂直方向の入力値*/
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
@@ -55,12 +51,10 @@ public class PlayerController : MonoBehaviour
     private bool isResetTrigger_L;
     private bool isJumping = false;         
     private bool isFalling = false;
+    private bool isKnockBack = false;
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool canMove = true;
-    // private bool onlyFirst = false;
-    //private bool isKnockBack = false;
-    
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
@@ -84,8 +78,12 @@ public class PlayerController : MonoBehaviour
         Gravity();
         if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
         {
+            if (isJumping)
+            { 
+                AirMovement();
+            }
             Move(); 
-            Dash();
+            DashSwitch();
         }
     }
 
@@ -134,22 +132,29 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Gravity()
-    {
-        //落下速度の調整用
-        if (isJumping == true)
+    {   //落下速度の調整用
+       
+        //ジャンプ中のみ重力 -> ノックバック時以外重力
+        if (isKnockBack == false)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+        }
+        else
+        {
+            //ノックバック時はふんわり落下
+            m_Rigidbody.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        //難しい方法はできないからTriggerで判定したい
-        if (isJumping == true || isFalling == true)
+      
+        if (isJumping == true || isFalling == true || canMove == false)
         {
             if (collision.gameObject.CompareTag("Ground"))  //着地した時
             {
                 isJumping = false;
                 isFalling = false;
+                isKnockBack = false;
                 canMove = true;
                 //Debug.Log("toLanding" );
             }
@@ -161,7 +166,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Dash()
+    private void DashSwitch()
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
@@ -197,8 +202,8 @@ public class PlayerController : MonoBehaviour
 
     void KnockBack(Collision collision)
     {
-        isJumping = true;
-        Debug.Log("isKnockBack");
+        isKnockBack = true;
+        canMove = false;
         
         //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
         Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
@@ -207,16 +212,6 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
     }
-
-    
-    /*public void fall()  //落下判定エリアで使う
-    {
-        isFall = true;
-        canMove = false;
-
-        //ここで操作不能にすればすれすれから復帰した時にジャンプができなくなることを防げそう
-        //落下モーションへの遷移
-    }*/
 
     private const float controlPower = 0.1f;
     void Move()
@@ -266,32 +261,37 @@ public class PlayerController : MonoBehaviour
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
-        if (MoveDuaringJump() == true)
-        {
-            
-            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
-            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
-            m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
-            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
-        }
-        else if (isJumping == false)
+      
+        if (isJumping == false)
         {
             m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
        
     }
 
-    private const float truncate = 0.5f;
+    private void AirMovement()
+    {
+        if (MoveDuaringJump() == true)
+        {
+            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
+            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
+            m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+    }
+
+    private const float reference = 0.5f;
     private bool MoveDuaringJump()
     {
+        //入力が小さい時は切り捨てて空中移動を制限
         if (isJumping == true)
         {
-            if (m_inputMove.y < -truncate || m_inputMove.y > truncate)
+            if (m_inputMove.y < -reference || m_inputMove.y > reference)
             {
                 return true;
             }
 
-            if (m_inputMove.x < -truncate || m_inputMove.x > truncate)
+            if (m_inputMove.x < -reference || m_inputMove.x > reference)
             {
                 return true;
             }
