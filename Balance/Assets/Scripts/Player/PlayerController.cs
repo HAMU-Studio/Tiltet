@@ -39,8 +39,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
     [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
-
-  
     
     //入力値
     private Vector2 m_inputMove;
@@ -58,9 +56,8 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool canMove = true;
-    // private bool onlyFirst = false;
+    //private bool onlyFirst = false;
     //private bool isKnockBack = false;
-    
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
@@ -75,9 +72,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Input();
-      //  Jump();
+        //Jump();
         //Attack(); //プロトタイプは現状攻撃なし
-       
     }
     private void FixedUpdate()
     {
@@ -128,10 +124,12 @@ public class PlayerController : MonoBehaviour
             
             //ジャンプ
             m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-           // canMove = false;
+            //canMove = false;
             isJumping = true;
         }
     }
+    
+    private void
 
     private void Gravity()
     {
@@ -239,7 +237,7 @@ public class PlayerController : MonoBehaviour
         var clampedInput = Vector3.ClampMagnitude(moveForward, 1f);  
 
         m_Velocity = clampedInput * m_moveSpeed;
-        // transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
+        //transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
 
         //Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
         //AddForceに加える力をwalkSpeedで設定した速さ以上にはならないように

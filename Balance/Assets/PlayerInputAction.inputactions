@@ -1,5 +1,5 @@
 {
-    "name": "playerInputAction",
+    "name": "PlayerInputAction",
     "maps": [
         {
             "name": "Player",
@@ -243,6 +243,17 @@
                     "name": "",
                     "id": "930bd648-748b-4ef8-810f-faf5d8564a00",
                     "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51c2e4a6-2361-43b4-9ad0-0a066e4c8ff7",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
