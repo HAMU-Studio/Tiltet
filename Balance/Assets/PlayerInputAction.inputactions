@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Left Trigger",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "8895d6bd-31b7-460e-ab40-989aaeb3d6f0",
                     "expectedControlType": "Button",
@@ -235,7 +235,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Left Trigger",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c5aa256-dc36-4a5a-8568-b56276bd983b",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
