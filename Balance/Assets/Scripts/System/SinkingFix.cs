@@ -41,10 +41,11 @@ public class SinkingFix : MonoBehaviour
         // radius: カプセルの半径
         
         //コライダーを通常より小さく指定すればがっつりめり込んだ時のみ修正できるかも？
+        //
          m_overLapColliders = Physics.OverlapCapsule(
-            transform.position + new Vector3(-m_cc.center.x, (m_cc.center.y - m_cc.height / 2) + m_cc.radius,
+            transform.position + new Vector3(-m_cc.center.x, (m_cc.center.y - m_cc.height / divisor) + m_cc.radius,
                 -m_cc.center.z),
-            transform.position + new Vector3(-m_cc.center.x, (m_cc.center.y + m_cc.height / 2) - m_cc.radius,
+            transform.position + new Vector3(-m_cc.center.x, (m_cc.center.y + m_cc.height / divisor) - m_cc.radius,
                 -m_cc.center.z),
             m_cc.radius,
             LayerMask.GetMask("Floor") 
@@ -90,8 +91,8 @@ public class SinkingFix : MonoBehaviour
 
                 if (penetrat)
                 {
-                  //  direction = Vector3.Scale(direction, new Vector3(1, 2f, 1));
-                    transform.position = transform.position + (direction * distance);
+                    //direction = Vector3.Scale(direction, new Vector3(1, 7f, 1));
+                    transform.position += direction * distance;
                     TempStopPhysics();  //移動後の動き抑制
                 }
             }
