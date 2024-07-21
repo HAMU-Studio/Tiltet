@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class EnemySphere : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 0.5f;
+    [SerializeField] private bool testmove = false;
 
     private float[] distance;
     private GameObject[] players;
     private GameObject target;
-    private Rigidbody enemyRb;
+    private Rigidbody enemyRb;   
 
     Vector3 Direction = new Vector3();
 
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.Rotate(2.5f, 0, 0);
         SearchPlayer();
 
         // targetがnullでないことを確認
@@ -46,7 +48,11 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        if(testmove)
+        {
+            Direction =new Vector3 (0f, 0f, 5f);
+            enemyRb.AddForce(Direction);
+        }
     }
 
     private void SearchPlayer()
