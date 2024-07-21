@@ -1495,10 +1495,20 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 3201240595744599277, guid: 94197ec7bc1ab594eb6405767d278d34,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3201240595744599279, guid: 94197ec7bc1ab594eb6405767d278d34,
         type: 3}
       propertyPath: m_Name
       value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3201240595744599279, guid: 94197ec7bc1ab594eb6405767d278d34,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3201240595744599279, guid: 94197ec7bc1ab594eb6405767d278d34,
         type: 3}
