@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,34 +6,34 @@ public class EnemySpawnScript : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
 
-    //ƒXƒ|[ƒ“”ÍˆÍƒIƒuƒWƒFƒNƒg
+    //ã‚¹ãƒãƒ¼ãƒ³ç¯„å›²ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     [SerializeField] private GameObject minimumValue;
     [SerializeField] private GameObject muximumValueX;
     [SerializeField] private GameObject muximumValueZ;
 
-    //“G‚ªƒXƒ|[ƒ“‚·‚éƒCƒ“ƒ^[ƒoƒ‹
+    //æ•µãŒã‚¹ãƒãƒ¼ãƒ³ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
     [SerializeField] private float spawnInterval = 3.0f;
 
-    //ˆê“x‚ÉƒXƒ|[ƒ“‚·‚é”
+    //ä¸€åº¦ã«ã‚¹ãƒãƒ¼ãƒ³ã™ã‚‹æ•°
     [SerializeField] private int spawnNum = 1;
 
     private float spawnTime;
 
-    //ƒXƒ|[ƒ“‚Ì”ÍˆÍ
+    //ã‚¹ãƒãƒ¼ãƒ³ã®ç¯„å›²
     private float lowestPositionX;
     private float lowestPositionZ;
     private float highestPositionX;
     private float highestPositionZ;
 
-    //“G‚Ì”ŒŸ’m
+    //æ•µã®æ•°æ¤œçŸ¥
     private GameObject[] enemies;
     //private int enemyNum;
     private bool ableSpawn;
 
-    //“G‚ÌƒXƒ|[ƒ“êŠ
+    //æ•µã®ã‚¹ãƒãƒ¼ãƒ³å ´æ‰€
     Vector3 enemyPos = new Vector3();
 
-    //ƒXƒ|[ƒ“”ÍˆÍƒIƒuƒWƒFƒNƒg—p
+    //ã‚¹ãƒãƒ¼ãƒ³ç¯„å›²ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”¨
     Vector3 miniPos = new Vector3();
     Vector3 maxPosX = new Vector3();
     Vector3 maxPosZ = new Vector3();
@@ -41,21 +41,21 @@ public class EnemySpawnScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //ƒXƒ|[ƒ“”ÍˆÍƒIƒuƒWƒFƒNƒg‚Ìƒ|ƒWƒVƒ‡ƒ“æ“¾
+        //ã‚¹ãƒãƒ¼ãƒ³ç¯„å›²ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒã‚¸ã‚·ãƒ§ãƒ³å–å¾—
         miniPos = minimumValue.transform.position;
         maxPosX = muximumValueX.transform.position;
         maxPosZ = muximumValueZ.transform.position;
 
-        //ƒXƒ|[ƒ“”ÍˆÍ‘ã“ü
+        //ã‚¹ãƒãƒ¼ãƒ³ç¯„å›²ä»£å…¥
         lowestPositionX = miniPos.x;
         lowestPositionZ = miniPos.z;
         highestPositionX = maxPosX.x;
         highestPositionZ = maxPosZ.z;
 
-        //‚‚³‚Ìæ“¾
+        //é«˜ã•ã®å–å¾—
         enemyPos.y = miniPos.y;
 
-        // ƒQ[ƒ€‚ªn‚Ü‚Á‚½‚Æ“¯‚ÉƒXƒ|[ƒ“i‚È‚­‚Ä‚à‚¢‚¢j
+        // ã‚²ãƒ¼ãƒ ãŒå§‹ã¾ã£ãŸã¨åŒæ™‚ã«ã‚¹ãƒãƒ¼ãƒ³ï¼ˆãªãã¦ã‚‚ã„ã„ï¼‰
         spawnTime = spawnInterval;
 
         ableSpawn = true;
