@@ -318,7 +318,19 @@ MonoBehaviour:
     m_ActionId: 65b32b5d-21ee-40a6-99dc-5c76c35d25eb
     m_ActionName: Player/Jump[/XInputControllerWindows/buttonEast,/XInputControllerWindows1/buttonEast]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6180727587083873517}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: RescueActionInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 77c4276b-49f6-47fd-92a9-4740b203988c
     m_ActionName: Player/Attack[/XInputControllerWindows/buttonSouth,/XInputControllerWindows1/buttonSouth]
   - m_PersistentCalls:
@@ -378,4 +390,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7608af8a21e108b48a04aaefa5d2c584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  divisor: 2
+  divisor: 2.5
+  stopFixHeight: 1.2

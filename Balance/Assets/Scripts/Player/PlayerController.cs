@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
-    //flag アニメーション実装したら減らしたい
+    //flag アニメーション実装したら減らしたい、enum使えばもっといろいろ楽そう
     private bool isEnteredAttack;
     private bool isResetTrigger_R;
     private bool isResetTrigger_L;
@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
+        canRescueAct = false;
     }
 
     private float elapsedTime;
@@ -80,6 +81,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 elapsedTime = 0;
             }
+        }
+
+        if (isFleezing)
+        {
+            PlayerFreeze();
         }
        
     }
@@ -146,6 +152,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private GameObject m_rescueCube;
+    private bool canRescueAct;
+    public void RescueActionInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && canRescueAct)
+        {
+            Debug.Log("isInputRescue");
+            m_rescueCube.GetComponent<Rescue>().RescueAction();
+            canRescueAct = false;
+        }
+    }
+
     private void Gravity()
     {   //落下速度の調整用
        
@@ -164,6 +182,32 @@ public class PlayerController : MonoBehaviour
     private void FallDetection()
     {
         //Rigidbodyのvelocityから落下の検知ができそう
+    }
+
+    //その場で固定するかどうか。救出アクション待機でつかう。
+    private bool isFleezing = false;
+    public void ChangePlayerState(bool isFleezing)
+    {
+        if (isFleezing)
+        {
+            freezePos = transform.position;
+          
+            m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;
+            canMove = false;
+            this.isFleezing = true;
+        }
+        else
+        {
+            this.isFleezing = false;
+            canMove = true;
+        }
+    }
+
+    private Vector3 freezePos;
+    private void PlayerFreeze()
+    {
+        transform.position = freezePos;
     }
         
     
@@ -185,6 +229,18 @@ public class PlayerController : MonoBehaviour
         {
             KnockBack(collision);
         }
+
+       
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RescueArea"))
+        {
+            canRescueAct = true;
+            m_rescueCube = other.gameObject;
+        }
+        
     }
 
     private void DashSwitch()
