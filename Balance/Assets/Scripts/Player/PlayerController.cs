@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -8,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Velocity;
     private float m_moveSpeed;
     
-     private Transform m_player;
+    private Transform m_player;
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
@@ -34,17 +35,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Material m_material_2P = default!;
     
     private Material m_defaultMaterial;
-    // [Header("ノックバックの強さ")]
-    // [SerializeField] private float knockBackP = 5f;              
-    // [Header("ノックバック時上方向の力")]
-    // [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
+    [Header("ノックバックの強さ")]
+    [SerializeField] private float knockBackP = 5f;              
+    [Header("ノックバック時上方向の力")]
+    [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
 
-
+  
+    
     //入力値
     private Vector2 m_inputMove;
     /*private float inputHorizontal;      //水平方向の入力値
     private float inputVertical;        //垂直方向の入力値*/
-    
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
@@ -115,12 +116,19 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true || isAttacking == true) return;  
+        if (isJumping == true || isFalling == true) return;  
 
+        
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
+            
+            //ジャンプする直前の加速度加えて慣性を表現
+            m_Rigidbody.AddForce(m_Rigidbody.velocity.normalized, ForceMode.Impulse);
+            
+            //ジャンプ
             m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+           // canMove = false;
             isJumping = true;
         }
     }
@@ -145,6 +153,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 //Debug.Log("toLanding" );
             }
+        }
+        
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            KnockBack(collision);
         }
     }
 
@@ -181,34 +194,21 @@ public class PlayerController : MonoBehaviour
         //平面に沿ったベクトルを計算
         return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
     }
-    /*void Attack()   //ジャンプ中は攻撃できない
-    {
-        if (R_inputTrigger == 0 && inputAttack == false)
-        {
-            R_isReset = true;
-            return;
-        }
-        if (isAttack == true || isJump == true || R_isReset == false)
-            return;
 
-        if (R_inputTrigger > triggerTiming || inputAttack)  //AボタンかRTで攻撃
-        {
-            isAttack = true;
-            R_isReset = false;
-        }
-    }*/
-    
-    /*void KnockBack(Collision collision)
+    void KnockBack(Collision collision)
     {
-        isJump = true;
+        isJumping = true;
         Debug.Log("isKnockBack");
-        Vector3 direction = collision.gameObject.transform.forward;
-
-        m_Rigidbody.AddForce(-direction * knockBackP, ForceMode.Impulse);      
+        
+        //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
+        Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
+        direction.y = 0;
+        m_Rigidbody.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
-    }*/
+    }
 
+    
     /*public void fall()  //落下判定エリアで使う
     {
         isFall = true;
@@ -218,6 +218,7 @@ public class PlayerController : MonoBehaviour
         //落下モーションへの遷移
     }*/
 
+    private const float controlPower = 0.1f;
     void Move()
     {
 
@@ -265,7 +266,37 @@ public class PlayerController : MonoBehaviour
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
-        m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        if (MoveDuaringJump() == true)
+        {
+            
+            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
+            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
+            m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+        else if (isJumping == false)
+        {
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+       
+    }
+
+    private const float truncate = 0.5f;
+    private bool MoveDuaringJump()
+    {
+        if (isJumping == true)
+        {
+            if (m_inputMove.y < -truncate || m_inputMove.y > truncate)
+            {
+                return true;
+            }
+
+            if (m_inputMove.x < -truncate || m_inputMove.x > truncate)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Change2PColor(int index)

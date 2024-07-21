@@ -4,31 +4,43 @@ using UnityEngine;
 
 public class TestSetting : MonoBehaviour
 {
-    [SerializeField] private Vector3 velocity;              // 移動方向
-    [SerializeField] private float moveSpeed = 5.0f;        // 移動速度
 
+    [SerializeField] float speed = 3f;
+
+    void Start()
+    {
+
+
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        // WASD入力から、XZ平面(水平な地面)を移動する方向(velocity)を得ます
-        velocity = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-            velocity.z += 1;
-        if (Input.GetKey(KeyCode.A))
-            velocity.x -= 1;
-        if (Input.GetKey(KeyCode.S))
-            velocity.z -= 1;
-        if (Input.GetKey(KeyCode.D))
-            velocity.x += 1;
+        //キー入力を取得
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
-        velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+        //移動方向の計算
+        Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-        // いずれかの方向に移動している場合
-        if (velocity.magnitude > 0)
+        //移動方向が変わる場合のみ回転を計算
+        if (moveDirection.magnitude >= 0.1f)
         {
-            // プレイヤーの位置(transform.position)の更新
-            // 移動方向ベクトル(velocity)を足し込みます
-            transform.position += velocity;
+            //移動
+            Vector3 moveVector = moveDirection * speed * Time.deltaTime;
+            transform.Translate(moveVector, Space.World);
+            Vector3 newPosition = transform.position;
+            newPosition.x = transform.position.x + 1.1f;
+            newPosition.z = transform.position.z + 0.2f;
+                
+
+            //プレイヤーの正面を移動方向に向ける
+            Quaternion toRotation = Quaternion.LookRotation(-moveDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 0.1f);
+
+               
         }
+
     }
+
 }

@@ -1,7 +1,7 @@
 name: Windows Build     
-on:   # mainにpullreqまたは手動で実行
+on:   # releaseにpullreqまたは手動で実行
   pull_request:
-    branches: main
+    branches: release
   workflow_dispatch: {}
   
 # 連続して実行されたときに一つ前の実行中のジョブが停止されるようにする  
