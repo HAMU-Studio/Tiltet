@@ -11,15 +11,21 @@ public class EnemyEllipse : MonoBehaviour
     //[SerializeField] private GameObject front;
     private GameObject[] players;
     private Rigidbody enemyRb;
+    private float time;
     private float moveSpeed;
+    private bool ableAssault;
+    private bool doAssault;
 
     Vector3 Direction = new Vector3();
-    Vector3 _prePosition = new Vector3();//前の位置
-    Vector3 _position = new Vector3();//現在の位置
+    Vector3 _prePosition = new Vector3();// 前の位置
+    Vector3 _position = new Vector3();// 現在の位置
 
     // Start is called before the first frame update
     void Start()
     {
+        time = 0;
+        ableAssault = false;
+
         _position = Vector3.zero;
         _prePosition = transform.position;
         Direction = Vector3.zero;
@@ -33,8 +39,25 @@ public class EnemyEllipse : MonoBehaviour
             return;
         }
 
-        CheckPlayer();
-        Debug.DrawRay(transform.position, Direction * 1000.0f, Color.red);
+        if (!ableAssault)
+        {
+            CheckPlayer();
+        }
+        else
+        {
+            time += Time.deltaTime;
+
+            if (time <= 0.5f)
+            {
+                enemyRb.velocity = Vector3.zero;
+                ableAssault = false;
+            }
+            else
+            {
+                ableAssault = false;
+            }
+        }
+        Debug.DrawRay(transform.position, Direction * 100.0f, Color.red);
     }
 
     void FixedUpdate()
@@ -42,7 +65,7 @@ public class EnemyEllipse : MonoBehaviour
         CheckDirection();
     }
 
-    void CheckDirection()
+    private void CheckDirection()
     {
         // 今の位置を代入しなおす
         _position = this.transform.position;
@@ -54,17 +77,35 @@ public class EnemyEllipse : MonoBehaviour
         _prePosition = _position;
     }
 
-    void CheckPlayer()
+    private void CheckPlayer()
     {
         Ray ray = new Ray(transform.position, Direction);
         RaycastHit hit;
-
-        if(Physics.Raycast(ray,out hit,10))
+        if (Physics.Raycast(ray, out hit, 10))
         {
-            if(hit.collider.CompareTag("Player"))
+            if (hit.collider.gameObject.CompareTag("Player"))
             {
-                enemyRb.AddForce(Direction * moveSpeed);
+                ableAssault = true;
             }
+        }
+    }
+
+    private void Assault()
+    {
+        time += Time.deltaTime;
+
+        enemyRb.velocity = Vector3.zero;
+
+        if (time <= 0.5f)
+        {
+            enemyRb.velocity = Vector3.zero;
+            enemyRb.AddForce(Direction * moveSpeed, ForceMode.Impulse);
+            doAssault = true;
+            ableAssault = false;   
+        }
+        else
+        {
+            doAssault = true;
         }
     }
 }
