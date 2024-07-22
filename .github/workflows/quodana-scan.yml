@@ -1,0 +1,25 @@
+name: Qodana
+on:
+  workflow_dispatch:
+ # pull_request:
+ #   branches:
+ #  - release  
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # 記事によってv3だったりv4だったりする。なぜ？
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}   #マージではなくプルリクをチェックアウトする
+          fetch-depth: 0   # プルリクの分析には完全な履歴が必要
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@main
+        with: 
+          args: --project-dir,./Balance    #プロジェクトの指定 要注意
+          upload-result: false
+          pr-mode: false
+        env: 
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+  
+        
