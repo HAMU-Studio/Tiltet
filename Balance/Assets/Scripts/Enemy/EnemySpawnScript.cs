@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawnScript : MonoBehaviour
 {
-    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject[] enemy;
 
     //スポーン範囲オブジェクト
     [SerializeField] private GameObject minimumValue;
@@ -27,7 +27,7 @@ public class EnemySpawnScript : MonoBehaviour
 
     //敵の数検知
     private GameObject[] enemies;
-    //private int enemyNum;
+    private int enemyKinds;
     private bool ableSpawn;
 
     //敵のスポーン場所
@@ -84,7 +84,8 @@ public class EnemySpawnScript : MonoBehaviour
 
     private void EnemySpawn()
     {
-        GameObject newEnemy = Instantiate(enemy);
+        enemyKinds = Random.Range(0, 2);
+        GameObject newEnemy = Instantiate(enemy[enemyKinds]);
 
         enemyPos.x = Random.Range(lowestPositionX, highestPositionX);
         enemyPos.z = Random.Range(lowestPositionZ, highestPositionZ);
