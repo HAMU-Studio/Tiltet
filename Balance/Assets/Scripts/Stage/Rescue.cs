@@ -92,6 +92,8 @@ public class Rescue : MonoBehaviour
         rescuedPlayer.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         rescuedPlayer.GetComponent<Rigidbody>().AddForce(new Vector3(0, direction.y, 0), ForceMode.Impulse);
 
+        this.GetComponent<Renderer>().enabled = false;
+
         canRescueAct = false;
     }
 }
