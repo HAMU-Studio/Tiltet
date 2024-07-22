@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "Rescue",
                     "type": "Button",
                     "id": "77c4276b-49f6-47fd-92a9-4740b203988c",
                     "expectedControlType": "Button",
@@ -279,7 +279,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Rescue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2cba4eae-89d4-432d-b368-00d0f1eeb668",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rescue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

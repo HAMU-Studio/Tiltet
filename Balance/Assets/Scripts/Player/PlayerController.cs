@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
-    [SerializeField] private float walkSpeed = 4f;
+    public float walkSpeed = 4f;
     [Header("ダッシュ時の速度")]
-    [SerializeField] private float dashSpeed = 8f;
+    public float dashSpeed = 8f;
     [Header("落下速度の調整　-つける")]
     [SerializeField] float gravityPower = default!;
     [Header("トリガーの反応タイミング")]
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
-    //flag アニメーション実装したら減らしたい
+    //flag アニメーション実装したら減らしたい、enum使えばもっといろいろ楽そう
     private bool isEnteredAttack;
     private bool isResetTrigger_R;
     private bool isResetTrigger_L;
@@ -63,6 +63,8 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
+        canRescueAct = false;
+        isChanged = false;
     }
 
     private float elapsedTime;
@@ -80,6 +82,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 elapsedTime = 0;
             }
+        }
+
+        if (isFleezing)
+        {
+            PlayerFreeze();
         }
        
     }
@@ -146,6 +153,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private GameObject m_rescueCube;
+    private bool canRescueAct;
+    public void RescueActionInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && canRescueAct)
+        {
+            Debug.Log("isInputRescue");
+            m_rescueCube.GetComponent<Rescue>().RescueAction();
+            canRescueAct = false;
+        }
+    }
+
     private void Gravity()
     {   //落下速度の調整用
        
@@ -165,8 +184,34 @@ public class PlayerController : MonoBehaviour
     {
         //Rigidbodyのvelocityから落下の検知ができそう
     }
+
+    //その場で固定するかどうか。救出アクション待機でつかう。
+    private bool isFleezing = false;
+    public void ChangePlayerState(bool isFleezing)
+    {
+        if (isFleezing)
+        {
+            freezePos = transform.position;
+          
+            m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;
+            canMove = false;
+            this.isFleezing = true;
+        }
+        else
+        {
+            this.isFleezing = false;
+            canMove = true;
+        }
+    }
+
+    private Vector3 freezePos;
+    private void PlayerFreeze()
+    {
+        transform.position = freezePos;
+    }
         
-    
+    private bool isChanged;
     private void OnCollisionEnter(Collision collision)
     {
       
@@ -185,6 +230,25 @@ public class PlayerController : MonoBehaviour
         {
             KnockBack(collision);
         }
+        
+        if (isChanged)
+            return;
+        
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+            isChanged = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RescueArea"))
+        {
+            canRescueAct = true;
+            m_rescueCube = other.gameObject;
+        }
+        
     }
 
     private void DashSwitch()
