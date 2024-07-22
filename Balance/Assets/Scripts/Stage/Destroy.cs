@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ public class Destroy : MonoBehaviour
         
     }
 
-    //DestroyArea‚ÉG‚ê‚½‚çÁ‚¦‚é
+    //DestroyAreaï¿½ÉGï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))

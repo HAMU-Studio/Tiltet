@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TiltController : MonoBehaviour
+public class TiltControl : MonoBehaviour
 {
     //固定したいY軸の回転
     [SerializeField] float FixedYRotation = 0f;
