@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
-    [SerializeField] private float walkSpeed = 4f;
+    public float walkSpeed = 4f;
     [Header("ダッシュ時の速度")]
-    [SerializeField] private float dashSpeed = 8f;
+    public float dashSpeed = 8f;
     [Header("落下速度の調整　-つける")]
     [SerializeField] float gravityPower = default!;
     [Header("トリガーの反応タイミング")]
@@ -39,28 +39,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
     [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
-
-  
     
     //入力値
     private Vector2 m_inputMove;
-    /*private float inputHorizontal;      //水平方向の入力値
-    private float inputVertical;        //垂直方向の入力値*/
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
-    //flag アニメーション実装したら減らしたい
+    //flag アニメーション実装したら減らしたい、enum使えばもっといろいろ楽そう
     private bool isEnteredAttack;
     private bool isResetTrigger_R;
     private bool isResetTrigger_L;
     private bool isJumping = false;         
-    private bool isFalling = false;
+    private bool isKnockBack = false;
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool canMove = true;
-    // private bool onlyFirst = false;
-    //private bool isKnockBack = false;
-    
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
@@ -70,22 +63,49 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
+        canRescueAct = false;
+        isChanged = false;
     }
 
+    private float elapsedTime;
+    [Header("ノックバックされてから動けるようになるまでの時間")]
+    [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
-        //Input();
-      //  Jump();
-        //Attack(); //プロトタイプは現状攻撃なし
+        if (isKnockBack && canMove == false)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime >= canMoveTime)
+            {
+                //移動不能だけ解除、低減した重力は着地までそのまま
+                canMove = true;
+                elapsedTime = 0;
+            }
+        }
+
+        if (isFleezing)
+        {
+            PlayerFreeze();
+        }
        
     }
     private void FixedUpdate()
     {
         Gravity();
-        if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
+        if (canMove) 
         {
-            Move(); 
-            Dash();
+            MoveCalc(); 
+            if (isJumping || isKnockBack)
+            { 
+                AirMovement();
+            }
+            else
+            {
+                NormalMovement();
+            }
+           
+            DashSwitch();
         }
     }
 
@@ -116,7 +136,7 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true) return;  
+        if (isJumping|| canMove == false || isKnockBack) return;  
 
         
         if (context.phase == InputActionPhase.Started)
@@ -133,25 +153,76 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Gravity()
+    private GameObject m_rescueCube;
+    private bool canRescueAct;
+    public void RescueActionInput(InputAction.CallbackContext context)
     {
-        //落下速度の調整用
-        if (isJumping == true)
+        if (context.phase == InputActionPhase.Started && canRescueAct)
+        {
+            Debug.Log("isInputRescue");
+            m_rescueCube.GetComponent<Rescue>().RescueAction();
+            canRescueAct = false;
+        }
+    }
+
+    private void Gravity()
+    {   //落下速度の調整用
+       
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減
+        if (isKnockBack == false)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
         }
+        else
+        {
+            //ノックバック時はふんわり落下
+            m_Rigidbody.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
+        }
     }
+
+    private void FallDetection()
+    {
+        //Rigidbodyのvelocityから落下の検知ができそう
+    }
+
+    //その場で固定するかどうか。救出アクション待機でつかう。
+    private bool isFleezing = false;
+    public void ChangePlayerState(bool isFleezing)
+    {
+        if (isFleezing)
+        {
+            freezePos = transform.position;
+          
+            m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;
+            canMove = false;
+            this.isFleezing = true;
+        }
+        else
+        {
+            this.isFleezing = false;
+            canMove = true;
+        }
+    }
+
+    private Vector3 freezePos;
+    private void PlayerFreeze()
+    {
+        transform.position = freezePos;
+    }
+        
+    private bool isChanged;
     private void OnCollisionEnter(Collision collision)
     {
-        //難しい方法はできないからTriggerで判定したい
-        if (isJumping == true || isFalling == true)
+      
+        if (isJumping|| isKnockBack || canMove == false)
         {
-            if (collision.gameObject.CompareTag("Ground"))  //着地した時
+            if (collision.gameObject.CompareTag("Ground"))  
             {
                 isJumping = false;
-                isFalling = false;
+                isKnockBack = false;
                 canMove = true;
-                //Debug.Log("toLanding" );
+                Debug.Log("toLanding" );
             }
         }
         
@@ -159,9 +230,28 @@ public class PlayerController : MonoBehaviour
         {
             KnockBack(collision);
         }
+        
+        if (isChanged)
+            return;
+        
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+            isChanged = true;
+        }
     }
 
-    private void Dash()
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RescueArea"))
+        {
+            canRescueAct = true;
+            m_rescueCube = other.gameObject;
+        }
+        
+    }
+
+    private void DashSwitch()
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
@@ -197,8 +287,8 @@ public class PlayerController : MonoBehaviour
 
     void KnockBack(Collision collision)
     {
-        isJumping = true;
-        Debug.Log("isKnockBack");
+        isKnockBack = true;
+        canMove = false;
         
         //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
         Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
@@ -208,18 +298,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
-    /*public void fall()  //落下判定エリアで使う
-    {
-        isFall = true;
-        canMove = false;
-
-        //ここで操作不能にすればすれすれから復帰した時にジャンプができなくなることを防げそう
-        //落下モーションへの遷移
-    }*/
-
     private const float controlPower = 0.1f;
-    void Move()
+    void MoveCalc()
     {
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
@@ -260,38 +340,47 @@ public class PlayerController : MonoBehaviour
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
-        
+    }
+
+    
+    //AddForceの部分を通常移動と空中移動で分けた
+    private void NormalMovement()
+    {
         // F・・・力  
         // m・・・質量  
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
-        if (MoveDuaringJump() == true)
+      
+        if (isJumping == false && isKnockBack == false)
         {
-            
+            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+    }
+
+    private void AirMovement()
+    {
+        if (MoveDuaringAir())
+        {
             //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
             //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
             m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
             m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
-        else if (isJumping == false)
-        {
-            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
-        }
-       
     }
 
-    private const float truncate = 0.5f;
-    private bool MoveDuaringJump()
+    private const float reference = 0.2f;
+    private bool MoveDuaringAir()
     {
-        if (isJumping == true)
+        //入力が小さい時は切り捨てて空中移動を制限
+        if (isJumping || isKnockBack && canMove)
         {
-            if (m_inputMove.y < -truncate || m_inputMove.y > truncate)
+            if (m_inputMove.y < -reference || m_inputMove.y > reference)
             {
                 return true;
             }
 
-            if (m_inputMove.x < -truncate || m_inputMove.x > truncate)
+            if (m_inputMove.x < -reference || m_inputMove.x > reference)
             {
                 return true;
             }

@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     {
         InitGame();
         Time.timeScale = 1;
+        SetCurrentState(GameState.Search);
     }
 
     public void Restart()
@@ -96,12 +97,15 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
+        
+   
+        
         //今後ScoreUIのUpdate呼び出す
     }
     
-    public void SetCurrentState(GameState State)
+    public void SetCurrentState(GameState state)
     {
-        currentGamestate = State;
+        currentGamestate = state;
     }
     public GameState ReturnCurrentState()
     {

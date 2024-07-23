@@ -1,5 +1,5 @@
 {
-    "name": "playerInputAction",
+    "name": "PlayerInputAction",
     "maps": [
         {
             "name": "Player",
@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Left Trigger",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "8895d6bd-31b7-460e-ab40-989aaeb3d6f0",
                     "expectedControlType": "Button",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "Rescue",
                     "type": "Button",
                     "id": "77c4276b-49f6-47fd-92a9-4740b203988c",
                     "expectedControlType": "Button",
@@ -235,7 +235,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Left Trigger",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c5aa256-dc36-4a5a-8568-b56276bd983b",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -252,12 +263,34 @@
                 },
                 {
                     "name": "",
+                    "id": "51c2e4a6-2361-43b4-9ad0-0a066e4c8ff7",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7a2e3051-3ca6-4a23-9e22-e3002413648f",
                     "path": "<XInputController>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Rescue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2cba4eae-89d4-432d-b368-00d0f1eeb668",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rescue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

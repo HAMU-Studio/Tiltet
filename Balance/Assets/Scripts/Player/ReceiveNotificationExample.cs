@@ -12,6 +12,7 @@ public class ReceiveNotificationExample : MonoBehaviour
     public void OnPlayerJoined(PlayerInput playerInput)
     {
         print($"プレイヤー#{playerInput.user.index}が入室！");
+       GameObject obj =  playerInput.gameObject.GetComponent<GameObject>();
        
         //2Pならカラーを変える
         _playerController.Change2PColor(playerInput.user.index);
