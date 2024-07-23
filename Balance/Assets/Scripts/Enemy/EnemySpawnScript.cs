@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawnScript : MonoBehaviour
 {
-    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject[] enemy;
 
     //スポーン範囲オブジェクト
     [SerializeField] private GameObject minimumValue;
@@ -27,7 +27,8 @@ public class EnemySpawnScript : MonoBehaviour
 
     //敵の数検知
     private GameObject[] enemies;
-    //private int enemyNum;
+    // 敵の種類ランダム
+    private int enemyKinds;
     private bool ableSpawn;
 
     //敵のスポーン場所
@@ -38,6 +39,8 @@ public class EnemySpawnScript : MonoBehaviour
     Vector3 maxPosX = new Vector3();
     Vector3 maxPosZ = new Vector3();
 
+    private int spawnCount;
+    public bool FightClear;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,9 +59,12 @@ public class EnemySpawnScript : MonoBehaviour
         enemyPos.y = miniPos.y;
 
         // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval;
+        spawnTime = spawnInterval - 1.0f;
 
         ableSpawn = true;
+
+        spawnCount = 0;
+        FightClear = false;
     }
 
     // Update is called once per frame
@@ -75,16 +81,23 @@ public class EnemySpawnScript : MonoBehaviour
                 for (int i = 0; spawnNum > i; i++)
                 {
                     EnemySpawn();
+                    spawnCount++;
                 }
             }
 
             spawnTime = 0;
         }
+
+        if(spawnCount>=3)
+        {
+            FightClear = true;
+        }
     }
 
     private void EnemySpawn()
     {
-        GameObject newEnemy = Instantiate(enemy);
+        enemyKinds = Random.Range(0, 2);
+        GameObject newEnemy = Instantiate(enemy[enemyKinds]);
 
         enemyPos.x = Random.Range(lowestPositionX, highestPositionX);
         enemyPos.z = Random.Range(lowestPositionZ, highestPositionZ);

@@ -14,7 +14,7 @@ public class EnemyEllipse : MonoBehaviour
     private float time;
     private float moveSpeed;
     private bool ableAssault;
-    private bool doAssault;
+    private bool Assault;
 
     Vector3 Direction = new Vector3();
     Vector3 _prePosition = new Vector3();// 前の位置
@@ -24,7 +24,9 @@ public class EnemyEllipse : MonoBehaviour
     void Start()
     {
         time = 0;
+        moveSpeed = 5.0f;
         ableAssault = false;
+        enemyRb = GetComponent<Rigidbody>();
 
         _position = Vector3.zero;
         _prePosition = transform.position;
@@ -47,15 +49,17 @@ public class EnemyEllipse : MonoBehaviour
         {
             time += Time.deltaTime;
 
-            if (time <= 0.5f)
+            if (time <= 5.0f)
             {
                 enemyRb.velocity = Vector3.zero;
-                ableAssault = false;
+                Assault = true;
             }
-            else
-            {
-                ableAssault = false;
-            }
+        }
+
+        if(Assault)
+        {
+            enemyRb.AddForce(Direction * moveSpeed, ForceMode.Impulse);
+            Assault = false;
         }
         Debug.DrawRay(transform.position, Direction * 100.0f, Color.red);
     }
@@ -80,32 +84,15 @@ public class EnemyEllipse : MonoBehaviour
     private void CheckPlayer()
     {
         Ray ray = new Ray(transform.position, Direction);
+        Debug.DrawRay(transform.position, Direction * 100.0f, Color.red);
         RaycastHit hit;
+
         if (Physics.Raycast(ray, out hit, 10))
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 ableAssault = true;
             }
-        }
-    }
-
-    private void Assault()
-    {
-        time += Time.deltaTime;
-
-        enemyRb.velocity = Vector3.zero;
-
-        if (time <= 0.5f)
-        {
-            enemyRb.velocity = Vector3.zero;
-            enemyRb.AddForce(Direction * moveSpeed, ForceMode.Impulse);
-            doAssault = true;
-            ableAssault = false;   
-        }
-        else
-        {
-            doAssault = true;
         }
     }
 }
