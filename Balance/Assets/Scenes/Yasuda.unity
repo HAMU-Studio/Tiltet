@@ -315,6 +315,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3201240595744599277, guid: 94197ec7bc1ab594eb6405767d278d34,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 46
+      objectReference: {fileID: 0}
     - target: {fileID: 3201240595744599279, guid: 94197ec7bc1ab594eb6405767d278d34,
         type: 3}
       propertyPath: m_Name
@@ -851,6 +856,7 @@ MonoBehaviour:
   muximumValueZ: {fileID: 2100324580}
   spawnInterval: 3
   spawnNum: 1
+  FightClear: 0
 --- !u!1 &1665370000
 GameObject:
   m_ObjectHideFlags: 0
