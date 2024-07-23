@@ -141,4 +141,25 @@ public class TiltControl : MonoBehaviour
             Debug.Log("処理を再開");
         }
     }
+
+    // StageMovement.csが向こうの場合、TiltControl.csを有効化
+    public void StateBalanceRelease()
+    {
+        // StageMovementコンポーネントを取得
+        StageMovement stageMovement = GetComponent<StageMovement>();
+
+        // StageMovementが無効化されている場合の処理
+        if (stageMovement != null && !stageMovement.enabled)
+        {
+            // Freeze RotationのXとZを解除
+            m_rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
+            m_rb.constraints &= ~RigidbodyConstraints.FreezeRotationZ;
+
+            // TiltControl.csを有効にする
+            this.enabled = true;
+
+            // デバッグログを出力
+            Debug.Log("StageMovementがオフのため、Freeze RotationのXとZをfalseにしてTiltControlをオンにしました。");
+        }
+    }
 }

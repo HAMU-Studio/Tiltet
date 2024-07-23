@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,8 +32,9 @@ public class StageManager : MonoBehaviour
         {
             wall.SetActive(false);
         }
-        
+
         //stageの移動停止処理とかカメラの切り替え関数呼ぶ
+        
     }
 
     public void ChangeModeToSearch()
