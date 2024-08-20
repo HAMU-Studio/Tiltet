@@ -25,18 +25,24 @@ public class Rescue : MonoBehaviour
         
     }
 
+    private Rigidbody m_RB;
     private void FixedUpdate()
     {
         if (isRescue)
         {
-            time += Time.fixedDeltaTime;
-            rescuedPlayer.GetComponent<Rigidbody>().AddForce(rescuedPlayer.GetComponent<Rigidbody>().mass * delayForce / Time.fixedDeltaTime, ForceMode.Force);
-            if (time >= finish)
+           // time += Time.fixedDeltaTime;
+            m_RB = rescuedPlayer.GetComponent<Rigidbody>();
+           
+            m_RB.AddForce(m_RB.mass * delayForce / Time.fixedDeltaTime, ForceMode.Force);
+
+            CheckRescueDone();
+            // rescuedPlayer.GetComponent<Rigidbody>().AddForce(rescuedPlayer.GetComponent<Rigidbody>().mass * delayForce / Time.fixedDeltaTime, ForceMode.Force);
+            /*if (time >= finish)
             {
-             
                 time = 0f;
                 isRescue = false;
-            }
+            }*/
+            //この辺あやしい
         }
     }
 
@@ -58,7 +64,6 @@ public class Rescue : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             canRescueAct = false;
-            Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
 
@@ -69,6 +74,9 @@ public class Rescue : MonoBehaviour
     }
     
     [SerializeField] private Vector3 scalePower;
+    
+    [Header("救出アクションで飛ばす先(反対側の板)")]
+    [SerializeField] private GameObject landingPoint;
     private bool isRescue;
     private Vector3 delayForce;
     public void RescueAction()
@@ -79,21 +87,47 @@ public class Rescue : MonoBehaviour
         }
 
         isRescue = true;
-        Vector3 direction = (rescuePlayer.transform.position - rescuedPlayer.transform.position).normalized;
+        Vector3 direction = (landingPoint.transform.position - rescuedPlayer.transform.position).normalized;
 
         //Yだけ強くして一本釣りっぽさ表現
         direction = Vector3.Scale(direction, new Vector3(scalePower.x, scalePower.y, scalePower.z));
 
         delayForce.x = direction.x;
         delayForce.z = direction.z;
-         
+       
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
-        rescuedPlayer.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        rescuedPlayer.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        rescuedPlayer.GetComponent<Rigidbody>().AddForce(new Vector3(0, direction.y, 0), ForceMode.Impulse);
+
+        SetRBVelocity();
+        
+        //最初にY方向だけ力加えた後少しずつX、Z方向にも加えてゆく
+        m_RB.AddForce(new Vector3(0, direction.y, 0), ForceMode.Impulse);
 
         this.GetComponent<Renderer>().enabled = false;
 
         canRescueAct = false;
+    }
+
+    private void CheckRescueDone()
+    {
+        Vector3 playerPos = rescuedPlayer.transform.position;
+        Vector3 targetPoint = landingPoint.transform.position;
+        
+        Debug.Log("playerPos = " + playerPos);
+        Debug.Log("targetPos = " + targetPoint);
+        
+        if (Mathf.Approximately(playerPos.x, targetPoint.x) &&
+            Mathf.Approximately(playerPos.z, targetPoint.z))
+        {
+            Debug.Log("Stop!");
+            isRescue = false;
+            SetRBVelocity();
+        }
+    }
+
+    private void SetRBVelocity()
+    {
+        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
+        m_RB.velocity = Vector3.zero;
+        m_RB.angularVelocity = Vector3.zero;
     }
 }
