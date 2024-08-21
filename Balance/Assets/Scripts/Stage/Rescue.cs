@@ -18,12 +18,12 @@ public class Rescue : MonoBehaviour
     private Rigidbody m_RB;
     private void FixedUpdate()
     {
-        if (isThrowing)
+        /*if (isThrowing)
         {
-            RescueThrowing();
+           // RescueThrowing();
            
             //この辺あやしい
-        }
+        }*/
     }
 
     private GameObject rescuePlayer;
@@ -61,8 +61,6 @@ public class Rescue : MonoBehaviour
         rescuedPlayer = Player;
     }
     
-    [SerializeField] private Vector3 scalePower;
- 
     [Header("救出アクションで飛ばす先(反対側の板)")]
     [SerializeField] private GameObject m_throwPoint;
     private bool isThrowing;
@@ -88,7 +86,6 @@ public class Rescue : MonoBehaviour
         m_RB.velocity = velocity;
 
         this.GetComponent<Renderer>().enabled = false;
-
        
     }
    
@@ -138,5 +135,12 @@ public class Rescue : MonoBehaviour
         canRescueAct = false;
         isThrowing = false;
         canRescueAct = false;
+        
+        rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+    }
+
+    public bool GetIsThrowing()
+    {
+        return isThrowing;
     }
 }
