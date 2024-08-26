@@ -19,35 +19,6 @@ public class StageManager : MonoBehaviour
     {
         
     }
-
-   
-    public void ChangeModeToBattle()
-    {
-        //tips GameManager.instance.ReturnCurrentState();
-        //でスクリプトアタッチしなくても現在が探索中なのか戦闘中なのか確認できるよ
-        
-        GameManager.instance.SetCurrentState(GameState.EnemyBattle);
-        
-        foreach (GameObject wall in walls)
-        {
-            wall.SetActive(false);
-        }
-
-        //stageの移動停止処理とかカメラの切り替え関数呼ぶ
-        
-    }
-
-    public void ChangeModeToSearch()
-    {
-        GameManager.instance.SetCurrentState(GameState.Search);
-        foreach (GameObject wall in walls)
-        {
-            wall.SetActive(true);
-        }
-        
-        //stageの移動再開処理とかカメラの切り替え関数呼ぶ
-    }
-
   
     /*private void OnCollisionEnter(Collision other)
     {
