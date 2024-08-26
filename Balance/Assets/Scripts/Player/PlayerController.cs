@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started && canRescueAct)
         {
             Debug.Log("isInputRescue");
-            m_rescueCube.GetComponent<Rescue>().RescueAction();
+            m_rescueCube.GetComponent<Rescue>().RescueThrowing();
             canRescueAct = false;
         }
     }
@@ -168,7 +168,10 @@ public class PlayerController : MonoBehaviour
     private void Gravity()
     {   //落下速度の調整用
        
-        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
+        if (canMove == false)
+            return;
+        
         if (isKnockBack == false)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
@@ -201,7 +204,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             this.isFleezing = false;
-            canMove = true;
+           // canMove = true; これを着地終了時に呼ぶ
         }
     }
 
@@ -234,11 +237,11 @@ public class PlayerController : MonoBehaviour
         if (isChanged)
             return;
         
-        if (collision.gameObject.CompareTag("Ground"))
+        /*if (collision.gameObject.CompareTag("Ground"))
         {
             collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
             isChanged = true;
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)
@@ -396,6 +399,18 @@ public class PlayerController : MonoBehaviour
         {
             m_defaultMaterial = m_material_2P;
             GetComponent<Renderer>().material = m_material_2P;
+        }
+    }
+
+    public void ChangePlayerCanMove(bool canMove)
+    {
+        if (canMove)
+        {
+            this.canMove = true;
+        }
+        else
+        {
+            this.canMove = false;
         }
     }
 }

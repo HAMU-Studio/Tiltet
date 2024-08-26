@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 落ちた敵を消す、救出アクションの準備
+/// </summary>
 public class FallArea : MonoBehaviour
 {
    
@@ -36,7 +39,7 @@ public class FallArea : MonoBehaviour
            fallPlayerInstance = other.gameObject;
            fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
            waitRescue = true;
-           CalcShortestDistCube();
+           CalcShortestDistRescueArea();
            //   other.gameObject.GetComponent<PlayerController>().ChangePlayerMove(true);
         }
     }
@@ -45,9 +48,10 @@ public class FallArea : MonoBehaviour
     private GameObject shortestDistCube;
     private float shortestDist = 0;
     private float dist;
-    private void CalcShortestDistCube()
+    private void CalcShortestDistRescueArea()
     {
         //最短距離の計算とそのcubeの取得
+        //できれば他スクリプトで行いたい
         foreach (GameObject cube in RescueActAreas)
         {
             cube.SetActive(true);
@@ -65,9 +69,13 @@ public class FallArea : MonoBehaviour
                 shortestDistCube = cube;
             }
         }
-
+     
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
     }
-   
+
+    /*public GameObject[] GetRescueActAreas()
+    {
+        return RescueActAreas;
+    }*/
 }
