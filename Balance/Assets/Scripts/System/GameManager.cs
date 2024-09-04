@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 
-public enum StageState
+public enum RescueState
 {
-    //ステージによって何か変わるかも
-    First,
-    Second,
-    Third
+    //紐を無くすタイミングのためThrowingとFlyに分ける
+    None,
+    Wait,
+    Throwing,
+    Fly
 }
 
 public enum GameState
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     [SerializeField] private GameState currentGamestate;
-    [SerializeField] private StageState currentStage;
+    [FormerlySerializedAs("currentStage")] [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
     [SerializeField] private int initialWave = default!;
@@ -48,18 +50,23 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
-    // Start is called before the first frame update
+   
     void Start()
     {
         InitGame();
-      
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private int m_life;
+    private int m_wave;
+    private int m_parts;
+  
+    public void InitGame()
     {
-        
+        Time.timeScale = 0;
+        m_life = initialLife;
+        m_wave = initialWave;
+        m_parts = 0;
+        //今後ScoreUIのUpdate呼び出す
     }
 
     //このあたりはプロトタイプのみ
@@ -96,28 +103,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private int m_life;
-    private int m_wave;
-    private int m_parts;
-    public void InitGame()
-    {
-        Time.timeScale = 0;
-        m_life = initialLife;
-        m_wave = initialWave;
-        m_parts = 0;
-        //今後ScoreUIのUpdate呼び出す
-    }
-
-    public int Life
+    private RescueState currentRescueState;
+    public RescueState RescueState
     {
         set
         {
-           m_life = value;
+            currentRescueState = value;
         }
         get
         {
-            return m_life;
+            return currentRescueState;
         }
+    }
+  
+    private Vector3 m_axis;
+    private Rigidbody m_pivotRB;
+    /// <summary>
+    /// 振り子の方向制御用
+    /// </summary>
+    public Vector3 Axis
+    {
+        get { return m_axis;}
+        
+        set { m_axis = value;}
+    }
+
+    public Rigidbody Pivot
+    {
+        get { return m_pivotRB; }
+
+        set { m_pivotRB = value; }
+    }
+    
+    public int Life
+    {
+        get { return m_life;}
+        
+        set { m_life = value;}
     }
 
     public void AddPartsNum()

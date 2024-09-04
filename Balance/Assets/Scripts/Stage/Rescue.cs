@@ -76,6 +76,7 @@ public class Rescue : MonoBehaviour
             return;
         }
         isThrowing = true;
+        GameManager.instance.RescueState = RescueState.Throwing;
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
     

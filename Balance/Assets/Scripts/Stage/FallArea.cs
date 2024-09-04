@@ -39,7 +39,11 @@ public class FallArea : MonoBehaviour
            fallPlayerInstance = other.gameObject;
            fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
            waitRescue = true;
+           GameManager.instance.RescueState = RescueState.Wait;
            CalcShortestDistRescueArea();
+
+           fallPlayerInstance.GetComponent<HingeManager>().SetJoint();
+          
            //   other.gameObject.GetComponent<PlayerController>().ChangePlayerMove(true);
         }
     }
@@ -69,9 +73,20 @@ public class FallArea : MonoBehaviour
                 shortestDistCube = cube;
             }
         }
-     
+        
+        //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
+        GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
+        GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();;
+        
+        GameManager.instance.Axis = playerPos - childPivot.transform.position;
+        
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
+    }
+
+    public bool GetWaitRescue()
+    {
+        return waitRescue;
     }
 
     /*public GameObject[] GetRescueActAreas()

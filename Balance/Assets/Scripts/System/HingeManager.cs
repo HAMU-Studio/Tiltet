@@ -10,23 +10,41 @@ public class HingeManager : MonoBehaviour
     private Rigidbody m_pivotRB;
     void Start()
     {
-        m_hingeJoint = GetComponent<HingeJoint>();
-        m_hingeJoint.connectedBody = null;
+   
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameManager.instance.RescueState == RescueState.Throwing)
+        {
+            
+        }
+    }
+
+    public void SetJoint()
+    {
+        this.gameObject.AddComponent<HingeJoint>();
+        m_hingeJoint = GetComponent<HingeJoint>();
+      
+        m_hingeJoint.anchor = new Vector3(0f, 3f, 0f);
+        SetPivot();
+        SetAxis();
+    }
+
+    public void JointOff()
+    {
+        m_hingeJoint = GetComponent<HingeJoint>();
+        Destroy(m_hingeJoint);
     }
 
     private void SetPivot()
     {
-        //m_hingeJoint.connectedBody = GameManager.instance.GetPivotRB();
+        m_hingeJoint.connectedBody = GameManager.instance.Pivot;
     }
 
     private void SetAxis()
     {
-        //m_hingeJoint.axis = GameManager.instance.Get
+        m_hingeJoint.axis = GameManager.instance.Axis;
     }
 }
