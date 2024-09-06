@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
         {
             
             //このfreezePosを救出時に利用したい
-            freezePos = transform.position;
+           // freezePos = transform.position;
           
             /*m_Rigidbody.angularVelocity = Vector3.zero;
             m_Rigidbody.velocity = Vector3.zero;*/

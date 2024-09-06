@@ -5,31 +5,48 @@ using UnityEngine;
 
 public class HingeManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
     private HingeJoint m_hingeJoint;
     private Rigidbody m_pivotRB;
+
+    private RopeLine m_ropeLine;
     void Start()
     {
-   
+        
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (GameManager.instance.RescueState == RescueState.Throwing)
         {
             
         }
+   
     }
 
-    public void SetJoint()
+    //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
+    public void SetJointAndLine()
     {
+        Rigidbody m_RB = gameObject.GetComponent<Rigidbody>();
+        m_RB.freezeRotation = false;
+        
         this.gameObject.AddComponent<HingeJoint>();
         m_hingeJoint = GetComponent<HingeJoint>();
       
-        m_hingeJoint.anchor = new Vector3(0f, 3f, 0f);
         SetPivot();
+        
+        m_hingeJoint.axis = new Vector3(0f, 0f, 10f);
+        m_hingeJoint.anchor = new Vector3(0f, 3f, 0f);
+        
+
+       // m_hingeJoint.useSpring = true;
         SetAxis();
+        
+        //ロープラインの終点指定
+        m_ropeLine = GameManager.instance.Pivot.GetComponent<RopeLine>();
+        m_ropeLine.SetEndPoint(GameManager.instance.Pivot.transform);
+        
+        
     }
 
     public void JointOff()

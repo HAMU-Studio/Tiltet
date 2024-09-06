@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -40,9 +41,9 @@ public class FallArea : MonoBehaviour
            fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
            waitRescue = true;
            GameManager.instance.RescueState = RescueState.Wait;
-           CalcShortestDistRescueArea();
+           CalcShortestDist();
 
-           fallPlayerInstance.GetComponent<HingeManager>().SetJoint();
+           fallPlayerInstance.GetComponent<HingeManager>().SetJointAndLine();
           
            //   other.gameObject.GetComponent<PlayerController>().ChangePlayerMove(true);
         }
@@ -52,7 +53,7 @@ public class FallArea : MonoBehaviour
     private GameObject shortestDistCube;
     private float shortestDist = 0;
     private float dist;
-    private void CalcShortestDistRescueArea()
+    private void CalcShortestDist()
     {
         //最短距離の計算とそのcubeの取得
         //できれば他スクリプトで行いたい
@@ -74,11 +75,14 @@ public class FallArea : MonoBehaviour
             }
         }
         
+        // shortestDistCube.SetActive(true);
+        
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
-        GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();;
+        GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();
+        //childPivot.SetActive(true);
         
-        GameManager.instance.Axis = playerPos - childPivot.transform.position;
+        GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
