@@ -12,7 +12,7 @@ public class FallArea : MonoBehaviour
    
     [SerializeField] private GameObject[] RescueActAreas;
     private GameObject fallPlayerInstance;
-
+   
     private bool waitRescue;
 
     private void Start()
@@ -36,6 +36,9 @@ public class FallArea : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
+            if ( GameManager.instance.RescueState != RescueState.None)
+                return;
+            
             //インスタンスの取得できた
            fallPlayerInstance = other.gameObject;
            fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
@@ -44,8 +47,6 @@ public class FallArea : MonoBehaviour
            CalcShortestDist();
 
            fallPlayerInstance.GetComponent<HingeManager>().SetJointAndLine();
-          
-           //   other.gameObject.GetComponent<PlayerController>().ChangePlayerMove(true);
         }
     }
 
@@ -82,19 +83,12 @@ public class FallArea : MonoBehaviour
         GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();
         //childPivot.SetActive(true);
         
+        childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);
+        
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
     }
 
-    public bool GetWaitRescue()
-    {
-        return waitRescue;
-    }
-
-    /*public GameObject[] GetRescueActAreas()
-    {
-        return RescueActAreas;
-    }*/
 }

@@ -159,7 +159,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -168,7 +168,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.11805534
+        value: 0.13888359
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -227,4 +227,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8330322f67cbb0a43affa68efbc313b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lineRenderer: {fileID: 1529936427}

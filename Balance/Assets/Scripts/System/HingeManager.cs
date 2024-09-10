@@ -9,18 +9,15 @@ public class HingeManager : MonoBehaviour
     private HingeJoint m_hingeJoint;
     private Rigidbody m_pivotRB;
 
-    private RopeLine m_ropeLine;
+    //private RopeLine m_ropeLine;
     void Start()
     {
-        
+        GameManager.instance.RescueState = RescueState.None;
     }
     
     void Update()
     {
-        if (GameManager.instance.RescueState == RescueState.Throwing)
-        {
-            
-        }
+     
    
     }
 
@@ -35,18 +32,11 @@ public class HingeManager : MonoBehaviour
       
         SetPivot();
         
-        m_hingeJoint.axis = new Vector3(0f, 0f, 10f);
-        m_hingeJoint.anchor = new Vector3(0f, 3f, 0f);
-        
+        //この値によって挙動が変わってしまう。要注意
+        m_hingeJoint.anchor = new Vector3(0, 10, 0);
 
-       // m_hingeJoint.useSpring = true;
+        SetSpring();
         SetAxis();
-        
-        //ロープラインの終点指定
-        m_ropeLine = GameManager.instance.Pivot.GetComponent<RopeLine>();
-        m_ropeLine.SetEndPoint(GameManager.instance.Pivot.transform);
-        
-        
     }
 
     public void JointOff()
@@ -62,6 +52,16 @@ public class HingeManager : MonoBehaviour
 
     private void SetAxis()
     {
-        m_hingeJoint.axis = GameManager.instance.Axis;
+        m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(1f, 0f, 1f));
+        //m_hingeJoint.axis.y = 
+    }
+
+    private void SetSpring()
+    {
+        JointSpring hingeSpring = m_hingeJoint.spring;
+        hingeSpring.spring = 100;
+        hingeSpring.damper = 10;
+        m_hingeJoint.spring = hingeSpring;
+        m_hingeJoint.useSpring = true;
     }
 }

@@ -5,32 +5,37 @@ using UnityEngine;
 
 public class RopeLine : MonoBehaviour
 {
-    [SerializeField] private LineRenderer m_lineRenderer;
+    private LineRenderer m_lineRenderer;
     private Transform m_startPoint;
     private Transform m_endPoint;
     private RopeLine  m_ropeLine;
     private void Start()
     {
-        m_ropeLine = this.gameObject.GetComponent<RopeLine>();
-        m_startPoint = this.gameObject.transform;
+        m_ropeLine = gameObject.GetComponent<RopeLine>();
+        m_startPoint = gameObject.transform;
         m_ropeLine.enabled = false;
-      
+        m_lineRenderer = this.gameObject.GetComponent<LineRenderer>();
     }
 
     void Update()
     {
         if (m_ropeLine.enabled == true)
         {
-            var positions = new Vector3[] { m_startPoint.position, m_endPoint.position, };
-            m_lineRenderer?.SetPositions(positions);
+            SetLinePos();
         }
     }
 
-    public void SetEndPoint(Transform playerInstance)
+    private void SetLinePos()
     {
+        var positions = new Vector3[] { m_startPoint.position, m_endPoint.position };
+        m_lineRenderer?.SetPositions(positions);
+    }
+  
+    //FallAreaで呼び出す。ロープの終点指定
+    public void SetEndPoint(GameObject playerInstance)
+    {
+        m_endPoint = playerInstance.transform;
         m_ropeLine.enabled = true;
-        m_endPoint = playerInstance;
-       
     }
 
     public void ResetEndPoint()
