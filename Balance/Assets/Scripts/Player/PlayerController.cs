@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
         if (isFleezing)
         {
-            PlayerFreeze();
+            //PlayerFreeze();
         }
        
     }
@@ -188,16 +188,19 @@ public class PlayerController : MonoBehaviour
         //Rigidbodyのvelocityから落下の検知ができそう
     }
 
-    //その場で固定するかどうか。救出アクション待機でつかう。
+    //その場で固定するかどうか。-> 振り子。救出アクション待機でつかう。
     private bool isFleezing = false;
     public void ChangePlayerState(bool isFleezing)
     {
         if (isFleezing)
         {
-            freezePos = transform.position;
+            
+            //このfreezePosを救出時に利用したい
+           // freezePos = transform.position;
           
-            m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;
+            /*m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;*/
+            
             canMove = false;
             this.isFleezing = true;
         }
@@ -211,7 +214,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 freezePos;
     private void PlayerFreeze()
     {
-        transform.position = freezePos;
+       // transform.position = freezePos;
     }
         
     private bool isChanged;

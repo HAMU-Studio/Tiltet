@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +12,7 @@ public class FallArea : MonoBehaviour
    
     [SerializeField] private GameObject[] RescueActAreas;
     private GameObject fallPlayerInstance;
-
+   
     private bool waitRescue;
 
     private void Start()
@@ -35,12 +36,17 @@ public class FallArea : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
+            if ( GameManager.instance.RescueState != RescueState.None)
+                return;
+            
             //インスタンスの取得できた
            fallPlayerInstance = other.gameObject;
            fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
            waitRescue = true;
-           CalcShortestDistRescueArea();
-           //   other.gameObject.GetComponent<PlayerController>().ChangePlayerMove(true);
+           GameManager.instance.RescueState = RescueState.Wait;
+           CalcShortestDist();
+
+           fallPlayerInstance.GetComponent<HingeManager>().SetJointAndLine();
         }
     }
 
@@ -48,7 +54,7 @@ public class FallArea : MonoBehaviour
     private GameObject shortestDistCube;
     private float shortestDist = 0;
     private float dist;
-    private void CalcShortestDistRescueArea()
+    private void CalcShortestDist()
     {
         //最短距離の計算とそのcubeの取得
         //できれば他スクリプトで行いたい
@@ -69,13 +75,20 @@ public class FallArea : MonoBehaviour
                 shortestDistCube = cube;
             }
         }
-     
+        
+        // shortestDistCube.SetActive(true);
+        
+        //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
+        GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
+        GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();
+        //childPivot.SetActive(true);
+        
+        childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);
+        
+        GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
+        
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
     }
 
-    /*public GameObject[] GetRescueActAreas()
-    {
-        return RescueActAreas;
-    }*/
 }
