@@ -80,7 +80,7 @@ public class FallArea : MonoBehaviour
         
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
-        GameManager.instance.Pivot = childPivot.GetComponent<Rigidbody>();
+        GameManager.instance.Pivot = childPivot;
         //childPivot.SetActive(true);
         
         childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);

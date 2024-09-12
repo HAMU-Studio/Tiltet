@@ -27,6 +27,9 @@ public class RopeLine : MonoBehaviour
 
     private void SetLinePos()
     {
+        if (m_lineRenderer.enabled == false)
+            m_lineRenderer.enabled = true;
+        
         var positions = new Vector3[] { m_startPoint.position, m_endPoint.position };
         m_lineRenderer?.SetPositions(positions);
     }
@@ -38,8 +41,9 @@ public class RopeLine : MonoBehaviour
         m_ropeLine.enabled = true;
     }
 
-    public void ResetEndPoint()
+    public void ResetRope()
     {
+        m_lineRenderer.enabled = false;
         m_ropeLine.enabled = false;
         m_endPoint = null;
     }

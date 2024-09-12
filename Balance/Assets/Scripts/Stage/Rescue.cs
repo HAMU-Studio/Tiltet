@@ -16,16 +16,7 @@ public class Rescue : MonoBehaviour
     }
     
     private Rigidbody m_RB;
-    private void FixedUpdate()
-    {
-        /*if (isThrowing)
-        {
-           // RescueThrowing();
-           
-            //この辺あやしい
-        }*/
-    }
-
+ 
     private GameObject rescuePlayer;
     private bool canRescueAct;
     private void OnTriggerEnter(Collider other)
@@ -82,9 +73,9 @@ public class Rescue : MonoBehaviour
     
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
-     
-        
+        ThrowPREP();
         m_RB.velocity = velocity;
+       
 
         this.GetComponent<Renderer>().enabled = false;
        
@@ -120,6 +111,16 @@ public class Rescue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 救出アクションの直前処理。ステージが引っ掛かりそうなら外に移動->ロープ切る->飛ばす
+    /// </summary>
+    private void ThrowPREP()
+    {
+        rescuedPlayer.GetComponent<HingeManager>().JointOff();
+        //ロープ作成時に回転制限オフにしたため
+        m_RB.freezeRotation = true;
+    }
+
     private void SetRBVelocity()
     {
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
@@ -140,8 +141,5 @@ public class Rescue : MonoBehaviour
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
     }
 
-    public bool GetIsThrowing()
-    {
-        return isThrowing;
-    }
+
 }

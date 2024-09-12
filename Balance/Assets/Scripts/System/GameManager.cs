@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
     }
   
     private Vector3 m_axis;
-    private Rigidbody m_pivotRB;
+    private GameObject m_pivot;
     /// <summary>
     /// 振り子の方向制御用
     /// </summary>
@@ -128,11 +128,11 @@ public class GameManager : MonoBehaviour
         set { m_axis = value;}
     }
 
-    public Rigidbody Pivot
+    public GameObject Pivot
     {
-        get { return m_pivotRB; }
+        get { return m_pivot; }
 
-        set { m_pivotRB = value; }
+        set { m_pivot = value; }
     }
     
     public int Life
