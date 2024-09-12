@@ -440,6 +440,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6180727587083873516, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6180727587083873516, guid: 43825079cbf40d3468ca9c687c7eafc4,
+        type: 3}
       propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
@@ -536,6 +541,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1321803228}
   m_PrefabAsset: {fileID: 0}
+--- !u!145 &1723589293
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723589282}
+  m_ConnectedBody: {fileID: 1529936425}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 3, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Spring: 1000
+  m_Damper: 0.1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &1891381755
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,7 +586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!59 &1891381756
 HingeJoint:
   m_ObjectHideFlags: 0

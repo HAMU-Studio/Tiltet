@@ -7,6 +7,7 @@ public class HingeManager : MonoBehaviour
 {
     
     private HingeJoint m_hingeJoint;
+    private SpringJoint m_springJoint;
     private Rigidbody m_pivotRB;
 
     //private RopeLine m_ropeLine;
@@ -14,29 +15,37 @@ public class HingeManager : MonoBehaviour
     {
         GameManager.instance.RescueState = RescueState.None;
     }
-    
-    void Update()
-    {
-     
-   
-    }
+
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
     public void SetJointAndLine()
     {
         Rigidbody m_RB = gameObject.GetComponent<Rigidbody>();
         m_RB.freezeRotation = false;
-        
-        this.gameObject.AddComponent<HingeJoint>();
-        m_hingeJoint = GetComponent<HingeJoint>();
+
+        AddJoint();
       
         SetPivot();
         
         //この値によって挙動が変わってしまう。要注意
         m_hingeJoint.anchor = new Vector3(0, 10, 0);
 
-        SetSpring();
+        m_springJoint.connectedBody = GameManager.instance.Pivot;
+        m_springJoint.anchor = new Vector3(0, 10, 0);
+        SetSpring(m_hingeJoint.spring, 1000, 10, true);
+        m_springJoint.spring = 1000f;
+        m_springJoint.damper = 0.1f;
+        
         SetAxis();
+    }
+
+    private void AddJoint()
+    {
+        gameObject.AddComponent<HingeJoint>();
+        gameObject.AddComponent<SpringJoint>();
+        
+        m_hingeJoint  = GetComponent<HingeJoint>();
+        m_springJoint = GetComponent<SpringJoint>();
     }
 
     public void JointOff()
@@ -52,16 +61,20 @@ public class HingeManager : MonoBehaviour
 
     private void SetAxis()
     {
+        //ここのX,Z上げて大げさにしても良い
         m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(1f, 0f, 1f));
-        //m_hingeJoint.axis.y = 
     }
 
-    private void SetSpring()
+    private void SetSpring(JointSpring jointSpring, float spring, float damper, bool isHinge)
     {
-        JointSpring hingeSpring = m_hingeJoint.spring;
-        hingeSpring.spring = 100;
-        hingeSpring.damper = 10;
-        m_hingeJoint.spring = hingeSpring;
-        m_hingeJoint.useSpring = true;
+        JointSpring JS = jointSpring;   //m_hingeJoint.spring
+        JS.spring = spring;             //1000
+        JS.damper = damper;             //10
+
+        if (isHinge)
+        {
+            m_hingeJoint.spring = JS;
+            m_hingeJoint.useSpring = true; 
+        }
     }
 }
