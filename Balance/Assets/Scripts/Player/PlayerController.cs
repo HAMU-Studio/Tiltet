@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
         if (isFleezing)
         {
-            PlayerFreeze();
+            //PlayerFreeze();
         }
        
     }
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started && canRescueAct)
         {
             Debug.Log("isInputRescue");
-            m_rescueCube.GetComponent<Rescue>().RescueAction();
+            m_rescueCube.GetComponent<Rescue>().RescueThrowing();
             canRescueAct = false;
         }
     }
@@ -168,7 +168,10 @@ public class PlayerController : MonoBehaviour
     private void Gravity()
     {   //落下速度の調整用
        
-        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
+        if (canMove == false)
+            return;
+        
         if (isKnockBack == false)
         {
             m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
@@ -185,30 +188,33 @@ public class PlayerController : MonoBehaviour
         //Rigidbodyのvelocityから落下の検知ができそう
     }
 
-    //その場で固定するかどうか。救出アクション待機でつかう。
+    //その場で固定するかどうか。-> 振り子。救出アクション待機でつかう。
     private bool isFleezing = false;
     public void ChangePlayerState(bool isFleezing)
     {
         if (isFleezing)
         {
-            freezePos = transform.position;
+            
+            //このfreezePosを救出時に利用したい
+           // freezePos = transform.position;
           
-            m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;
+            /*m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;*/
+            
             canMove = false;
             this.isFleezing = true;
         }
         else
         {
             this.isFleezing = false;
-            canMove = true;
+           // canMove = true; これを着地終了時に呼ぶ
         }
     }
 
     private Vector3 freezePos;
     private void PlayerFreeze()
     {
-        transform.position = freezePos;
+       // transform.position = freezePos;
     }
         
     private bool isChanged;
@@ -234,11 +240,11 @@ public class PlayerController : MonoBehaviour
         if (isChanged)
             return;
         
-        if (collision.gameObject.CompareTag("Ground"))
+        /*if (collision.gameObject.CompareTag("Ground"))
         {
             collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
             isChanged = true;
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)
@@ -396,6 +402,18 @@ public class PlayerController : MonoBehaviour
         {
             m_defaultMaterial = m_material_2P;
             GetComponent<Renderer>().material = m_material_2P;
+        }
+    }
+
+    public void ChangePlayerCanMove(bool canMove)
+    {
+        if (canMove)
+        {
+            this.canMove = true;
+        }
+        else
+        {
+            this.canMove = false;
         }
     }
 }

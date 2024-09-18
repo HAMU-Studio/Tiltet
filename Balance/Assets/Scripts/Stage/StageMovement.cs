@@ -69,4 +69,43 @@ public class StageMovement : MonoBehaviour
         movementForce = Vector3.zero;
         targetRotation = Vector3.zero;
     }
+
+    public Vector3 GetCurrentMovementForce()
+    {
+        return movementForce;
+    }
+
+    public void StopMovement()
+    {
+        // StageMovement と GravitySensor の機能を停止する処理
+        StopAllCoroutines();
+        enabled = false;
+
+        // GravitySensor コンポーネントを取得して停止する
+        GravitySensor gravitySensor = GetComponent<GravitySensor>();
+        if (gravitySensor != null)
+        {
+            gravitySensor.enabled = false;
+        }
+
+        // StageのTransform.Rotationを(0,0,0)に初期化
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        // RigidbodyのFreeze Positionを全てtrueにする
+        // RigidbodyのFreeze Rotationを全てtrueにする
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
+                              RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EncountArea"))
+        {
+            StopMovement();
+        }
+    }
 }
