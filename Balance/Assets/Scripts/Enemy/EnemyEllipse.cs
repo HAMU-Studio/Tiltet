@@ -14,9 +14,9 @@ public class EnemyEllipse : MonoBehaviour
     private float time;
     private float moveSpeed;
     private bool ableAssault;
-    private bool doAssault;
+    private bool Assault;
 
-    Vector3 Direction = new Vector3();
+    Vector3 _Direction = new Vector3();
     Vector3 _prePosition = new Vector3();// 前の位置
     Vector3 _position = new Vector3();// 現在の位置
 
@@ -28,17 +28,13 @@ public class EnemyEllipse : MonoBehaviour
 
         _position = Vector3.zero;
         _prePosition = transform.position;
-        Direction = Vector3.zero;
+        _Direction = Vector3.forward;
+        enemyRb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Direction == Vector3.zero)
-        {
-            return;
-        }
-
         if (!ableAssault)
         {
             CheckPlayer();
@@ -49,15 +45,20 @@ public class EnemyEllipse : MonoBehaviour
 
             if (time <= 0.5f)
             {
+                Debug.Log("hit");
                 enemyRb.velocity = Vector3.zero;
-                ableAssault = false;
-            }
-            else
-            {
+                Assault = true;
                 ableAssault = false;
             }
         }
-        Debug.DrawRay(transform.position, Direction * 100.0f, Color.red);
+
+        if(Assault)
+        {
+            enemyRb.AddForce(_Direction * moveSpeed, ForceMode.Impulse);
+            Assault = false;
+        }
+
+        Debug.DrawRay(transform.position, _Direction * 100.0f, Color.red);
     }
 
     void FixedUpdate()
@@ -70,8 +71,13 @@ public class EnemyEllipse : MonoBehaviour
         // 今の位置を代入しなおす
         _position = this.transform.position;
 
+        if(_position == _prePosition)
+        {
+            return;
+        }
+
         //進行方向（移動量ベクトル）
-        Direction = _position - _prePosition;
+        _Direction = _position - _prePosition;
 
         //前の位置を代入
         _prePosition = _position;
@@ -79,7 +85,7 @@ public class EnemyEllipse : MonoBehaviour
 
     private void CheckPlayer()
     {
-        Ray ray = new Ray(transform.position, Direction);
+        Ray ray = new Ray(transform.position, _Direction);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10))
         {
@@ -87,25 +93,6 @@ public class EnemyEllipse : MonoBehaviour
             {
                 ableAssault = true;
             }
-        }
-    }
-
-    private void Assault()
-    {
-        time += Time.deltaTime;
-
-        enemyRb.velocity = Vector3.zero;
-
-        if (time <= 0.5f)
-        {
-            enemyRb.velocity = Vector3.zero;
-            enemyRb.AddForce(Direction * moveSpeed, ForceMode.Impulse);
-            doAssault = true;
-            ableAssault = false;   
-        }
-        else
-        {
-            doAssault = true;
         }
     }
 }

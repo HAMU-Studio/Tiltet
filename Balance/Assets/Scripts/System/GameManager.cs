@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -110,5 +110,10 @@ public class GameManager : MonoBehaviour
     public GameState ReturnCurrentState()
     {
         return currentGamestate;
+    }
+
+    public void start()
+    {
+        SceneManager.LoadScene("Forest");
     }
 }

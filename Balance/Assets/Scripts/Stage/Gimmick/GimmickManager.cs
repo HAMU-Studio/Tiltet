@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
+using TMPro;
 
-public class Gimmick : MonoBehaviour
+public class GimmickManager : MonoBehaviour
 {
     [SerializeField] private GameObject coin;
     [SerializeField] private GameObject[] stands;
@@ -39,7 +40,10 @@ public class Gimmick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (countParts >= 2)
+        {
 
+        }
     }
     void FixUpdate()
     {

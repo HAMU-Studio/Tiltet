@@ -516,6 +516,25 @@ Transform:
   m_Father: {fileID: 2037112442}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1095015701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3684226004918467752, guid: 45cf954cb7434cb4180fe673e68ad518,
+    type: 3}
+  m_PrefabInstance: {fileID: 4214134735467670605}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1095015708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095015701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FixedYRotation: 0
 --- !u!1 &1198188147
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +610,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 5362902088219938543, guid: fea7467595b7bcf4e9fae6953be3d192, type: 3}
+  enemy:
+  - {fileID: 5362902088219938543, guid: fea7467595b7bcf4e9fae6953be3d192, type: 3}
+  - {fileID: 5881569010776543277, guid: adf9b0c64217c8741bc8a77961404a7a, type: 3}
   minimumValue: {fileID: 2063622111}
   muximumValueX: {fileID: 1032190272}
   muximumValueZ: {fileID: 1198188147}
@@ -1429,6 +1450,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RescueFloor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684226004918467754, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 3684226004918467758, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
