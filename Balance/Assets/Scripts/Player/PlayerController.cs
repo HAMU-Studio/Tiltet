@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
+
+    private PlayerManager m_PM;
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
@@ -65,6 +67,8 @@ public class PlayerController : MonoBehaviour
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
+
+        m_PM = GetComponent<PlayerManager>();
     }
 
     private float elapsedTime;
@@ -159,8 +163,8 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && canRescueAct)
         {
-            Debug.Log("isInputRescue");
-            m_rescueCube.GetComponent<Rescue>().RescueThrowing();
+            m_PM.RescueState = RescueState.Move;
+           //m_rescueCube.GetComponent<Rescue>().RescueThrowing();
             canRescueAct = false;
         }
     }
@@ -181,11 +185,6 @@ public class PlayerController : MonoBehaviour
             //ノックバック時はふんわり落下
             m_Rigidbody.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
         }
-    }
-
-    private void FallDetection()
-    {
-        //Rigidbodyのvelocityから落下の検知ができそう
     }
 
     //その場で固定するかどうか。-> 振り子。救出アクション待機でつかう。
@@ -239,12 +238,6 @@ public class PlayerController : MonoBehaviour
         
         if (isChanged)
             return;
-        
-        /*if (collision.gameObject.CompareTag("Ground"))
-        {
-            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
-            isChanged = true;
-        }*/
     }
 
     private void OnTriggerEnter(Collider other)
@@ -254,7 +247,6 @@ public class PlayerController : MonoBehaviour
             canRescueAct = true;
             m_rescueCube = other.gameObject;
         }
-        
     }
 
     private void DashSwitch()
@@ -347,7 +339,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
     }
-
     
     //AddForceの部分を通常移動と空中移動で分けた
     private void NormalMovement()

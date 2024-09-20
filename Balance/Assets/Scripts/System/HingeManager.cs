@@ -1,21 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HingeManager : MonoBehaviour
 {
-    
     private HingeJoint m_hingeJoint;
     private SpringJoint m_springJoint;
     private Rigidbody m_pivotRB;
 
+    private PlayerManager m_PM; //インスタンスから取得、操作
+
     //private RopeLine m_ropeLine;
     void Start()
     {
-        GameManager.instance.RescueState = RescueState.None;
+        GetPlayerManager();
     }
-
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
     public void SetJointAndLine()
@@ -43,7 +41,7 @@ public class HingeManager : MonoBehaviour
 
     private void AddJoint()
     {
-        Debug.Log("state = " + GameManager.instance.RescueState);
+        //Debug.Log("state = " + GameManager.instance.RescueState);
         
         gameObject.AddComponent<HingeJoint>();
         gameObject.AddComponent<SpringJoint>();
@@ -84,5 +82,24 @@ public class HingeManager : MonoBehaviour
             m_hingeJoint.spring = JS;
             m_hingeJoint.useSpring = true; 
         }
+    }
+
+    private void GetPlayerManager()
+    {
+        m_PM = GetComponent<PlayerManager>();
+    }
+
+    private void Update()
+    {
+        if (m_PM.RescueState == RescueState.Throwing)
+           StartCoroutine("DelayFly");
+    }
+
+    private IEnumerator DelayFly()
+    {
+        m_PM.RescueState = RescueState.Fly;
+        yield return new WaitForSeconds(0.7f);
+        
+        JointOff();
     }
 }

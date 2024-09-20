@@ -12,6 +12,7 @@ public class FallArea : MonoBehaviour
    
     [SerializeField] private GameObject[] RescueActAreas;
     private GameObject fallPlayerInstance;
+    private PlayerManager m_PM;
    
     private bool waitRescue;
 
@@ -26,6 +27,11 @@ public class FallArea : MonoBehaviour
         }
     }
 
+    private void SetPlayerManager()
+    {
+        m_PM = fallPlayerInstance.GetComponent<PlayerManager>();
+    }
+
     //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     private void OnTriggerEnter(Collider other)
     {
@@ -36,18 +42,28 @@ public class FallArea : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
-            if ( GameManager.instance.RescueState != RescueState.None)
-                return;
-            
-            //インスタンスの取得できた
-           fallPlayerInstance = other.gameObject;
-           fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
-           waitRescue = true;
-           GameManager.instance.RescueState = RescueState.Wait;
-           CalcShortestDist();
+            //ここ絶対エラー出るからどうにかしたい
+           // if ( GameManager.instance.RescueState != RescueState.None )
+               // return;
 
-           fallPlayerInstance.GetComponent<HingeManager>().SetJointAndLine();
+            SetFallInstance(other);
+ 
+            waitRescue = true;
+            m_PM.RescueState = RescueState.Wait;
+            CalcShortestDist();
+           
+            HingeManager _hingeManager =  fallPlayerInstance.GetComponent<HingeManager>();
+            _hingeManager.SetJointAndLine();
+            //_hingeManager.SaveTarget(fallPlayerInstance.transform.position);
         }
+    }
+
+    private void SetFallInstance(Collider col)
+    {
+        //インスタンスの取得できた
+        fallPlayerInstance = col.gameObject;
+        fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
+        SetPlayerManager();
     }
 
     private Vector3 playerPos;
@@ -76,12 +92,9 @@ public class FallArea : MonoBehaviour
             }
         }
         
-        // shortestDistCube.SetActive(true);
-        
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
         GameManager.instance.Pivot = childPivot;
-        //childPivot.SetActive(true);
         
         childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);
         
@@ -89,6 +102,8 @@ public class FallArea : MonoBehaviour
         
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
+        
+        shortestDistCube.GetComponent<Rescue>().SaveTarget(fallPlayerInstance.transform.position);
     }
 
 }

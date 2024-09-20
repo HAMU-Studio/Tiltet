@@ -2,16 +2,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-
-public enum RescueState
-{
-    //紐を無くすタイミングのためThrowingとFlyに分ける
-    None,
-    Wait,
-    Throwing,
-    Fly
-}
-
 public enum GameState
 {
     //制作の進捗具合によって逐次追加
@@ -103,19 +93,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private RescueState currentRescueState;
-    public RescueState RescueState
-    {
-        set
-        {
-            currentRescueState = value;
-        }
-        get
-        {
-            return currentRescueState;
-        }
-    }
-  
+
     private Vector3 m_axis;
     private GameObject m_pivot;
     /// <summary>

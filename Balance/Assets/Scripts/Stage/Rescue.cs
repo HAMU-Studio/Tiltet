@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine;
 
 public class Rescue : MonoBehaviour
@@ -16,7 +10,6 @@ public class Rescue : MonoBehaviour
     }
     
     private Rigidbody m_RB;
- 
     private GameObject rescuePlayer;
     private bool canRescueAct;
     private void OnTriggerEnter(Collider other)
@@ -27,6 +20,12 @@ public class Rescue : MonoBehaviour
             rescuePlayer = other.gameObject;
             Debug.Log("canRescueAct = " + canRescueAct);
         }
+    }
+    
+    private Vector3 m_targetVec;
+    public void SaveTarget(Vector3 targetVector)
+    {
+        m_targetVec = targetVector;
     }
 
     private void OnTriggerExit(Collider other)
@@ -66,8 +65,7 @@ public class Rescue : MonoBehaviour
         {
             return;
         }
-        isThrowing = true;
-        GameManager.instance.RescueState = RescueState.Throwing;
+      
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
     
@@ -75,10 +73,8 @@ public class Rescue : MonoBehaviour
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
         ThrowPREP();
         m_RB.velocity = velocity;
-       
 
         this.GetComponent<Renderer>().enabled = false;
-       
     }
    
     /// <param name="pointA">飛ばす元(落ちたプレイヤー)</param>
@@ -121,6 +117,23 @@ public class Rescue : MonoBehaviour
         m_RB.freezeRotation = true;
     }
 
+    private void SetThrowPos()
+    {
+        if (isThrowing)
+            return;
+        
+        if (Mathf.Approximately(Vector3.Distance(rescuedPlayer.transform.position, m_targetVec), 0))
+        {
+            RescueThrowing();
+            isThrowing = true;
+        }
+        else
+        {
+            Vector3 direction = (m_targetVec - rescuedPlayer.transform.position).normalized;
+            m_RB.AddForce(direction * 2); 
+        }
+    }
+
     private void SetRBVelocity()
     {
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
@@ -133,13 +146,16 @@ public class Rescue : MonoBehaviour
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
-        
-        canRescueAct = false;
+    
         isThrowing = false;
         canRescueAct = false;
         
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
     }
 
-
+    private void Update()
+    {
+        //これ使うと全部のインスタンスで実行されてしまうからエラー出る
+        SetThrowPos();
+    }
 }
