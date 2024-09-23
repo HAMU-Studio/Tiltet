@@ -52,12 +52,15 @@ public class HingeManager : MonoBehaviour
 
     public void JointOff()
     {
-        RopeLine ropeLine = GameManager.instance.Pivot.GetComponent<RopeLine>();
-        ropeLine.ResetRope();
-        
         m_hingeJoint = GetComponent<HingeJoint>();
         Destroy(m_hingeJoint);
         Destroy(m_springJoint);
+    }
+
+    public void RopeOff()
+    {
+        RopeLine ropeLine = GameManager.instance.Pivot.GetComponent<RopeLine>();
+        ropeLine.ResetRope();
     }
 
     private void SetPivot()
@@ -84,6 +87,34 @@ public class HingeManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 救出アクションでステージの引っかかり防止に使う
+    /// </summary>
+    public void RescueAdjust()
+    {
+        SetMotor();
+        SetLimit();
+    }
+    private void SetMotor()
+    {
+        JointMotor motor = m_hingeJoint.motor;
+        motor.force = 100;
+        motor.targetVelocity = 90;
+        motor.freeSpin = false;
+        m_hingeJoint.motor = motor;
+        m_hingeJoint.useMotor = true;
+    }
+
+    private void SetLimit()
+    {
+        JointLimits limits = m_hingeJoint.limits;
+        limits.min = -50f;
+        //limits.bounciness = 50f;
+        limits.max = 50f;
+        m_hingeJoint.limits = limits;
+        m_hingeJoint.useLimits = true;
+    }
+
     private void GetPlayerManager()
     {
         m_PM = GetComponent<PlayerManager>();
@@ -93,6 +124,11 @@ public class HingeManager : MonoBehaviour
     {
         if (m_PM.RescueState == RescueState.Throwing)
            StartCoroutine("DelayFly");
+
+        if (m_PM.RescueState == RescueState.Move)
+        {
+          //  m_hingeJoint.
+        }
     }
 
     private IEnumerator DelayFly()
@@ -100,6 +136,7 @@ public class HingeManager : MonoBehaviour
         m_PM.RescueState = RescueState.Fly;
         yield return new WaitForSeconds(0.7f);
         
-        JointOff();
+        RopeOff();
+       
     }
 }

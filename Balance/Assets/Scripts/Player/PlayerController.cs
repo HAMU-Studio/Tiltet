@@ -163,8 +163,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && canRescueAct)
         {
-            m_PM.RescueState = RescueState.Move;
-           //m_rescueCube.GetComponent<Rescue>().RescueThrowing();
+            //自分のやつ変えても意味ない
+            //m_PM.RescueState = RescueState.Move;
+            m_rescueCube.GetComponent<Rescue>().StartRescue();
+         
             canRescueAct = false;
         }
     }

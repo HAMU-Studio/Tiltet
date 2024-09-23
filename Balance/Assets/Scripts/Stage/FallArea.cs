@@ -27,6 +27,15 @@ public class FallArea : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (waitRescue)
+        {
+            if (m_PM.RescueState == RescueState.None)
+                ResetFlag();
+        }
+    }
+
     private void SetPlayerManager()
     {
         m_PM = fallPlayerInstance.GetComponent<PlayerManager>();
@@ -43,24 +52,39 @@ public class FallArea : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             //ここ絶対エラー出るからどうにかしたい
-           // if ( GameManager.instance.RescueState != RescueState.None )
+           // if ( m_PM.RescueState != RescueState.None )
                // return;
 
-            SetFallInstance(other);
- 
-            waitRescue = true;
-            m_PM.RescueState = RescueState.Wait;
-            CalcShortestDist();
-           
-            HingeManager _hingeManager =  fallPlayerInstance.GetComponent<HingeManager>();
-            _hingeManager.SetJointAndLine();
-            //_hingeManager.SaveTarget(fallPlayerInstance.transform.position);
+            if (!waitRescue)
+            {
+                HitPlayerProcess(other);
+                waitRescue = true;
+            }
         }
+    }
+
+    private void ResetFlag()
+    {
+        waitRescue = false;
+    }
+
+    /// <summary>
+    /// OnTriggerEnterでプレイヤーが触れた時の一連の処理 もう少し細かく分けたい
+    /// </summary>
+    private void HitPlayerProcess(Collider playerCol)
+    {
+        SetFallInstance(playerCol);
+     
+        m_PM.RescueState = RescueState.Wait;
+        CalcShortestDist();
+           
+        HingeManager _hingeManager =  fallPlayerInstance.GetComponent<HingeManager>();
+        _hingeManager.SetJointAndLine();
     }
 
     private void SetFallInstance(Collider col)
     {
-        //インスタンスの取得できた
+       
         fallPlayerInstance = col.gameObject;
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
@@ -76,7 +100,7 @@ public class FallArea : MonoBehaviour
         //できれば他スクリプトで行いたい
         foreach (GameObject cube in RescueActAreas)
         {
-            cube.SetActive(true);
+            
             playerPos = fallPlayerInstance.transform.position;
             dist = Vector3.Distance(cube.transform.position, playerPos);
             
@@ -92,6 +116,7 @@ public class FallArea : MonoBehaviour
             }
         }
         
+        shortestDistCube.SetActive(true);
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
         GameManager.instance.Pivot = childPivot;
@@ -100,6 +125,7 @@ public class FallArea : MonoBehaviour
         
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
+        //最短距離のオブジェクトだけon
         shortestDistCube.GetComponent<Renderer>().enabled = true;
         shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
         

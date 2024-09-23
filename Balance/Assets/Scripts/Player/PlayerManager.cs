@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 元はGamaManagerにstateを置いていたが、インスタンスが一つなのでエラーが多発したので移動。
 /// ついでにアニメーション実装を楽にするためにPlayerControllerのフラグを減らしてこっちに構造体として移植したい。
+/// HingeManagerの移植もありかも
 /// </summary>
 
 public enum RescueState
@@ -24,25 +25,8 @@ public class PlayerManager : MonoBehaviour
     
     public RescueState RescueState
     {
-        set
-        {
-            currentRescueState = value;
-        }
-        get
-        {
-            return currentRescueState;
-        }
+        set { currentRescueState = value; }
+        get { return currentRescueState; }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }

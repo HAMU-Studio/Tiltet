@@ -1,17 +1,23 @@
+using System;
 using UnityEngine;
 
 public class Rescue : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    private Rigidbody m_RB;
+    private GameObject rescuePlayer;
+    private bool canRescueAct;
+    private Vector3 direction;
+
+  
+ 
     void Start()
     {
         canRescueAct = false;
         isThrowing = false;
     }
+
     
-    private Rigidbody m_RB;
-    private GameObject rescuePlayer;
-    private bool canRescueAct;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -26,6 +32,8 @@ public class Rescue : MonoBehaviour
     public void SaveTarget(Vector3 targetVector)
     {
         m_targetVec = targetVector;
+        
+        //ここの座標で透明なcube作成、onTriggerで到着したか判定させたい
     }
 
     private void OnTriggerExit(Collider other)
@@ -46,9 +54,12 @@ public class Rescue : MonoBehaviour
     }
 
     private GameObject rescuedPlayer;
+    private PlayerManager m_PM;
     public void SetRescuedPlayer(GameObject Player)
     {
         rescuedPlayer = Player;
+        m_PM = rescuedPlayer.GetComponent<PlayerManager>();
+        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
     }
     
     [Header("救出アクションで飛ばす先(反対側の板)")]
@@ -65,13 +76,13 @@ public class Rescue : MonoBehaviour
         {
             return;
         }
-      
+        ThrowPREP();
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
     
-        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
-        ThrowPREP();
+
+        SetRBVelocity();
         m_RB.velocity = velocity;
 
         this.GetComponent<Renderer>().enabled = false;
@@ -112,16 +123,18 @@ public class Rescue : MonoBehaviour
     /// </summary>
     private void ThrowPREP()
     {
-        rescuedPlayer.GetComponent<HingeManager>().JointOff();
+       // rescuedPlayer.GetComponent<HingeManager>().JointOff();
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
+       // direction = m_targetVec;
     }
 
     private void SetThrowPos()
     {
         if (isThrowing)
             return;
-        
+       
+        //指定の場所まで移動したかどうか判断させたい ->別に視覚的にロープがあればjoint切ってもいいかも
         if (Mathf.Approximately(Vector3.Distance(rescuedPlayer.transform.position, m_targetVec), 0))
         {
             RescueThrowing();
@@ -129,8 +142,8 @@ public class Rescue : MonoBehaviour
         }
         else
         {
-            Vector3 direction = (m_targetVec - rescuedPlayer.transform.position).normalized;
-            m_RB.AddForce(direction * 2); 
+           // m_RB.AddForce(direction * 10);
+            m_RB.MovePosition(direction);
         }
     }
 
@@ -153,9 +166,18 @@ public class Rescue : MonoBehaviour
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
     }
 
-    private void Update()
+    public void StartRescue()
     {
-        //これ使うと全部のインスタンスで実行されてしまうからエラー出る
-        SetThrowPos();
+        m_PM.RescueState = RescueState.Move;
+        rescuedPlayer.GetComponent<HingeManager>().RescueAdjust();
+        
+    }
+
+    private void FixedUpdate()
+    {
+        /*if (m_PM.RescueState == RescueState.Move)
+        {
+            SetThrowPos();
+        }*/
     }
 }
