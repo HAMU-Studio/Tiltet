@@ -94,6 +94,7 @@ public class HingeManager : MonoBehaviour
     {
         SetMotor();
         SetLimit();
+        m_hingeJoint.useSpring = false;
     }
     private void SetMotor()
     {
@@ -108,8 +109,6 @@ public class HingeManager : MonoBehaviour
     private void SetLimit()
     {
         JointLimits limits = m_hingeJoint.limits;
-        limits.min = -50f;
-        //limits.bounciness = 50f;
         limits.max = 50f;
         m_hingeJoint.limits = limits;
         m_hingeJoint.useLimits = true;
@@ -128,6 +127,11 @@ public class HingeManager : MonoBehaviour
         if (m_PM.RescueState == RescueState.Move)
         {
           //  m_hingeJoint.
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            this.gameObject.transform.rotation = Quaternion.identity;
         }
     }
 
