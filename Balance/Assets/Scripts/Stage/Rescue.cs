@@ -15,6 +15,7 @@ public class Rescue : MonoBehaviour
     {
         canRescueAct = false;
         isThrowing = false;
+        once = false;
     }
 
     
@@ -69,13 +70,15 @@ public class Rescue : MonoBehaviour
     [Header("射出角度")]
     [SerializeField] float m_Angle = 60;
     
-    public void RescueThrowing()
+    public void RescueThrow()
     {
+        Debug.Log("CallRescueThrow");
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
             return;
         }
+        Debug.Log("CallRescueThrow2");
         ThrowPREP();
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
@@ -137,7 +140,7 @@ public class Rescue : MonoBehaviour
         //指定の場所まで移動したかどうか判断させたい ->別に視覚的にロープがあればjoint切ってもいいかも
         if (Mathf.Approximately(Vector3.Distance(rescuedPlayer.transform.position, m_targetVec), 0))
         {
-            RescueThrowing();
+            RescueThrow();
             isThrowing = true;
         }
         else
@@ -169,8 +172,20 @@ public class Rescue : MonoBehaviour
     public void StartRescue()
     {
         m_PM.RescueState = RescueState.Move;
-        rescuedPlayer.GetComponent<HingeManager>().RescueAdjust();
+        rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
+    }
+
+    private bool once;
+    private void Update()
+    {
+        if (once)
+           return;
         
+        if (m_PM.RescueState == RescueState.Fly)
+        {
+            RescueThrow();
+            once = true;
+        }
     }
 
     private void FixedUpdate()

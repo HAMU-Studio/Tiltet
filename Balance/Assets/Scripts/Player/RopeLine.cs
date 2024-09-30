@@ -40,6 +40,7 @@ public class RopeLine : MonoBehaviour
 
     public void ResetRope()
     {
+        Debug.Log("RopeOff");
         m_ropeLine.enabled = false;
         SetLinePos ( Vector3.zero, Vector3.zero );
         m_endPoint = null;

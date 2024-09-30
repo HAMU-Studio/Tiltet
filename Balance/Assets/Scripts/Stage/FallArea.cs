@@ -78,8 +78,8 @@ public class FallArea : MonoBehaviour
         m_PM.RescueState = RescueState.Wait;
         CalcShortestDist();
            
-        HingeManager _hingeManager =  fallPlayerInstance.GetComponent<HingeManager>();
-        _hingeManager.SetJointAndLine();
+        JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
+        jointManager.SetJointAndLine();
     }
 
     private void SetFallInstance(Collider col)
