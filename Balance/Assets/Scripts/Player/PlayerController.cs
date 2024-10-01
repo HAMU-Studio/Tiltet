@@ -5,6 +5,8 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
+    private PlayerManager m_PM;
+    
     private Rigidbody m_Rigidbody;
     private Vector3 m_Velocity;
     private float m_moveSpeed;
@@ -13,8 +15,7 @@ public class PlayerController : MonoBehaviour
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
-
-    private PlayerManager m_PM;
+   
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
@@ -175,7 +176,7 @@ public class PlayerController : MonoBehaviour
     {   //落下速度の調整用
        
         //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
-        if (canMove == false)
+        if (canMove == false || m_PM.RescueState != RescueState.None)
             return;
         
         if (isKnockBack == false)

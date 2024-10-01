@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JointManager : MonoBehaviour
 {
-  //  private HingeJoint m_hingeJoint;
+    private HingeJoint m_hingeJoint;
     private SpringJoint m_springJoint;
     private Rigidbody m_pivotRB;
 
@@ -14,12 +14,16 @@ public class JointManager : MonoBehaviour
     void Start()
     {
         GetPlayerManager();
+        onceForce = false;
     }
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
     private Rigidbody m_RB;
     public void SetJointAndLine()
     {
+        /*if (m_PM.RescueState != RescueState.None)
+            return;*/
+        
         m_RB = gameObject.GetComponent<Rigidbody>();
         m_RB.freezeRotation = false;
 
@@ -28,15 +32,17 @@ public class JointManager : MonoBehaviour
         SetPivot();
         
         //この値によって挙動が変わってしまう。要注意
-        //  m_hingeJoint.anchor = new Vector3(0, 10, 0);
+        m_hingeJoint.anchor = new Vector3(0, 10, 0);
+
 
         m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
         //  m_springJoint.anchor = new Vector3(0, 10, 0);
-        m_springJoint.spring = 100f;
+        m_springJoint.spring = 15f;
         m_springJoint.damper = 0.2f;
+       
         
         //SetSpring(m_hingeJoint.spring, 2000, 1, true);
-        m_RB.freezeRotation = true;
+      //  m_RB.freezeRotation = true;
         SetAxis();
         
         Vector3 force = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
@@ -48,18 +54,19 @@ public class JointManager : MonoBehaviour
     {
         //Debug.Log("state = " + GameManager.instance.RescueState);
         
-      //gameObject.AddComponent<HingeJoint>();
+        gameObject.AddComponent<HingeJoint>();
         gameObject.AddComponent<SpringJoint>();
         
-     //m_hingeJoint  = GetComponent<HingeJoint>();
+        m_hingeJoint  = GetComponent<HingeJoint>();
         m_springJoint = GetComponent<SpringJoint>();
     }
 
     public void JointOff()
     {
-     //   m_hingeJoint = GetComponent<HingeJoint>();
-    //    Destroy(m_hingeJoint);
+        m_hingeJoint = GetComponent<HingeJoint>();
+        Destroy(m_hingeJoint);
         Destroy(m_springJoint);
+        m_RB.freezeRotation = true;
     }
 
     public void RopeOff()
@@ -70,13 +77,13 @@ public class JointManager : MonoBehaviour
 
     private void SetPivot()
     {
-   //     m_hingeJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
+        m_hingeJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
     }
 
     private void SetAxis()
     {
         //ここのX,Z上げて大げさにしても良い
-  //      m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 0f, 5f));
+        m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
     }
 
     private void SetSpring(JointSpring jointSpring, float spring, float damper, bool isHinge)
@@ -124,6 +131,8 @@ public class JointManager : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
     }
 
+
+  　private float lowerLimit = 10f;
     private void CheckDistanceFromStage()
     {
         Vector3 pivotPos = GameManager.instance.Pivot.transform.position;
@@ -131,11 +140,10 @@ public class JointManager : MonoBehaviour
         float dist = Vector3.Distance(transform.position, pivotPos);
 
         Debug.Log("dist = " + dist);
-        if (dist >= 7f)
+        if (dist >= lowerLimit)
         {
             StartCoroutine("DelayFly");
         }
-
     }
 
     /// <summary>
@@ -197,14 +205,30 @@ public class JointManager : MonoBehaviour
            StartCoroutine("DelayFly");*/
     }
 
+    private Vector3 force = new Vector3(-50f, 1f, -50f);
+   private bool onceForce = false;
     private void FixedUpdate()
     {
         if (m_PM.RescueState == RescueState.Move)
         {
+            // JointOff();
             CheckDistanceFromStage();
+           //m_RB.AddForce(Vector3.up * 10);
             
-            Vector3 force = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
-            m_RB.AddForce(force);
+            if (onceForce)
+                return;
+            // JointOff();
+
+            Vector3 direction = GameManager.instance.Pivot.transform.position;
+
+            direction = (direction - transform.position).normalized;
+            m_hingeJoint.breakForce = 5f;
+            m_springJoint.breakForce = 5f;
+            direction = Vector3.Scale(direction, force);
+            m_RB.AddForce(direction, ForceMode.Impulse);
+            onceForce = true;
+            
+            m_RB.AddForce(Vector3.up * 5);
         }
     }
 
