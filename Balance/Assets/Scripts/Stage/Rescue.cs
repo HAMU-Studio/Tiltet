@@ -3,13 +3,10 @@ using UnityEngine;
 
 public class Rescue : MonoBehaviour
 {
-
     private Rigidbody m_RB;
     private GameObject rescuePlayer;
     private bool canRescueAct;
     private Vector3 direction;
-
-  
  
     void Start()
     {
@@ -17,7 +14,6 @@ public class Rescue : MonoBehaviour
         isThrowing = false;
         once = false;
     }
-
     
     private void OnTriggerEnter(Collider other)
     {
@@ -72,13 +68,13 @@ public class Rescue : MonoBehaviour
     
     public void RescueThrow()
     {
-        Debug.Log("CallRescueThrow");
+       
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
             return;
         }
-        Debug.Log("CallRescueThrow2");
+      
         ThrowPREP();
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
@@ -88,7 +84,7 @@ public class Rescue : MonoBehaviour
         SetRBVelocity();
         m_RB.velocity = velocity;
 
-        this.GetComponent<Renderer>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
     }
    
     /// <param name="pointA">飛ばす元(落ちたプレイヤー)</param>
@@ -188,11 +184,4 @@ public class Rescue : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        /*if (m_PM.RescueState == RescueState.Move)
-        {
-            SetThrowPos();
-        }*/
-    }
 }

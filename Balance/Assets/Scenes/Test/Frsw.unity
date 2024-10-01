@@ -1337,6 +1337,11 @@ PrefabInstance:
       propertyPath: m_throwPoint
       value: 
       objectReference: {fileID: 4214134735467670607}
+    - target: {fileID: 713065880327415689, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1119215871430751153, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_throwPoint
@@ -1387,10 +1392,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pivot 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2816300049403162981, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2896077700676835881, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_Name
       value: Pivot 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2950257379199898047, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3166846555074800496, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
@@ -1467,6 +1482,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3964908980692265343, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4176443993459180775, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4366528372208008305, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_Name
@@ -1482,11 +1507,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pivot 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4802439145947431853, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5051790470529785048, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_throwPoint
       value: 
       objectReference: {fileID: 4214134735467670617}
+    - target: {fileID: 5503956220698849953, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5584708038934292705, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_Name
@@ -1516,6 +1551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.833
+      objectReference: {fileID: 0}
+    - target: {fileID: 6200429524060612085, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6707234269573558213, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
@@ -1567,15 +1607,35 @@ PrefabInstance:
       propertyPath: m_throwPoint
       value: 
       objectReference: {fileID: 4214134735467670608}
+    - target: {fileID: 8333328696136709181, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8382859438036414063, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_throwPoint
       value: 
       objectReference: {fileID: 4214134735467670619}
+    - target: {fileID: 8406293869510998551, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8557983550436136325, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8660300148758257752, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
       propertyPath: m_Name
       value: Pivot 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717713303022074458, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: direction
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45cf954cb7434cb4180fe673e68ad518, type: 3}

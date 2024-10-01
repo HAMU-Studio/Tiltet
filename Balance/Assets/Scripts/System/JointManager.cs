@@ -9,12 +9,15 @@ public class JointManager : MonoBehaviour
     private Rigidbody m_pivotRB;
 
     private PlayerManager m_PM; //インスタンスから取得、操作
+    private Direction m_direction;
 
     //private RopeLine m_ropeLine;
     void Start()
     {
         GetPlayerManager();
         onceForce = false;
+        
+       
     }
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
@@ -39,10 +42,9 @@ public class JointManager : MonoBehaviour
         //  m_springJoint.anchor = new Vector3(0, 10, 0);
         m_springJoint.spring = 15f;
         m_springJoint.damper = 0.2f;
-       
         
         //SetSpring(m_hingeJoint.spring, 2000, 1, true);
-      //  m_RB.freezeRotation = true;
+        //m_RB.freezeRotation = true;
         SetAxis();
         
         Vector3 force = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
@@ -95,7 +97,7 @@ public class JointManager : MonoBehaviour
         if (isHinge)
         {
           //  m_hingeJoint.spring = JS;
-         //   m_hingeJoint.useSpring = true; 
+          //   m_hingeJoint.useSpring = true; 
         }
     }
 
@@ -206,7 +208,8 @@ public class JointManager : MonoBehaviour
     }
 
     private Vector3 force = new Vector3(-50f, 1f, -50f);
-   private bool onceForce = false;
+    private bool onceForce = false;
+  
     private void FixedUpdate()
     {
         if (m_PM.RescueState == RescueState.Move)
@@ -224,7 +227,26 @@ public class JointManager : MonoBehaviour
             direction = (direction - transform.position).normalized;
             m_hingeJoint.breakForce = 5f;
             m_springJoint.breakForce = 5f;
+            
             direction = Vector3.Scale(direction, force);
+            
+            m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
+
+            //正面方向の救出アクションのみ
+            if (m_direction == Direction.Foward)
+            {
+                if (Mathf.Sign(direction.x) < 0)
+                {
+                    direction = Vector3.Scale(direction, new Vector3(-1f, -1f, 1f));
+                }
+
+                if (Mathf.Sign(direction.z) < 0)
+                {
+                    direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
+                }
+
+            }
+            
             m_RB.AddForce(direction, ForceMode.Impulse);
             onceForce = true;
             
