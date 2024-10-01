@@ -81,7 +81,7 @@ public class Rescue : MonoBehaviour
     
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
 
-        SetRBVelocity();
+        ResetRBVelocity();
         m_RB.velocity = velocity;
 
         GetComponent<Renderer>().enabled = false;
@@ -122,10 +122,10 @@ public class Rescue : MonoBehaviour
     /// </summary>
     private void ThrowPREP()
     {
-       // rescuedPlayer.GetComponent<HingeManager>().JointOff();
+     
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
-       // direction = m_targetVec;
+       
     }
 
     private void SetThrowPos()
@@ -146,7 +146,7 @@ public class Rescue : MonoBehaviour
         }
     }
 
-    private void SetRBVelocity()
+    private void ResetRBVelocity()
     {
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         m_RB.velocity = Vector3.zero;
