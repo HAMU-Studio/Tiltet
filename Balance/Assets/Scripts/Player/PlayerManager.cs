@@ -15,8 +15,8 @@ public enum RescueState
     None,
     Wait,
     Move,
-    Throwing,
-    Fly
+    Fly,
+    SuperLand
 }
 
 public class PlayerManager : MonoBehaviour

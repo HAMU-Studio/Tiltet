@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class JointManager : MonoBehaviour
     private SpringJoint m_springJoint;
     private Rigidbody m_pivotRB;
 
-    private PlayerManager m_PM; //インスタンスから取得、操作
+    private PlayerManager m_PM; 　 //インスタンスから取得、操作
     private Direction m_direction;
 
     //private RopeLine m_ropeLine;
@@ -16,17 +15,12 @@ public class JointManager : MonoBehaviour
     {
         GetPlayerManager();
         onceForce = false;
-        
-       
     }
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
     private Rigidbody m_RB;
     public void SetJointAndLine()
     {
-        /*if (m_PM.RescueState != RescueState.None)
-            return;*/
-        
         m_RB = gameObject.GetComponent<Rigidbody>();
         m_RB.freezeRotation = false;
 
@@ -37,19 +31,15 @@ public class JointManager : MonoBehaviour
         //この値によって挙動が変わってしまう。要注意
         m_hingeJoint.anchor = new Vector3(0, 10, 0);
 
-
         m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
-        //  m_springJoint.anchor = new Vector3(0, 10, 0);
+       
         m_springJoint.spring = 15f;
         m_springJoint.damper = 0.2f;
         
-        //SetSpring(m_hingeJoint.spring, 2000, 1, true);
-        //m_RB.freezeRotation = true;
         SetAxis();
         
         Vector3 force = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
         m_RB.AddForce(force, ForceMode.Impulse);
-        
     }
 
     private void AddJoint()
@@ -87,61 +77,23 @@ public class JointManager : MonoBehaviour
         //ここのX,Z上げて大げさにしても良い
         m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
     }
-
-    private void SetSpring(JointSpring jointSpring, float spring, float damper, bool isHinge)
-    {
-        /*JointSpring JS = jointSpring;   //m_hingeJoint.spring
-        JS.spring = spring;             //1000
-        JS.damper = damper;  */           //10
-
-        if (isHinge)
-        {
-          //  m_hingeJoint.spring = JS;
-          //   m_hingeJoint.useSpring = true; 
-        }
-    }
-
-    /// <summary>
-    /// 救出アクションでステージの引っかかり防止に使う
-    /// </summary>
-    public void RescueAdjust()
-    {
-        SetMotor();
-        SetLimit();
-      //  m_hingeJoint.useSpring = false;
-    }
-    private void SetMotor()
-    {
-        /*JointMotor motor = m_hingeJoint.motor;
-        motor.force = 100;
-        motor.targetVelocity = 90;
-        motor.freeSpin = false;
-        m_hingeJoint.motor = motor;
-        m_hingeJoint.useMotor = true;*/
-    }
-
-    private void SetLimit()
-    {
-        /*JointLimits limits = m_hingeJoint.limits;
-        limits.max = 50f;
-        m_hingeJoint.limits = limits;
-        m_hingeJoint.useLimits = true;*/
-    }
-
+    
     private void GetPlayerManager()
     {
         m_PM = GetComponent<PlayerManager>();
     }
 
-
   　private float lowerLimit = 10f;
+   /// <summary>
+   /// ある程度離れていたら飛ばす
+   /// </summary>
     private void CheckDistanceFromStage()
     {
         Vector3 pivotPos = GameManager.instance.Pivot.transform.position;
         
         float dist = Vector3.Distance(transform.position, pivotPos);
 
-        Debug.Log("dist = " + dist);
+       // Debug.Log("dist = " + dist);
         if (dist >= lowerLimit)
         {
             StartCoroutine("DelayFly");
@@ -197,42 +149,45 @@ public class JointManager : MonoBehaviour
 
     private void Update()
     {
-        if (m_PM.RescueState == RescueState.Wait)
+        /*if (m_PM.RescueState == RescueState.Wait)
         {
             //DecreaseAnchorXZ();
-           
-        }
-        
-        /*if (m_PM.RescueState == RescueState.Throwing)
-           StartCoroutine("DelayFly");*/
+        }*/
     }
-
     private Vector3 force = new Vector3(-50f, 1f, -50f);
-    private bool onceForce = false;
-  
+    private bool onceForce;
     private void FixedUpdate()
     {
+        RescueAdjust();
+    }
+    
+    /// <summary>
+    /// 救出アクションでステージの引っかかり防止に使う
+    /// jointあまり関係ないから違うスクリプトに移したい
+    /// </summary>
+    private void RescueAdjust()
+    {
+        //もう少し細かく分けたい
         if (m_PM.RescueState == RescueState.Move)
         {
-            // JointOff();
             CheckDistanceFromStage();
-           //m_RB.AddForce(Vector3.up * 10);
             
             if (onceForce)
                 return;
-            // JointOff();
 
+            //pivotと落下したプレイヤー、二点間のベクトルを取得->Y軸以外反転
             Vector3 direction = GameManager.instance.Pivot.transform.position;
-
-            direction = (direction - transform.position).normalized;
-            m_hingeJoint.breakForce = 5f;
-            m_springJoint.breakForce = 5f;
             
+            direction = (direction - transform.position).normalized;
             direction = Vector3.Scale(direction, force);
             
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
 
-            //正面方向の救出アクションのみ
+            //breakForce設定してちょっと力加われば自動で千切れるように(Componentごと消える)
+            m_hingeJoint.breakForce = 5f;
+            m_springJoint.breakForce = 5f;
+            
+            //正面方向の救出アクションのみ符号反転すれば正常に動く
             if (m_direction == Direction.Foward)
             {
                 if (Mathf.Sign(direction.x) < 0)
@@ -244,25 +199,26 @@ public class JointManager : MonoBehaviour
                 {
                     direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
                 }
-
             }
             
-            m_RB.AddForce(direction, ForceMode.Impulse);
-            onceForce = true;
+            //ステージの反対方向と上方向に力加える
             
+            m_RB.AddForce(direction, ForceMode.Impulse);
             m_RB.AddForce(Vector3.up * 5);
+            
+            onceForce = true;
         }
     }
 
     private IEnumerator DelayFly()
     {
-        Debug.Log("CallDelayFly");
         JointOff();
         m_PM.RescueState = RescueState.Fly;
         
         yield return new WaitForSeconds(0.7f);
         
         RopeOff();
-       
+        
+        onceForce = false;
     }
 }

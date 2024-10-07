@@ -122,28 +122,8 @@ public class Rescue : MonoBehaviour
     /// </summary>
     private void ThrowPREP()
     {
-     
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
-       
-    }
-
-    private void SetThrowPos()
-    {
-        if (isThrowing)
-            return;
-       
-        //指定の場所まで移動したかどうか判断させたい ->別に視覚的にロープがあればjoint切ってもいいかも
-        if (Mathf.Approximately(Vector3.Distance(rescuedPlayer.transform.position, m_targetVec), 0))
-        {
-            RescueThrow();
-            isThrowing = true;
-        }
-        else
-        {
-           // m_RB.AddForce(direction * 10);
-            m_RB.MovePosition(direction);
-        }
     }
 
     private void ResetRBVelocity()
@@ -158,17 +138,18 @@ public class Rescue : MonoBehaviour
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
-    
-        isThrowing = false;
-        canRescueAct = false;
         
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+        
+        canRescueAct = false;
+        isThrowing = false;
+        once = false;
     }
 
     public void StartRescue()
     {
         m_PM.RescueState = RescueState.Move;
-        rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
+        //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
     private bool once;

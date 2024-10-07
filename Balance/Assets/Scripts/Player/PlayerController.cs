@@ -170,6 +170,7 @@ public class PlayerController : MonoBehaviour
                 //スーパー着地
                 Debug.Log("Call 1");
                 SuperLanding();
+                m_PM.RescueState = RescueState.SuperLand;
             }
             if (canRescueAct)
             {
@@ -212,7 +213,6 @@ public class PlayerController : MonoBehaviour
     {
         if (isFleezing)
         {
-            
             //このfreezePosを救出時に利用したい
            // freezePos = transform.position;
           
@@ -238,7 +238,6 @@ public class PlayerController : MonoBehaviour
     private bool isChanged;
     private void OnCollisionEnter(Collision collision)
     {
-      
         if (isJumping|| isKnockBack || canMove == false)
         {
             if (collision.gameObject.CompareTag("Ground"))  
@@ -246,7 +245,13 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
                 isKnockBack = false;
                 canMove = true;
-                Debug.Log("toLanding" );
+                //Debug.Log("toLanding" );
+                
+                if (m_PM.RescueState == RescueState.Fly ||
+                    m_PM.RescueState == RescueState.SuperLand)
+                {
+                    m_PM.RescueState = RescueState.None;
+                }
             }
         }
         
@@ -259,6 +264,9 @@ public class PlayerController : MonoBehaviour
             return;
     }
 
+    /// <summary>
+    /// 救出可能エリアにいるか
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("RescueArea"))

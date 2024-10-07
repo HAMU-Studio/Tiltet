@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 落ちた敵を消す、救出アクションの準備
@@ -84,7 +80,6 @@ public class FallArea : MonoBehaviour
 
     private void SetFallInstance(Collider col)
     {
-       
         fallPlayerInstance = col.gameObject;
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
@@ -100,7 +95,6 @@ public class FallArea : MonoBehaviour
         //できれば他スクリプトで行いたい
         foreach (GameObject cube in RescueActAreas)
         {
-            
             playerPos = fallPlayerInstance.transform.position;
             dist = Vector3.Distance(cube.transform.position, playerPos);
             
@@ -117,6 +111,7 @@ public class FallArea : MonoBehaviour
         }
         
         shortestDistCube.SetActive(true);
+        
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
         GameManager.instance.Pivot = childPivot;
