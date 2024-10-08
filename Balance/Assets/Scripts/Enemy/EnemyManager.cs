@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawnScript : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemy;
 
@@ -27,7 +27,6 @@ public class EnemySpawnScript : MonoBehaviour
 
     //敵の数検知
     private GameObject[] enemies;
-    // 敵の種類ランダム
     private int enemyKinds;
     private bool ableSpawn;
 
@@ -39,8 +38,7 @@ public class EnemySpawnScript : MonoBehaviour
     Vector3 maxPosX = new Vector3();
     Vector3 maxPosZ = new Vector3();
 
-    private int spawnCount;
-    public bool FightClear;
+    private float enemyCount;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,12 +57,11 @@ public class EnemySpawnScript : MonoBehaviour
         enemyPos.y = miniPos.y;
 
         // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval - 1.0f;
+        spawnTime = spawnInterval;
 
         ableSpawn = true;
 
-        spawnCount = 0;
-        FightClear = false;
+        enemyCount = 0;
     }
 
     // Update is called once per frame
@@ -81,16 +78,10 @@ public class EnemySpawnScript : MonoBehaviour
                 for (int i = 0; spawnNum > i; i++)
                 {
                     EnemySpawn();
-                    spawnCount++;
                 }
             }
 
             spawnTime = 0;
-        }
-
-        if(spawnCount>=3)
-        {
-            FightClear = true;
         }
     }
 

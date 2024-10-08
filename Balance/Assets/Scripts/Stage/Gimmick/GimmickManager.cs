@@ -4,14 +4,12 @@ using System.Collections.Specialized;
 using UnityEngine;
 using TMPro;
 
-public class Gimmick : MonoBehaviour
+public class GimmickManager : MonoBehaviour
 {
     [SerializeField] private GameObject coin;
     [SerializeField] private GameObject[] stands;
     [SerializeField] private GameObject[] parts;
     [SerializeField] private GameObject[] coinPositions;
-
-    [SerializeField] private TextMeshProUGUI clearText;
 
     private int numCoin;
     private int countCoin;
@@ -44,7 +42,7 @@ public class Gimmick : MonoBehaviour
     {
         if (countParts >= 2)
         {
-            clearText.text = "Clear!";
+
         }
     }
     void FixUpdate()
