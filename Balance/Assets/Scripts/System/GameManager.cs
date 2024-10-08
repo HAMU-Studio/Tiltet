@@ -6,14 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum StageState
-{
-    //ステージによって何か変わるかも
-    First,
-    Second,
-    Third
-}
-
 public enum GameState
 {
     //制作の進捗具合によって逐次追加
@@ -92,15 +84,24 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    public void InitGame()
+
+    private Vector3 m_axis;
+    private GameObject m_pivot;
+    /// <summary>
+    /// 振り子の方向制御用
+    /// </summary>
+    public Vector3 Axis
     {
-        Time.timeScale = 0;
-        m_life = initialLife;
-        m_wave = initialWave;
+        get { return m_axis;}
         
-   
-        
-        //今後ScoreUIのUpdate呼び出す
+        set { m_axis = value;}
+    }
+
+    public GameObject Pivot
+    {
+        get { return m_pivot; }
+
+        set { m_pivot = value; }
     }
     
     public void SetCurrentState(GameState state)

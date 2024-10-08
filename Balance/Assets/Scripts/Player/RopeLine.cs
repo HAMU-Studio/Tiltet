@@ -19,15 +19,15 @@ public class RopeLine : MonoBehaviour
 
     void Update()
     {
-        if (m_ropeLine.enabled == true)
+        if (m_ropeLine.enabled)
         {
-            SetLinePos();
+            SetLinePos(m_startPoint.position, m_endPoint.position);
         }
     }
 
-    private void SetLinePos()
+    private void SetLinePos(Vector3 startPos, Vector3 endPos)
     {
-        var positions = new Vector3[] { m_startPoint.position, m_endPoint.position };
+        var positions = new Vector3[] { startPos, endPos };
         m_lineRenderer?.SetPositions(positions);
     }
   
@@ -38,9 +38,11 @@ public class RopeLine : MonoBehaviour
         m_ropeLine.enabled = true;
     }
 
-    public void ResetEndPoint()
+    public void ResetRope()
     {
+        Debug.Log("RopeOff");
         m_ropeLine.enabled = false;
+        SetLinePos ( Vector3.zero, Vector3.zero );
         m_endPoint = null;
     }
 }
