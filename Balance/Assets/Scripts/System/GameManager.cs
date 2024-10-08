@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 public enum GameState
 {
@@ -25,17 +21,14 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     [SerializeField] private GameState currentGamestate;
-    [SerializeField] private StageState currentStage;
+    [FormerlySerializedAs("currentStage")] [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
     [SerializeField] private int initialWave = default!;
     
-    private int m_life;
-    private int m_wave;
-    
     private void Awake()
     {
-        SetCurrentState(GameState.WaitStart);
+        CurrentState = GameState.WaitStart;
 
         if (instance == null)
         {
@@ -47,18 +40,23 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
-    // Start is called before the first frame update
+   
     void Start()
     {
         InitGame();
-      
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private int m_life;
+    private int m_wave;
+    private int m_parts;
+  
+    public void InitGame()
     {
-        
+        Time.timeScale = 0;
+        m_life = initialLife;
+        m_wave = initialWave;
+        m_parts = 0;
+        //今後ScoreUIのUpdate呼び出す
     }
 
     //このあたりはプロトタイプのみ
@@ -66,7 +64,7 @@ public class GameManager : MonoBehaviour
     {
         InitGame();
         Time.timeScale = 1;
-        SetCurrentState(GameState.Search);
+        CurrentState = GameState.Search;
     }
 
     public void Restart()
@@ -82,6 +80,17 @@ public class GameManager : MonoBehaviour
 #else
        Application.Quit();
 #endif
+    }
+    public GameState CurrentState
+    {
+        set
+        {
+            currentGamestate = value;
+        }
+        get
+        {
+            return currentGamestate;
+        }
     }
 
 
@@ -104,17 +113,36 @@ public class GameManager : MonoBehaviour
         set { m_pivot = value; }
     }
     
-    public void SetCurrentState(GameState state)
+    public int Life
     {
-        currentGamestate = state;
-    }
-    public GameState ReturnCurrentState()
-    {
-        return currentGamestate;
+        get { return m_life;}
+        
+        set { m_life = value;}
     }
 
-    public void start()
+    public void AddPartsNum()
     {
-        SceneManager.LoadScene("Forest");
+        m_parts++;
+    }
+    public int GetPartsNum()
+    {
+        return m_parts;
+    }
+    
+    public void ChangeStageModeTo(GameState state)
+    {
+        //tips GameManager.instance.CurrentState
+        //でスクリプトアタッチしなくても現在が探索中なのか戦闘中なのか確認できるよ
+        
+        if (state == GameState.EnemyBattle || state == GameState.Search)
+            GameManager.instance.CurrentState = state;
+        
+        /*foreach (GameObject wall in walls)    壁はなくなりそう
+        {
+            wall.SetActive(false);
+        }*/
+
+        //stageの移動停止と再開処理とかカメラの切り替え処理呼ぶ　ここは最悪相互参照になってもいいかも
+        
     }
 }

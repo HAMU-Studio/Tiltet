@@ -28,5 +28,4 @@ public class PlayerManager : MonoBehaviour
         set { currentRescueState = value; }
         get { return currentRescueState; }
     }
- 
 }

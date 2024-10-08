@@ -220,5 +220,8 @@ public class JointManager : MonoBehaviour
         RopeOff();
         
         onceForce = false;
+
+        GameManager.instance.Pivot = null;
+        GameManager.instance.Axis = Vector3.zero;
     }
 }

@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
             if (m_PM.RescueState == RescueState.Fly)
             {
                 //スーパー着地
-                Debug.Log("Call 1");
+             //   Debug.Log("Call 1");
                 SuperLanding();
                 m_PM.RescueState = RescueState.SuperLand;
             }
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
         m_RB.angularVelocity = Vector3.zero;
         
         m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
-        Debug.Log("call 2");
+       // Debug.Log("call 2");
     }
 
     private void Gravity()
