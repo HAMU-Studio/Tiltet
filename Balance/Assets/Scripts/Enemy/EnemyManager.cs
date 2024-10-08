@@ -38,7 +38,10 @@ public class EnemyManager : MonoBehaviour
     Vector3 maxPosX = new Vector3();
     Vector3 maxPosZ = new Vector3();
 
+    private Rigidbody enemyRb;
+
     private float enemyCount;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,6 +96,7 @@ public class EnemyManager : MonoBehaviour
         enemyPos.x = Random.Range(lowestPositionX, highestPositionX);
         enemyPos.z = Random.Range(lowestPositionZ, highestPositionZ);
         //enemyPos = new Vector3(ramdomPositionX, 0, ramdomPositionZ);
+
 
         newEnemy.transform.position = enemyPos;
     }
