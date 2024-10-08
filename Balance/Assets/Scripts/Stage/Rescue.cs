@@ -1,33 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine;
 
 public class Rescue : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Rigidbody m_RB;
+    private GameObject rescuePlayer;
+    private bool canRescueAct;
+    private Vector3 direction;
+ 
     void Start()
     {
         canRescueAct = false;
         isThrowing = false;
+        once = false;
     }
     
-    private Rigidbody m_RB;
-    private void FixedUpdate()
-    {
-        /*if (isThrowing)
-        {
-           // RescueThrowing();
-           
-            //この辺あやしい
-        }*/
-    }
-
-    private GameObject rescuePlayer;
-    private bool canRescueAct;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -36,6 +23,14 @@ public class Rescue : MonoBehaviour
             rescuePlayer = other.gameObject;
             Debug.Log("canRescueAct = " + canRescueAct);
         }
+    }
+    
+    private Vector3 m_targetVec;
+    public void SaveTarget(Vector3 targetVector)
+    {
+        m_targetVec = targetVector;
+        
+        //ここの座標で透明なcube作成、onTriggerで到着したか判定させたい
     }
 
     private void OnTriggerExit(Collider other)
@@ -56,9 +51,12 @@ public class Rescue : MonoBehaviour
     }
 
     private GameObject rescuedPlayer;
+    private PlayerManager m_PM;
     public void SetRescuedPlayer(GameObject Player)
     {
         rescuedPlayer = Player;
+        m_PM = rescuedPlayer.GetComponent<PlayerManager>();
+        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
     }
     
     [Header("救出アクションで飛ばす先(反対側の板)")]
@@ -68,26 +66,25 @@ public class Rescue : MonoBehaviour
     [Header("射出角度")]
     [SerializeField] float m_Angle = 60;
     
-    public void RescueThrowing()
+    public void RescueThrow()
     {
+       
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
             return;
         }
-        isThrowing = true;
-        GameManager.instance.RescueState = RescueState.Throwing;
+      
+        ThrowPREP();
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
     
-        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
-     
-        
+
+        ResetRBVelocity();
         m_RB.velocity = velocity;
 
-        this.GetComponent<Renderer>().enabled = false;
-       
+        GetComponent<Renderer>().enabled = false;
     }
    
     /// <param name="pointA">飛ばす元(落ちたプレイヤー)</param>
@@ -120,7 +117,16 @@ public class Rescue : MonoBehaviour
         }
     }
 
-    private void SetRBVelocity()
+    /// <summary>
+    /// 救出アクションの直前処理。ステージが引っ掛かりそうなら外に移動->ロープ切る->飛ばす
+    /// </summary>
+    private void ThrowPREP()
+    {
+        //ロープ作成時に回転制限オフにしたため
+        m_RB.freezeRotation = true;
+    }
+
+    private void ResetRBVelocity()
     {
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         m_RB.velocity = Vector3.zero;
@@ -133,15 +139,30 @@ public class Rescue : MonoBehaviour
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
         
+        rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+        
         canRescueAct = false;
         isThrowing = false;
-        canRescueAct = false;
-        
-        rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+        once = false;
     }
 
-    public bool GetIsThrowing()
+    public void StartRescue()
     {
-        return isThrowing;
+        m_PM.RescueState = RescueState.Move;
+        //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
+
+    private bool once;
+    private void Update()
+    {
+        if (once)
+           return;
+        
+        if (m_PM.RescueState == RescueState.Fly)
+        {
+            RescueThrow();
+            once = true;
+        }
+    }
+
 }
