@@ -21,17 +21,15 @@ public class Rescue : MonoBehaviour
         {
             canRescueAct = true;
             rescuePlayer = other.gameObject;
-            Debug.Log("canRescueAct = " + canRescueAct);
+         //   Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
     
-    private Vector3 m_targetVec;
+   /*// private Vector3 m_targetVec;
     public void SaveTarget(Vector3 targetVector)
     {
-        m_targetVec = targetVector;
-        
-        //ここの座標で透明なcube作成、onTriggerで到着したか判定させたい
-    }
+       // m_targetVec = targetVector;
+    }*/
 
     private void OnTriggerExit(Collider other)
     {
@@ -68,7 +66,6 @@ public class Rescue : MonoBehaviour
     
     public void RescueThrow()
     {
-       
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
@@ -148,7 +145,7 @@ public class Rescue : MonoBehaviour
 
     public void StartRescue()
     {
-        m_PM.RescueState = RescueState.Move;
+        m_PM.State = RescueState.Move;
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
@@ -158,7 +155,7 @@ public class Rescue : MonoBehaviour
         if (once)
            return;
         
-        if (m_PM.RescueState == RescueState.Fly)
+        if (m_PM.State == RescueState.Fly)
         {
             RescueThrow();
             once = true;
