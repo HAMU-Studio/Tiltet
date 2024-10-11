@@ -72,6 +72,7 @@ public class FallArea : MonoBehaviour
     private void ResetFlag()
     {
         waitRescue = false;
+        Debug.Log("reset waitRescue");
     }
 
     /// <summary>
@@ -94,13 +95,22 @@ public class FallArea : MonoBehaviour
 
     private void SetFallInstance(Collider col)
     {
+        
+        /*
+        if (m_PM != null)
+        {
+            if (m_PM.State != RescueState.None)
+            {
+                return;
+            }
+        }*/
         fallPlayerInstance = col.gameObject;
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
     }
 
     private Vector3 playerPos;
-    private GameObject shortestDistCube;
+    private GameObject shortestDistArea;
     private float shortestDist = 0;
     private float dist;
     private void CalcShortestDist()
@@ -109,30 +119,30 @@ public class FallArea : MonoBehaviour
         //できれば他スクリプトで行いたい
         /*GameManager.instance.Pivot = null;
         GameManager.instance.Axis = Vector3.zero;*/
-        foreach (GameObject cube in RescueActAreas)
+        foreach (GameObject area in RescueActAreas)
         {
             playerPos = fallPlayerInstance.transform.position;
-            dist = Vector3.Distance(cube.transform.position, playerPos);
+            dist = Vector3.Distance(area.transform.position, playerPos);
             
             if (shortestDist == 0)
             {
                 shortestDist = dist;
-                shortestDistCube = cube;
+                shortestDistArea = area;
             }
             else if (dist < shortestDist)
             {
                 shortestDist = dist;
-                shortestDistCube = cube;
+                shortestDistArea = area;
             }
         }
         
-        if (shortestDistCube == null)
+        if (shortestDistArea == null)
             Debug.LogError("shortestDistCube are null");
         
-        shortestDistCube.SetActive(true);
+        shortestDistArea.SetActive(true);
         
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
-        GameObject childPivot = shortestDistCube.transform.GetChild(0).gameObject;
+        GameObject childPivot = shortestDistArea.transform.GetChild(0).gameObject;
         GameManager.instance.Pivot = childPivot;
         
         childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);
@@ -140,8 +150,8 @@ public class FallArea : MonoBehaviour
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         //最短距離のオブジェクトだけon
-        shortestDistCube.GetComponent<Renderer>().enabled = true;
-        shortestDistCube.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
+        shortestDistArea.GetComponent<Renderer>().enabled = true;
+        shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
         
      //   shortestDistCube.GetComponent<Rescue>().SaveTarget(fallPlayerInstance.transform.position);
     }
@@ -150,11 +160,12 @@ public class FallArea : MonoBehaviour
     {
       //  shortestDistCube.GetComponent<Renderer>().enabled = false;
       //  shortestDistCube.SetActive(false);
-      //  shortestDistCube = null;
+      m_PM = null;
+      shortestDistArea = null;
       shortestDist = 0;
       foreach (GameObject area in RescueActAreas)
       {
-          area.SetActive(false);
+        //  area.SetActive(false);
           area.GetComponent<Renderer>().enabled = false;
       }
     }

@@ -44,6 +44,7 @@ public class Rescue : MonoBehaviour
         //m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         if (collision.rigidbody == m_RB)
         {
+            //これ意味ない説
             RescPostProcess();
         }
     }
@@ -132,15 +133,18 @@ public class Rescue : MonoBehaviour
 
     private void RescPostProcess()
     {
+        Debug.Log("call PostProcess");
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
         
-        rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+       // rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
         
         canRescueAct = false;
         isThrowing = false;
         once = false;
+        m_PM = null;
+        gameObject.SetActive(false);
     }
 
     public void StartRescue()
@@ -153,7 +157,14 @@ public class Rescue : MonoBehaviour
     private void Update()
     {
         if (once)
-           return;
+        {
+            if (m_PM.State == RescueState.SuperLand || m_PM.State == RescueState.None)
+            {
+                RescPostProcess();
+            }
+            return;
+        }
+         
         
         if (m_PM.State == RescueState.Fly)
         {

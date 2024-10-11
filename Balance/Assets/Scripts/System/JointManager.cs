@@ -209,12 +209,19 @@ public class JointManager : MonoBehaviour
                     direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
                 }
             }
+
+            /*if (m_direction == Direction.Back)
+            {
+                direction = Vector3.Scale(direction, new Vector3(1f, -1f, 1f));
+                //m_RB.AddForce(Vector3.up * 7f);
+            }*/
             
             //ステージの反対方向と上方向に力加える
             
             m_RB.AddForce(direction, ForceMode.Impulse);
             m_RB.AddForce(Vector3.up * 7f);
             
+            Debug.Log("addForce");
             onceForce = true;
         }
     }
@@ -239,6 +246,7 @@ public class JointManager : MonoBehaviour
         {
             if (m_PM.State == RescueState.Fly || m_PM.State == RescueState.SuperLand)
             {
+                Debug.Log("pivot and axis are null");
                 GameManager.instance.Pivot = null;
                 GameManager.instance.Axis = Vector3.zero;
             }

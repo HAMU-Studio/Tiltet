@@ -45,7 +45,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentState != m_beforeState)
         {
-            Debug.Log("state change" + m_beforeState + "->" + currentState);
+            Debug.Log("state change " + m_beforeState + "->" + currentState);
         }
         
         m_beforeState = currentState;

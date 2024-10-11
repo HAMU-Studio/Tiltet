@@ -213,26 +213,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isFleezing)
         {
-            //このfreezePosを救出時に利用したい
-           // freezePos = transform.position;
-          
-            /*m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;*/
-            
             canMove = false;
             this.isFleezing = true;
         }
         else
         {
             this.isFleezing = false;
-           // canMove = true; これを着地終了時に呼ぶ
         }
-    }
-
-    private Vector3 freezePos;
-    private void PlayerFreeze()
-    {
-       // transform.position = freezePos;
     }
         
     private bool isChanged;
