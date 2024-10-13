@@ -164,7 +164,6 @@ public class Rescue : MonoBehaviour
             }
             return;
         }
-         
         
         if (m_PM.State == RescueState.Fly)
         {
@@ -172,5 +171,4 @@ public class Rescue : MonoBehaviour
             once = true;
         }
     }
-
 }

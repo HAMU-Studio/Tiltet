@@ -242,7 +242,7 @@ public class JointManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        /*if (other.gameObject.CompareTag("Ground"))
         {
             if (m_PM.State == RescueState.Fly || m_PM.State == RescueState.SuperLand)
             {
@@ -250,6 +250,6 @@ public class JointManager : MonoBehaviour
                 GameManager.instance.Pivot = null;
                 GameManager.instance.Axis = Vector3.zero;
             }
-        }
+        }*/
     }
 }
