@@ -52,10 +52,11 @@ public class GameManager : MonoBehaviour
   
     public void InitGame()
     {
-        Time.timeScale = 0;
+     //   Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
         m_parts = 0;
+        StartGame();
         //今後ScoreUIのUpdate呼び出す
     }
 
