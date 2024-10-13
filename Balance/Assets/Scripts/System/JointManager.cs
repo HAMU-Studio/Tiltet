@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class JointManager : MonoBehaviour
@@ -58,6 +60,7 @@ public class JointManager : MonoBehaviour
         m_hingeJoint = GetComponent<HingeJoint>();
         Destroy(m_hingeJoint);
         Destroy(m_springJoint);
+        m_RB.rotation = quaternion.identity;
         m_RB.freezeRotation = true;
     }
 
@@ -74,8 +77,20 @@ public class JointManager : MonoBehaviour
 
     private void SetAxis()
     {
-        //ここのX,Z上げて大げさにしても良い
-        m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
+        //二点間のベクトル利用してaxisを設定すると手前と奥だけ挙動がおかしくなる -> axisを全部0にするとZ軸で動いてくれる(要修正)
+        
+        m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
+
+        if (m_direction == Direction.Foward || m_direction == Direction.Back)
+        {
+           // m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(1f, 1f, -5f));
+            m_hingeJoint.axis = Vector3.zero;
+        }
+        else
+        {
+            m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
+        }
+
     }
     
     private void GetPlayerManager()
@@ -87,17 +102,16 @@ public class JointManager : MonoBehaviour
    /// <summary>
    /// ある程度離れていたら飛ばす
    /// </summary>
-    private void CheckDistanceFromStage()
+    private float CheckDistanceFromStage()
     {
         Vector3 pivotPos = GameManager.instance.Pivot.transform.position;
         
         float dist = Vector3.Distance(transform.position, pivotPos);
 
+        return dist;
+
        // Debug.Log("dist = " + dist);
-        if (dist >= lowerLimit)
-        {
-            StartCoroutine("DelayFly");
-        }
+   
     }
 
     /// <summary>
@@ -149,10 +163,7 @@ public class JointManager : MonoBehaviour
 
     private void Update()
     {
-        /*if (m_PM.RescueState == RescueState.Wait)
-        {
-            //DecreaseAnchorXZ();
-        }*/
+   
     }
     private Vector3 force = new Vector3(-50f, 1f, -50f);
     private bool onceForce;
@@ -168,9 +179,12 @@ public class JointManager : MonoBehaviour
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
-        if (m_PM.RescueState == RescueState.Move)
+        if (m_PM.State == RescueState.Move)
         {
-            CheckDistanceFromStage();
+            if (CheckDistanceFromStage() > lowerLimit)
+            {
+                StartCoroutine("DelayFly");
+            }
             
             if (onceForce)
                 return;
@@ -179,6 +193,13 @@ public class JointManager : MonoBehaviour
             Vector3 direction = GameManager.instance.Pivot.transform.position;
             
             direction = (direction - transform.position).normalized;
+            //ここ小さすぎる場合変化加えたい
+
+            if (CheckDistanceFromStage() <= 4f)
+            {
+                direction = Vector3.Scale(direction, new Vector3(5f, 2f, 5f));
+            }
+            
             direction = Vector3.Scale(direction, force);
             
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
@@ -200,12 +221,19 @@ public class JointManager : MonoBehaviour
                     direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
                 }
             }
+
+            /*if (m_direction == Direction.Back)
+            {
+                direction = Vector3.Scale(direction, new Vector3(1f, -1f, 1f));
+                //m_RB.AddForce(Vector3.up * 7f);
+            }*/
             
             //ステージの反対方向と上方向に力加える
             
             m_RB.AddForce(direction, ForceMode.Impulse);
-            m_RB.AddForce(Vector3.up * 5);
+            m_RB.AddForce(Vector3.up * 7f);
             
+            Debug.Log("addForce");
             onceForce = true;
         }
     }
@@ -213,15 +241,27 @@ public class JointManager : MonoBehaviour
     private IEnumerator DelayFly()
     {
         JointOff();
-        m_PM.RescueState = RescueState.Fly;
+        m_PM.State = RescueState.Fly;
         
         yield return new WaitForSeconds(0.7f);
         
         RopeOff();
         
         onceForce = false;
+        /*GameManager.instance.Pivot = null;
+        GameManager.instance.Axis = Vector3.zero;*/
+    }
 
-        GameManager.instance.Pivot = null;
-        GameManager.instance.Axis = Vector3.zero;
+    private void OnCollisionEnter(Collision other)
+    {
+        /*if (other.gameObject.CompareTag("Ground"))
+        {
+            if (m_PM.State == RescueState.Fly || m_PM.State == RescueState.SuperLand)
+            {
+                Debug.Log("pivot and axis are null");
+                GameManager.instance.Pivot = null;
+                GameManager.instance.Axis = Vector3.zero;
+            }
+        }*/
     }
 }

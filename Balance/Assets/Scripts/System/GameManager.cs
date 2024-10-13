@@ -101,7 +101,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public Vector3 Axis
     {
-        get { return m_axis;}
+        get
+        {
+            Debug.Log("axis = " + m_axis);
+            return m_axis;
+        }
         
         set { m_axis = value;}
     }

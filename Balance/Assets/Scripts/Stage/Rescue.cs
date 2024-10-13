@@ -21,17 +21,15 @@ public class Rescue : MonoBehaviour
         {
             canRescueAct = true;
             rescuePlayer = other.gameObject;
-            Debug.Log("canRescueAct = " + canRescueAct);
+         //   Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
     
-    private Vector3 m_targetVec;
+   /*// private Vector3 m_targetVec;
     public void SaveTarget(Vector3 targetVector)
     {
-        m_targetVec = targetVector;
-        
-        //ここの座標で透明なcube作成、onTriggerで到着したか判定させたい
-    }
+       // m_targetVec = targetVector;
+    }*/
 
     private void OnTriggerExit(Collider other)
     {
@@ -46,6 +44,7 @@ public class Rescue : MonoBehaviour
         //m_RB = rescuedPlayer.GetComponent<Rigidbody>();
         if (collision.rigidbody == m_RB)
         {
+            //これ意味ない説
             RescPostProcess();
         }
     }
@@ -68,7 +67,6 @@ public class Rescue : MonoBehaviour
     
     public void RescueThrow()
     {
-       
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
@@ -135,20 +133,23 @@ public class Rescue : MonoBehaviour
 
     private void RescPostProcess()
     {
+        Debug.Log("call PostProcess");
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
         
-        rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
+       // rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
         
         canRescueAct = false;
         isThrowing = false;
         once = false;
+        m_PM = null;
+        gameObject.SetActive(false);
     }
 
     public void StartRescue()
     {
-        m_PM.RescueState = RescueState.Move;
+        m_PM.State = RescueState.Move;
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
@@ -156,13 +157,18 @@ public class Rescue : MonoBehaviour
     private void Update()
     {
         if (once)
-           return;
+        {
+            if (m_PM.State == RescueState.SuperLand || m_PM.State == RescueState.None)
+            {
+                RescPostProcess();
+            }
+            return;
+        }
         
-        if (m_PM.RescueState == RescueState.Fly)
+        if (m_PM.State == RescueState.Fly)
         {
             RescueThrow();
             once = true;
         }
     }
-
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,11 +22,32 @@ public enum RescueState
 
 public class PlayerManager : MonoBehaviour
 {
-    private RescueState currentRescueState;
+    private RescueState currentState;
     
-    public RescueState RescueState
+    public RescueState State
     {
-        set { currentRescueState = value; }
-        get { return currentRescueState; }
+        set { currentState = value; }
+        get { return currentState; }
+    }
+
+    private void Start()
+    {
+        m_beforeState = currentState;
+    }
+
+    private void FixedUpdate()
+    {
+        DebugStateChange();
+    }
+
+    private RescueState m_beforeState;
+    private void DebugStateChange()
+    {
+        if (currentState != m_beforeState)
+        {
+            Debug.Log("state change " + m_beforeState + "->" + currentState);
+        }
+        
+        m_beforeState = currentState;
     }
 }

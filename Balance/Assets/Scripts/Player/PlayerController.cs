@@ -165,12 +165,12 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
 
-            if (m_PM.RescueState == RescueState.Fly)
+            if (m_PM.State == RescueState.Fly)
             {
                 //スーパー着地
              //   Debug.Log("Call 1");
                 SuperLanding();
-                m_PM.RescueState = RescueState.SuperLand;
+                m_PM.State = RescueState.SuperLand;
             }
             if (canRescueAct)
             {
@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
     {   //落下速度の調整用
        
         //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
-        if (canMove == false || m_PM.RescueState != RescueState.None)
+        if (canMove == false || m_PM.State != RescueState.None)
             return;
         
         if (isKnockBack == false)
@@ -213,26 +213,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isFleezing)
         {
-            //このfreezePosを救出時に利用したい
-           // freezePos = transform.position;
-          
-            /*m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;*/
-            
             canMove = false;
             this.isFleezing = true;
         }
         else
         {
             this.isFleezing = false;
-           // canMove = true; これを着地終了時に呼ぶ
         }
-    }
-
-    private Vector3 freezePos;
-    private void PlayerFreeze()
-    {
-       // transform.position = freezePos;
     }
         
     private bool isChanged;
@@ -247,10 +234,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 //Debug.Log("toLanding" );
                 
-                if (m_PM.RescueState == RescueState.Fly ||
-                    m_PM.RescueState == RescueState.SuperLand)
+                if (m_PM.State == RescueState.Fly ||
+                    m_PM.State == RescueState.SuperLand)
                 {
-                    m_PM.RescueState = RescueState.None;
+                    m_PM.State = RescueState.None;
+                    Debug.Log("pm = " + m_PM.State);
                 }
             }
         }
