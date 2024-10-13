@@ -509,10 +509,10 @@ HingeJoint:
   m_ConnectedBody: {fileID: 1529936425}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 3, z: 0}
-  m_Axis: {x: 5, y: 0, z: 0}
+  m_Axis: {x: 5, y: 0, z: 5}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_UseSpring: 0
+  m_UseSpring: 1
   m_Spring:
     spring: 200
     damper: 10

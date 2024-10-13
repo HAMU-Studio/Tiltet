@@ -77,8 +77,20 @@ public class JointManager : MonoBehaviour
 
     private void SetAxis()
     {
-        //ここのX,Z上げて大げさにしても良い
-        m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
+        //二点間のベクトル利用してaxisを設定すると手前と奥だけ挙動がおかしくなる -> axisを全部0にするとZ軸で動いてくれる(要修正)
+        
+        m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
+
+        if (m_direction == Direction.Foward || m_direction == Direction.Back)
+        {
+           // m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(1f, 1f, -5f));
+            m_hingeJoint.axis = Vector3.zero;
+        }
+        else
+        {
+            m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
+        }
+
     }
     
     private void GetPlayerManager()
