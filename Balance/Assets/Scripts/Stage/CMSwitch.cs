@@ -14,6 +14,7 @@ public class CMSwitch : MonoBehaviour
     public static CMSwitch activeSwitch = null; // 現在アクティブなスイッチを追跡する
     private bool isPlayerInContact = false; // Playerと接触しているかを確認するフラグ
     private bool isSwitchOn = false; // スイッチの状態
+    public bool canActivated { get; private set; } = false; // 他のスクリプトで参照できるフラグ
 
     public Material redMaterial; // 赤色のマテリアル
     private Material originalMaterial; // 元のマテリアルを保存
@@ -42,12 +43,17 @@ public class CMSwitch : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInContact = true;
+            canActivated = true; // Playerが接触している場合にフラグを立てる
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        isPlayerInContact = false;
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInContact = false;
+            canActivated = false; // Playerが離れた場合にフラグを下げる
+        }
     }
 
     private void Update()
