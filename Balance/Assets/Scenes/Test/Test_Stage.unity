@@ -669,6 +669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchType: 3
+  redMaterial: {fileID: 2100000, guid: 97d02315d8cf95b419e341b24b623593, type: 2}
 --- !u!1 &164105141
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &192017332
 Transform:
   m_ObjectHideFlags: 0
@@ -807,15 +808,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192017331}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.039222296, w: 0.9992305}
   m_LocalPosition: {x: 0, y: 0.636, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9969279, y: 1.006144, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 242967787}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 4.496}
 --- !u!1 &225042932
 GameObject:
   m_ObjectHideFlags: 0
@@ -927,6 +928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchType: 1
+  redMaterial: {fileID: 2100000, guid: 97d02315d8cf95b419e341b24b623593, type: 2}
 --- !u!1 &242967786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,6 +1199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchType: 0
+  redMaterial: {fileID: 2100000, guid: 97d02315d8cf95b419e341b24b623593, type: 2}
 --- !u!1 &437253133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,7 +2280,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267465720}
-  m_LocalRotation: {x: 0.0000000013780783, y: 0.9870875, z: -0.16018224, w: 0.000000008492101}
+  m_LocalRotation: {x: -0.0000000013780784, y: 0.9870875, z: -0.16018225, w: -0.000000008492101}
   m_LocalPosition: {x: 0, y: 30, z: 1}
   m_LocalScale: {x: 0.033333357, y: 0.28985515, z: 0.036968604}
   m_ConstrainProportionsScale: 0
@@ -2526,6 +2529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchType: 2
+  redMaterial: {fileID: 2100000, guid: 97d02315d8cf95b419e341b24b623593, type: 2}
 --- !u!1 &1471282841
 GameObject:
   m_ObjectHideFlags: 0
