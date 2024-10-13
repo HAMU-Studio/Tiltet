@@ -44,7 +44,7 @@ public class StageManager : MonoBehaviour
         obj.transform.position = SetPos.transform.position;
         return;
         //子オブジェクトのtransform.parentに親にしたいオブジェクトのtransformを代入
-        obj.transform.parent = this.transform;
+        //obj.transform.parent = this.transform;
         //new Vector3(0.07f, 4.23f, 0.07f);
        
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
@@ -11,7 +10,7 @@ public class CameraManager : MonoBehaviour
     public CinemachineVirtualCamera cmRight;
     public CinemachineVirtualCamera cmBattle;
 
-    private StageMovement stageMovement;
+    private CMSwitch activeSwitch; // アクティブなスイッチを参照する
     private CameraState currentCameraState;
 
     // カメラの状態を表すEnum
@@ -25,22 +24,24 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        // StageMovementコンポーネントを取得
-        stageMovement = GetComponent<StageMovement>();
         // 初期状態を前方とする
         currentCameraState = CameraState.Forward;
     }
 
     void Update()
     {
-        // 現在の移動力を取得
-        Vector3 movementForce = stageMovement.GetCurrentMovementForce();
+        // アクティブなスイッチがあるか確認
+        if (CMSwitch.activeSwitch != null)
+        {
+            activeSwitch = CMSwitch.activeSwitch;
 
-        // カメラの優先度をリセット
-        ResetCameraPriorities();
-
-        // 移動方向に応じたカメラの状態を更新
-        UpdateCameraState(movementForce);
+            // スイッチがオンの場合にカメラを切り替える
+            if (activeSwitch.IsSwitchOn)
+            {
+                ResetCameraPriorities();
+                SwitchCameraBySwitchType(activeSwitch.switchType);
+            }
+        }
     }
 
     // 全てのカメラの優先度をリセット
@@ -52,102 +53,112 @@ public class CameraManager : MonoBehaviour
         cmRight.Priority = 0;
     }
 
-    // 移動方向に応じたカメラの状態を更新
-    void UpdateCameraState(Vector3 movementForce)
+    // スイッチのタイプに応じてカメラを切り替える
+    void SwitchCameraBySwitchType(CMSwitch.SwitchType switchType)
     {
-        CameraState newCameraState = currentCameraState;
+        CameraState targetCameraState = currentCameraState;
 
-        // 移動方向に基づいて新しいカメラ状態を決定
-        if (movementForce.z > 0)
+        // スイッチタイプに基づいて目標カメラ状態を設定
+        switch (switchType)
         {
-            newCameraState = CameraState.Forward;
-        }
-        else if (movementForce.z < 0)
-        {
-            newCameraState = CameraState.Backward;
-        }
-        else if (movementForce.x > 0)
-        {
-            newCameraState = CameraState.Left;
-        }
-        else if (movementForce.x < 0)
-        {
-            newCameraState = CameraState.Right;
+            case CMSwitch.SwitchType.Front:
+                targetCameraState = CameraState.Forward;
+                break;
+            case CMSwitch.SwitchType.Back:
+                targetCameraState = CameraState.Backward;
+                break;
+            case CMSwitch.SwitchType.Left:
+                targetCameraState = CameraState.Left;
+                break;
+            case CMSwitch.SwitchType.Right:
+                targetCameraState = CameraState.Right;
+                break;
         }
 
-        // 新しいカメラ状態が現在のカメラ状態と異なる場合、カメラを切り替える
-        if (newCameraState != currentCameraState)
+        // カメラ状態が変更されていた場合、カメラを切り替える
+        if (targetCameraState != currentCameraState)
         {
-            StartCoroutine(SwitchCamera(newCameraState));
+            StartCoroutine(SwitchCamera(targetCameraState));
         }
     }
 
-    // 左回りでカメラを切り替えるコルーチン
-    IEnumerator SwitchCamera(CameraState newCameraState)
+    // カメラを直接切り替えるメソッド
+    IEnumerator SwitchCamera(CameraState targetCameraState)
     {
-        switch (currentCameraState)
+        // 反対側のカメラへ切り替える場合は、右回りでカメラを経由する
+        if (IsOppositeSide(currentCameraState, targetCameraState))
         {
-            case CameraState.Forward:
-                if (newCameraState == CameraState.Backward)
-                {
-                    // 前方から後方に切り替える場合、左回りで切り替える
-                    cmLeft.Priority = 10;
-                    yield return new WaitForSeconds(1.5f);
-                    cmBackward.Priority = 10;
-                }
-                else
-                {
-                    SetCameraPriority(newCameraState);
-                }
-                break;
-            case CameraState.Backward:
-                if (newCameraState == CameraState.Forward)
-                {
-                    // 後方から前方に切り替える場合、左回りで切り替える
-                    cmRight.Priority = 10;
-                    yield return new WaitForSeconds(1.5f);
-                    cmForward.Priority = 10;
-                }
-                else
-                {
-                    SetCameraPriority(newCameraState);
-                }
-                break;
-            case CameraState.Left:
-                if (newCameraState == CameraState.Right)
-                {
-                    // 左から右に切り替える場合、左回りで切り替える
-                    cmForward.Priority = 10;
-                    yield return new WaitForSeconds(1.5f);
-                    cmRight.Priority = 10;
-                }
-                else
-                {
-                    SetCameraPriority(newCameraState);
-                }
-                break;
-            case CameraState.Right:
-                if (newCameraState == CameraState.Left)
-                {
-                    // 右から左に切り替える場合、左回りで切り替える
-                    cmBackward.Priority = 10;
-                    yield return new WaitForSeconds(1.5f);
-                    cmLeft.Priority = 10;
-                }
-                else
-                {
-                    SetCameraPriority(newCameraState);
-                }
-                break;
+            yield return StartCoroutine(ClockwiseCamera(targetCameraState));
         }
-
-        // 新しいカメラ状態を現在のカメラ状態として設定
-        currentCameraState = newCameraState;
+        else
+        {
+            // 直接切り替える場合
+            SetCameraPriority(targetCameraState);
+            currentCameraState = targetCameraState;
+        }
     }
 
-    // 指定されたカメラ状態に基づいてカメラの優先度を設定
+    // カメラが反対側かどうかを判定するメソッド
+    bool IsOppositeSide(CameraState fromState, CameraState toState)
+    {
+        // 前と後ろ、左と右が反対側
+        return (fromState == CameraState.Forward && toState == CameraState.Backward) ||
+               (fromState == CameraState.Backward && toState == CameraState.Forward) ||
+               (fromState == CameraState.Left && toState == CameraState.Right) ||
+               (fromState == CameraState.Right && toState == CameraState.Left);
+    }
+
+    // カメラを右回りで順番に切り替えるコルーチン
+    IEnumerator ClockwiseCamera(CameraState targetCameraState)
+    {
+        // カメラを右回りで順番に経由して切り替える
+        while (currentCameraState != targetCameraState)
+        {
+            switch (currentCameraState)
+            {
+                // 前方のカメラの場合
+                case CameraState.Forward: 
+                    cmRight.Priority = 10; // 右カメラをアクティブ
+                    yield return new WaitForSeconds(1.7f); // 待機時間
+                    cmForward.Priority = 0; // 前方カメラの優先度をリセット
+                    currentCameraState = CameraState.Right; // 現在の状態を右に設定
+                    break;
+
+                // 右のカメラの場合
+                case CameraState.Right:
+                    cmBackward.Priority = 10;
+                    yield return new WaitForSeconds(1.7f);
+                    cmRight.Priority = 0;
+                    currentCameraState = CameraState.Backward;
+                    break;
+
+                // 後方のカメラの場合
+                case CameraState.Backward:
+                    cmLeft.Priority = 10;
+                    yield return new WaitForSeconds(1.7f);
+                    cmBackward.Priority = 0;
+                    currentCameraState = CameraState.Left;
+                    break;
+
+                // 左のカメラの場合
+                case CameraState.Left:
+                    cmForward.Priority = 10;
+                    yield return new WaitForSeconds(1.7f);
+                    cmLeft.Priority = 0;
+                    currentCameraState = CameraState.Forward;
+                    break;
+            }
+        }
+
+        // 最後に目標カメラをアクティブに設定
+        SetCameraPriority(targetCameraState);
+    }
+
+    // 最短距離でカメラを切り替える
     void SetCameraPriority(CameraState state)
     {
+        ResetCameraPriorities(); // 優先度をリセット
+
         switch (state)
         {
             case CameraState.Forward:
