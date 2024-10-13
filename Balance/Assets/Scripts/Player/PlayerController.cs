@@ -5,7 +5,9 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody m_Rigidbody;
+    private PlayerManager m_PM;
+    
+    private Rigidbody m_RB;
     private Vector3 m_Velocity;
     private float m_moveSpeed;
     
@@ -13,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
+   
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
@@ -60,11 +63,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_player = GetComponent<Transform>();
-        m_Rigidbody = GetComponent<Rigidbody>();
+        m_RB = GetComponent<Rigidbody>();
         m_defaultMaterial = GetComponent<Renderer>().material;
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
+
+        m_PM = GetComponent<PlayerManager>();
     }
 
     private float elapsedTime;
@@ -86,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
         if (isFleezing)
         {
-            PlayerFreeze();
+            //PlayerFreeze();
         }
        
     }
@@ -144,10 +149,10 @@ public class PlayerController : MonoBehaviour
             //移動中またはその場でジャンプした時の遷移
             
             //ジャンプする直前の加速度加えて慣性を表現
-            m_Rigidbody.AddForce(m_Rigidbody.velocity.normalized, ForceMode.Impulse);
+            m_RB.AddForce(m_RB.velocity.normalized, ForceMode.Impulse);
             
             //ジャンプ
-            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            m_RB.AddForce(transform.up * jumpPower, ForceMode.Impulse);
            // canMove = false;
             isJumping = true;
         }
@@ -157,64 +162,82 @@ public class PlayerController : MonoBehaviour
     private bool canRescueAct;
     public void RescueActionInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && canRescueAct)
+        if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("isInputRescue");
-            m_rescueCube.GetComponent<Rescue>().RescueAction();
-            canRescueAct = false;
+
+            if (m_PM.RescueState == RescueState.Fly)
+            {
+                //スーパー着地
+             //   Debug.Log("Call 1");
+                SuperLanding();
+                m_PM.RescueState = RescueState.SuperLand;
+            }
+            if (canRescueAct)
+            {
+                m_rescueCube.GetComponent<Rescue>().StartRescue();
+                canRescueAct = false;
+            }
         }
+    }
+    [SerializeField] private Vector3 scalePow;
+    private void SuperLanding()
+    {
+        m_RB.velocity = Vector3.zero;
+        m_RB.angularVelocity = Vector3.zero;
+        
+        m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
+       // Debug.Log("call 2");
     }
 
     private void Gravity()
     {   //落下速度の調整用
        
-        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
+        if (canMove == false || m_PM.RescueState != RescueState.None)
+            return;
+        
         if (isKnockBack == false)
         {
-            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+            m_RB.AddForce(new Vector3(0, gravityPower, 0));
         }
         else
         {
             //ノックバック時はふんわり落下
-            m_Rigidbody.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
+            m_RB.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
         }
     }
 
-    private void FallDetection()
-    {
-        //Rigidbodyのvelocityから落下の検知ができそう
-    }
-
-    //その場で固定するかどうか。救出アクション待機でつかう。
+    //その場で固定するかどうか。-> 振り子。救出アクション待機でつかう。
     private bool isFleezing = false;
     public void ChangePlayerState(bool isFleezing)
     {
         if (isFleezing)
         {
-            freezePos = transform.position;
+            //このfreezePosを救出時に利用したい
+           // freezePos = transform.position;
           
-            m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;
+            /*m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;*/
+            
             canMove = false;
             this.isFleezing = true;
         }
         else
         {
             this.isFleezing = false;
-            canMove = true;
+           // canMove = true; これを着地終了時に呼ぶ
         }
     }
 
     private Vector3 freezePos;
     private void PlayerFreeze()
     {
-        transform.position = freezePos;
+       // transform.position = freezePos;
     }
         
     private bool isChanged;
     private void OnCollisionEnter(Collision collision)
     {
-      
         if (isJumping|| isKnockBack || canMove == false)
         {
             if (collision.gameObject.CompareTag("Ground"))  
@@ -222,7 +245,13 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
                 isKnockBack = false;
                 canMove = true;
-                Debug.Log("toLanding" );
+                //Debug.Log("toLanding" );
+                
+                if (m_PM.RescueState == RescueState.Fly ||
+                    m_PM.RescueState == RescueState.SuperLand)
+                {
+                    m_PM.RescueState = RescueState.None;
+                }
             }
         }
         
@@ -233,14 +262,11 @@ public class PlayerController : MonoBehaviour
         
         if (isChanged)
             return;
-        
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
-            isChanged = true;
-        }
     }
 
+    /// <summary>
+    /// 救出可能エリアにいるか
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("RescueArea"))
@@ -248,7 +274,6 @@ public class PlayerController : MonoBehaviour
             canRescueAct = true;
             m_rescueCube = other.gameObject;
         }
-        
     }
 
     private void DashSwitch()
@@ -293,8 +318,8 @@ public class PlayerController : MonoBehaviour
         //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
         Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
         direction.y = 0;
-        m_Rigidbody.AddForce(direction * knockBackP, ForceMode.Impulse);      
-        m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
+        m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
+        m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
 
     }
 
@@ -324,7 +349,7 @@ public class PlayerController : MonoBehaviour
         //Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
         //AddForceに加える力をwalkSpeedで設定した速さ以上にはならないように
         //今入力から計算した速度から現在のRigidbodyの速度を引く
-        m_Velocity = m_Velocity - m_Rigidbody.velocity;
+        m_Velocity = m_Velocity - m_RB.velocity;
 
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
         m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -m_moveSpeed, m_moveSpeed), 0f, Mathf.Clamp(m_Velocity.z, -m_moveSpeed, m_moveSpeed));
@@ -341,7 +366,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
     }
-
     
     //AddForceの部分を通常移動と空中移動で分けた
     private void NormalMovement()
@@ -354,7 +378,7 @@ public class PlayerController : MonoBehaviour
       
         if (isJumping == false && isKnockBack == false)
         {
-            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+            m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
     }
 
@@ -365,7 +389,7 @@ public class PlayerController : MonoBehaviour
             //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
             //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
             m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
-            m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+            m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
     }
 
@@ -396,6 +420,18 @@ public class PlayerController : MonoBehaviour
         {
             m_defaultMaterial = m_material_2P;
             GetComponent<Renderer>().material = m_material_2P;
+        }
+    }
+
+    public void ChangePlayerCanMove(bool canMove)
+    {
+        if (canMove)
+        {
+            this.canMove = true;
+        }
+        else
+        {
+            this.canMove = false;
         }
     }
 }
