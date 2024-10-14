@@ -250,6 +250,13 @@ public class PlayerController : MonoBehaviour
         
         if (isChanged)
             return;
+        
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            
+            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+            isChanged = true;
+        }
     }
 
     /// <summary>

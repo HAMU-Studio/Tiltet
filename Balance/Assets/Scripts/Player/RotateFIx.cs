@@ -6,19 +6,12 @@ public class RotateFIx : MonoBehaviour
 {
     //プレイヤーをステージの子にすると傾きに応じてぐにゃるから無理やり直す, 今後要修正
 
-    private Quaternion rot;
-    // Start is called before the first frame update
-    void Start()
-    {
-         rot = default;
-    }
+    private Vector3 rot;
 
-    // Update is called once per frame
     void Update()
     {
-        if (this.transform.rotation != rot)
-        {
-            transform.rotation = rot;
-        }
+        rot = transform.localEulerAngles;
+    
+        transform.localRotation =  Quaternion.Euler(0.0f, rot.y, 0.0f);
     }
 }
