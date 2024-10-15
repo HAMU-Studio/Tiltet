@@ -107,6 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2986898519352478738}
+  - component: {fileID: 7692586887586503191}
   m_Layer: 0
   m_Name: Pillar_02
   m_TagString: Untagged
@@ -123,13 +124,32 @@ Transform:
   m_GameObject: {fileID: 2465800838347839144}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 30, y: 30, z: 30}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 949446162997457824}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &7692586887586503191
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465800838347839144}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.0031214058, y: 0.71673983, z: 0.002365023}
+  m_Size: 1.4246534
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.029245753
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 1864452722857675815}
+  m_Enabled: 1
 --- !u!1 &8651922145422787123
 GameObject:
   m_ObjectHideFlags: 0
