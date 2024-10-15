@@ -24,13 +24,7 @@ public class Rescue : MonoBehaviour
          //   Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
-    
-   /*// private Vector3 m_targetVec;
-    public void SaveTarget(Vector3 targetVector)
-    {
-       // m_targetVec = targetVector;
-    }*/
-
+  
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -79,7 +73,7 @@ public class Rescue : MonoBehaviour
     
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
 
-        ResetRBVelocity();
+        GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
 
         GetComponent<Renderer>().enabled = false;
@@ -122,13 +116,6 @@ public class Rescue : MonoBehaviour
     {
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
-    }
-
-    private void ResetRBVelocity()
-    {
-        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
-        m_RB.velocity = Vector3.zero;
-        m_RB.angularVelocity = Vector3.zero;
     }
 
     private void RescPostProcess()

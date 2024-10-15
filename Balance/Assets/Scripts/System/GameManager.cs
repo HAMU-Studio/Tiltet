@@ -67,8 +67,6 @@ public class GameManager : MonoBehaviour
         InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
-
-
     }
 
     public void Restart()
@@ -96,7 +94,6 @@ public class GameManager : MonoBehaviour
             return currentGamestate;
         }
     }
-
 
     private Vector3 m_axis;
     private GameObject m_pivot;
@@ -161,6 +158,11 @@ public class GameManager : MonoBehaviour
         //stageの移動停止と再開処理とかカメラの切り替え処理呼ぶ　ここは最悪相互参照になってもいいかも
         
     }
-
+    
+    public void ResetRBVelocity(Rigidbody RB)
+    {
+        RB.velocity = Vector3.zero;
+        RB.angularVelocity = Vector3.zero;
+    }
 
 }

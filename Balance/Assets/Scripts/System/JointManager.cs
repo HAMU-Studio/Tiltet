@@ -83,14 +83,13 @@ public class JointManager : MonoBehaviour
 
         if (m_direction == Direction.Foward || m_direction == Direction.Back)
         {
-           // m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(1f, 1f, -5f));
             m_hingeJoint.axis = Vector3.zero;
         }
         else
         {
+          //  GameManager.instance.ResetRBVelocity(m_RB);
             m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
         }
-
     }
     
     private void GetPlayerManager()
@@ -160,11 +159,7 @@ public class JointManager : MonoBehaviour
         m_RB.isKinematic = false;
         m_RB.velocity = originalVelocity;*/
     }
-
-    private void Update()
-    {
-   
-    }
+    
     private Vector3 force = new Vector3(-50f, 1f, -50f);
     private bool onceForce;
     private void FixedUpdate()
@@ -221,12 +216,6 @@ public class JointManager : MonoBehaviour
                     direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
                 }
             }
-
-            /*if (m_direction == Direction.Back)
-            {
-                direction = Vector3.Scale(direction, new Vector3(1f, -1f, 1f));
-                //m_RB.AddForce(Vector3.up * 7f);
-            }*/
             
             //ステージの反対方向と上方向に力加える
             

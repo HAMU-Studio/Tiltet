@@ -95,15 +95,6 @@ public class FallArea : MonoBehaviour
 
     private void SetFallInstance(Collider col)
     {
-        
-        /*
-        if (m_PM != null)
-        {
-            if (m_PM.State != RescueState.None)
-            {
-                return;
-            }
-        }*/
         fallPlayerInstance = col.gameObject;
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
@@ -117,8 +108,7 @@ public class FallArea : MonoBehaviour
     {
         //最短距離の計算とそのcubeの取得
         //できれば他スクリプトで行いたい
-        /*GameManager.instance.Pivot = null;
-        GameManager.instance.Axis = Vector3.zero;*/
+       
         foreach (GameObject area in RescueActAreas)
         {
             playerPos = fallPlayerInstance.transform.position;
