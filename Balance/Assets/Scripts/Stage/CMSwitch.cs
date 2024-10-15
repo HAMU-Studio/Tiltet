@@ -12,14 +12,18 @@ public class CMSwitch : MonoBehaviour
 
     public SwitchType switchType; // オブジェクトのタイプを設定する
     public static CMSwitch activeSwitch = null; // 現在アクティブなスイッチを追跡する
-    public bool isPlayerInContact = false; // Playerと接触しているかを確認するフラグ
-    private bool SwitchPressed = false;
+    private bool isPlayerInContact = false; // Playerと接触しているかを確認するフラグ
+    private bool isSwitchPressed = false; // Switchを押したかを通知するフラグ
     private bool isSwitchOn = false; // スイッチの状態
 
     public Material redMaterial; // 赤色のマテリアル
     private Material originalMaterial; // 元のマテリアルを保存
     private Renderer objectRenderer; // オブジェクトのRenderer
 
+    public bool IsPlayerInContact()
+    {
+        return isPlayerInContact;
+    }
     public bool IsSwitchOn // 他のスクリプトからスイッチの状態を取得できるプロパティ
     {
         get { return isSwitchOn; }
@@ -27,6 +31,7 @@ public class CMSwitch : MonoBehaviour
 
     private void Start()
     {
+
         objectRenderer = GetComponent<Renderer>(); // Rendererを取得
         originalMaterial = objectRenderer.material; // 元のマテリアルを保存
 
@@ -51,11 +56,9 @@ public class CMSwitch : MonoBehaviour
         isPlayerInContact = false;
     }
 
-    //SwitchPressedメソッドをPlayerController.csのRescueActionInputメソッドで呼び出すようにしたい。
-    //その際、PlayerController.csでisPlayerInContactのフラグを取得し、それがtrueの時にSwitchPressedメソッドを呼び出す。
-    public void Update()
+    private void SwitchPressed()
     {
-        if (SwitchPressed)
+        if (isSwitchPressed)
         {
             if (activeSwitch != null && activeSwitch != this) // 他のスイッチがアクティブな場合
             {
@@ -68,8 +71,16 @@ public class CMSwitch : MonoBehaviour
 
             // スイッチの状態に応じてマテリアルを切り替える
             objectRenderer.material = isSwitchOn ? redMaterial : originalMaterial;
+        }
+    }
 
-            SwitchPressed = false;
+    // isSwitchPressedがtrueになった時にSwitchPressedを呼ぶ
+    public void SetSwitchPressed(bool pressed)
+    {
+        isSwitchPressed = pressed;
+        if (isSwitchPressed)
+        {
+            SwitchPressed(); // フラグがtrueになったタイミングでSwitchPressedメソッドを呼ぶ
         }
     }
 
