@@ -101,11 +101,11 @@ public class StageMovement : MonoBehaviour
         }
     }
 
-    /*void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EncountArea"))
         {
             StopMovement();
         }
-    }*/
+    }
 }
