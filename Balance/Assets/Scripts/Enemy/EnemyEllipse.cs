@@ -5,6 +5,8 @@ using System.ComponentModel;
 //using System.Diagnostics;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 public class EnemyEllipse : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class EnemyEllipse : MonoBehaviour
     private GameObject[] players;
     private Rigidbody enemyRb;
     private float time;
-    private float moveSpeed;
+    private float moveSpeed = 3.0f;
     private bool ableAssault;
     private bool Assault;
 
@@ -20,9 +22,23 @@ public class EnemyEllipse : MonoBehaviour
     Vector3 _prePosition = new Vector3();// 前の位置
     Vector3 _position = new Vector3();// 現在の位置
 
+    private float[] distance;
+    private GameObject target;
+
+    Vector3 Direction = new Vector3();
+
     // Start is called before the first frame update
     void Start()
     {
+        //playerのタグがついているオブジェクトを代入
+        players = GameObject.FindGameObjectsWithTag("Player");
+
+        // players配列の長さに基づいてdistance配列を初期化
+        if (players.Length > 0)
+        {
+            distance = new float[players.Length];
+        }
+
         time = 0;
         ableAssault = false;
 
@@ -30,6 +46,18 @@ public class EnemyEllipse : MonoBehaviour
         _prePosition = transform.position;
         _Direction = Vector3.forward;
         enemyRb = GetComponent<Rigidbody>();
+
+        SearchPlayer();
+
+        // targetがnullでないことを確認
+        if (target != null)
+        {
+            //進行方向
+            Direction = (target.transform.position - transform.position).normalized;
+
+            enemyRb.AddForce(transform.up * 8.0f, ForceMode.Impulse);
+            enemyRb.AddForce(Direction * 8.0f, ForceMode.Impulse);
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +73,7 @@ public class EnemyEllipse : MonoBehaviour
 
             if (time <= 0.5f)
             {
-                Debug.Log("hit");
+                //Debug.Log("hit");
                 enemyRb.velocity = Vector3.zero;
                 Assault = true;
                 ableAssault = false;
@@ -95,4 +123,35 @@ public class EnemyEllipse : MonoBehaviour
             }
         }
     }
+
+    private void SearchPlayer()
+    {
+        //playerが1人もいない時
+        if (players.Length == 0)
+        {
+            players = GameObject.FindGameObjectsWithTag("Player");
+            return;
+        }
+        //playerが1人の時
+        if (players.Length == 1)
+        {
+            players = GameObject.FindGameObjectsWithTag("Player");
+            target = players[0];
+            return;
+        }
+
+        //距離を調査
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
+        }
+
+        //どっちのplayerのほうが近いか
+        target = players[0];
+        if (distance[1] < distance[0])
+        {
+            target = players[1];
+        }
+    }
 }
+
