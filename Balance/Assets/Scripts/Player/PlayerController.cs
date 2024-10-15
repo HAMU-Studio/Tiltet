@@ -177,6 +177,15 @@ public class PlayerController : MonoBehaviour
                 m_rescueCube.GetComponent<Rescue>().StartRescue();
                 canRescueAct = false;
             }
+            // CMSwitchを探し、プレイヤーが接触しているか確認する処理
+            CMSwitch[] switches = FindObjectsOfType<CMSwitch>();
+            foreach (var cmswitch in switches)
+            {
+                if (cmswitch.IsPlayerInContact())
+                {
+                    cmswitch.SetSwitchPressed(true); // スイッチを押す
+                }
+            }
         }
     }
     [SerializeField] private Vector3 scalePow;
