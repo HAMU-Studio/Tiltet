@@ -12,7 +12,8 @@ public class CMSwitch : MonoBehaviour
 
     public SwitchType switchType; // オブジェクトのタイプを設定する
     public static CMSwitch activeSwitch = null; // 現在アクティブなスイッチを追跡する
-    private bool isPlayerInContact = false; // Playerと接触しているかを確認するフラグ
+    public bool isPlayerInContact = false; // Playerと接触しているかを確認するフラグ
+    private bool SwitchPressed = false;
     private bool isSwitchOn = false; // スイッチの状態
 
     public Material redMaterial; // 赤色のマテリアル
@@ -50,10 +51,11 @@ public class CMSwitch : MonoBehaviour
         isPlayerInContact = false;
     }
 
-    private void Update()
+    //SwitchPressedメソッドをPlayerController.csのRescueActionInputメソッドで呼び出すようにしたい。
+    //その際、PlayerController.csでisPlayerInContactのフラグを取得し、それがtrueの時にSwitchPressedメソッドを呼び出す。
+    public void Update()
     {
-        // 使用できるボタンが分かり次第変える。今は仮でFキーに設定している。
-        if (isPlayerInContact && Input.GetKeyDown(KeyCode.F))
+        if (SwitchPressed)
         {
             if (activeSwitch != null && activeSwitch != this) // 他のスイッチがアクティブな場合
             {
@@ -66,6 +68,8 @@ public class CMSwitch : MonoBehaviour
 
             // スイッチの状態に応じてマテリアルを切り替える
             objectRenderer.material = isSwitchOn ? redMaterial : originalMaterial;
+
+            SwitchPressed = false;
         }
     }
 
