@@ -1,29 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+//using System.Diagnostics;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemy;
-
-    //スポーン範囲オブジェクト
-    [SerializeField] private GameObject minimumValue;
-    [SerializeField] private GameObject muximumValueX;
-    [SerializeField] private GameObject muximumValueZ;
+    [SerializeField] private GameObject[] spawnPoint;
 
     //敵がスポーンするインターバル
     [SerializeField] private float spawnInterval = 3.0f;
 
     //一度にスポーンする数
-    [SerializeField] private int spawnNum = 1;
+    [SerializeField] private int spawnLimit = 1;
 
     private float spawnTime;
-
-    //スポーンの範囲
-    private float lowestPositionX;
-    private float lowestPositionZ;
-    private float highestPositionX;
-    private float highestPositionZ;
 
     //敵の数検知
     private GameObject[] enemies;
@@ -41,30 +33,19 @@ public class EnemyManager : MonoBehaviour
     private Rigidbody enemyRb;
 
     private float enemyCount;
+    private int spawnNum;
+    
 
     // Start is called before the first frame update
     void Start()
-    {
-        //スポーン範囲オブジェクトのポジション取得
-        miniPos = minimumValue.transform.position;
-        maxPosX = muximumValueX.transform.position;
-        maxPosZ = muximumValueZ.transform.position;
-
-        //スポーン範囲代入
-        lowestPositionX = miniPos.x;
-        lowestPositionZ = miniPos.z;
-        highestPositionX = maxPosX.x;
-        highestPositionZ = maxPosZ.z;
-
-        //高さの取得
-        enemyPos.y = miniPos.y;
-
+    { 
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
 
         ableSpawn = true;
 
         enemyCount = 0;
+
     }
 
     // Update is called once per frame
@@ -73,12 +54,12 @@ public class EnemyManager : MonoBehaviour
         spawnTime += Time.deltaTime;
 
         if (spawnTime > spawnInterval)
-        {
+        { 
             CheakEnemy();
 
             if (ableSpawn)
             {
-                for (int i = 0; spawnNum > i; i++)
+                for (int i = 0; spawnLimit > i; i++)
                 {
                     EnemySpawn();
                 }
@@ -90,15 +71,25 @@ public class EnemyManager : MonoBehaviour
 
     private void EnemySpawn()
     {
-        enemyKinds = Random.Range(0, 2);
+        //0...丸 1...楕円
+        enemyKinds = Random.Range(0, enemy.Length);
         GameObject newEnemy = Instantiate(enemy[enemyKinds]);
 
-        enemyPos.x = Random.Range(lowestPositionX, highestPositionX);
-        enemyPos.z = Random.Range(lowestPositionZ, highestPositionZ);
-        //enemyPos = new Vector3(ramdomPositionX, 0, ramdomPositionZ);
+        spawnNum = Random.Range(0, spawnPoint.Length);
+        newEnemy.transform.position = spawnPoint[spawnNum].transform.position;
 
-
-        newEnemy.transform.position = enemyPos;
+        if (spawnNum > 2 || enemyKinds == 1)
+        {
+            Debug.Log("daen");
+            if (spawnNum == 0)
+            {
+                newEnemy.transform.Rotate(0, -90.0f, 0);
+            }
+            if (spawnNum == 1)
+            {
+                newEnemy.transform.Rotate(0, 90.0f, 0);
+            }
+        }
     }
 
     private void CheakEnemy()

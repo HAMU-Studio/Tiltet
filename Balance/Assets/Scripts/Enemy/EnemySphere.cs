@@ -28,12 +28,25 @@ public class EnemySphere : MonoBehaviour
         }
 
         enemyRb = GetComponent<Rigidbody>();
+
+        SearchPlayer();
+
+        // targetがnullでないことを確認
+        if (target != null)
+        {
+            //進行方向
+            Direction = (target.transform.position - transform.position).normalized;
+
+            enemyRb.AddForce(Direction * moveSpeed, ForceMode.Impulse);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(1.0f, 0, 0);
+        //ころころ
+        //transform.Rotate(1.0f, 0, 0);
+
         SearchPlayer();
 
         // targetがnullでないことを確認
