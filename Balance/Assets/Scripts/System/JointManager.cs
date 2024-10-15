@@ -55,7 +55,7 @@ public class JointManager : MonoBehaviour
         m_springJoint = GetComponent<SpringJoint>();
     }
 
-    public void JointOff()
+    private void JointOff()
     {
         m_hingeJoint = GetComponent<HingeJoint>();
         Destroy(m_hingeJoint);
@@ -160,17 +160,18 @@ public class JointManager : MonoBehaviour
         m_RB.velocity = originalVelocity;*/
     }
     
-    private Vector3 force = new Vector3(-50f, 1f, -50f);
+    private Vector3 force = new Vector3(50f, 1f, 50f);
     private bool onceForce;
     private void FixedUpdate()
     {
         RescueAdjust();
     }
-    
+
     /// <summary>
     /// 救出アクションでステージの引っかかり防止に使う
     /// jointあまり関係ないから違うスクリプトに移したい
     /// </summary>
+    private Vector3 direction; 
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
@@ -183,30 +184,15 @@ public class JointManager : MonoBehaviour
             
             if (onceForce)
                 return;
-
-            //pivotと落下したプレイヤー、二点間のベクトルを取得->Y軸以外反転
-            Vector3 direction = GameManager.instance.Pivot.transform.position;
-            
-            direction = (direction - transform.position).normalized;
-            //ここ小さすぎる場合変化加えたい
-
-            if (CheckDistanceFromStage() <= 4f)
-            {
-                direction = Vector3.Scale(direction, new Vector3(5f, 2f, 5f));
-            }
-            
-            direction = Vector3.Scale(direction, force);
             
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
-
-            //breakForce設定してちょっと力加われば自動で千切れるように(Componentごと消える)
-            m_hingeJoint.breakForce = 5f;
-            m_springJoint.breakForce = 5f;
             
             //正面方向の救出アクションのみ符号反転すれば正常に動く
             if (m_direction == Direction.Foward)
             {
-                if (Mathf.Sign(direction.x) < 0)
+                direction = Vector3.forward;
+                
+                /*if (Mathf.Sign(direction.x) < 0)
                 {
                     direction = Vector3.Scale(direction, new Vector3(-1f, -1f, 1f));
                 }
@@ -214,10 +200,39 @@ public class JointManager : MonoBehaviour
                 if (Mathf.Sign(direction.z) < 0)
                 {
                     direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
-                }
+                }*/
+            }
+            else if (m_direction == Direction.Back)
+            {
+                direction = Vector3.back;
+            }
+            else if (m_direction == Direction.Left)
+            {
+                direction = Vector3.left;
+            }
+            else if (m_direction == Direction.Right)
+            {
+                direction = Vector3.right;
             }
             
+            
+            if (CheckDistanceFromStage() <= 4f)
+            {
+                direction = Vector3.Scale(direction, new Vector3(5f, 2f, 5f));
+            }
+            
+            direction = Vector3.Scale(direction, force);
+            
+           
+
+            //breakForce設定してちょっと力加われば自動で千切れるように(Componentごと消える)
+            m_hingeJoint.breakForce = 5f;
+            m_springJoint.breakForce = 5f;
+            
             //ステージの反対方向と上方向に力加える
+            
+           // GameManager.instance.ResetRBVelocity(m_RB);
+           //JointOff();
             
             m_RB.AddForce(direction, ForceMode.Impulse);
             m_RB.AddForce(Vector3.up * 7f);
@@ -229,7 +244,7 @@ public class JointManager : MonoBehaviour
 
     private IEnumerator DelayFly()
     {
-        JointOff();
+        //JointOff();
         m_PM.State = RescueState.Fly;
         
         yield return new WaitForSeconds(0.7f);

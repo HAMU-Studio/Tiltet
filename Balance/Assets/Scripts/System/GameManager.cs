@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-        InitGame();
+       // InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
     }
