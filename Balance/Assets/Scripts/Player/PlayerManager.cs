@@ -46,6 +46,18 @@ public class PlayerManager : MonoBehaviour
         if (currentState != m_beforeState)
         {
             Debug.Log("state change " + m_beforeState + "->" + currentState);
+            if (m_beforeState == RescueState.None && currentState == RescueState.Wait)
+            {
+                GameManager.instance.Rescue = true;
+            }
+
+            if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
+            {
+                if (currentState == RescueState.None)
+                {
+                    GameManager.instance.Rescue = false;
+                }
+            }
         }
         
         m_beforeState = currentState;

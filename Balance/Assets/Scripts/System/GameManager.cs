@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour
 
     private Vector3 m_axis;
     private GameObject m_pivot;
+    private bool m_rescue;
     /// <summary>
     /// 振り子の方向制御用
     /// </summary>
@@ -123,6 +125,13 @@ public class GameManager : MonoBehaviour
         get { return m_life;}
         
         set { m_life = value;}
+    }
+
+    public bool Rescue
+    {
+       get { return m_rescue; }
+       
+       set { m_rescue = value;}
     }
 
     public void AddPartsNum()

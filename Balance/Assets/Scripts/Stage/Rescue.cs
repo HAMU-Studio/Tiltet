@@ -133,7 +133,7 @@ public class Rescue : MonoBehaviour
 
     private void RescPostProcess()
     {
-        Debug.Log("call PostProcess");
+       // Debug.Log("call PostProcess");
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
