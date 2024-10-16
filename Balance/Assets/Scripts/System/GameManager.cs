@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            Debug.Log("axis = " + m_axis);
+           // Debug.Log("axis = " + m_axis);
             return m_axis;
         }
         

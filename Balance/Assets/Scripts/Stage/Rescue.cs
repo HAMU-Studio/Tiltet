@@ -21,7 +21,6 @@ public class Rescue : MonoBehaviour
         {
             canRescueAct = true;
             rescuePlayer = other.gameObject;
-         //   Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
   
@@ -110,12 +109,13 @@ public class Rescue : MonoBehaviour
     }
 
     /// <summary>
-    /// 救出アクションの直前処理。ステージが引っ掛かりそうなら外に移動->ロープ切る->飛ばす
+    /// 救出アクションの直前処理。
     /// </summary>
     private void ThrowPREP()
     {
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
+     //   GameManager.instance.ResetRBVelocity(m_RB);
     }
 
     private void RescPostProcess()

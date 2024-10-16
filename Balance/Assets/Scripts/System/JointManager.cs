@@ -30,18 +30,19 @@ public class JointManager : MonoBehaviour
       
         SetPivot();
         
-        //この値によって挙動が変わってしまう。要注意
+        //この値によって挙動が変わってしまう。要注意 ->AutoConnectedAnchorだから関係ないかも
         m_hingeJoint.anchor = new Vector3(0, 10, 0);
 
         m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
        
-        m_springJoint.spring = 15f;
+        m_springJoint.spring = 30f;
         m_springJoint.damper = 0.2f;
-        
-        SetAxis();
-        
-        Vector3 force = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
-        m_RB.AddForce(force, ForceMode.Impulse);
+       
+        //GameManagerのAxisは二点間のベクトル、それを軸とすると手前側と奥側の挙動がおかしくなる
+        Vector3 velocity = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
+        SetAxis(velocity);
+     
+        m_RB.AddForce(velocity, ForceMode.Impulse);
     }
 
     private void AddJoint()
@@ -58,10 +59,17 @@ public class JointManager : MonoBehaviour
     private void JointOff()
     {
         m_hingeJoint = GetComponent<HingeJoint>();
+        
         Destroy(m_hingeJoint);
         Destroy(m_springJoint);
+        
+        GameManager.instance.ResetRBVelocity(m_RB);
+        
         m_RB.rotation = quaternion.identity;
-        m_RB.freezeRotation = true;
+    
+        // 一時的にRigidbodyを固定
+        m_RB.isKinematic = true;
+        StartCoroutine(ReleaseAndAddForce());
     }
 
     public void RopeOff()
@@ -75,21 +83,13 @@ public class JointManager : MonoBehaviour
         m_hingeJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
     }
 
-    private void SetAxis()
+    private void SetAxis(Vector3 velocity)
     {
-        //二点間のベクトル利用してaxisを設定すると手前と奥だけ挙動がおかしくなる -> axisを全部0にするとZ軸で動いてくれる(要修正)
+        //二点間のベクトル利用してaxisを設定すると手前と奥だけ挙動がおかしくなる -> axisを全部0にすると動いてくれる
         
         m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
-
-        if (m_direction == Direction.Foward || m_direction == Direction.Back)
-        {
-            m_hingeJoint.axis = Vector3.zero;
-        }
-        else
-        {
-          //  GameManager.instance.ResetRBVelocity(m_RB);
-            m_hingeJoint.axis = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, 1f, 5f));
-        }
+     
+        m_hingeJoint.axis = Vector3.zero;
     }
     
     private void GetPlayerManager()
@@ -108,9 +108,6 @@ public class JointManager : MonoBehaviour
         float dist = Vector3.Distance(transform.position, pivotPos);
 
         return dist;
-
-       // Debug.Log("dist = " + dist);
-   
     }
 
     /// <summary>
@@ -160,15 +157,19 @@ public class JointManager : MonoBehaviour
         m_RB.velocity = originalVelocity;*/
     }
     
-    private Vector3 force = new Vector3(50f, 1f, 50f);
-    private bool onceForce;
+
     private void FixedUpdate()
     {
         RescueAdjust();
     }
+    
+    [Header("外側に弾く力の倍率")]
+    [SerializeField]
+    private Vector3 force = new Vector3(5f, 1f, 5f);
+    private bool onceForce;
 
     /// <summary>
-    /// 救出アクションでステージの引っかかり防止に使う
+    /// 救出アクションでステージの引っかかり防止に使う　ステージが引っ掛かりそうなら外に移動->飛ばす->ロープ切る
     /// jointあまり関係ないから違うスクリプトに移したい
     /// </summary>
     private Vector3 direction; 
@@ -187,20 +188,10 @@ public class JointManager : MonoBehaviour
             
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
             
-            //正面方向の救出アクションのみ符号反転すれば正常に動く
+            //正面方向の救出アクションのみ符号反転すれば正常に動く->そんなことなかった
             if (m_direction == Direction.Foward)
             {
                 direction = Vector3.forward;
-                
-                /*if (Mathf.Sign(direction.x) < 0)
-                {
-                    direction = Vector3.Scale(direction, new Vector3(-1f, -1f, 1f));
-                }
-
-                if (Mathf.Sign(direction.z) < 0)
-                {
-                    direction = Vector3.Scale(direction, new Vector3(1f, 1f, -1f));
-                }*/
             }
             else if (m_direction == Direction.Back)
             {
@@ -215,57 +206,44 @@ public class JointManager : MonoBehaviour
                 direction = Vector3.right;
             }
             
-            
             if (CheckDistanceFromStage() <= 4f)
             {
-                direction = Vector3.Scale(direction, new Vector3(5f, 2f, 5f));
+                //距離がかなり近い時はさらに飛ばす
+                force =  new Vector3(force.x, Mathf.Pow(force.y, 0), force.z);
+                direction = Vector3.Scale(direction, force);
             }
             
+            //Yは0乗して1に、力の調整しない
+            force =  new Vector3(force.x, Mathf.Pow(force.y, 0), force.z);
             direction = Vector3.Scale(direction, force);
-            
-           
 
-            //breakForce設定してちょっと力加われば自動で千切れるように(Componentごと消える)
-            m_hingeJoint.breakForce = 5f;
-            m_springJoint.breakForce = 5f;
-            
-            //ステージの反対方向と上方向に力加える
-            
-           // GameManager.instance.ResetRBVelocity(m_RB);
-           //JointOff();
-            
-            m_RB.AddForce(direction, ForceMode.Impulse);
-            m_RB.AddForce(Vector3.up * 7f);
-            
-            Debug.Log("addForce");
-            onceForce = true;
+           JointOff();
+    
+           onceForce = true;
         }
+    }
+
+    [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 10f;
+    //axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
+    //一時的にisKinematicをonにすれば直った
+    private IEnumerator ReleaseAndAddForce()
+    {
+        yield return new WaitForSeconds(0.1f); // 少し待つ
+        
+        m_RB.isKinematic = false; // 再度物理的に解放
+        
+        //ステージの反対方向と上方向に力加える
+        m_RB.AddForce(direction, ForceMode.Impulse);
+        m_RB.AddForce(Vector3.up * upPowoer, ForceMode.Impulse);
     }
 
     private IEnumerator DelayFly()
     {
-        //JointOff();
         m_PM.State = RescueState.Fly;
         
         yield return new WaitForSeconds(0.7f);
-        
+      
         RopeOff();
-        
         onceForce = false;
-        /*GameManager.instance.Pivot = null;
-        GameManager.instance.Axis = Vector3.zero;*/
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        /*if (other.gameObject.CompareTag("Ground"))
-        {
-            if (m_PM.State == RescueState.Fly || m_PM.State == RescueState.SuperLand)
-            {
-                Debug.Log("pivot and axis are null");
-                GameManager.instance.Pivot = null;
-                GameManager.instance.Axis = Vector3.zero;
-            }
-        }*/
     }
 }
