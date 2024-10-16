@@ -223,7 +223,7 @@ public class JointManager : MonoBehaviour
         }
     }
 
-    [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 10f;
+  
     //axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
     //一時的にisKinematicをonにすれば直った
     private IEnumerator ReleaseAndAddForce()
@@ -234,7 +234,6 @@ public class JointManager : MonoBehaviour
         
         //ステージの反対方向と上方向に力加える
         m_RB.AddForce(direction, ForceMode.Impulse);
-        m_RB.AddForce(Vector3.up * upPowoer, ForceMode.Impulse);
     }
 
     private IEnumerator DelayFly()

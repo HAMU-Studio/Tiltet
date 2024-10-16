@@ -158,4 +158,14 @@ public class Rescue : MonoBehaviour
             once = true;
         }
     }
+    
+    [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 2f;
+    private void FixedUpdate()
+    {
+        if (m_PM.State == RescueState.Move)
+        {
+            Vector3 force = Vector3.up * upPowoer / Time.fixedDeltaTime;
+            m_RB.AddForce(force);
+        }
+    }
 }
