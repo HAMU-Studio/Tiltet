@@ -78,9 +78,8 @@ public class EnemyManager : MonoBehaviour
         spawnNum = Random.Range(0, spawnPoint.Length);
         newEnemy.transform.position = spawnPoint[spawnNum].transform.position;
 
-        if (spawnNum > 2 || enemyKinds == 1)
+        if (enemyKinds == 1)
         {
-            Debug.Log("daen");
             if (spawnNum == 0)
             {
                 newEnemy.transform.Rotate(0, -90.0f, 0);
