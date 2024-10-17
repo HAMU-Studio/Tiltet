@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class CMSwitch : MonoBehaviour
 {
@@ -20,11 +22,14 @@ public class CMSwitch : MonoBehaviour
     private Material originalMaterial; // 元のマテリアルを保存
     private Renderer objectRenderer; // オブジェクトのRenderer
 
+    // 他のスクリプトからプレイヤーの接触の状態を取得できるプロパティ
     public bool IsPlayerInContact()
     {
         return isPlayerInContact;
     }
-    public bool IsSwitchOn // 他のスクリプトからスイッチの状態を取得できるプロパティ
+
+    // 他のスクリプトからスイッチの状態を取得できるプロパティ
+    public bool IsSwitchOn 
     {
         get { return isSwitchOn; }
     }
@@ -56,6 +61,7 @@ public class CMSwitch : MonoBehaviour
         isPlayerInContact = false;
     }
 
+    //スイッチの状態を切り替えるメソッド
     private void SwitchPressed()
     {
         if (isSwitchPressed)
@@ -84,7 +90,7 @@ public class CMSwitch : MonoBehaviour
         }
     }
 
-    // スイッチの状態を設定するメソッド
+    // オン状態のスイッチをオフに更新するメソッド
     private void SetSwitchState(bool state)
     {
         isSwitchOn = state;

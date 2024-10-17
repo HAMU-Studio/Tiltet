@@ -553,7 +553,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FixedYRotation: 0
+  MinXRotation: -30
+  MaxXRotation: 30
+  MinZRotation: -30
+  MaxZRotation: 30
 --- !u!1 &98239501
 GameObject:
   m_ObjectHideFlags: 0
