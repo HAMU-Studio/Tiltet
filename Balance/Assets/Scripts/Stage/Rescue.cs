@@ -72,6 +72,9 @@ public class Rescue : MonoBehaviour
     
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
 
+        if (m_RB.isKinematic)
+            m_RB.isKinematic = false;
+        
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
 
@@ -106,6 +109,19 @@ public class Rescue : MonoBehaviour
         {
             return (new Vector3(pointB.x - pointA.x, x * Mathf.Tan(rad), pointB.z - pointA.z).normalized * speed);
         }
+    }
+    
+    /// <summary>
+    /// 現状JointManagerで使用する、外側に弾く力を計算する関数。
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 CalcOutsideForce()
+    {
+        Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
+
+        velocity = new Vector3(-velocity.x, 0f, -velocity.z);
+
+        return velocity.normalized;
     }
 
     /// <summary>

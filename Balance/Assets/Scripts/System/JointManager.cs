@@ -156,7 +156,6 @@ public class JointManager : MonoBehaviour
         m_RB.isKinematic = false;
         m_RB.velocity = originalVelocity;*/
     }
-    
 
     private void FixedUpdate()
     {
@@ -189,7 +188,7 @@ public class JointManager : MonoBehaviour
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
             
             //正面方向の救出アクションのみ符号反転すれば正常に動く->そんなことなかった
-            if (m_direction == Direction.Foward)
+            /*if (m_direction == Direction.Foward)
             {
                 direction = Vector3.forward;
             }
@@ -204,7 +203,9 @@ public class JointManager : MonoBehaviour
             else if (m_direction == Direction.Right)
             {
                 direction = Vector3.right;
-            }
+            }*/
+
+            SetOutsideForce();
             
             if (CheckDistanceFromStage() <= 4f)
             {
@@ -223,16 +224,32 @@ public class JointManager : MonoBehaviour
         }
     }
 
-  
+    private void SetOutsideForce()
+    {
+        if (GameManager.instance.Pivot != null)
+        {
+            Debug.Log("pivot = " + GameManager.instance.Pivot);
+        }
+
+        direction = GameManager.instance.Pivot.GetComponentInParent<Rescue>().CalcOutsideForce();
+        
+    }
     //axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
     //一時的にisKinematicをonにすれば直った
     private IEnumerator ReleaseAndAddForce()
     {
-        yield return new WaitForSeconds(0.1f); // 少し待つ
+        yield return new WaitForSeconds(0.1f); 　//物理挙動がおかしくならないように少し待つ
+
+        if (m_RB.isKinematic == false)
+        {
+            //弾く必要なし
+            yield break;
+        }
         
-        m_RB.isKinematic = false; // 再度物理的に解放
+        m_RB.isKinematic = false; 　//再度物理的に解放
         
-        //ステージの反対方向と上方向に力加える
+        Debug.Log("call OutsideForce");
+        //ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
         m_RB.AddForce(direction, ForceMode.Impulse);
     }
 

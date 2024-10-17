@@ -72,7 +72,7 @@ public class FallArea : MonoBehaviour
     private void ResetFlag()
     {
         waitRescue = false;
-        Debug.Log("reset waitRescue");
+     //   Debug.Log("reset waitRescue");
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class FallArea : MonoBehaviour
      
         m_PM.State = RescueState.Wait;
         CalcShortestDist();
-        Debug.Log("state is " + m_PM.State);
+      //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
         jointManager.SetJointAndLine();
     }
