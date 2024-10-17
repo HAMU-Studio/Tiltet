@@ -21,16 +21,9 @@ public class Rescue : MonoBehaviour
         {
             canRescueAct = true;
             rescuePlayer = other.gameObject;
-         //   Debug.Log("canRescueAct = " + canRescueAct);
         }
     }
-    
-   /*// private Vector3 m_targetVec;
-    public void SaveTarget(Vector3 targetVector)
-    {
-       // m_targetVec = targetVector;
-    }*/
-
+  
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -79,7 +72,10 @@ public class Rescue : MonoBehaviour
     
         rescuedPlayer.GetComponent<PlayerController>().ChangePlayerState(false);
 
-        ResetRBVelocity();
+        if (m_RB.isKinematic)
+            m_RB.isKinematic = false;
+        
+        GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
 
         GetComponent<Renderer>().enabled = false;
@@ -114,21 +110,28 @@ public class Rescue : MonoBehaviour
             return (new Vector3(pointB.x - pointA.x, x * Mathf.Tan(rad), pointB.z - pointA.z).normalized * speed);
         }
     }
+    
+    /// <summary>
+    /// 現状JointManagerで使用する、外側に弾く力を計算する関数。
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 CalcOutsideForce()
+    {
+        Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
+
+        velocity = new Vector3(-velocity.x, 0f, -velocity.z);
+
+        return velocity.normalized;
+    }
 
     /// <summary>
-    /// 救出アクションの直前処理。ステージが引っ掛かりそうなら外に移動->ロープ切る->飛ばす
+    /// 救出アクションの直前処理。
     /// </summary>
     private void ThrowPREP()
     {
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
-    }
-
-    private void ResetRBVelocity()
-    {
-        m_RB = rescuedPlayer.GetComponent<Rigidbody>();
-        m_RB.velocity = Vector3.zero;
-        m_RB.angularVelocity = Vector3.zero;
+     //   GameManager.instance.ResetRBVelocity(m_RB);
     }
 
     private void RescPostProcess()
@@ -169,6 +172,16 @@ public class Rescue : MonoBehaviour
         {
             RescueThrow();
             once = true;
+        }
+    }
+    
+    [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 2f;
+    private void FixedUpdate()
+    {
+        if (m_PM.State == RescueState.Move)
+        {
+            Vector3 force = Vector3.up * upPowoer / Time.fixedDeltaTime;
+            m_RB.AddForce(force);
         }
     }
 }

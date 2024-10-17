@@ -37,29 +37,65 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DebugStateChange();
+        if (currentState != m_beforeState)
+        {
+            OnStateChange();
+        }
     }
 
     private RescueState m_beforeState;
-    private void DebugStateChange()
+    private void OnStateChange()
     {
-        if (currentState != m_beforeState)
+       // Debug.Log("state change " + m_beforeState + "->" + currentState);
+        
+        if (m_beforeState == RescueState.None && currentState == RescueState.Wait)
         {
-            Debug.Log("state change " + m_beforeState + "->" + currentState);
-            if (m_beforeState == RescueState.None && currentState == RescueState.Wait)
-            {
-                GameManager.instance.Rescue = true;
-            }
+            //落ちたら救出開始
+            GameManager.instance.Rescue = true;
+        }
 
-            if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
+        if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
+        {
+            //着地したら救出終了
+            if (currentState == RescueState.None)
             {
-                if (currentState == RescueState.None)
-                {
-                    GameManager.instance.Rescue = false;
-                }
+                GameManager.instance.Rescue = false;
             }
         }
-        
+
+        if (m_beforeState == RescueState.Fly && currentState == RescueState.SuperLand)
+        {
+            if (gameObject.layer ==  LayerMask.NameToLayer("Fly"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
+            }
+        }
+
+        if (m_beforeState == RescueState.Move && currentState == RescueState.Fly)
+        {
+            //飛んだらレイヤー管理
+            StartCoroutine("LayerManagement");
+            //LayerManagement();
+        }
         m_beforeState = currentState;
+    }
+
+    [Header("飛び始めてから当たり判定が元に戻るまでの時間")] 
+    [SerializeField] private float waitTime = 2f;
+    
+    /// <summary>
+    /// 救出アクション中進行不可能にならないようにLayerを変更して念のため貫通するように
+    /// </summary>
+    private IEnumerator LayerManagement()
+    {
+        //NameToLayerは名前から数値への変換。本来Layerは数字
+        gameObject.layer = LayerMask.NameToLayer("Fly");
+        Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
+        
+        yield return new WaitForSeconds(waitTime);
+        
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
     }
 }

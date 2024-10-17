@@ -64,11 +64,9 @@ public class GameManager : MonoBehaviour
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-        InitGame();
+       // InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
-
-
     }
 
     public void Restart()
@@ -97,7 +95,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private Vector3 m_axis;
     private GameObject m_pivot;
     private bool m_rescue;
@@ -108,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            Debug.Log("axis = " + m_axis);
+           // Debug.Log("axis = " + m_axis);
             return m_axis;
         }
         
@@ -161,6 +158,11 @@ public class GameManager : MonoBehaviour
         //stageの移動停止と再開処理とかカメラの切り替え処理呼ぶ　ここは最悪相互参照になってもいいかも
         
     }
-
+    
+    public void ResetRBVelocity(Rigidbody RB)
+    {
+        RB.velocity = Vector3.zero;
+        RB.angularVelocity = Vector3.zero;
+    }
 
 }
