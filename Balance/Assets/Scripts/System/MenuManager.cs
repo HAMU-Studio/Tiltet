@@ -20,6 +20,6 @@ public class MenuManager : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("Forest");
+        SceneManager.LoadScene("Stage01");
     }
 }
