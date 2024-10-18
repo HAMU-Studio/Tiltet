@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -93,7 +93,14 @@ public class PlayerController : MonoBehaviour
         {
             //PlayerFreeze();
         }
-       
+
+        if (m_PM.State == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            //スーパー着地
+            //   Debug.Log("Call 1");
+            SuperLanding();
+        }
+
     }
     private void FixedUpdate()
     {
@@ -177,6 +184,15 @@ public class PlayerController : MonoBehaviour
                 m_rescueCube.GetComponent<Rescue>().StartRescue();
                 canRescueAct = false;
             }
+            // CMSwitchを探し、プレイヤーが接触しているか確認する処理
+            CMSwitch[] switches = FindObjectsOfType<CMSwitch>();
+            foreach (var cmswitch in switches)
+            {
+                if (cmswitch.IsPlayerInContact())
+                {
+                    cmswitch.SetSwitchPressed(true); // スイッチを押す
+                }
+            }
         }
     }
     [SerializeField] private Vector3 scalePow;
@@ -238,7 +254,7 @@ public class PlayerController : MonoBehaviour
                     m_PM.State == RescueState.SuperLand)
                 {
                     m_PM.State = RescueState.None;
-                    Debug.Log("pm = " + m_PM.State);
+                 //   Debug.Log("pm = " + m_PM.State);
                 }
             }
         }
@@ -253,8 +269,7 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Ground"))
         {
-            
-            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+            //collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
             isChanged = true;
         }
     }

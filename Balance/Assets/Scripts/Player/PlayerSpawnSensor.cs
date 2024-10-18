@@ -32,6 +32,7 @@ public class PlayerSpawnSensor : MonoBehaviour
                 if (player.transform.position == P1Spawn.position)
                 {
                     Debug.Log("player1 spawn success");
+                    GameManager.instance.P1Spawn = true;
                 }
                 else
                 {
@@ -45,6 +46,7 @@ public class PlayerSpawnSensor : MonoBehaviour
                 if (player.transform.position == P2Spawn.position)
                 {
                     Debug.Log("player2 spawn success");
+                    GameManager.instance.P2Spawn = true;
                 }
                 else
                 {

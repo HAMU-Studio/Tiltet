@@ -72,7 +72,7 @@ public class FallArea : MonoBehaviour
     private void ResetFlag()
     {
         waitRescue = false;
-        Debug.Log("reset waitRescue");
+     //   Debug.Log("reset waitRescue");
     }
 
     /// <summary>
@@ -88,22 +88,13 @@ public class FallArea : MonoBehaviour
      
         m_PM.State = RescueState.Wait;
         CalcShortestDist();
-        Debug.Log("state is " + m_PM.State);
+      //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
         jointManager.SetJointAndLine();
     }
 
     private void SetFallInstance(Collider col)
     {
-        
-        /*
-        if (m_PM != null)
-        {
-            if (m_PM.State != RescueState.None)
-            {
-                return;
-            }
-        }*/
         fallPlayerInstance = col.gameObject;
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
@@ -117,8 +108,7 @@ public class FallArea : MonoBehaviour
     {
         //最短距離の計算とそのcubeの取得
         //できれば他スクリプトで行いたい
-        /*GameManager.instance.Pivot = null;
-        GameManager.instance.Axis = Vector3.zero;*/
+       
         foreach (GameObject area in RescueActAreas)
         {
             playerPos = fallPlayerInstance.transform.position;
