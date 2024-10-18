@@ -4,95 +4,43 @@ using UnityEngine;
 
 public class StageMovement : MonoBehaviour
 {
-    public float forceMultiplier = 2.0f; // 力の倍率を設定する変数
-    public float rotationAngle = 10.0f;  // 傾ける角度
+    private TiltControl tiltControl;
 
-    private Vector3 movementForce = Vector3.zero; // 現在の移動力を保持する変数
-    private Vector3 targetRotation = Vector3.zero; // 目標回転角度
-
-    void FixedUpdate()
+    void Start()
     {
-        // 現在の移動力に基づいて床を移動させる
-        if (movementForce != Vector3.zero)
+        // TiltControlコンポーネントを取得
+        tiltControl = GetComponent<TiltControl>();
+
+        // nullチェック
+        if (tiltControl == null)
         {
-            transform.Translate(movementForce * Time.fixedDeltaTime, Space.World);
-            // 目標回転角度に向けて回転する
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(targetRotation), Time.fixedDeltaTime * 2.0f);
-        }
-        else
-        {
-            // 移動力がゼロの場合、回転をリセットする
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.fixedDeltaTime * 2.0f);
+            Debug.LogError("TiltControlが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
         }
     }
 
-    public void AddForce(Vector3 force)
+    void Update()
     {
-        // 指定された方向に力を加える（倍率を適用）
-        movementForce += force * forceMultiplier;
-
-        // 移動方向に応じて回転角度を設定
-        if (force == Vector3.forward)
+        // MaxForcePointを取得してデバッグ出力
+        if (tiltControl != null)
         {
-            targetRotation = new Vector3(rotationAngle, 0, 0);
-        }
-        else if (force == Vector3.back)
-        {
-            targetRotation = new Vector3(-rotationAngle, 0, 0);
-        }
-        else if (force == Vector3.left)
-        {
-            targetRotation = new Vector3(0, 0, rotationAngle);
-        }
-        else if (force == Vector3.right)
-        {
-            targetRotation = new Vector3(0, 0, -rotationAngle);
-        }
-        // 他の方向の場合は、適宜調整する
-    }
-
-    public void RemoveForce(Vector3 force)
-    {
-        // 指定された方向の力を削除（倍率を適用）
-        movementForce -= force * forceMultiplier;
-
-        // 力がゼロになる場合、回転角度をリセット
-        if (movementForce == Vector3.zero)
-        {
-            targetRotation = Vector3.zero;
+            Vector3 maxForcePoint = tiltControl.MaxForcePoint;
+            Debug.Log("最大の力がかかるポイント: " + maxForcePoint);
         }
     }
 
-    public void StopMoving()
+    /*public void StopMovement()
     {
-        // 力をゼロにして停止する
-        movementForce = Vector3.zero;
-        targetRotation = Vector3.zero;
-    }
-
-    public Vector3 GetCurrentMovementForce()
-    {
-        return movementForce;
-    }
-
-    public void StopMovement()
-    {
-        // StageMovement と GravitySensor の機能を停止する処理
         StopAllCoroutines();
         enabled = false;
 
-        // GravitySensor コンポーネントを取得して停止する
         GravitySensor gravitySensor = GetComponent<GravitySensor>();
         if (gravitySensor != null)
         {
             gravitySensor.enabled = false;
         }
 
-        // StageのTransform.Rotationを(0,0,0)に初期化
         transform.rotation = Quaternion.Euler(0, 0, 0);
 
-        // RigidbodyのFreeze Positionを全てtrueにする
-        // RigidbodyのFreeze Rotationを全てtrueにする
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -107,5 +55,5 @@ public class StageMovement : MonoBehaviour
         {
             StopMovement();
         }
-    }
+    }*/
 }

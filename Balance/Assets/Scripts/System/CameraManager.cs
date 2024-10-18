@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
+    //使用するカメラ
     public CinemachineVirtualCamera cmForward;
     public CinemachineVirtualCamera cmBackward;
     public CinemachineVirtualCamera cmLeft;
