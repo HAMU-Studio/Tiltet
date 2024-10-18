@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 4176195231437034335}
   - component: {fileID: 4176195231437034332}
   - component: {fileID: 1529936427}
-  - component: {fileID: 1529936426}
   - component: {fileID: 6008238175642274521}
+  - component: {fileID: 789365590259599339}
   m_Layer: 0
   m_Name: Pivot
   m_TagString: Untagged
@@ -216,18 +216,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &1529936426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4176195231437034333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8330322f67cbb0a43affa68efbc313b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6008238175642274521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,3 +229,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 0
+--- !u!114 &789365590259599339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4176195231437034333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8330322f67cbb0a43affa68efbc313b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
