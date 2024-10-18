@@ -11,9 +11,14 @@ public class GimmickManager : MonoBehaviour
     [SerializeField] private GameObject[] parts;
     [SerializeField] private GameObject[] coinPositions;
 
-    private int numCoin;
+    [Header("クリアに必要なコインの取得数")]
+    [SerializeField] int numCoin;
+
+    //取ったコインの数
     private int countCoin;
+    //取ったパーツの数
     private int countParts;
+
     private GameObject[] Coins;
 
     // 部品の数で配列数を変える
@@ -22,19 +27,7 @@ public class GimmickManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // コインの枚数
-        numCoin = 9;
-        countCoin = 0;
-        countParts = 0;
-
-        PartsPosition[0] = stands[0].transform.position;
-        PartsPosition[1] = stands[1].transform.position;
-
-        PartsPosition[0].y += 10.0f;
-        PartsPosition[1].y += 10.0f;
-
-        GameObject LeftParts = Instantiate(parts[0]);
-        LeftParts.transform.position = PartsPosition[0];
+        Set();
     }
 
     // Update is called once per frame
@@ -48,6 +41,24 @@ public class GimmickManager : MonoBehaviour
     void FixUpdate()
     {
 
+    }
+
+    private void Set()
+    {
+        // コインの枚数
+        numCoin = 5;
+
+        countCoin = 0;
+        countParts = 0;
+
+        PartsPosition[0] = stands[0].transform.position;
+        PartsPosition[1] = stands[1].transform.position;
+
+        PartsPosition[0].y += 10.0f;
+        PartsPosition[1].y += 10.0f;
+
+        /*GameObject LeftParts = Instantiate(parts[0]);
+        LeftParts.transform.position = PartsPosition[0];*/
     }
 
     private void CoinSpawn()
@@ -72,6 +83,7 @@ public class GimmickManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //特定のエリアに侵入するとコインが出現する仕掛け
         if (collision.gameObject.name == "CoinArea")
         {
             CoinSpawn();
