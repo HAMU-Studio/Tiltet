@@ -30,34 +30,7 @@ public class EnemyEllipse : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //playerのタグがついているオブジェクトを代入
-        players = GameObject.FindGameObjectsWithTag("Player");
-
-        // players配列の長さに基づいてdistance配列を初期化
-        if (players.Length > 0)
-        {
-            distance = new float[players.Length];
-        }
-
-        time = 0;
-        ableAssault = false;
-
-        _position = Vector3.zero;
-        _prePosition = transform.position;
-        _Direction = Vector3.forward;
-        enemyRb = GetComponent<Rigidbody>();
-
-        SearchPlayer();
-
-        // targetがnullでないことを確認
-        if (target != null)
-        {
-            //進行方向
-            Direction = (target.transform.position - transform.position).normalized;
-
-            enemyRb.AddForce(transform.up * 8.0f, ForceMode.Impulse);
-            enemyRb.AddForce(Direction * 8.0f, ForceMode.Impulse);
-        }
+        Set();
     }
 
     // Update is called once per frame
@@ -73,7 +46,7 @@ public class EnemyEllipse : MonoBehaviour
 
             if (time <= 0.5f)
             {
-                //Debug.Log("hit");
+                Debug.Log("hit");
                 enemyRb.velocity = Vector3.zero;
                 Assault = true;
                 ableAssault = false;
@@ -92,6 +65,26 @@ public class EnemyEllipse : MonoBehaviour
     void FixedUpdate()
     {
         CheckDirection();
+    }
+
+    private void Set()
+    {
+        //playerのタグがついているオブジェクトを代入
+        players = GameObject.FindGameObjectsWithTag("Player");
+
+        // players配列の長さに基づいてdistance配列を初期化
+        if (players.Length > 0)
+        {
+            distance = new float[players.Length];
+        }
+
+        time = 0;
+        ableAssault = false;
+
+        _position = Vector3.zero;
+        _prePosition = transform.position;
+        _Direction = Vector3.forward;
+        enemyRb = GetComponent<Rigidbody>();
     }
 
     private void CheckDirection()

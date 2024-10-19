@@ -40,31 +40,35 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        isPlayerSpawn = new bool [2];
+
+        InitGame();
     }
    
     void Start()
     {
-        InitGame();
+      // StartGame();
     }
     
     private int m_life;
     private int m_wave;
     private int m_parts;
   
-    public void InitGame()
+    private void InitGame()
     {
-     //   Time.timeScale = 0;
+       // Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
         m_parts = 0;
-        StartGame();
+        isPlayerSpawn = new bool [2];
+      //  StartGame();
         //今後ScoreUIのUpdate呼び出す
     }
 
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-       // InitGame();
+     //   InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
     }
@@ -131,6 +135,21 @@ public class GameManager : MonoBehaviour
        get { return m_rescue; }
        
        set { m_rescue = value;}
+    }
+    
+    private bool[] isPlayerSpawn;
+    public bool P1Spawn
+    {
+        get { return isPlayerSpawn[0]; }
+
+        set { isPlayerSpawn[0] = value; }
+    }
+
+    public bool P2Spawn
+    {
+        get { return isPlayerSpawn[1]; }
+
+        set { isPlayerSpawn[1] = value; }
     }
 
     public void AddPartsNum()
