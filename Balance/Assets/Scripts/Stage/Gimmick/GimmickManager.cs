@@ -19,8 +19,6 @@ public class GimmickManager : MonoBehaviour
     //取ったパーツの数
     private int countParts;
 
-    private GameObject[] Coins;
-
     // 部品の数で配列数を変える
     Vector3[] PartsPosition = new Vector3[2];
 
@@ -28,6 +26,7 @@ public class GimmickManager : MonoBehaviour
     void Start()
     {
         Set();
+        CoinSpawn();
     }
 
     // Update is called once per frame
@@ -48,13 +47,13 @@ public class GimmickManager : MonoBehaviour
         // コインの枚数
         numCoin = 5;
 
-        countCoin = 0;
+        countCoin = 5;
         countParts = 0;
 
-        PartsPosition[0] = stands[0].transform.position;
+        PartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);
         PartsPosition[1] = stands[1].transform.position;
 
-        PartsPosition[0].y += 10.0f;
+        //PartsPosition[0] += new Vector3(0, 10.0f, 0);
         PartsPosition[1].y += 10.0f;
 
         /*GameObject LeftParts = Instantiate(parts[0]);
@@ -63,39 +62,41 @@ public class GimmickManager : MonoBehaviour
 
     private void CoinSpawn()
     {
-        Coins = new GameObject[numCoin];
-
-        for (int i = 0; i < numCoin; i++)
-        {
-            Coins[i] = Instantiate(coin);
-            Coins[i].transform.position = coinPositions[i].transform.position;
-        }
+        GameObject Coin = Instantiate(coin);
+        Coin.transform.position = coinPositions[countCoin].transform.position;
     }
 
     private void CoinGimmick()
     {
         if (countCoin >= numCoin)
         {
-            GameObject RightParts = Instantiate(parts[1]);
-            RightParts.transform.position = PartsPosition[1];
+            GameObject CoinParts = Instantiate(parts[0]);
+            CoinParts.transform.position = PartsPosition[0];
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         //特定のエリアに侵入するとコインが出現する仕掛け
-        if (collision.gameObject.name == "CoinArea")
+        /*if (collision.gameObject.name == "CoinArea")
         {
             CoinSpawn();
             Destroy(collision.gameObject);
-        }
+        }*/
 
         if(collision.gameObject.CompareTag("Coin"))
         {
             Destroy(collision.gameObject);
             countCoin++;
 
-            CoinGimmick();
+            if (countCoin < numCoin)
+            {
+                CoinSpawn();
+            }
+            else
+            {
+                CoinGimmick();
+            }
         }
 
         if(collision.gameObject.CompareTag("Parts"))
