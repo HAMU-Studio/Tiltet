@@ -6,6 +6,7 @@ using TMPro;
 
 public class GimmickManager : MonoBehaviour
 {
+    GameManager gamemanager;
     [SerializeField] private GameObject coin;
     [SerializeField] private GameObject[] stands;
     [SerializeField] private GameObject[] parts;
@@ -20,7 +21,8 @@ public class GimmickManager : MonoBehaviour
     private int countParts;
 
     // 部品の数で配列数を変える
-    Vector3[] PartsPosition = new Vector3[2];
+    Vector3[] MainPartsPosition = new Vector3[];
+    Vector3[] SubPartsPosition = new Vector3[2];
 
     // Start is called before the first frame update
     void Start()
@@ -44,20 +46,18 @@ public class GimmickManager : MonoBehaviour
 
     private void Set()
     {
+        gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
         // コインの枚数
-        numCoin = 5;
+        numCoin = 0;
 
         countCoin = 5;
         countParts = 0;
 
-        PartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);
-        PartsPosition[1] = stands[1].transform.position;
-
-        //PartsPosition[0] += new Vector3(0, 10.0f, 0);
-        PartsPosition[1].y += 10.0f;
+        SubPartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);
+        SubPartsPosition[1] = stands[1].transform.position + new Vector3(0, 15.0f, 0);
 
         /*GameObject LeftParts = Instantiate(parts[0]);
-        LeftParts.transform.position = PartsPosition[0];*/
+        LeftParts.transform.position = SubPartsPosition[0];*/
     }
 
     private void CoinSpawn()
@@ -71,7 +71,7 @@ public class GimmickManager : MonoBehaviour
         if (countCoin >= numCoin)
         {
             GameObject CoinParts = Instantiate(parts[0]);
-            CoinParts.transform.position = PartsPosition[0];
+            CoinParts.transform.position = SubPartsPosition[0];
         }
     }
 
@@ -102,7 +102,7 @@ public class GimmickManager : MonoBehaviour
         if(collision.gameObject.CompareTag("Parts"))
         {
             Destroy(collision.gameObject);
-            countParts++;
+            gamemanager.AddPartsNum();
         }
     }
 }

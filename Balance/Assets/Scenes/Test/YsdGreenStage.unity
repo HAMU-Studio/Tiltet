@@ -2891,8 +2891,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 3
-  stage: {fileID: 193767885}
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &476898060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4162,7 +4162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceMultiplier: 7
+  forceMultiplier: 2
   rotationAngle: 10
 --- !u!114 &723246460
 MonoBehaviour:
@@ -4315,7 +4315,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733104574}
-  m_LocalRotation: {x: 0.0000000013780783, y: 0.9870875, z: -0.16018224, w: 0.000000008492101}
+  m_LocalRotation: {x: -0.0000000013780784, y: 0.9870875, z: -0.16018225, w: -0.000000008492101}
   m_LocalPosition: {x: 0, y: 10, z: 1}
   m_LocalScale: {x: 0.033333335, y: 0.22988503, z: 0.03683241}
   m_ConstrainProportionsScale: 0
@@ -6514,8 +6514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 1
-  stage: {fileID: 193767885}
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &1175521325
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7387,7 +7387,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1325867842}
   m_LocalRotation: {x: 0.20584048, y: -0.16473687, z: -0.03480552, w: -0.96399176}
-  m_LocalPosition: {x: 546.249, y: -155.89035, z: -286.93323}
+  m_LocalPosition: {x: 517.4961, y: -194.60207, z: -368.55978}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7747,7 +7747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensorType: 0
-  stage: {fileID: 193767885}
+  stage: {fileID: 0}
 --- !u!65 &1455615900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8052,8 +8052,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 2
-  stage: {fileID: 193767885}
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &1546520764
 BoxCollider:
   m_ObjectHideFlags: 0
