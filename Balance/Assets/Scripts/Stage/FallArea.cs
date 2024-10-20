@@ -63,6 +63,7 @@ public class FallArea : MonoBehaviour
 
             if (!waitRescue)
             {
+                Debug.Log("callHItPlayerProcess");
                 HitPlayerProcess(other);
                 waitRescue = true;
             }
@@ -72,7 +73,7 @@ public class FallArea : MonoBehaviour
     private void ResetFlag()
     {
         waitRescue = false;
-        Debug.Log("reset waitRescue");
+     //   Debug.Log("reset waitRescue");
     }
 
     /// <summary>
@@ -88,23 +89,15 @@ public class FallArea : MonoBehaviour
      
         m_PM.State = RescueState.Wait;
         CalcShortestDist();
-        Debug.Log("state is " + m_PM.State);
+      //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
         jointManager.SetJointAndLine();
     }
 
     private void SetFallInstance(Collider col)
     {
-        
-        /*
-        if (m_PM != null)
-        {
-            if (m_PM.State != RescueState.None)
-            {
-                return;
-            }
-        }*/
         fallPlayerInstance = col.gameObject;
+        Debug.Log("FPI = " + fallPlayerInstance);
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
     }
@@ -117,8 +110,7 @@ public class FallArea : MonoBehaviour
     {
         //最短距離の計算とそのcubeの取得
         //できれば他スクリプトで行いたい
-        /*GameManager.instance.Pivot = null;
-        GameManager.instance.Axis = Vector3.zero;*/
+       
         foreach (GameObject area in RescueActAreas)
         {
             playerPos = fallPlayerInstance.transform.position;
@@ -139,7 +131,7 @@ public class FallArea : MonoBehaviour
         if (shortestDistArea == null)
             Debug.LogError("shortestDistCube are null");
         
-        shortestDistArea.SetActive(true);
+     
         
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistArea.transform.GetChild(0).gameObject;
@@ -152,6 +144,7 @@ public class FallArea : MonoBehaviour
         //最短距離のオブジェクトだけon
         shortestDistArea.GetComponent<Renderer>().enabled = true;
         shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
+        shortestDistArea.SetActive(true);
         
      //   shortestDistCube.GetComponent<Rescue>().SaveTarget(fallPlayerInstance.transform.position);
     }

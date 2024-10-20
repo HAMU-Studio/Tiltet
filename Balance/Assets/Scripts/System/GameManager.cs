@@ -40,35 +40,37 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        isPlayerSpawn = new bool [2];
+
+        InitGame();
     }
    
     void Start()
     {
-        InitGame();
+      // StartGame();
     }
     
     private int m_life;
     private int m_wave;
     private int m_parts;
   
-    public void InitGame()
+    private void InitGame()
     {
-     //   Time.timeScale = 0;
+       // Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
         m_parts = 0;
-        StartGame();
+        isPlayerSpawn = new bool [2];
+      //  StartGame();
         //今後ScoreUIのUpdate呼び出す
     }
 
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-        InitGame();
+     //   InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
-
-
     }
 
     public void Restart()
@@ -97,7 +99,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private Vector3 m_axis;
     private GameObject m_pivot;
     private bool m_rescue;
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            Debug.Log("axis = " + m_axis);
+           // Debug.Log("axis = " + m_axis);
             return m_axis;
         }
         
@@ -134,6 +135,21 @@ public class GameManager : MonoBehaviour
        get { return m_rescue; }
        
        set { m_rescue = value;}
+    }
+    
+    private bool[] isPlayerSpawn;
+    public bool P1Spawn
+    {
+        get { return isPlayerSpawn[0]; }
+
+        set { isPlayerSpawn[0] = value; }
+    }
+
+    public bool P2Spawn
+    {
+        get { return isPlayerSpawn[1]; }
+
+        set { isPlayerSpawn[1] = value; }
     }
 
     public void AddPartsNum()
@@ -161,6 +177,11 @@ public class GameManager : MonoBehaviour
         //stageの移動停止と再開処理とかカメラの切り替え処理呼ぶ　ここは最悪相互参照になってもいいかも
         
     }
-
+    
+    public void ResetRBVelocity(Rigidbody RB)
+    {
+        RB.velocity = Vector3.zero;
+        RB.angularVelocity = Vector3.zero;
+    }
 
 }

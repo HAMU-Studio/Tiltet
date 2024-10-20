@@ -93,7 +93,14 @@ public class PlayerController : MonoBehaviour
         {
             //PlayerFreeze();
         }
-       
+
+        if (m_PM.State == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            //スーパー着地
+            //   Debug.Log("Call 1");
+            SuperLanding();
+        }
+
     }
     private void FixedUpdate()
     {
@@ -247,7 +254,7 @@ public class PlayerController : MonoBehaviour
                     m_PM.State == RescueState.SuperLand)
                 {
                     m_PM.State = RescueState.None;
-                    Debug.Log("pm = " + m_PM.State);
+                 //   Debug.Log("pm = " + m_PM.State);
                 }
             }
         }
@@ -262,7 +269,6 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Ground"))
         {
-            
             collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
             isChanged = true;
         }
