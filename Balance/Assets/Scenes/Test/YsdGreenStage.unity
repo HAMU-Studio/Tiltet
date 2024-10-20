@@ -2891,8 +2891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!65 &476898060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4143,7 +4141,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FixedYRotation: 0
+  Resilience: 10
+  MinXRotation: -30
+  MaxXRotation: 30
+  MinZRotation: -30
+  MaxZRotation: 30
 --- !u!4 &723246454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3684226004918467758, guid: 45cf954cb7434cb4180fe673e68ad518,
@@ -4162,8 +4164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceMultiplier: 2
-  rotationAngle: 10
 --- !u!114 &723246460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4215,7 +4215,6 @@ MonoBehaviour:
   - {fileID: 116365382}
   - {fileID: 1053706043}
   - {fileID: 1838794874}
-  numCoin: 5
 --- !u!1001 &724524245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6514,8 +6513,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!65 &1175521325
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7386,8 +7383,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1325867842}
-  m_LocalRotation: {x: 0.20584048, y: -0.16473687, z: -0.03480552, w: -0.96399176}
-  m_LocalPosition: {x: 517.4961, y: -194.60207, z: -368.55978}
+  m_LocalRotation: {x: 0.022716815, y: -0.66803443, z: -0.020058725, w: -0.743513}
+  m_LocalPosition: {x: -263.34497, y: -43.5178, z: 814.6297}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7746,8 +7743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!65 &1455615900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7975,7 +7970,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  numCoin: 0
 --- !u!1 &1519706150
 GameObject:
   m_ObjectHideFlags: 0
@@ -8052,8 +8046,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!65 &1546520764
 BoxCollider:
   m_ObjectHideFlags: 0
