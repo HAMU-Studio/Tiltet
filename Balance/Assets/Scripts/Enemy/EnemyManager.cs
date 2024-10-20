@@ -4,16 +4,25 @@ using System.Collections.Specialized;
 //using System.Diagnostics;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager: MonoBehaviour
 {
-    [SerializeField] private GameObject[] enemy;
-    [SerializeField] private GameObject[] spawnPoint;
+    [SerializeField] private GameObject stage;
+    [SerializeField] private GameObject[] enemys;
+    [SerializeField] private GameObject[] trees;
+    [SerializeField] private GameObject[] enemySpawnPoints;
 
-    //敵がスポーンするインターバル
+    [Header("木の生える範囲")]
+    [SerializeField] private GameObject minimumValue;
+    [SerializeField] private GameObject muximumValue;
+
+    [Header("木の生える数×2")]
+    [SerializeField] private int treeNum = 2;
+
+    [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
     //一度にスポーンする数
-    [SerializeField] private int spawnLimit = 1;
+    private int spawnLimit = 1;
 
     private float spawnTime;
 
@@ -27,8 +36,7 @@ public class EnemyManager : MonoBehaviour
 
     //スポーン範囲オブジェクト用
     Vector3 miniPos = new Vector3();
-    Vector3 maxPosX = new Vector3();
-    Vector3 maxPosZ = new Vector3();
+    Vector3 maxPos = new Vector3();
 
     private Rigidbody enemyRb;
 
@@ -38,14 +46,8 @@ public class EnemyManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    { 
-        // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval;
-
-        ableSpawn = true;
-
-        enemyCount = 0;
-
+    {
+        Set();
     }
 
     // Update is called once per frame
@@ -69,14 +71,28 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    private void Set()
+    {
+        // ゲームが始まったと同時にスポーン（なくてもいい）
+        spawnTime = spawnInterval;
+
+        ableSpawn = true;
+
+        enemyCount = 0;
+
+        GameObject Trees = Instantiate(trees[0]);
+        Vector3 Stage = stage.transform.position;
+        Trees.transform.position = new Vector3(Stage.x + 15, 0, Stage.z + 26);
+    }
+
     private void EnemySpawn()
     {
         //0...丸 1...楕円
-        enemyKinds = Random.Range(0, enemy.Length);
-        GameObject newEnemy = Instantiate(enemy[enemyKinds]);
+        enemyKinds = Random.Range(0, enemys.Length);
+        GameObject newEnemy = Instantiate(enemys[enemyKinds]);
 
-        spawnNum = Random.Range(0, spawnPoint.Length);
-        newEnemy.transform.position = spawnPoint[spawnNum].transform.position;
+        spawnNum = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[spawnNum].transform.position;
 
         if (enemyKinds == 1)
         {
