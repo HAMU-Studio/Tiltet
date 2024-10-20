@@ -21,7 +21,7 @@ public class GimmickManager : MonoBehaviour
     private int countParts;
 
     // 部品の数で配列数を変える
-    Vector3[] MainPartsPosition = new Vector3[];
+    Vector3[] MainPartsPosition = new Vector3[3];
     Vector3[] SubPartsPosition = new Vector3[2];
 
     // Start is called before the first frame update
