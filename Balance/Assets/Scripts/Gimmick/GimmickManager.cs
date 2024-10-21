@@ -102,7 +102,7 @@ public class GimmickManager : MonoBehaviour
         if(collision.gameObject.CompareTag("Parts"))
         {
             Destroy(collision.gameObject);
-            gamemanager.AddPartsNum();
+            gamemanager.AddSubPartsNum();
         }
     }
 }
