@@ -4,40 +4,24 @@ using UnityEngine;
 
 public class TiltControl : MonoBehaviour
 {
-    // 初期Y位置を保存
-    //private float initialYPosition;
-
-    // 座標の固定
-    private Vector3 FixedPosition;
-
-    // Y軸の回転の固定
-    private float FixedYRotation = 0f;
-
-    // AddForceで使用する力の大きさ
-    private Vector3 m_forceDirection = new Vector3(0, 10, 0);
-    private ForceMode m_forceMode = ForceMode.Force;
-
     private Rigidbody m_rb;
 
-    // 傾きを水平に保とうとする力(復元力)の強さ
-    [SerializeField] float Resilience = 10f;
+    // 接触中のオブジェクトの質量を記録する変数
+    private float contactMass = 0f;
 
-    // X軸とZ軸の回転制限角度
-    [SerializeField] float MinXRotation = -30f;
-    [SerializeField] float MaxXRotation = 30f;
-    [SerializeField] float MinZRotation = -30f;
-    [SerializeField] float MaxZRotation = 30f;
+    // オブジェクトが接触しているかどうかのフラグ
+    private bool isContacting = false;
 
-    // (※デバッグ用) オブジェクトの動作を一時停止するためのフラグ
-    private bool isPaused = false;
-    private Vector3 savedPosition;
-    private Quaternion savedRotation;
+    // 初期Y位置とY軸の回転角度を記録する変数
+    private float initialYPosition;
+    private float initialYRotation;
 
-    // 傾いている方向を保存
-    private Vector3 tiltDirection;
+    // 傾きの最大角度（インスペクターで調整可能）
+    [SerializeField] private float maxTiltAngleX = 30f;
+    [SerializeField] private float maxTiltAngleZ = 30f;
 
-    // 外部スクリプトで参照可能なプロパティ
-    public Vector3 TiltDirection => tiltDirection;
+    // 復元力の大きさ
+    [SerializeField] private float restoringForce = 10f;
 
     void Start()
     {
@@ -50,176 +34,96 @@ public class TiltControl : MonoBehaviour
             Debug.LogError("Rigidbodyが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
         }
 
-        // 初期Y位置を保存
-        //initialYPosition = transform.position.y;
-
-        // オブジェクトの初期位置を保存
-        FixedPosition = transform.position;
-    }
-
-    void Update()
-    {
-        // Y軸の位置を初期位置に固定
-        /*Vector3 currentPosition = transform.position;
-        currentPosition.y = initialYPosition; // Y軸を初期位置に設定
-        transform.position = currentPosition;*/
-
-        // オブジェクトの位置を固定
-        transform.position = FixedPosition;
-
-        // (※デバッグ用) Oキーが押されたときに一時停止を実行
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            TogglePause();
-        }
-
-        // (※デバッグ用) 一時停止中は位置と回転を保存した値に固定
-        if (isPaused)
-        {
-            transform.position = savedPosition;
-            transform.rotation = savedRotation;
-            return;
-        }
-
-        // Update内で力を加える（ForceModeがForce以外の場合）
-        if (m_forceMode != ForceMode.Force)
-        {
-            m_rb.AddForce(m_forceDirection, m_forceMode);
-        }
-
-        // 現在の回転を取得
-        Quaternion currentRotation = transform.rotation;
-
-        // オイラー角に変換
-        Vector3 euler = currentRotation.eulerAngles;
-
-        // Y軸の回転を固定
-        euler.y = FixedYRotation;
-
-        // X軸とZ軸の回転を制限
-        euler.x = ClampAngle(euler.x, MinXRotation, MaxXRotation);
-        euler.z = ClampAngle(euler.z, MinZRotation, MaxZRotation);
-
-        // 回転を更新
-        transform.rotation = Quaternion.Euler(euler);
-
-        // オブジェクトの傾き方向を取得して保存
-        tiltDirection = CalculateTiltDirection();
-        Debug.Log("傾いている方向: " + tiltDirection);
+        // 初期Y位置とY軸の回転角度を保存
+        initialYPosition = transform.position.y;
+        initialYRotation = transform.rotation.eulerAngles.y;
     }
 
     void FixedUpdate()
     {
-        // (※デバッグ用) 一時停止中は処理を中断
-        if (isPaused)
+        // Y軸方向の移動を固定
+        Vector3 currentPosition = transform.position;
+        currentPosition.y = initialYPosition; // Y軸の位置を初期位置に固定
+        transform.position = currentPosition;
+
+        // Y軸の回転を固定
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        currentRotation.y = initialYRotation; // Y軸の回転を初期回転角度に固定
+
+        // X軸とZ軸の回転を±maxTiltAngleX、±maxTiltAngleZに制限
+        currentRotation.x = Mathf.Clamp(currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x, -maxTiltAngleX, maxTiltAngleX);
+        currentRotation.z = Mathf.Clamp(currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z, -maxTiltAngleZ, maxTiltAngleZ);
+
+        // 制限後の回転を適用
+        transform.rotation = Quaternion.Euler(currentRotation);
+
+        // 接触中のオブジェクトがある場合、その質量に応じて傾きを加える
+        if (isContacting && contactMass > 0f)
         {
-            return;
+            // 質量に応じた傾きの強さを計算
+            float tiltAmount = Mathf.Clamp(contactMass, 1f, 10f); // 1～10の範囲で傾きを制限
+            // X軸とZ軸の傾きを計算（質量に応じて傾く強さを変更）
+            Vector3 xTiltTorque = Vector3.right * -tiltAmount;
+            Vector3 zTiltTorque = Vector3.forward * -tiltAmount;
+
+            // Rigidbodyにトルクを加える（傾きを適用）
+            m_rb.AddTorque(xTiltTorque + zTiltTorque);
         }
 
-        // ForceModeがForceの場合はFixedUpdate内で力を加える
-        if (m_forceMode == ForceMode.Force)
+        // 復元力を適用して傾きを戻す処理
+        ApplyRestoringForce();
+    }
+
+    // 復元力を適用して傾きを安定させる
+    private void ApplyRestoringForce()
+    {
+        // 現在の回転角度を取得
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+
+        // 回転角度を[-180, 180]の範囲に正規化
+        float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
+        float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
+
+        // X軸とZ軸の傾きに対する復元力を計算
+        Vector3 restoringTorqueX = Vector3.right * -tiltX * restoringForce;
+        Vector3 restoringTorqueZ = Vector3.forward * -tiltZ * restoringForce;
+
+        // 復元力をRigidbodyに適用
+        m_rb.AddTorque(restoringTorqueX + restoringTorqueZ);
+    }
+
+    // オブジェクトが接触を開始したとき
+    void OnCollisionEnter(Collision collision)
+    {
+        Rigidbody otherRb = collision.rigidbody;
+
+        if (otherRb != null)
         {
-            m_rb.AddForce(m_forceDirection, m_forceMode);
-        }
-
-        // 傾きを水平に保つ
-        Vector3 currentRotation = transform.localEulerAngles;
-
-        // X軸の傾きを水平に戻すためのトルク
-        if (currentRotation.x > 180) currentRotation.x -= 360;
-        Vector3 xCorrectionTorque = Vector3.right * -currentRotation.x * Resilience;
-
-        // Z軸の傾きを水平に戻すためのトルク
-        if (currentRotation.z > 180) currentRotation.z -= 360;
-        Vector3 zCorrectionTorque = Vector3.forward * -currentRotation.z * Resilience;
-
-        // Rigidbodyにトルクを加える
-        m_rb.AddTorque(xCorrectionTorque + zCorrectionTorque);
-    }
-
-    // 傾いている方向を計算するメソッド
-    private Vector3 CalculateTiltDirection()
-    {
-        Vector3 tiltDirection = new Vector3(
-            Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad),
-            0,
-            Mathf.Sin(transform.eulerAngles.x * Mathf.Deg2Rad)
-        );
-        return tiltDirection.normalized;
-    }
-
-    // 今は使用していないが外部でAddForceの設定を外部で参照できるメッソド
-    // 力の方向と大きさを設定するメソッド
-    public void SetForceDirection(Vector3 direction)
-    {
-        m_forceDirection = direction;
-    }
-
-    // 力の方向と大きさを取得するメソッド
-    public Vector3 GetForceDirection()
-    {
-        return m_forceDirection;
-    }
-
-    // ForceModeを設定するメソッド
-    public void SetForceMode(ForceMode mode)
-    {
-        m_forceMode = mode;
-    }
-
-    // ForceModeを取得するメソッド
-    public ForceMode GetForceMode()
-    {
-        return m_forceMode;
-    }
-
-    // 角度をクランプするヘルパーメソッド
-    float ClampAngle(float angle, float min, float max)
-    {
-        if (angle < 180f)
-        {
-            angle = Mathf.Clamp(angle, min, max);
-        }
-        else
-        {
-            angle = Mathf.Clamp(angle, 360f + min, 360f + max);
-        }
-        return angle;
-    }
-
-    // (※デバッグ用) オブジェクトの動作を一時停止または再開するメソッド
-    private void TogglePause()
-    {
-        isPaused = !isPaused;
-
-        if (isPaused)
-        {
-            savedPosition = transform.position;
-            savedRotation = transform.rotation;
-            Debug.Log("処理を一時停止");
-        }
-        else
-        {
-            Debug.Log("処理を再開");
+            // 接触したオブジェクトの質量を取得
+            contactMass = otherRb.mass;
+            isContacting = true; // 接触状態を記録
+            Debug.Log("接触開始: 質量 " + contactMass);
         }
     }
 
-    // StageMovement.csが向こうの場合、TiltControl.csを有効化
-    public void StateBalanceRelease()
+    // オブジェクトが接触している間
+    void OnCollisionStay(Collision collision)
     {
-        // StageMovementコンポーネントを取得
-        StageMovement stageMovement = GetComponent<StageMovement>();
+        Rigidbody otherRb = collision.rigidbody;
 
-        // StageMovementが無効化されている場合の処理
-        if (stageMovement != null && !stageMovement.enabled)
+        if (otherRb != null)
         {
-            // Freeze RotationのXとZを解除
-            m_rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
-            m_rb.constraints &= ~RigidbodyConstraints.FreezeRotationZ;
-
-            // TiltControl.csを有効にする
-            this.enabled = true;
-            Debug.Log("StageMovementがオフのため、Freeze RotationのXとZをfalseにしてTiltControlをオンにしました。");
+            // 接触している間は質量を更新
+            contactMass = otherRb.mass;
         }
+    }
+
+    // オブジェクトが接触を終了したとき
+    void OnCollisionExit(Collision collision)
+    {
+        // 接触が終わったので質量をリセット
+        contactMass = 0f;
+        isContacting = false;
+        Debug.Log("接触終了");
     }
 }
