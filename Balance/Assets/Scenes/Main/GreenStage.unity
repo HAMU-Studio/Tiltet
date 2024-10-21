@@ -3337,6 +3337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &476898060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5055,11 +5057,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Resilience: 10
-  MinXRotation: -30
-  MaxXRotation: 30
-  MinZRotation: -30
-  MaxZRotation: 30
+  maxTiltAngleX: 30
+  maxTiltAngleZ: 30
+  restoringForce: 10
 --- !u!4 &723246454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3684226004918467758, guid: 45cf954cb7434cb4180fe673e68ad518,
@@ -5078,6 +5078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceMultiplier: 2
 --- !u!114 &723246460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7571,6 +7572,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &1175521325
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8374,13 +8377,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  spawnPoint: []
+  stage: {fileID: 0}
+  enemys: []
+  trees: []
+  enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 1
+  spawnNum: 4
 --- !u!1 &1281012718
 GameObject:
   m_ObjectHideFlags: 0
@@ -8937,6 +8939,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &1455615900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9207,6 +9211,7 @@ MonoBehaviour:
   - {fileID: 1732211703}
   - {fileID: 607038019}
   - {fileID: 640627850}
+  numCoin: 0
 --- !u!1001 &1539243682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9347,6 +9352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensorType: 0
+  stage: {fileID: 0}
 --- !u!65 &1546520764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13068,27 +13075,22 @@ PrefabInstance:
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.000000008492101
+      value: 0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0000000013780784
+      value: 0.0000000013780783
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018225
+      value: -0.16018224
       objectReference: {fileID: 0}
     - target: {fileID: 622164571971897639, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_Name
       value: stage
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149149763476, guid: d7bcb65c2c24de84aa6b19fa0a252731,
-        type: 3}
-      propertyPath: scaleSize
-      value: 1.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7bcb65c2c24de84aa6b19fa0a252731, type: 3}
