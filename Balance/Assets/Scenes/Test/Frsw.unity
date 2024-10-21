@@ -443,7 +443,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FixedYRotation: 0
+  maxTiltAngleX: 25
+  maxTiltAngleZ: 25
+  restoringForce: 10
 --- !u!1 &1032190272
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,13 +552,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  spawnPoint: []
+  stage: {fileID: 0}
+  enemys: []
+  trees: []
+  enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 1
+  spawnNum: 4
 --- !u!1 &1268405306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,8 +1422,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3684226004918467754, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684226004918467754, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684226004918467754, guid: 45cf954cb7434cb4180fe673e68ad518,
+        type: 3}
       propertyPath: m_Constraints
-      value: 14
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 3684226004918467758, guid: 45cf954cb7434cb4180fe673e68ad518,
         type: 3}
