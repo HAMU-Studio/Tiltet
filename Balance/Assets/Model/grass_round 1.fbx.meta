@@ -3,7 +3,17 @@ guid: 170b66577a293dd4486d2cb0798f432d
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tekusutya
+    second: {fileID: 2100000, guid: 696c3fee285b41c47ac442c1deb88a5a, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: kusa1_1001_BaseColor
+    second: {fileID: 2800000, guid: 70f97dd32f5a4254db0355d82935993b, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
