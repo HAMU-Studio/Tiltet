@@ -8,7 +8,6 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject stage;
     [SerializeField] private GameObject[] enemys;
-    [SerializeField] private GameObject[] trees;
     [SerializeField] private GameObject[] enemySpawnPoints;
 
     [Header("敵がスポーンするインターバル")]
