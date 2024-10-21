@@ -7,7 +7,8 @@ public class ReceiveNotificationExample : MonoBehaviour
     [SerializeField] private PlayerInputManager _playerInputManager = default!;
     [SerializeField] private PlayerController _playerController = default!;
     [SerializeField] private Material m_defaultMaterial = default!;
-    
+
+    [SerializeField] private Renderer m_playerRenderer;
     // プレイヤー入室時に受け取る通知
     public void OnPlayerJoined(PlayerInput playerInput)
     {
@@ -29,6 +30,7 @@ public class ReceiveNotificationExample : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _playerInputManager.playerPrefab.gameObject.GetComponent<Renderer>().material = m_defaultMaterial;
+        _playerInputManager.playerPrefab.gameObject.GetComponentInChildren<Renderer>().material = m_defaultMaterial;
+      //  _playerInputManager.playerPrefab.gameObject.GetComponent<Renderer>().material = m_defaultMaterial;
     }
 }

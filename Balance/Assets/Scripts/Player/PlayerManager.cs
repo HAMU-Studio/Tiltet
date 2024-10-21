@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
 {
     private RescueState rescCurrentState;
 
-    private PlayerAnimState animCurrenState;
+   // private PlayerAnimState animCurrenState;
     
     public RescueState rescState
     {
@@ -39,12 +39,12 @@ public class PlayerManager : MonoBehaviour
         get { return rescCurrentState; }
     }
 
-    public PlayerAnimState AnimState
+    /*public PlayerAnimState AnimState
     {
         set { animCurrenState = value; }
 
         get { return animCurrenState; }
-    }
+    }*/
 
     private void Start()
     {

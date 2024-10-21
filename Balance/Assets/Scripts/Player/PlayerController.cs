@@ -63,11 +63,14 @@ public class PlayerController : MonoBehaviour
     
     Animator animator;
     AnimatorStateInfo stateInfo;
-    void Start()
+    
+    [Header("Rendererがアタッチされているオブジェクト")]
+    [SerializeField] private Renderer m_playerRenderer;
+    void Awake()
     {
         m_player = GetComponent<Transform>();
         m_RB = GetComponent<Rigidbody>();
-        m_defaultMaterial = GetComponent<Renderer>().material;
+        m_defaultMaterial = m_playerRenderer.material;
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
@@ -83,6 +86,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
+
+    
         if (isKnockBack && canMove == false)
         {
             elapsedTime += Time.deltaTime;
@@ -138,12 +143,12 @@ public class PlayerController : MonoBehaviour
             time += Time.deltaTime;
             animator.ResetTrigger("toIdle");           
         }
-        else if (m_inputMove == Vector2.zero)
+        else if (m_inputMove == Vector2.zero && stateInfo.IsName("Walk_01"))
         {
             time = 0f;
             animator.SetTrigger("toIdle"); 
         }
-        animator.SetFloat("time", time);
+        animator.SetFloat("time", (float)time);
 
     }
 
@@ -176,12 +181,18 @@ public class PlayerController : MonoBehaviour
         //落下中と攻撃中はジャンプをさせない
         if (isJumping|| canMove == false || isKnockBack) return;  
 
-        
+        if (m_RB == null)
+        {
+            Debug.Log("RB is null");
+            //Start();
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
             
             //ジャンプする直前の加速度加えて慣性を表現
+            
             m_RB.AddForce(m_RB.velocity.normalized, ForceMode.Impulse);
             
             //ジャンプ
@@ -197,6 +208,12 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            if (m_PM == null)
+            {
+                //Start();
+                Debug.Log("PM is null");
+                m_PM = GetComponent<PlayerManager>();
+            }
 
             if (m_PM.rescState == RescueState.Fly)
             {
@@ -295,7 +312,7 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Ground"))
         {
-            collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+         //   collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
             isChanged = true;
         }
     }
@@ -316,7 +333,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
-            GetComponent<Renderer>().material = m_defaultMaterial;
+            m_playerRenderer.material = m_defaultMaterial;
             m_moveSpeed = walkSpeed;
             isResetTrigger_L = true;
             isDashing = false;
@@ -326,7 +343,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_inputTrigger_L  > triggerTiming)  
         {
-            GetComponent<Renderer>().material = m_dashMaterial;
+            m_playerRenderer.material = m_dashMaterial;
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
@@ -455,7 +472,7 @@ public class PlayerController : MonoBehaviour
         if (index == 0)
         {
             m_defaultMaterial = m_material_2P;
-            GetComponent<Renderer>().material = m_material_2P;
+            m_playerRenderer.material = m_material_2P;
         }
     }
 
