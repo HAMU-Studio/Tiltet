@@ -4,52 +4,64 @@ using UnityEngine;
 
 public class StageMovement : MonoBehaviour
 {
-    // 力の大きさを調整するための倍率
-    [SerializeField] private float forceMultiplier = 1.0f;
-
-    // TiltControlのインスタンスを保持
-    private TiltControl tiltControl;
-
-    // Rigidbodyコンポーネント
-    private Rigidbody rb;
-
-    void Start()
-    {
-        // Rigidbodyコンポーネントを取得
-        rb = GetComponent<Rigidbody>();
-
-        // TiltControlコンポーネントを取得
-        tiltControl = GetComponent<TiltControl>();
-
-        // nullチェック
-        if (tiltControl == null)
-        {
-            Debug.LogError("TiltControlコンポーネントが見つかりません。");
-        }
-
-        if (rb == null)
-        {
-            Debug.LogError("Rigidbodyコンポーネントが見つかりません。");
-        }
-    }
+    public float forceMultiplier = 2.0f; // 力の倍率を設定する変数
+    private Vector3 movementForce = Vector3.zero; // 現在の移動力を保持する変数
 
     void FixedUpdate()
     {
-        // 傾き方向を取得
-        Vector3 tiltDirection = tiltControl.TiltDirection;
-
-        // Y軸の位置を維持するため、Y軸の力をゼロにする
-        tiltDirection.y = 0;
-
-        // ワールド座標系で傾きの方向に基づいて力を加える
-        Vector3 worldTiltDirection = transform.TransformDirection(tiltDirection);
-
-        // 力を加える
-        rb.AddForce(worldTiltDirection * forceMultiplier, ForceMode.Force);
-
-        // Y軸の位置を固定
-        Vector3 currentPosition = transform.position;
-        currentPosition.y = 0f; // 初期Y座標を固定値に設定 (必要に応じて調整可能)
-        transform.position = currentPosition;
+        // 現在の移動力に基づいて床を移動させる
+        if (movementForce != Vector3.zero)
+        {
+            transform.Translate(movementForce * Time.fixedDeltaTime, Space.World);
+        }
     }
+
+    public void AddForce(Vector3 force)
+    {
+        // 指定された方向に力を加える（倍率を適用）
+        movementForce += force * forceMultiplier;
+    }
+
+    public void RemoveForce(Vector3 force)
+    {
+        // 指定された方向の力を削除（倍率を適用）
+        movementForce -= force * forceMultiplier;
+    }
+
+    public void StopMoving()
+    {
+        // 力をゼロにして停止する
+        movementForce = Vector3.zero;
+    }
+
+    public void StopMovement()
+    {
+        // StageMovement と GravitySensor の機能を停止する処理
+        StopAllCoroutines();
+        enabled = false;
+
+        // GravitySensor コンポーネントを取得して停止する
+        GravitySensor gravitySensor = GetComponent<GravitySensor>();
+        if (gravitySensor != null)
+        {
+            gravitySensor.enabled = false;
+        }
+
+        // RigidbodyのFreeze Positionを全てtrueにする
+        // RigidbodyのFreeze Rotationを全てtrueにする
+        /*Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
+                              RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }*/
+    }
+
+    /*void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EncountArea"))
+        {
+            StopMovement();
+        }
+    }*/
 }
