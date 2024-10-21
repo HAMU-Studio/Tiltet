@@ -20,24 +20,40 @@ public enum RescueState
     SuperLand
 }
 
+public enum PlayerAnimState
+{
+    None,
+    Idle,
+    Walk,
+}
+
 public class PlayerManager : MonoBehaviour
 {
-    private RescueState currentState;
+    private RescueState rescCurrentState;
+
+    private PlayerAnimState animCurrenState;
     
-    public RescueState State
+    public RescueState rescState
     {
-        set { currentState = value; }
-        get { return currentState; }
+        set { rescCurrentState = value; }
+        get { return rescCurrentState; }
+    }
+
+    public PlayerAnimState AnimState
+    {
+        set { animCurrenState = value; }
+
+        get { return animCurrenState; }
     }
 
     private void Start()
     {
-        m_beforeState = currentState;
+        m_beforeState = rescCurrentState;
     }
 
     private void FixedUpdate()
     {
-        if (currentState != m_beforeState)
+        if (rescCurrentState != m_beforeState)
         {
             OnStateChange();
         }
@@ -48,7 +64,7 @@ public class PlayerManager : MonoBehaviour
     {
        // Debug.Log("state change " + m_beforeState + "->" + currentState);
         
-        if (m_beforeState == RescueState.None && currentState == RescueState.Wait)
+        if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
@@ -57,13 +73,13 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
         {
             //着地したら救出終了
-            if (currentState == RescueState.None)
+            if (rescCurrentState == RescueState.None)
             {
                 GameManager.instance.Rescue = false;
             }
         }
 
-        if (m_beforeState == RescueState.Fly && currentState == RescueState.SuperLand)
+        if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
         {
             if (gameObject.layer ==  LayerMask.NameToLayer("Fly"))
             {
@@ -72,13 +88,13 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (m_beforeState == RescueState.Move && currentState == RescueState.Fly)
+        if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
         {
             //飛んだらレイヤー管理
             StartCoroutine("LayerManagement");
             //LayerManagement();
         }
-        m_beforeState = currentState;
+        m_beforeState = rescCurrentState;
     }
 
     [Header("飛び始めてから当たり判定が元に戻るまでの時間")] 

@@ -60,6 +60,9 @@ public class PlayerController : MonoBehaviour
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
+    
+    Animator animator;
+    AnimatorStateInfo stateInfo;
     void Start()
     {
         m_player = GetComponent<Transform>();
@@ -70,6 +73,9 @@ public class PlayerController : MonoBehaviour
         isChanged = false;
 
         m_PM = GetComponent<PlayerManager>();
+        
+        animator = GetComponent<Animator>();
+        animator.SetTrigger("toIdle");
     }
 
     private float elapsedTime;
@@ -94,13 +100,14 @@ public class PlayerController : MonoBehaviour
             //PlayerFreeze();
         }
 
-        if (m_PM.State == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (m_PM.rescState == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             //スーパー着地
             //   Debug.Log("Call 1");
             SuperLanding();
         }
-
+        
+        TransitionAnim();
     }
     private void FixedUpdate()
     {
@@ -119,6 +126,25 @@ public class PlayerController : MonoBehaviour
            
             DashSwitch();
         }
+    }
+
+    private float time;
+    private void TransitionAnim()
+    {
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        
+        if (m_inputMove != Vector2.zero)
+        {
+            time += Time.deltaTime;
+            animator.ResetTrigger("toIdle");           
+        }
+        else if (m_inputMove == Vector2.zero)
+        {
+            time = 0f;
+            animator.SetTrigger("toIdle"); 
+        }
+        animator.SetFloat("time", time);
+
     }
 
     public void  PlayerMoveInput(InputAction.CallbackContext context)
@@ -172,12 +198,12 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
 
-            if (m_PM.State == RescueState.Fly)
+            if (m_PM.rescState == RescueState.Fly)
             {
                 //スーパー着地
              //   Debug.Log("Call 1");
                 SuperLanding();
-                m_PM.State = RescueState.SuperLand;
+                m_PM.rescState = RescueState.SuperLand;
             }
             if (canRescueAct)
             {
@@ -209,7 +235,7 @@ public class PlayerController : MonoBehaviour
     {   //落下速度の調整用
        
         //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
-        if (canMove == false || m_PM.State != RescueState.None)
+        if (canMove == false || m_PM.rescState != RescueState.None)
             return;
         
         if (isKnockBack == false)
@@ -250,10 +276,10 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 //Debug.Log("toLanding" );
                 
-                if (m_PM.State == RescueState.Fly ||
-                    m_PM.State == RescueState.SuperLand)
+                if (m_PM.rescState == RescueState.Fly ||
+                    m_PM.rescState == RescueState.SuperLand)
                 {
-                    m_PM.State = RescueState.None;
+                    m_PM.rescState = RescueState.None;
                  //   Debug.Log("pm = " + m_PM.State);
                 }
             }

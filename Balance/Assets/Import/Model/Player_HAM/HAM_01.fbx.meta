@@ -24,7 +24,11 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
+<<<<<<< Updated upstream
     animationCompression: 1
+=======
+    animationCompression: 3
+>>>>>>> Stashed changes
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -80,7 +84,252 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
+<<<<<<< Updated upstream
     skeleton: []
+=======
+    skeleton:
+    - name: HAM_01(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: HAM_locator
+      parentName: HAM_01(Clone)
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: HAM_face
+      parentName: HAM_locator
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: HAM_Hips
+      parentName: HAM_locator
+      position: {x: 0.000000025931513, y: 0.0390488, z: 0.0016010851}
+      rotation: {x: -0.6710664, y: 0.65126234, z: 0.24942993, w: 0.25161886}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999999}
+    - name: HAM_ForeLeg_L
+      parentName: HAM_Hips
+      position: {x: 0.0096727135, y: 0.015867947, z: -0.0066901348}
+      rotation: {x: -0.02815307, y: 0.5840132, z: 0.016288873, w: 0.8110923}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+    - name: HAM_LowLeg_L
+      parentName: HAM_ForeLeg_L
+      position: {x: 0.009220792, y: 0.0005218675, z: 0.008316512}
+      rotation: {x: -0.023831172, y: 0.21566601, z: -0.028123999, w: -0.9757711}
+      scale: {x: 1, y: 1, z: 1.0000002}
+    - name: HAM_Foot_L
+      parentName: HAM_LowLeg_L
+      position: {x: 0.011794457, y: 3.3067233e-17, z: -0.00007904692}
+      rotation: {x: 0.20450339, y: 0.18790975, z: -0.6660337, w: -0.6922915}
+      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999976}
+    - name: HAM_tail_01
+      parentName: HAM_Hips
+      position: {x: 0.013381572, y: -0.000041614272, z: 0.01813326}
+      rotation: {x: 0.65088916, y: -0.2825905, z: 0.29814214, w: 0.63843346}
+      scale: {x: 1.0000002, y: 0.9999999, z: 0.99999994}
+    - name: HAM_tail_02
+      parentName: HAM_tail_01
+      position: {x: 0.013113643, y: 0.0031169346, z: 1.110223e-18}
+      rotation: {x: -0.000000029802319, y: 0.000000029802319, z: 0.23395723, w: 0.9722469}
+      scale: {x: 1.0000001, y: 0.99999976, z: 1.0000002}
+    - name: HAM_tail_03
+      parentName: HAM_tail_02
+      position: {x: 0.020511312, y: -0.00073182594, z: 1.110223e-18}
+      rotation: {x: -0, y: -0, z: 8.881782e-16, w: 1}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1.0000002}
+    - name: HAM_tail_04
+      parentName: HAM_tail_03
+      position: {x: 0.020220373, y: 0.0010041897, z: 1.110223e-18}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000002, y: 1, z: 1.0000002}
+    - name: HAM_tail_05
+      parentName: HAM_tail_04
+      position: {x: 0.026184656, y: -0.0006694598, z: 1.110223e-18}
+      rotation: {x: -0.0000000069724697, y: -0.000000028975212, z: 0.000000029802319,
+        w: 1}
+      scale: {x: 1.0000005, y: 1, z: 1.0000002}
+    - name: HAM_tail_06
+      parentName: HAM_tail_05
+      position: {x: 0.031845093, y: -0.000077245364, z: 1.110223e-18}
+      rotation: {x: -0, y: -0, z: -2.0202878e-16, w: 1}
+      scale: {x: 1.0000002, y: 1, z: 1.0000001}
+    - name: HAM_tail_07
+      parentName: HAM_tail_06
+      position: {x: 0.037477758, y: 0.00069489307, z: 1.110223e-18}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+    - name: HAM_tail_tane_A_01
+      parentName: HAM_tail_07
+      position: {x: 0.0047776317, y: 0.011453682, z: 1.110223e-18}
+      rotation: {x: 0.0000000032137812, y: 0.000000013439479, z: 0.036332037, w: 0.99933976}
+      scale: {x: 1.0000005, y: 1, z: 1.0000004}
+    - name: HAM_tail_tane_A_02
+      parentName: HAM_tail_tane_A_01
+      position: {x: 0.031998906, y: -0.0072758645, z: -5.7788016e-18}
+      rotation: {x: 0.027758837, y: 0.70656174, z: -0.027758744, w: 0.7065617}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
+    - name: HAM_tail_tane_B_01
+      parentName: HAM_tail_07
+      position: {x: 0.0047776317, y: 0.005495771, z: 0.013047893}
+      rotation: {x: 0.58031976, y: -0.006433221, z: 0.010001011, w: 0.81430197}
+      scale: {x: 1.0000005, y: 1, z: 1.0000004}
+    - name: HAM_tail_tane_B_02
+      parentName: HAM_tail_tane_B_01
+      position: {x: 0.03418469, y: -0.0066549587, z: -0.00080253585}
+      rotation: {x: 0.027758744, y: 0.7065618, z: -0.027758863, w: 0.7065617}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: HAM_tail_tane_C_01
+      parentName: HAM_tail_07
+      position: {x: 0.0047776317, y: -0.0059598577, z: 0.013047893}
+      rotation: {x: 0.5785682, y: 0.04432839, z: 0.046148352, w: 0.81312}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: HAM_tail_tane_C_02
+      parentName: HAM_tail_tane_C_01
+      position: {x: 0.03377986, y: -0.007341241, z: 0.0009428001}
+      rotation: {x: 0.027758893, y: 0.70656174, z: -0.027758684, w: 0.70656174}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: HAM_tail_tane_D_01
+      parentName: HAM_tail_07
+      position: {x: 0.0047776317, y: -0.013457656, z: 1.110223e-18}
+      rotation: {x: 0.000000030977432, y: 0.000000002980551, z: 0.15958264, w: 0.98718464}
+      scale: {x: 1.0000005, y: 0.9999999, z: 1.0000002}
+    - name: HAM_tail_tane_D_02
+      parentName: HAM_tail_tane_D_01
+      position: {x: 0.032878533, y: -0.007555817, z: -5.7788016e-18}
+      rotation: {x: 0.027758803, y: 0.7065617, z: -0.027758729, w: 0.70656174}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
+    - name: HAM_tail_tane_E_01
+      parentName: HAM_tail_07
+      position: {x: 0.004777724, y: 0.0052931276, z: -0.0130479}
+      rotation: {x: 0.0064332224, y: 0.58031976, z: 0.8143019, w: -0.010001038}
+      scale: {x: 1.0000005, y: 1.0000004, z: 1}
+    - name: HAM_tail_tane_E_02
+      parentName: HAM_tail_tane_E_01
+      position: {x: -0.033778425, y: 0.0062920824, z: 0.0018257204}
+      rotation: {x: -0.027758772, y: -0.7065618, z: 0.027758842, w: -0.7065616}
+      scale: {x: 1.0000007, y: 1.0000006, z: 1.0000005}
+    - name: HAM_tail_tane_F_01
+      parentName: HAM_tail_07
+      position: {x: 0.004777724, y: -0.0069035487, z: -0.0130479}
+      rotation: {x: -0.04432833, y: 0.5785683, z: 0.81312, w: -0.04614829}
+      scale: {x: 1.0000008, y: 1.0000005, z: 1.0000002}
+    - name: HAM_tail_tane_F_02
+      parentName: HAM_tail_tane_F_01
+      position: {x: -0.03585239, y: 0.007169702, z: -0.00056503236}
+      rotation: {x: -0.027758839, y: -0.70656174, z: 0.027758816, w: -0.7065616}
+      scale: {x: 1.0000005, y: 1.0000001, z: 1.0000001}
+    - name: HAM_tail_tane_D_03
+      parentName: HAM_tail_07
+      position: {x: 0.0047776317, y: -0.007702095, z: 1.110223e-18}
+      rotation: {x: 0.000000030977432, y: 0.000000002980551, z: 0.15958264, w: 0.98718464}
+      scale: {x: 1.0000005, y: 0.9999999, z: 1.0000002}
+    - name: HAM_tail_tane_D_02
+      parentName: HAM_tail_tane_D_03
+      position: {x: 0.0317486, y: -0.0066564367, z: -5.7788016e-18}
+      rotation: {x: 0.027758803, y: 0.7065617, z: -0.027758729, w: 0.70656174}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
+    - name: HAM_Chest
+      parentName: HAM_Hips
+      position: {x: -0.016215358, y: -0.00088580174, z: -0.007832497}
+      rotation: {x: 0.19294626, y: 0.19343756, z: 0.69009, w: 0.67017126}
+      scale: {x: 0.9999999, y: 0.9999999, z: 0.99999994}
+    - name: HAM_Handle_01
+      parentName: HAM_Chest
+      position: {x: 0.00032167975, y: 0.038221993, z: 0.030849397}
+      rotation: {x: -0, y: -0, z: 0.0000000046566124, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: HAM_Handle_02
+      parentName: HAM_Handle_01
+      position: {x: -0.00026066517, y: 0.00438013, z: 0.012778091}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: HAM_Handle_03
+      parentName: HAM_Handle_02
+      position: {x: -0.00026621224, y: -0.03845035, z: 0.009659075}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: HAM_Handle_04
+      parentName: HAM_Handle_03
+      position: {x: 0.00021888563, y: -0.020558974, z: 0.0052010403}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: HAM_Shoulder_L
+      parentName: HAM_Chest
+      position: {x: 0.016725801, y: 0.007959318, z: 0.007193919}
+      rotation: {x: -0.000000029802319, y: -0.000000119209275, z: -0.1158868, w: 0.99326247}
+      scale: {x: 1, y: 1.0000002, z: 1}
+    - name: HAM_LowArm_L
+      parentName: HAM_Shoulder_L
+      position: {x: 0.01366431, y: 0.0021343604, z: -1.5056985e-17}
+      rotation: {x: 0.000000024036776, y: -0.00000008433262, z: -0.12959729, w: 0.9915668}
+      scale: {x: 1, y: 0.9999999, z: 0.9999999}
+    - name: HAM_Hand_L
+      parentName: HAM_LowArm_L
+      position: {x: 0.011121754, y: 0.0052702567, z: 6.175201e-18}
+      rotation: {x: 0.0072222827, y: 0.056082167, z: -0.12752147, w: 0.9902227}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1}
+    - name: HAM_Neck
+      parentName: HAM_Chest
+      position: {x: 1.9760657e-11, y: 0.019159487, z: -0.006210057}
+      rotation: {x: -0, y: -0, z: 0.0000000046566124, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: HAM_Head
+      parentName: HAM_Neck
+      position: {x: 0.0008535674, y: 0.02580173, z: 0.012911434}
+      rotation: {x: -0.00000007287599, y: -0.000000006752088, z: 0.7147496, w: 0.6993806}
+      scale: {x: 0.9999998, y: 0.9999999, z: 1}
+    - name: HAM_Ear_L_01
+      parentName: HAM_Head
+      position: {x: 0.009120394, y: -0.015413188, z: -0.00042695526}
+      rotation: {x: -0.12567899, y: 0.0031373804, z: -0.99175704, w: -0.024756636}
+      scale: {x: 1.0000005, y: 1.0000004, z: 1.0000001}
+    - name: HAM_Ear_L_02
+      parentName: HAM_Ear_L_01
+      position: {x: -0.019499373, y: 0.010328331, z: 0.0052295653}
+      rotation: {x: 0.09013987, y: 0.087634824, z: 0.7113104, w: 0.6915436}
+      scale: {x: 1.0000001, y: 0.99999994, z: 0.9999998}
+    - name: HAM_Ear_R_01
+      parentName: HAM_Head
+      position: {x: 0.009781603, y: 0.015002312, z: -0.00042693017}
+      rotation: {x: 0.9920609, y: 0.0031959715, z: -0.12571748, w: 0.00040501615}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000004}
+    - name: HAM_Ear_R_02
+      parentName: HAM_Ear_R_01
+      position: {x: 0.019499328, y: -0.010328319, z: -0.0052295346}
+      rotation: {x: -0.09013979, y: -0.08763486, z: -0.7113103, w: -0.6915437}
+      scale: {x: 0.99999994, y: 1.0000006, z: 1.0000006}
+    - name: HAM_Shoulder_R
+      parentName: HAM_Chest
+      position: {x: -0.016725795, y: 0.007959349, z: 0.007193923}
+      rotation: {x: -0.9932626, y: -0.11588552, z: -0.00000016391277, w: -0.00000011920929}
+      scale: {x: 1, y: 1.0000002, z: 1}
+    - name: HAM_RowArm_R
+      parentName: HAM_Shoulder_R
+      position: {x: -0.01366435, y: -0.0021343355, z: 3.180408e-11}
+      rotation: {x: 0.000000040104144, y: 0.00000021665394, z: -0.12959851, w: 0.99156654}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1}
+    - name: HAM_Hand_R
+      parentName: HAM_RowArm_R
+      position: {x: -0.011121747, y: -0.0052702576, z: -9.0985476e-11}
+      rotation: {x: 0.007222319, y: 0.05608208, z: -0.12752151, w: 0.9902227}
+      scale: {x: 1, y: 1.0000004, z: 1.0000001}
+    - name: HAM_ForeReg_R
+      parentName: HAM_Hips
+      position: {x: 0.010521258, y: -0.015221086, z: -0.006908702}
+      rotation: {x: -0.00995317, y: 0.81101704, z: 0.017908221, w: -0.58466375}
+      scale: {x: 1.0000002, y: 1, z: 1}
+    - name: HAM_RowReg_R
+      parentName: HAM_ForeReg_R
+      position: {x: -0.009220827, y: -0.00052189996, z: -0.008316533}
+      rotation: {x: -0.023832383, y: 0.21566518, z: -0.028125085, w: -0.97577125}
+      scale: {x: 1.0000002, y: 1, z: 1.0000001}
+    - name: HAM_Foot_R
+      parentName: HAM_RowReg_R
+      position: {x: -0.011794479, y: -3.5527135e-16, z: 0.00007904208}
+      rotation: {x: 0.20450447, y: 0.18790935, z: -0.6660338, w: -0.6922912}
+      scale: {x: 1, y: 0.99999994, z: 1}
+>>>>>>> Stashed changes
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -91,13 +340,21 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
+<<<<<<< Updated upstream
     hasExtraRoot: 0
+=======
+    hasExtraRoot: 1
+>>>>>>> Stashed changes
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+<<<<<<< Updated upstream
   avatarSetup: 0
+=======
+  avatarSetup: 1
+>>>>>>> Stashed changes
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
