@@ -14,9 +14,13 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float spawnInterval = 3.0f;
 
     [Header("敵がスポーンする場所の数")]
-    [SerializeField] private int spawnNum = 4;
+    [SerializeField] private int spawnPositionNum = 4;
+
+    [Header("敵が存在できる最大数")]
+    [SerializeField] private int spawnLimit = 2;
+
     //一度にスポーンする数
-    private int spawnLimit = 1;
+    private int spawnNum = 1;
 
     private float spawnTime;
 
@@ -56,7 +60,7 @@ public class EnemyManager : MonoBehaviour
 
             if (ableSpawn)
             {
-                for (int i = 0; spawnLimit > i; i++)
+                for (int i = 0; spawnNum > i; i++)
                 {
                     EnemySpawn();
                 }
@@ -103,7 +107,7 @@ public class EnemyManager : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //enemyNum = enemies.Length;
 
-        if (2 < enemies.Length)
+        if (spawnLimit < enemies.Length)
         {
             ableSpawn = false;
         }
@@ -113,5 +117,4 @@ public class EnemyManager : MonoBehaviour
         }
 
     }
-
 }
