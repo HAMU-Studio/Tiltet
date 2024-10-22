@@ -13,7 +13,7 @@ public class GimmickManager : MonoBehaviour
     [SerializeField] private GameObject[] coinPositions;
 
     [Header("クリアに必要なコインの取得数")]
-    [SerializeField] int numCoin;
+    [SerializeField] int numCoin = 5;
 
     //取ったコインの数
     private int countCoin;
@@ -29,6 +29,7 @@ public class GimmickManager : MonoBehaviour
     {
         Set();
         CoinSpawn();
+        Debug.Log("こいん");
     }
 
     // Update is called once per frame
@@ -47,10 +48,8 @@ public class GimmickManager : MonoBehaviour
     private void Set()
     {
         gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        // コインの枚数
-        numCoin = 0;
 
-        countCoin = 5;
+        countCoin = 0;
         countParts = 0;
 
         SubPartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);
