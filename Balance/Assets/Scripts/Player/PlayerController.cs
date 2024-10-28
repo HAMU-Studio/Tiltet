@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] private Material m_material_2P = default!;
     
-    private Material m_defaultMaterial;
     [Header("ノックバックの強さ")]
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
@@ -70,15 +69,44 @@ public class PlayerController : MonoBehaviour
     {
         m_player = GetComponent<Transform>();
         m_RB = GetComponent<Rigidbody>();
-        m_defaultMaterial = m_playerRenderer.material;
+
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
 
+        GetMaterialProcess();
+        
         m_PM = GetComponent<PlayerManager>();
         
         animator = GetComponent<Animator>();
         animator.SetTrigger("toIdle");
+    }
+
+    /// <summary>
+    /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。->同じマテリアルだから配列必要なかった...
+    /// </summary>
+    private void GetMaterialProcess()
+    {
+        m_playerRenderer = m_playerRenderer.GetComponent<Renderer>();
+        
+        if ( m_playerRenderer != null)
+        {
+            if (m_playerRenderer.materials.Length > 1)
+            {
+              //  m_defaultMaterial = new Material[2]; 
+         
+              //  m_defaultMaterial[1] = m_playerRenderer.materials[1];
+            }
+            else 
+            {
+                Debug.LogError("Not enough materials assigned to the Renderer.");
+            }
+        } 
+        else
+        {
+            Debug.LogError("Renderer component is missing on the player object.");
+        }
+
     }
 
     private float elapsedTime;
@@ -86,8 +114,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
-
-    
         if (isKnockBack && canMove == false)
         {
             elapsedTime += Time.deltaTime;
@@ -333,7 +359,8 @@ public class PlayerController : MonoBehaviour
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
-            m_playerRenderer.material = m_defaultMaterial;
+            //今後マテリアルの変更ではなくエフェクト再生に変更
+        
             m_moveSpeed = walkSpeed;
             isResetTrigger_L = true;
             isDashing = false;
@@ -343,7 +370,9 @@ public class PlayerController : MonoBehaviour
 
         if (m_inputTrigger_L  > triggerTiming)  
         {
-            m_playerRenderer.material = m_dashMaterial;
+            //ダッシュ時はマテリアルを変更->エフェクトを発生させたい
+           // m_playerRenderer.material = m_dashMaterial;
+           
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
@@ -471,8 +500,13 @@ public class PlayerController : MonoBehaviour
       
         if (index == 0)
         {
-            m_defaultMaterial = m_material_2P;
-            m_playerRenderer.material = m_material_2P;
+            Debug.Log("beforeMat = " + m_playerRenderer.sharedMaterials[0]);
+            Material[] newMaterials = m_playerRenderer.sharedMaterials;
+            newMaterials[0] = m_material_2P;
+            newMaterials[1] = m_material_2P;
+            m_playerRenderer.sharedMaterials = newMaterials;
+            
+            Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
         }
     }
 
