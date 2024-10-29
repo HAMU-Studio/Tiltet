@@ -8,6 +8,7 @@ public class EnemySphere : MonoBehaviour
     [Header("動くスピード")]
     [SerializeField] private float moveSpeed = 0.5f;
 
+    private Animator anim;
     private float[] distance;
     private GameObject[] players;
     private GameObject target;
@@ -53,14 +54,29 @@ public class EnemySphere : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
 
         // players配列の長さに基づいてdistance配列を初期化
-        if (players.Length > 0)
-        {
-            distance = new float[players.Length];
-        }
+        // どうせプレイヤーは二人なので二個で初期化
+        distance = new float[2];
 
         enemyRb = GetComponent<Rigidbody>();
+
+        anim = gameObject.GetComponent<Animator>();
     }
 
+    private void SetTarget()
+    {
+        //距離を調査
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
+        }
+
+        //どっちのplayerのほうが近いか
+        target = players[0];
+        if (distance[1] < distance[0])
+        {
+            target = players[1];
+        }
+    }
     private void SearchPlayer()
     {
         //playerが1人もいない時
@@ -77,19 +93,6 @@ public class EnemySphere : MonoBehaviour
                 players = GameObject.FindGameObjectsWithTag("Player");
                 target = players[0];
             }
-
-            //距離を調査
-            for (int i = 0; i < players.Length; i++)
-            {
-                distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
-            }
-
-            //どっちのplayerのほうが近いか
-            target = players[0];
-            if (distance[1] < distance[0])
-            {
-                target = players[1];
-            }
         }
     }
 
@@ -101,8 +104,16 @@ public class EnemySphere : MonoBehaviour
             if (collision.gameObject.CompareTag("Ground"))
             {
                 arrived = true;
-                SearchPlayer();
+                SetTarget();
             }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            anim.SetBool("Arrived", true);
         }
     }
 }

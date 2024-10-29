@@ -5514,23 +5514,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
-      propertyPath: MaxXRotation
+      propertyPath: Resilience
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: MaxXRotation
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MaxZRotation
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MinXRotation
-      value: -10
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MinZRotation
-      value: -10
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529787870351, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870351, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -5540,17 +5550,17 @@ PrefabInstance:
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.000000008492101
+      value: 0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0000000013780784
+      value: 0.0000000013780783
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018225
+      value: -0.16018224
       objectReference: {fileID: 0}
     - target: {fileID: 622164571971897639, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -8636,9 +8646,9 @@ MonoBehaviour:
   - {fileID: 1992701128}
   - {fileID: 1042376086}
   - {fileID: 437129183}
-  spawnInterval: 3
+  spawnInterval: 2
   spawnPositionNum: 4
-  spawnLimit: 2
+  spawnLimit: 3
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0

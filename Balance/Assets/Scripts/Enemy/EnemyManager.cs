@@ -42,7 +42,9 @@ public class EnemyManager : MonoBehaviour
 
     Vector3[] SpawnPos = new Vector3[4];
 
+    private bool start;
 
+    private GameObject[] players;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,26 +54,35 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        spawnTime += Time.deltaTime;
+        //デバッグ用
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            start = true;
+        }
+        if (start)
+        {
+            spawnTime += Time.deltaTime;
 
-        if (spawnTime > spawnInterval)
-        { 
-            CheakEnemy();
-
-            if (ableSpawn)
+            if (spawnTime > spawnInterval)
             {
-                for (int i = 0; spawnNum > i; i++)
-                {
-                    EnemySpawn();
-                }
-            }
+                CheakEnemy();
 
-            spawnTime = 0;
+                if (ableSpawn)
+                {
+                    for (int i = 0; spawnNum > i; i++)
+                    {
+                        EnemySpawn();
+                    }
+                }
+
+                spawnTime = 0;
+            }
         }
     }
 
     private void Set()
     {
+        start = false;
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
 
@@ -115,6 +126,16 @@ public class EnemyManager : MonoBehaviour
         {
             ableSpawn = true;
         }
+    }
 
+    private void CheakPlayer()
+    {
+        GameObject[] players;
+        players = GameObject.FindGameObjectsWithTag("Player");
+
+        if (players.Length == 2)
+        {
+            start = true;
+        }
     }
 }
