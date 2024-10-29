@@ -1859,7 +1859,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &375099181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -5504,32 +5505,37 @@ PrefabInstance:
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0000000228801
+      value: -0.00000002288009
       objectReference: {fileID: 0}
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000008283737
+      value: 0.000000008283735
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MaxXRotation
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MaxZRotation
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MinXRotation
-      value: -25
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: MinZRotation
-      value: -25
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529787870351, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -8631,7 +8637,8 @@ MonoBehaviour:
   - {fileID: 1042376086}
   - {fileID: 437129183}
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0
