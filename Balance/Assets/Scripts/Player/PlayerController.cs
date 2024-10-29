@@ -500,13 +500,13 @@ public class PlayerController : MonoBehaviour
       
         if (index == 0)
         {
-            Debug.Log("beforeMat = " + m_playerRenderer.sharedMaterials[0]);
+          // Debug.Log("beforeMat = " + m_playerRenderer.sharedMaterials[0]);
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            newMaterials[0] = m_material_2P;
+            //newMaterials[0] = m_material_2P;
             newMaterials[1] = m_material_2P;
             m_playerRenderer.sharedMaterials = newMaterials;
             
-            Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
+         //   Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
         }
     }
 

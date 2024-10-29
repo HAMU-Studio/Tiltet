@@ -467,8 +467,10 @@ GameObject:
   - component: {fileID: 6079009902311539654}
   - component: {fileID: 8362760578719666595}
   - component: {fileID: -1394173557279358483}
+  - component: {fileID: 4076896663669706105}
+  - component: {fileID: 4141651716559128088}
   m_Layer: 7
-  m_Name: HAM_hontai_03
+  m_Name: HAM_01
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -730,6 +732,34 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!136 &4076896663669706105
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2530105368876131897}
+  m_Material: {fileID: 13400000, guid: 0ea75a41ba4531c40b136acb0e1e0dfc, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.04
+  m_Height: 0.12
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0.05, z: 0.01}
+--- !u!114 &4141651716559128088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2530105368876131897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7608af8a21e108b48a04aaefa5d2c584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  divisor: 2.5
+  stopFixHeight: -2
 --- !u!1 &2627314663748272436
 GameObject:
   m_ObjectHideFlags: 0
@@ -1813,12 +1843,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2084944195359061397, guid: b0ea74e62d1e70d459f00603dda77a57,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8878758244455788795, guid: b0ea74e62d1e70d459f00603dda77a57,
         type: 3}
       propertyPath: m_Name
       value: HAM_face
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2084944195359061397, guid: b0ea74e62d1e70d459f00603dda77a57, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b0ea74e62d1e70d459f00603dda77a57, type: 3}
 --- !u!23 &385148265913221440 stripped
 MeshRenderer:

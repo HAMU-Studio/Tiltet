@@ -39,7 +39,7 @@ public class ReceiveNotificationExample : MonoBehaviour
     {
         Renderer _renderer = _playerInputManager.playerPrefab.gameObject.GetComponentInChildren<Renderer>();
         Material[] newMaterials = _renderer.sharedMaterials;
-        newMaterials[0] = m_defaultMaterial;
+    //    newMaterials[0] = m_defaultMaterial;
         newMaterials[1] = m_defaultMaterial;
         _renderer.sharedMaterials = newMaterials;
     }
