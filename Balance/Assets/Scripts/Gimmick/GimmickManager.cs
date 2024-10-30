@@ -29,7 +29,6 @@ public class GimmickManager : MonoBehaviour
     {
         Set();
         CoinSpawn();
-        Debug.Log("こいん");
     }
 
     // Update is called once per frame
@@ -53,7 +52,7 @@ public class GimmickManager : MonoBehaviour
         countParts = 0;
 
         SubPartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);
-        SubPartsPosition[1] = stands[1].transform.position + new Vector3(0, 15.0f, 0);
+        //SubPartsPosition[1] = stands[1].transform.position + new Vector3(0, 15.0f, 0);
 
         /*GameObject LeftParts = Instantiate(parts[0]);
         LeftParts.transform.position = SubPartsPosition[0];*/
