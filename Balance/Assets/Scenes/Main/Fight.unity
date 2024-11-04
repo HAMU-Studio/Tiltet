@@ -1859,7 +1859,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &375099181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -5431,6 +5432,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2111672105, guid: d7bcb65c2c24de84aa6b19fa0a252731, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.12
+      objectReference: {fileID: 0}
     - target: {fileID: 281914563837268893, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_RootOrder
@@ -8631,7 +8636,8 @@ MonoBehaviour:
   - {fileID: 1042376086}
   - {fileID: 437129183}
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0
@@ -10101,7 +10107,7 @@ TerrainCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851724494}
   m_Material: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_TerrainData: {fileID: 15600000, guid: 2d97b189b8ceff640bc477f56cfa7124, type: 2}
   m_EnableTreeColliders: 1
 --- !u!218 &1851724496

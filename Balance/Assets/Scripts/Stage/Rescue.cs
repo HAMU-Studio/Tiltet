@@ -26,9 +26,12 @@ public class Rescue : MonoBehaviour
   
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (m_PM.State == RescueState.Wait)
         {
-            canRescueAct = false;
+            if (other.gameObject.CompareTag("Player"))
+            {
+                canRescueAct = false;
+            }
         }
     }
     void OnCollisionEnter(Collision collision)
@@ -63,6 +66,7 @@ public class Rescue : MonoBehaviour
         //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
         if (canRescueAct == false)
         {
+            Debug.Log("calRescueAct = " + canRescueAct);
             return;
         }
       
@@ -77,6 +81,7 @@ public class Rescue : MonoBehaviour
         
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
+        Debug.Log("call rescueThrow!");
 
         GetComponent<Renderer>().enabled = false;
     }
@@ -103,6 +108,7 @@ public class Rescue : MonoBehaviour
         if (float.IsNaN(speed))
         {
             //条件を満たす初速を産出できなければzeroベクトルを返す
+            Debug.Log("calculate error");
             return Vector3.zero;
         }
         else
@@ -170,6 +176,7 @@ public class Rescue : MonoBehaviour
         
         if (m_PM.State == RescueState.Fly)
         {
+            Debug.Log("call rescueThrow 1");
             RescueThrow();
             once = true;
         }

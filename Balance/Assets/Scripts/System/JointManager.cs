@@ -97,17 +97,30 @@ public class JointManager : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
     }
 
-  　private float lowerLimit = 10f;
+  
    /// <summary>
    /// ある程度離れていたら飛ばす
    /// </summary>
     private float CheckDistanceFromStage()
     {
         Vector3 pivotPos = GameManager.instance.Pivot.transform.position;
+
+        if (pivotPos != GameManager.instance.Pivot.transform.position)
+        {
+            Debug.LogError("pivotPos Error!");
+        }
         
         float dist = Vector3.Distance(transform.position, pivotPos);
 
-        return dist;
+        if (float.IsNaN(dist))
+        {
+            Debug.LogError(" Check distance is Failed!");
+            return 0f;
+        }
+        else
+        {
+            return dist;
+        }
     }
 
     /// <summary>
@@ -165,13 +178,14 @@ public class JointManager : MonoBehaviour
     [Header("外側に弾く力の倍率")]
     [SerializeField]
     private Vector3 force = new Vector3(5f, 1f, 5f);
-    private bool onceForce;
-
+    [Header("飛ばすために必要な自機との距離")]
+    [SerializeField]private float lowerLimit = 10f;
     /// <summary>
     /// 救出アクションでステージの引っかかり防止に使う　ステージが引っ掛かりそうなら外に移動->飛ばす->ロープ切る
     /// jointあまり関係ないから違うスクリプトに移したい
     /// </summary>
     private Vector3 direction; 
+    private bool onceForce;
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
@@ -255,6 +269,7 @@ public class JointManager : MonoBehaviour
 
     private IEnumerator DelayFly()
     {
+        Debug.Log("call delayFly");
         m_PM.State = RescueState.Fly;
         
         yield return new WaitForSeconds(0.7f);
