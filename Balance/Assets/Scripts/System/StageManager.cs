@@ -34,19 +34,26 @@ public class StageManager : MonoBehaviour
  //   [SerializeField] private GameObject SetPos;
     public void SetToStageChild(GameObject obj)
     {
-       
         //親子付けしてもステージの移動に置いて行かれるからサイズとスピード変更
-        // Vector3.Scale(obj.transform.localScale, new Vector3(scaleSize, scaleSize, scaleSize));
-        Debug.Log("callChange");
-        
-        
-     //   obj.transform.localScale =  new Vector3(0.02f, 0.02f, 0.02f);
-        obj.transform.localScale =  new Vector3(scaleSize, scaleSize, scaleSize);
-       
         //子オブジェクトのtransform.parentに親にしたいオブジェクトのtransformを代入
         obj.transform.parent = this.transform;
-       
-        //new Vector3(0.07f, 4.23f, 0.07f);
-       
+    }
+
+    /// <summary>
+    /// 親のサイズによる影響を打ち消すスケール算出 -> なぜか必要なくなった
+    /// </summary>
+    /// <param name="child">自機の子にあたるPlayer</param>
+    /// <returns>playerのlocalScaleに入れる</returns>
+    public void CounterScaleCalc(GameObject child)
+    {
+        //lossyScaleはワールド空間上の親子関係による影響を加味した最終的なスケール(実際の見た目のサイズ)を取得できる
+        Vector3 localScale = child.transform.localScale;
+        Vector3 parentLossyScale = this.transform.lossyScale;
+
+        child.transform.localScale 
+            = new Vector3(
+                localScale.x / parentLossyScale.x,
+                localScale.y / parentLossyScale.y,
+                localScale.z / parentLossyScale.z);
     }
 }

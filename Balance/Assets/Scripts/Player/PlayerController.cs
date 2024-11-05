@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
-
+    
         GetMaterialProcess();
         
         m_PM = GetComponent<PlayerManager>();
@@ -267,6 +267,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 scalePow;
     private void SuperLanding()
     {
+        if (CanSuperLand() == false)
+            return;
+        
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
         
@@ -338,7 +341,10 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Ground"))
         {
-         //   collision.gameObject.GetComponent<StageManager>().SetToStageChild(gameObject);
+            StageManager _stageManager = collision.gameObject.GetComponent<StageManager>();
+          
+            _stageManager.SetToStageChild(gameObject);
+            //_stageManager.CounterScaleCalc(gameObject);
             isChanged = true;
         }
     }
@@ -379,17 +385,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private RaycastHit RaycastDown(int maxDistance)
+    {
+        m_ray = new Ray(m_player.position, -transform.up);
+        Physics.Raycast(m_ray, out m_hit, maxDistance);
+
+        return m_hit;
+    }
+
+    private bool CanSuperLand()
+    {
+        RaycastHit _hit =  RaycastDown(10);
+
+        if (_hit.collider.gameObject.CompareTag("Ground"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// Rayを元に法線の計算をして滑らかに坂を上り下りできるように
     /// </summary>
     private Vector3 GetNormal(Vector3　moveForward)
     {
         //プレイヤーの真下方向にRayを飛ばす
-        m_ray = new Ray(m_player.position, -transform.up);
-        Physics.Raycast(m_ray, out m_hit, 2);
+        RaycastHit _hit = RaycastDown(2);
         //平面に投影したいベクトルmoveForwardとrayを飛ばして取得した平面の法線ベクトルから
         //平面に沿ったベクトルを計算
-        return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
+        return Vector3.ProjectOnPlane(moveForward, _hit.normal);
     }
 
     void KnockBack(Collision collision)

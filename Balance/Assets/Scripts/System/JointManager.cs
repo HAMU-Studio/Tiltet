@@ -97,17 +97,28 @@ public class JointManager : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
     }
 
-  　private float lowerLimit = 10f;
+  
+   private Vector3 pivotPos;
    /// <summary>
    /// ある程度離れていたら飛ばす
    /// </summary>
     private float CheckDistanceFromStage()
     {
-        Vector3 pivotPos = GameManager.instance.Pivot.transform.position;
+        
+        pivotPos = GameManager.instance.Pivot.transform.position;
+        
         
         float dist = Vector3.Distance(transform.position, pivotPos);
 
-        return dist;
+        if (float.IsNaN(dist))
+        {
+            Debug.LogError(" Check distance is Failed!");
+            return 0f;
+        }
+        else
+        {
+            return dist;
+        }
     }
 
     /// <summary>
@@ -165,13 +176,15 @@ public class JointManager : MonoBehaviour
     [Header("外側に弾く力の倍率")]
     [SerializeField]
     private Vector3 force = new Vector3(5f, 1f, 5f);
+    [Header("飛ばすために必要な自機との距離")]
+    [SerializeField]private float lowerLimit = 10f;
+    
     private bool onceForce;
-
+    private Vector3 direction; 
     /// <summary>
     /// 救出アクションでステージの引っかかり防止に使う　ステージが引っ掛かりそうなら外に移動->飛ばす->ロープ切る
     /// jointあまり関係ないから違うスクリプトに移したい
     /// </summary>
-    private Vector3 direction; 
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
@@ -188,22 +201,6 @@ public class JointManager : MonoBehaviour
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
             
             //正面方向の救出アクションのみ符号反転すれば正常に動く->そんなことなかった
-            /*if (m_direction == Direction.Foward)
-            {
-                direction = Vector3.forward;
-            }
-            else if (m_direction == Direction.Back)
-            {
-                direction = Vector3.back;
-            }
-            else if (m_direction == Direction.Left)
-            {
-                direction = Vector3.left;
-            }
-            else if (m_direction == Direction.Right)
-            {
-                direction = Vector3.right;
-            }*/
 
             SetOutsideForce();
             
@@ -248,7 +245,7 @@ public class JointManager : MonoBehaviour
         
         m_RB.isKinematic = false; 　//再度物理的に解放
         
-        Debug.Log("call OutsideForce");
+     //   Debug.Log("call OutsideForce");
         //ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
         m_RB.AddForce(direction, ForceMode.Impulse);
     }

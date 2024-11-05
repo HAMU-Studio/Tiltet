@@ -283,12 +283,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  spawnPoint: []
+  stage: {fileID: 0}
+  enemys: []
+  enemySpawnPoints: []
   spawnInterval: 3
+  spawnPositionNum: 4
   spawnLimit: 1
 --- !u!1 &1268405306
 GameObject:
@@ -538,29 +537,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7249596636241904843, guid: c8f224c03cfbf7240b1e27d4ec98507b,
-        type: 3}
-      propertyPath: m_playerRenderer
-      value: 
-      objectReference: {fileID: 3268068568848495009, guid: b0ea74e62d1e70d459f00603dda77a57,
-        type: 3}
-    - target: {fileID: 7249596636241904843, guid: c8f224c03cfbf7240b1e27d4ec98507b,
-        type: 3}
-      propertyPath: _playerController
-      value: 
-      objectReference: {fileID: 4527379732234072247, guid: 02f9918b3cea88241830e1ca2c4dd97b,
-        type: 3}
     - target: {fileID: 7249596636241904844, guid: c8f224c03cfbf7240b1e27d4ec98507b,
         type: 3}
       propertyPath: m_Name
       value: PlayerInputManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7249596636241904845, guid: c8f224c03cfbf7240b1e27d4ec98507b,
-        type: 3}
-      propertyPath: m_PlayerPrefab
-      value: 
-      objectReference: {fileID: 2530105368876131897, guid: 02f9918b3cea88241830e1ca2c4dd97b,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8f224c03cfbf7240b1e27d4ec98507b, type: 3}
 --- !u!1 &2005849203
