@@ -1,12 +1,37 @@
 fileFormatVersion: 2
-guid: f003599b42ad33d4f9f8ac9e7da7c4cf
+guid: 60cf91fdd65374d4abd5752952b48816
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: aiStandardSurface1
+    second: {fileID: 2100000, guid: a108dc3f587f652499638e17d212da57, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wiya
+    second: {fileID: 2100000, guid: fc4f3d8d229ed8241b8989743eb2fd1d, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: standardSurface_BaseColor_01
+    second: {fileID: 2800000, guid: 1c332d9b390b8d84ba7087d2921086ab, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: standardSurface_Emissive_01
+    second: {fileID: 2800000, guid: de439614403c7ef49a45a085ff2fe666, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: wiya_standardSurface_BaseColor
+    second: {fileID: 2800000, guid: 16086f1bcc1775a4b9509bf41e664a12, type: 3}
   materials:
     materialImportMode: 2
-    materialName: 0
+    materialName: 1
     materialSearch: 1
     materialLocation: 1
   animations:

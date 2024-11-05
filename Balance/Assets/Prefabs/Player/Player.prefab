@@ -167,7 +167,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74e66b3ba04fe684abe50ce8cc34dd5c, type: 2}
+  - {fileID: 2100000, guid: a108dc3f587f652499638e17d212da57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -241,6 +241,7 @@ MonoBehaviour:
   m_material_2P: {fileID: 2100000, guid: 28cc8dde4eeb2ea4da990077f3535cc8, type: 2}
   knockBackP: 10
   knockBackUpP: 6
+  m_playerRenderer: {fileID: 6180727587083873518}
   canMoveTime: 0.5
   scalePow: {x: 0, y: 20, z: 0}
 --- !u!114 &54312201
