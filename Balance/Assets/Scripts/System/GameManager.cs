@@ -52,14 +52,16 @@ public class GameManager : MonoBehaviour
     
     private int m_life;
     private int m_wave;
-    private int m_parts;
+    private int m_mainParts;
+    private int m_subParts;
   
     private void InitGame()
     {
        // Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
-        m_parts = 0;
+        m_mainParts = 0;
+        m_subParts = 0;
         isPlayerSpawn = new bool [2];
       //  StartGame();
         //今後ScoreUIのUpdate呼び出す
@@ -152,13 +154,22 @@ public class GameManager : MonoBehaviour
         set { isPlayerSpawn[1] = value; }
     }
 
-    public void AddPartsNum()
+    public void AddMainPartsNum()
     {
-        m_parts++;
+        m_mainParts++;
     }
-    public int GetPartsNum()
+    public int GetMainPartsNum()
     {
-        return m_parts;
+        return m_mainParts;
+    }
+
+    public void AddSubPartsNum()
+    {
+        m_subParts++;
+    }
+    public int GetSubPartsNum()
+    {
+        return m_subParts;
     }
     
     public void ChangeStageModeTo(GameState state)

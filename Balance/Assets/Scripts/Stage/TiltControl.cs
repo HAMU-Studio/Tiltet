@@ -33,8 +33,11 @@ public class TiltControl : MonoBehaviour
     private Vector3 savedPosition;
     private Quaternion savedRotation;
 
-    // 外部からアクセス可能な力の最大値
-    public Vector3 MaxForcePoint { get; private set; }
+    // 傾いている方向を保存
+    private Vector3 tiltDirection;
+
+    // 外部スクリプトで参照可能なプロパティ
+    public Vector3 TiltDirection => tiltDirection;
 
     void Start()
     {
@@ -52,18 +55,17 @@ public class TiltControl : MonoBehaviour
 
         // オブジェクトの初期位置を保存
         FixedPosition = transform.position;
-
     }
 
     void Update()
     {
-        // オブジェクトの位置を固定
-        transform.position = FixedPosition;
-
         // Y軸の位置を初期位置に固定
         /*Vector3 currentPosition = transform.position;
         currentPosition.y = initialYPosition; // Y軸を初期位置に設定
         transform.position = currentPosition;*/
+
+        // オブジェクトの位置を固定
+        transform.position = FixedPosition;
 
         // (※デバッグ用) Oキーが押されたときに一時停止を実行
         if (Input.GetKeyDown(KeyCode.O))
@@ -83,7 +85,6 @@ public class TiltControl : MonoBehaviour
         if (m_forceMode != ForceMode.Force)
         {
             m_rb.AddForce(m_forceDirection, m_forceMode);
-            MaxForcePoint = m_forceDirection; // 最大の力がかかるポイントを記録
         }
 
         // 現在の回転を取得
@@ -101,6 +102,10 @@ public class TiltControl : MonoBehaviour
 
         // 回転を更新
         transform.rotation = Quaternion.Euler(euler);
+
+        // オブジェクトの傾き方向を取得して保存
+        tiltDirection = CalculateTiltDirection();
+        Debug.Log("傾いている方向: " + tiltDirection);
     }
 
     void FixedUpdate()
@@ -115,10 +120,9 @@ public class TiltControl : MonoBehaviour
         if (m_forceMode == ForceMode.Force)
         {
             m_rb.AddForce(m_forceDirection, m_forceMode);
-            MaxForcePoint = m_forceDirection; // 最大の力がかかるポイントを記録
         }
 
-        // 傾きを水平に保つ処理
+        // 傾きを水平に保つ
         Vector3 currentRotation = transform.localEulerAngles;
 
         // X軸の傾きを水平に戻すためのトルク
@@ -133,6 +137,18 @@ public class TiltControl : MonoBehaviour
         m_rb.AddTorque(xCorrectionTorque + zCorrectionTorque);
     }
 
+    // 傾いている方向を計算するメソッド
+    private Vector3 CalculateTiltDirection()
+    {
+        Vector3 tiltDirection = new Vector3(
+            Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad),
+            0,
+            Mathf.Sin(transform.eulerAngles.x * Mathf.Deg2Rad)
+        );
+        return tiltDirection.normalized;
+    }
+
+    // 今は使用していないが外部でAddForceの設定を外部で参照できるメッソド
     // 力の方向と大きさを設定するメソッド
     public void SetForceDirection(Vector3 direction)
     {
@@ -180,10 +196,9 @@ public class TiltControl : MonoBehaviour
         {
             savedPosition = transform.position;
             savedRotation = transform.rotation;
-
             Debug.Log("処理を一時停止");
         }
-        if (!isPaused)
+        else
         {
             Debug.Log("処理を再開");
         }
@@ -204,8 +219,6 @@ public class TiltControl : MonoBehaviour
 
             // TiltControl.csを有効にする
             this.enabled = true;
-
-            // デバッグログを出力
             Debug.Log("StageMovementがオフのため、Freeze RotationのXとZをfalseにしてTiltControlをオンにしました。");
         }
     }

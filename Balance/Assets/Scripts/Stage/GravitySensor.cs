@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GravitySensor : MonoBehaviour
 {
-    /*public enum SensorType
+    public enum SensorType
     {
         Forward,  // 前方移動センサー
         Backward, // 後方移動センサー
@@ -79,5 +79,5 @@ public class GravitySensor : MonoBehaviour
                     break;
             }
         }
-    }*/
+    }
 }

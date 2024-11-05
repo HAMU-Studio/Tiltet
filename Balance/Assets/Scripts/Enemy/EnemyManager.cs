@@ -6,14 +6,21 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] enemy;
-    [SerializeField] private GameObject[] spawnPoint;
+    [SerializeField] private GameObject stage;
+    [SerializeField] private GameObject[] enemys;
+    [SerializeField] private GameObject[] enemySpawnPoints;
 
-    //敵がスポーンするインターバル
+    [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
+    [Header("敵がスポーンする場所の数")]
+    [SerializeField] private int spawnPositionNum = 4;
+
+    [Header("敵が存在できる最大数")]
+    [SerializeField] private int spawnLimit = 2;
+
     //一度にスポーンする数
-    [SerializeField] private int spawnLimit = 1;
+    private int spawnNum = 1;
 
     private float spawnTime;
 
@@ -27,25 +34,19 @@ public class EnemyManager : MonoBehaviour
 
     //スポーン範囲オブジェクト用
     Vector3 miniPos = new Vector3();
-    Vector3 maxPosX = new Vector3();
-    Vector3 maxPosZ = new Vector3();
+    Vector3 maxPos = new Vector3();
 
     private Rigidbody enemyRb;
 
     private float enemyCount;
-    private int spawnNum;
-    
+
+    Vector3[] SpawnPos = new Vector3[4];
+
 
     // Start is called before the first frame update
     void Start()
-    { 
-        // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval;
-
-        ableSpawn = true;
-
-        enemyCount = 0;
-
+    {
+        Set();
     }
 
     // Update is called once per frame
@@ -59,7 +60,7 @@ public class EnemyManager : MonoBehaviour
 
             if (ableSpawn)
             {
-                for (int i = 0; spawnLimit > i; i++)
+                for (int i = 0; spawnNum > i; i++)
                 {
                     EnemySpawn();
                 }
@@ -69,14 +70,24 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    private void Set()
+    {
+        // ゲームが始まったと同時にスポーン（なくてもいい）
+        spawnTime = spawnInterval;
+
+        ableSpawn = true;
+
+        enemyCount = 0;
+    }
+
     private void EnemySpawn()
     {
         //0...丸 1...楕円
-        enemyKinds = Random.Range(0, enemy.Length);
-        GameObject newEnemy = Instantiate(enemy[enemyKinds]);
+        enemyKinds = Random.Range(0, enemys.Length);
+        GameObject newEnemy = Instantiate(enemys[enemyKinds]);
 
-        spawnNum = Random.Range(0, spawnPoint.Length);
-        newEnemy.transform.position = spawnPoint[spawnNum].transform.position;
+        spawnNum = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[spawnNum].transform.position;
 
         if (enemyKinds == 1)
         {
@@ -96,7 +107,7 @@ public class EnemyManager : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //enemyNum = enemies.Length;
 
-        if (2 < enemies.Length)
+        if (spawnLimit < enemies.Length)
         {
             ableSpawn = false;
         }
@@ -106,5 +117,4 @@ public class EnemyManager : MonoBehaviour
         }
 
     }
-
 }

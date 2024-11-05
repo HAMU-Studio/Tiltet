@@ -36,9 +36,9 @@ public class EnemyGetOn : MonoBehaviour
     void Update()
     {
        if (!arrived)
-        {
+       {
             GetOn();
-        }
+       }
     }
 
     private void Set()
