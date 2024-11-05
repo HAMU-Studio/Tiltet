@@ -6,76 +6,71 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField] private GameObject stage;
+    [Header("0...丸 1...楕円")]
     [SerializeField] private GameObject[] enemys;
     [SerializeField] private GameObject[] enemySpawnPoints;
 
     [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
-    [Header("敵がスポーンする場所の数")]
-    [SerializeField] private int spawnPositionNum = 4;
-
     [Header("敵が存在できる最大数")]
     [SerializeField] private int spawnLimit = 2;
 
-    //一度にスポーンする数
+    [Header("敵が一回にスポーンする数")]
     private int spawnNum = 1;
 
     private float spawnTime;
 
     //敵の数検知
-    private GameObject[] enemies;
-    private int enemyKinds;
     private bool ableSpawn;
 
-    //敵のスポーン場所
-    Vector3 enemyPos = new Vector3();
-
-    //スポーン範囲オブジェクト用
-    Vector3 miniPos = new Vector3();
-    Vector3 maxPos = new Vector3();
-
-    private Rigidbody enemyRb;
-
-    private float enemyCount;
-
-    Vector3[] SpawnPos = new Vector3[4];
-
+    //プレイヤーが二人いたら始まる
     private bool start;
 
-    private GameObject[] players;
+    //デバッグ用
+    private bool circleEnemyTest;
+
     // Start is called before the first frame update
     void Start()
     {
         Set();
+
+        circleEnemyTest = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         //デバッグ用
+        //Pを押すと1人でも始められる
         if(Input.GetKeyDown(KeyCode.P))
         {
             start = true;
         }
+
         if (start)
         {
-            spawnTime += Time.deltaTime;
-
-            if (spawnTime > spawnInterval)
+            CheakEnemy();
+            
+            if(ableSpawn)
             {
-                CheakEnemy();
+                spawnTime += Time.deltaTime;
 
-                if (ableSpawn)
+                if (spawnTime > spawnInterval)
                 {
                     for (int i = 0; spawnNum > i; i++)
                     {
-                        EnemySpawn();
+                        if (circleEnemyTest)
+                        {
+                            CircleEnemySpawn();
+                        }
+                        else
+                        {
+                            EnemySpawn();
+                        }
                     }
+                    spawnTime = 0;
                 }
-
-                spawnTime = 0;
             }
         }
     }
@@ -87,26 +82,26 @@ public class EnemyManager : MonoBehaviour
         spawnTime = spawnInterval;
 
         ableSpawn = true;
-
-        enemyCount = 0;
     }
 
     private void EnemySpawn()
     {
+        int enemyKinds;
+        int enemySpawnPos;
         //0...丸 1...楕円
         enemyKinds = Random.Range(0, enemys.Length);
         GameObject newEnemy = Instantiate(enemys[enemyKinds]);
 
-        spawnNum = Random.Range(0, enemySpawnPoints.Length);
-        newEnemy.transform.position = enemySpawnPoints[spawnNum].transform.position;
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
 
         if (enemyKinds == 1)
         {
-            if (spawnNum == 0)
+            if (enemySpawnPos == 0)
             {
                 newEnemy.transform.Rotate(0, -90.0f, 0);
             }
-            if (spawnNum == 1)
+            if (enemySpawnPos == 1)
             {
                 newEnemy.transform.Rotate(0, 90.0f, 0);
             }
@@ -115,10 +110,10 @@ public class EnemyManager : MonoBehaviour
 
     private void CheakEnemy()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        //enemyNum = enemies.Length;
+        GameObject[] enemyNum;
+        enemyNum = GameObject.FindGameObjectsWithTag("Enemy");
 
-        if (spawnLimit < enemies.Length)
+        if (spawnLimit <= enemyNum.Length)
         {
             ableSpawn = false;
         }
@@ -137,5 +132,15 @@ public class EnemyManager : MonoBehaviour
         {
             start = true;
         }
+    }
+
+    private void CircleEnemySpawn()
+    {
+        int enemySpawnPos;
+
+        GameObject newEnemy = Instantiate(enemys[0]);
+
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 }

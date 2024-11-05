@@ -105,7 +105,7 @@ public class TiltControl : MonoBehaviour
 
         // オブジェクトの傾き方向を取得して保存
         tiltDirection = CalculateTiltDirection();
-        Debug.Log("傾いている方向: " + tiltDirection);
+        //Debug.Log("傾いている方向: " + tiltDirection);
     }
 
     void FixedUpdate()
