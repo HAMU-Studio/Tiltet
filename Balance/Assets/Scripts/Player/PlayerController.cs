@@ -268,7 +268,11 @@ public class PlayerController : MonoBehaviour
     private void SuperLanding()
     {
         if (CanSuperLand() == false)
+        {
+            Debug.Log("CanSuperLand = false");
             return;
+        }
+            
         
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
@@ -387,18 +391,20 @@ public class PlayerController : MonoBehaviour
 
     private RaycastHit RaycastDown(int maxDistance)
     {
-        m_ray = new Ray(m_player.position, -transform.up);
+        m_ray = new Ray(m_player.position, -transform.up * maxDistance);
         Physics.Raycast(m_ray, out m_hit, maxDistance);
+       // Debug.DrawRay(m_player.position, -transform.up * maxDistance, Color.red);
 
         return m_hit;
     }
 
     private bool CanSuperLand()
     {
-        RaycastHit _hit =  RaycastDown(10);
+        RaycastHit _hit =  RaycastDown(50);
 
         if (_hit.collider.gameObject.CompareTag("Ground"))
         {
+            m_PM.SlipThroughOff();
             return true;
         }
         else
