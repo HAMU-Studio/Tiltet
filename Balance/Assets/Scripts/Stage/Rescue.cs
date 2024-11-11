@@ -26,9 +26,12 @@ public class Rescue : MonoBehaviour
   
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (m_PM.rescState == RescueState.Wait)
         {
-            canRescueAct = false;
+            if (other.gameObject.CompareTag("Player"))
+            {
+                canRescueAct = false;
+            }
         }
     }
     void OnCollisionEnter(Collision collision)

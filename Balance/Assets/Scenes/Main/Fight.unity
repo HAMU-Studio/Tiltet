@@ -574,10 +574,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -1115,7 +1145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 150386155}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1564,10 +1594,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -1650,7 +1710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 280832997}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1774,7 +1834,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 294422739}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1859,7 +1919,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &375099181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -3357,10 +3418,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -3443,7 +3534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 831110231}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3478,7 +3569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 853901876}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3932,6 +4023,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerInputManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7249596636241904845, guid: c8f224c03cfbf7240b1e27d4ec98507b,
+        type: 3}
+      propertyPath: m_PlayerPrefab
+      value: 
+      objectReference: {fileID: 2530105368876131897, guid: 02f9918b3cea88241830e1ca2c4dd97b,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8f224c03cfbf7240b1e27d4ec98507b, type: 3}
 --- !u!4 &899290475 stripped
@@ -3947,10 +4044,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -4031,10 +4158,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -4729,7 +4886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1037544437}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5444,7 +5601,7 @@ PrefabInstance:
     - target: {fileID: 281914563837268893, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1814785
+      value: 5.1
       objectReference: {fileID: 0}
     - target: {fileID: 281914563837268893, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -5486,10 +5643,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 316156528650388658, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156528650388658, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.16018224
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156528650388658, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156528650388658, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 316156529353865914, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.59999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529353865914, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29999998
       objectReference: {fileID: 0}
     - target: {fileID: 316156529353865914, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -5501,15 +5683,30 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.113265954
       objectReference: {fileID: 0}
+    - target: {fileID: 316156529609150635, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529609150635, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.113265954
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529609150635, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.113265954
+      objectReference: {fileID: 0}
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0000000228801
+      value: -0.0000000228801
       objectReference: {fileID: 0}
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000008283737
+      value: 0.000000008283737
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -5533,25 +5730,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.000000008492101
+      value: 0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0000000013780784
+      value: 0.0000000013780783
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018225
+      value: -0.16018224
       objectReference: {fileID: 0}
     - target: {fileID: 622164571971897639, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_Name
       value: stage
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 316156529787870345, guid: d7bcb65c2c24de84aa6b19fa0a252731, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d7bcb65c2c24de84aa6b19fa0a252731, type: 3}
 --- !u!4 &1143247191 stripped
 Transform:
@@ -5718,10 +5921,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -5804,7 +6037,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1174356535}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5848,7 +6081,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1189346213}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5970,10 +6203,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -6125,8 +6388,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223397415}
-  m_LocalRotation: {x: 0.16018224, y: 1e-45, z: 0, w: 0.9870875}
-  m_LocalPosition: {x: -0.5011368, y: 16.181479, z: -29.017857}
+  m_LocalRotation: {x: 0.16018224, y: 0, z: 0, w: 0.9870875}
+  m_LocalPosition: {x: -0.5011368, y: 20.1, z: -29.017857}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6209,7 +6472,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1223649354}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6884,7 +7147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305804204}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7236,10 +7499,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -7404,10 +7697,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -7778,7 +8101,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1419508383}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7947,7 +8270,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1451286856}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trees
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8466,7 +8789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1586126057}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8631,7 +8954,8 @@ MonoBehaviour:
   - {fileID: 1042376086}
   - {fileID: 437129183}
   spawnInterval: 3
-  spawnNum: 4
+  spawnPositionNum: 4
+  spawnLimit: 2
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0
@@ -8756,10 +9080,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -9896,6 +10250,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1402511453}
     m_Modifications:
+    - target: {fileID: 1843725117, guid: 8873c4bd252db2144a710e859b466650, type: 3}
+      propertyPath: P1Spawn
+      value: 
+      objectReference: {fileID: 1143247192}
+    - target: {fileID: 1843725117, guid: 8873c4bd252db2144a710e859b466650, type: 3}
+      propertyPath: P2Spawn
+      value: 
+      objectReference: {fileID: 1143247191}
     - target: {fileID: 2371525423099053548, guid: 8873c4bd252db2144a710e859b466650,
         type: 3}
       propertyPath: m_Name
@@ -9956,11 +10318,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8631952043899800751, guid: 8873c4bd252db2144a710e859b466650,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8873c4bd252db2144a710e859b466650, type: 3}
 --- !u!4 &1843725113 stripped
@@ -9969,28 +10326,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1843725112}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1843725114 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2371525423099053548, guid: 8873c4bd252db2144a710e859b466650,
-    type: 3}
-  m_PrefabInstance: {fileID: 1843725112}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1843725115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1843725114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fa58e58484b6c94abb10b684846fe29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  P1mat: {fileID: 2100000, guid: 74e66b3ba04fe684abe50ce8cc34dd5c, type: 2}
-  P2mat: {fileID: 2100000, guid: 28cc8dde4eeb2ea4da990077f3535cc8, type: 2}
-  P1Spawn: {fileID: 1143247192}
-  P2Spawn: {fileID: 1143247191}
 --- !u!1001 &1844709629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10086,7 +10421,7 @@ GameObject:
   - component: {fileID: 1851724497}
   - component: {fileID: 1851724496}
   - component: {fileID: 1851724495}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10162,10 +10497,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -10266,7 +10631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1904409622}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flowers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10788,10 +11153,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
@@ -11136,10 +11531,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1451286856}
     m_Modifications:
+    - target: {fileID: -7738750208739635629, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3479438734948570722, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -418248218262842034, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -19064270300167458, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
       propertyPath: m_Name
       value: Paint Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 983829057080428297, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184868557553975864, guid: 7c6cb345f8f5da644ad0094aab516b6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
         type: 3}
