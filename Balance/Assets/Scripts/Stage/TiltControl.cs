@@ -64,7 +64,7 @@ public class TiltControl : MonoBehaviour
 
         // 制限後の回転を適用
         transform.rotation = Quaternion.Euler(currentRotation);
-
+        
         // 接触中のオブジェクトがある場合、その質量に応じて傾きを加える
         if (isContacting && contactMass > 0f)
         {

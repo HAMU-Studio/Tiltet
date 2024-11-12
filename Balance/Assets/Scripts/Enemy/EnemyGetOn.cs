@@ -5,16 +5,10 @@ using UnityEngine;
 
 public class EnemyGetOn : MonoBehaviour
 {
-    //スポーン範囲オブジェクト
-    [SerializeField] private GameObject minimumValue;
-    [SerializeField] private GameObject muximumValue;
+    Vector3 stagePos = new Vector3();
 
     [Header("飛ぶときの最高点")] 
     [SerializeField] private int addHight = 5;
-
-    //スポーン範囲オブジェクト用
-    Vector3 miniPos = new Vector3();
-    Vector3 maxPos = new Vector3();
 
     //ベジェ曲線用
     Vector3 spawnPosition = new Vector3();
@@ -43,19 +37,22 @@ public class EnemyGetOn : MonoBehaviour
 
     private void Set()
     {
-        arrived = false;
+        //スポーンする範囲の取得
+        GameObject enemyManager = GameObject.Find("EnemyManager");
+        EnemyManager enemymanager;
+        enemymanager = enemyManager.GetComponent<EnemyManager>();
+        Vector3 minPos = enemymanager.minPos;
+        Vector3 maxPos = enemymanager.maxPos;
 
-        //スポーン範囲オブジェクトのポジション取得
-        miniPos = minimumValue.transform.position;
-        maxPos = muximumValue.transform.position;
+        arrived = false;
 
         //出発地点
         spawnPosition = transform.position;
 
         //目的地の設定
-        destination.x = Random.Range(miniPos.x, maxPos.x);
-        destination.y = miniPos.y;
-        destination.z = Random.Range(miniPos.z, maxPos.x);
+        destination.x = Random.Range(minPos.x, maxPos.x);
+        destination.y = minPos.y;
+        destination.z = Random.Range(minPos.z, maxPos.x);
 
         //飛ぶときの高さの最高到達点
         top = new Vector3((spawnPosition.x + destination.x) / 2,
@@ -63,10 +60,16 @@ public class EnemyGetOn : MonoBehaviour
                           (spawnPosition.z + destination.z) / 2);
 
         enemySpeed = 10 / Vector3.Distance(spawnPosition, destination);
+
+       // GameObject stage = GameObject.FindWithTag("Graund");
+        //stagePos = stage.transform.position;
     }
 
     private void GetOn()
     {
+        //着地地点を見る
+        transform.LookAt(destination);
+
         t += enemySpeed * Time.deltaTime;
         Vector3 a = Vector3.Lerp(spawnPosition, top, t);
         Vector3 b = Vector3.Lerp(top, destination, t);

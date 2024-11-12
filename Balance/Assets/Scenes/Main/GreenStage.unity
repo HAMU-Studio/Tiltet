@@ -17188,12 +17188,22 @@ PrefabInstance:
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002288009
+      value: 0.0000000228801
       objectReference: {fileID: 0}
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008283735
+      value: -0.000000008283737
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529787870348, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 316156529787870351, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 116
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -17217,6 +17227,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7bcb65c2c24de84aa6b19fa0a252731, type: 3}
+--- !u!4 &316156528983887542 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 281914563837268893, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+    type: 3}
+  m_PrefabInstance: {fileID: 316156528983887541}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &316156528983887543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 622164571971897639, guid: d7bcb65c2c24de84aa6b19fa0a252731,
+    type: 3}
+  m_PrefabInstance: {fileID: 316156528983887541}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &316156528983887544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316156528983887543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceMultiplier: 5
+  rotationAngle: 10
 --- !u!1001 &1011290208474637844
 PrefabInstance:
   m_ObjectHideFlags: 0
