@@ -152,7 +152,7 @@ public class Rescue : MonoBehaviour
 
     public void StartRescue()
     {
-        m_PM.State = RescueState.Move;
+        m_PM.rescState = RescueState.Move;
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
@@ -161,14 +161,14 @@ public class Rescue : MonoBehaviour
     {
         if (once)
         {
-            if (m_PM.State == RescueState.SuperLand || m_PM.State == RescueState.None)
+            if (m_PM.rescState == RescueState.SuperLand || m_PM.rescState == RescueState.None)
             {
                 RescPostProcess();
             }
             return;
         }
         
-        if (m_PM.State == RescueState.Fly)
+        if (m_PM.rescState == RescueState.Fly)
         {
             RescueThrow();
             once = true;
@@ -178,7 +178,7 @@ public class Rescue : MonoBehaviour
     [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 2f;
     private void FixedUpdate()
     {
-        if (m_PM.State == RescueState.Move)
+        if (m_PM.rescState == RescueState.Move)
         {
             Vector3 force = Vector3.up * upPowoer / Time.fixedDeltaTime;
             m_RB.AddForce(force);

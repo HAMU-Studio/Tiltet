@@ -28,7 +28,7 @@ public class FallArea : MonoBehaviour
         if (waitRescue)
         {
             //救出アクション終わった時（多分）
-            if (m_PM.State == RescueState.None)
+            if (m_PM.rescState == RescueState.None)
             {
                 ResetFlag();
                 PostProcess();
@@ -84,10 +84,10 @@ public class FallArea : MonoBehaviour
         SetFallInstance(playerCol);
        
         //紐が二本つかないように
-        if (m_PM.State != RescueState.None)
+        if (m_PM.rescState != RescueState.None)
             return;
      
-        m_PM.State = RescueState.Wait;
+        m_PM.rescState = RescueState.Wait;
         CalcShortestDist();
       //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
