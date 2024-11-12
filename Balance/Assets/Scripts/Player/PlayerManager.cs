@@ -79,39 +79,51 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
+        /*if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
         {
             if (gameObject.layer ==  LayerMask.NameToLayer("Fly"))
             {
-                gameObject.layer = LayerMask.NameToLayer("Player");
-                Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
+                SlipThroughOff();
             }
-        }
+        }*/
 
         if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
         {
-            //飛んだらレイヤー管理
-            StartCoroutine("LayerManagement");
-            //LayerManagement();
+            //飛んだらレイヤーですり抜けon
+           SlipThroughOn();
+         
         }
         m_beforeState = rescCurrentState;
     }
-
-    [Header("飛び始めてから当たり判定が元に戻るまでの時間")] 
-    [SerializeField] private float waitTime = 2f;
     
     /// <summary>
     /// 救出アクション中進行不可能にならないようにLayerを変更して念のため貫通するように
     /// </summary>
-    private IEnumerator LayerManagement()
+    private void SlipThroughOn()
     {
         //NameToLayerは名前から数値への変換。本来Layerは数字
+        StartCoroutine("AutoSlipThroughOff");
         gameObject.layer = LayerMask.NameToLayer("Fly");
         Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
-        
-        yield return new WaitForSeconds(waitTime);
-        
+    }
+
+    public void SlipThroughOff()
+    {
         gameObject.layer = LayerMask.NameToLayer("Player");
         Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
+    }
+    
+    [Header("飛び始めてから〇秒ですり抜け機能はoffに")] 
+    [SerializeField] private float waitTime = 3f;
+    private IEnumerator AutoSlipThroughOff()
+    {
+        yield return new WaitForSeconds(waitTime);
+        //NameToLayerは名前から数値への変換。本来Layerは数字
+
+        if (gameObject.layer == LayerMask.NameToLayer("Fly"))
+        {
+            gameObject.layer = LayerMask.NameToLayer("Player");
+            Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
+        }
     }
 }

@@ -19,7 +19,7 @@ public class PlayerSpawnSensor : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             GameObject player = other.gameObject;
-            Material playerMat = player.GetComponent<Renderer>().material;
+            Material playerMat = player.GetComponentInChildren<Renderer>().materials[1];
 
             //Debug.Log("playerMat = " + playerMat);
             //Debug.Log("P1mat = " + P1mat);

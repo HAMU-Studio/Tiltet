@@ -10,13 +10,15 @@ using UnityEngine.AI;
 
 public class EnemyEllipse : MonoBehaviour
 {
-    //[SerializeField] private GameObject front;
+    [Header("突撃する強さ")]
+    [SerializeField] private float moveSpeed = 50.0f;
+
     private GameObject[] players;
     private Rigidbody enemyRb;
     private float time;
-    private float moveSpeed = 3.0f;
+    private bool m_arrived;
     private bool ableAssault;
-    private bool Assault;
+    private bool assault;
 
     Vector3 _Direction = new Vector3();
     Vector3 _prePosition = new Vector3();// 前の位置
@@ -27,6 +29,8 @@ public class EnemyEllipse : MonoBehaviour
 
     Vector3 Direction = new Vector3();
 
+    private bool ablemove;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,27 +40,48 @@ public class EnemyEllipse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!ableAssault)
+        if (m_arrived)
         {
-            CheckPlayer();
-        }
-        else
-        {
-            time += Time.deltaTime;
-
-            if (time <= 0.5f)
+            if (!ablemove)
             {
-                Debug.Log("hit");
-                enemyRb.velocity = Vector3.zero;
-                Assault = true;
-                ableAssault = false;
-            }
-        }
+                time += Time.deltaTime;
 
-        if(Assault)
-        {
-            enemyRb.AddForce(_Direction * moveSpeed, ForceMode.Impulse);
-            Assault = false;
+                if (time <= 0.5f)
+                {
+                    enemyRb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+                else
+                {
+                    time = 0.0f;
+                    enemyRb.constraints = RigidbodyConstraints.None;
+                    ablemove = true;
+                }
+            }
+
+            if (ablemove)
+            {
+                if (!ableAssault)
+                {
+                    time += Time.deltaTime;
+
+                    if (time >= 2.0f)
+                    {
+                        time = 0.0f;
+                        ableAssault = true;
+                    }
+                }
+                else
+                {
+                    CheckPlayer();
+                }
+
+                if (assault)
+                {
+                    enemyRb.AddForce(_Direction * moveSpeed, ForceMode.Impulse);
+                    ableAssault = false;
+                    assault = false;
+                }
+            }
         }
 
         Debug.DrawRay(transform.position, _Direction * 100.0f, Color.red);
@@ -79,12 +104,16 @@ public class EnemyEllipse : MonoBehaviour
         }
 
         time = 0;
-        ableAssault = false;
+        m_arrived= false;
+        assault = false;
+        ableAssault = true;
 
         _position = Vector3.zero;
         _prePosition = transform.position;
         _Direction = Vector3.forward;
         enemyRb = GetComponent<Rigidbody>();
+
+        ablemove = false;
     }
 
     private void CheckDirection()
@@ -106,44 +135,27 @@ public class EnemyEllipse : MonoBehaviour
 
     private void CheckPlayer()
     {
-        Ray ray = new Ray(transform.position, _Direction);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10))
+        //Ray ray = new Ray(transform.position, _Direction);
+        //RaycastHit hit;
+        if (Physics.CapsuleCast(
+            transform.position + new Vector3(1.5f,0.0f,0.0f),
+            transform.position + new Vector3(-1.5f,0.0f,0.0f),
+            4.0f,
+            _Direction,
+            out var hit))
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
-                ableAssault = true;
+                assault = true;
             }
         }
     }
 
-    private void SearchPlayer()
+    private void OnCollisionEnter(Collision collision)
     {
-        //playerが1人もいない時
-        if (players.Length == 0)
+        if(collision.gameObject.CompareTag("Ground"))
         {
-            players = GameObject.FindGameObjectsWithTag("Player");
-            return;
-        }
-        //playerが1人の時
-        if (players.Length == 1)
-        {
-            players = GameObject.FindGameObjectsWithTag("Player");
-            target = players[0];
-            return;
-        }
-
-        //距離を調査
-        for (int i = 0; i < players.Length; i++)
-        {
-            distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
-        }
-
-        //どっちのplayerのほうが近いか
-        target = players[0];
-        if (distance[1] < distance[0])
-        {
-            target = players[1];
+            m_arrived = true;
         }
     }
 }
