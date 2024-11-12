@@ -135,9 +135,14 @@ public class EnemyEllipse : MonoBehaviour
 
     private void CheckPlayer()
     {
-        Ray ray = new Ray(transform.position, _Direction);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10))
+        //Ray ray = new Ray(transform.position, _Direction);
+        //RaycastHit hit;
+        if (Physics.CapsuleCast(
+            transform.position+new Vector3(1.5f,0.0f,0.0f),
+            transform.position+new Vector3(-1.5f,0.0f,0.0f),
+            4.0f,
+            _Direction,
+            out var hit))
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
