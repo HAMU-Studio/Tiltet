@@ -27,23 +27,44 @@ public class JointManager : MonoBehaviour
         m_RB.freezeRotation = false;
 
         AddJoint();
-      
+        SetSpring();
         SetPivot();
         
         //この値によって挙動が変わってしまう。要注意 ->AutoConnectedAnchorだから関係ないかも
-        m_hingeJoint.anchor = new Vector3(0, 10, 0);
+       // m_hingeJoint.anchor = new Vector3(0f, m_hingeJoint.connectedBody.position.y, 0f);
+        m_hingeJoint.anchor = m_hingeJoint.connectedAnchor;
+        SetLimit();
 
         m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
-       
+      //  m_springJoint.anchor = new Vector3(0f, m_springJoint.connectedBody.position.y, 0f);
         m_springJoint.spring = 30f;
         m_springJoint.damper = 0.2f;
        
         //GameManagerのAxisは二点間のベクトル、それを軸とすると手前側と奥側の挙動がおかしくなる
         Vector3 velocity = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
         SetAxis(velocity);
-     
+        
         m_RB.AddForce(velocity, ForceMode.Impulse);
     }
+    
+    private void SetSpring()
+    {
+        JointSpring hingeSpring = m_hingeJoint.spring;
+        hingeSpring.spring = 100;
+        hingeSpring.damper = 200;
+        m_hingeJoint.spring = hingeSpring;
+        m_hingeJoint.useSpring = true;
+    }
+
+    private void SetLimit()
+    {
+        JointLimits hingeLimits = m_hingeJoint.limits;
+        hingeLimits.max = 30;
+        hingeLimits.min = -30;
+        m_hingeJoint.limits = hingeLimits;
+        m_hingeJoint.useLimits = true;
+    }
+
 
     private void AddJoint()
     {
@@ -187,23 +208,6 @@ public class JointManager : MonoBehaviour
             
             m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
             
-            //正面方向の救出アクションのみ符号反転すれば正常に動く->そんなことなかった
-            /*if (m_direction == Direction.Foward)
-            {
-                direction = Vector3.forward;
-            }
-            else if (m_direction == Direction.Back)
-            {
-                direction = Vector3.back;
-            }
-            else if (m_direction == Direction.Left)
-            {
-                direction = Vector3.left;
-            }
-            else if (m_direction == Direction.Right)
-            {
-                direction = Vector3.right;
-            }*/
 
             SetOutsideForce();
             

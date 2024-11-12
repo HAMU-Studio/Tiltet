@@ -373,6 +373,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 951973401259594076, guid: 43825079cbf40d3468ca9c687c7eafc4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5498652859594551887, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
       propertyPath: m_Enabled
@@ -508,8 +513,8 @@ HingeJoint:
   m_GameObject: {fileID: 1723589282}
   m_ConnectedBody: {fileID: 1529936425}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 3, z: 0}
-  m_Axis: {x: 5, y: 0, z: 5}
+  m_Anchor: {x: 0, y: 6.69, z: 0}
+  m_Axis: {x: 5, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_UseSpring: 1
@@ -522,10 +527,10 @@ HingeJoint:
     targetVelocity: 100
     force: 90
     freeSpin: 0
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_Limits:
-    min: -50
-    max: 50
+    min: -30
+    max: 30
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -541,30 +546,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1321803228}
   m_PrefabAsset: {fileID: 0}
---- !u!145 &1723589293
-SpringJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1723589282}
-  m_ConnectedBody: {fileID: 0}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 1, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  serializedVersion: 2
-  m_Spring: 15
-  m_Damper: 0.2
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_Tolerance: 0.025
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1 &1891381755
 GameObject:
   m_ObjectHideFlags: 0
