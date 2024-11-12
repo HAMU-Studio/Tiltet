@@ -78,12 +78,12 @@ public class EnemyEllipse : MonoBehaviour
                 if (assault)
                 {
                     enemyRb.AddForce(_Direction * moveSpeed, ForceMode.Impulse);
-                    Debug.Log("あたっく");
                     ableAssault = false;
                     assault = false;
                 }
             }
         }
+
         Debug.DrawRay(transform.position, _Direction * 100.0f, Color.red);
     }
 
@@ -138,8 +138,8 @@ public class EnemyEllipse : MonoBehaviour
         //Ray ray = new Ray(transform.position, _Direction);
         //RaycastHit hit;
         if (Physics.CapsuleCast(
-            transform.position+new Vector3(1.5f,0.0f,0.0f),
-            transform.position+new Vector3(-1.5f,0.0f,0.0f),
+            transform.position + new Vector3(1.5f,0.0f,0.0f),
+            transform.position + new Vector3(-1.5f,0.0f,0.0f),
             4.0f,
             _Direction,
             out var hit))

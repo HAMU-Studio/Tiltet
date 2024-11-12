@@ -20,6 +20,8 @@ public class EnemyGetOn : MonoBehaviour
     //探査機に到着したか否か
     private bool arrived;
 
+    private bool gotOff;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +47,7 @@ public class EnemyGetOn : MonoBehaviour
         Vector3 maxPos = enemymanager.maxPos;
 
         arrived = false;
+        gotOff = false;
 
         //出発地点
         spawnPosition = transform.position;
@@ -60,9 +63,6 @@ public class EnemyGetOn : MonoBehaviour
                           (spawnPosition.z + destination.z) / 2);
 
         enemySpeed = 10 / Vector3.Distance(spawnPosition, destination);
-
-       // GameObject stage = GameObject.FindWithTag("Graund");
-        //stagePos = stage.transform.position;
     }
 
     private void GetOn()
@@ -87,6 +87,11 @@ public class EnemyGetOn : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             arrived = true;
+        }
+
+        if(collision.gameObject.CompareTag("Destroy"))
+        {
+            gotOff = false;
         }
     }
 }
