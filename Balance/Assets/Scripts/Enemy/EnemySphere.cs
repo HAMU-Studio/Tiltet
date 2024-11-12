@@ -149,12 +149,10 @@ public class EnemySphere : MonoBehaviour
         Vector3 nowPos = transform.position;
         Vector3 enemyDirection = (nowPos - m_prePosition).normalized;
         float speed = (nowPos - m_prePosition).magnitude;
-        Debug.Log(speed);
 
         if (speed > m_maxSpeed)
         {
             enemyRb.AddForce(-enemyDirection * (m_moveSpeed + 1.0f));
-
         }
 
         m_prePosition = nowPos;

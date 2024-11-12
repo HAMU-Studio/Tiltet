@@ -1826,17 +1826,17 @@ PrefabInstance:
     - target: {fileID: 6180727587083873504, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.0442982
+      value: -3.27
       objectReference: {fileID: 0}
     - target: {fileID: 6180727587083873504, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.1681976
+      value: 2.05
       objectReference: {fileID: 0}
     - target: {fileID: 6180727587083873504, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.769265
+      value: -3.17
       objectReference: {fileID: 0}
     - target: {fileID: 6180727587083873504, guid: 43825079cbf40d3468ca9c687c7eafc4,
         type: 3}
@@ -1934,11 +1934,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage: {fileID: 0}
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
   spawnLimit: 2
+  circleEnemyTest: 0
+  ellipseEnemyTest: 0
 --- !u!4 &375099181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -5667,12 +5668,12 @@ PrefabInstance:
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002288009
+      value: 0.0000000228801
       objectReference: {fileID: 0}
     - target: {fileID: 316156529766620054, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008283735
+      value: -0.000000008283737
       objectReference: {fileID: 0}
     - target: {fileID: 316156529787870345, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -5717,17 +5718,17 @@ PrefabInstance:
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000000008492101
+      value: -0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000000013780783
+      value: -0.0000000013780784
       objectReference: {fileID: 0}
     - target: {fileID: 316156530133742415, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018224
+      value: -0.16018225
       objectReference: {fileID: 0}
     - target: {fileID: 622164571971897639, guid: d7bcb65c2c24de84aa6b19fa0a252731,
         type: 3}
@@ -8804,7 +8805,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage: {fileID: 0}
   enemys:
   - {fileID: 7359282681462766789, guid: a81489aaec5607e438714e971a569d75, type: 3}
   - {fileID: 1654121995944958511, guid: 4749abd0e06658c45bb95db8f1640ddc, type: 3}
@@ -8815,6 +8815,8 @@ MonoBehaviour:
   - {fileID: 437129183}
   spawnInterval: 2
   spawnLimit: 3
+  circleEnemyTest: 0
+  ellipseEnemyTest: 1
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0

@@ -19,6 +19,14 @@ public class EnemyManager : MonoBehaviour
     [Header("敵が一回にスポーンする数")]
     private int spawnNum = 1;
 
+    [Header("デバッグ用")]
+    [SerializeField] private bool circleEnemyTest;
+    [SerializeField] private bool ellipseEnemyTest;
+
+    //敵がスポーンする範囲
+    public Vector3 minPos { get; set; }
+    public Vector3 maxPos { get; set; }
+
     private float spawnTime;
 
     //敵の数検知
@@ -27,15 +35,10 @@ public class EnemyManager : MonoBehaviour
     //プレイヤーが二人いたら始まる
     private bool start;
 
-    //デバッグ用
-    private bool circleEnemyTest;
-
     // Start is called before the first frame update
     void Start()
     {
         Set();
-
-        circleEnemyTest = true;
     }
 
     // Update is called once per frame
@@ -60,9 +63,14 @@ public class EnemyManager : MonoBehaviour
                 {
                     for (int i = 0; spawnNum > i; i++)
                     {
+                        //デバッグ用
                         if (circleEnemyTest)
                         {
                             CircleEnemySpawn();
+                        }
+                        else if (ellipseEnemyTest)
+                        {
+                            EllipseEnemySpawn();
                         }
                         else
                         {
@@ -82,6 +90,18 @@ public class EnemyManager : MonoBehaviour
         spawnTime = spawnInterval;
 
         ableSpawn = true;
+
+        //敵がスポーンする範囲
+        GameObject stage = GameObject.FindWithTag("Ground");
+        Vector3 stagePos = stage.transform.position;
+
+        minPos = new Vector3(stagePos.x - 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z - 6.0f);
+
+        maxPos = new Vector3(stagePos.x + 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z + 6.0f);
     }
 
     private void EnemySpawn()
@@ -94,18 +114,6 @@ public class EnemyManager : MonoBehaviour
 
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
-
-        if (enemyKinds == 1)
-        {
-            if (enemySpawnPos == 0)
-            {
-                newEnemy.transform.Rotate(0, -90.0f, 0);
-            }
-            if (enemySpawnPos == 1)
-            {
-                newEnemy.transform.Rotate(0, 90.0f, 0);
-            }
-        }
     }
 
     private void CheakEnemy()
@@ -139,6 +147,16 @@ public class EnemyManager : MonoBehaviour
         int enemySpawnPos;
 
         GameObject newEnemy = Instantiate(enemys[0]);
+
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
+    }
+
+    private void EllipseEnemySpawn()
+    {
+        int enemySpawnPos;
+
+        GameObject newEnemy = Instantiate(enemys[1]);
 
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
