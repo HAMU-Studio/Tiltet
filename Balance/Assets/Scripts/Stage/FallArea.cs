@@ -50,11 +50,6 @@ public class FallArea : MonoBehaviour
     //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(other.gameObject);
-        }
-
         if (other.gameObject.CompareTag("Player"))
         {
             //ここ絶対エラー出るからどうにかしたい

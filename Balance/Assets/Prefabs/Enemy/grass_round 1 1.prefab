@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 5817277119277424925}
   m_Layer: 0
   m_Name: grass_round 1 1
-  m_TagString: Enemy
+  m_TagString: SphereEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -477,10 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7ef1d8c8cbdca4c846b4bc3023b1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimumValue: {fileID: 1358860560611814493, guid: 3e2bf4f7ca8721948ab1177e0e8f7f52,
-    type: 3}
-  muximumValue: {fileID: 3352469527664168858, guid: cf6a955fa67946a478d5fad34871c0ca,
-    type: 3}
   addHight: 8
 --- !u!95 &5817277119277424925
 Animator:
