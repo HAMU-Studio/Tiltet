@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 //using System.Diagnostics;
 using UnityEngine;
+using TMPro;
+
+public enum FIELD_TYPE
+{ 
+    GREEN,    //緑地帯
+    VOLCANIC, //火山帯
+    SNOW      //寒冷帯
+}
 
 public class EnemyManager : MonoBehaviour
 {
@@ -18,6 +26,9 @@ public class EnemyManager : MonoBehaviour
 
     [Header("敵が一回にスポーンする数")]
     private int spawnNum = 1;
+
+    [Header("フェーズ表示用テキスト")]
+    [SerializeField] TextMeshProUGUI phasesText;
 
     [Header("デバッグ用")]
     [SerializeField] private bool circleEnemyTest;
@@ -118,10 +129,12 @@ public class EnemyManager : MonoBehaviour
 
     private void CheakEnemy()
     {
-        GameObject[] enemyNum;
-        enemyNum = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] SphereNum;
+        GameObject[] EllipseNum;
+        SphereNum = GameObject.FindGameObjectsWithTag("SphereEnemy");
+        EllipseNum = GameObject.FindGameObjectsWithTag("EllipseNum");
 
-        if (spawnLimit <= enemyNum.Length)
+        if (spawnLimit <= SphereNum.Length)
         {
             ableSpawn = false;
         }
@@ -141,6 +154,7 @@ public class EnemyManager : MonoBehaviour
             start = true;
         }
     }
+
 
     private void CircleEnemySpawn()
     {
