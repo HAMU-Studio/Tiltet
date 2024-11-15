@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StageMovement : MonoBehaviour
 {
-    public enum MovePattern
+    private enum MovePattern
     {
         None,
         Forward,    //前方
