@@ -4,108 +4,168 @@ using UnityEngine;
 
 public class StageMovement : MonoBehaviour
 {
-    public float forceMultiplier = 2.0f; // 力の倍率を設定する変数
-    public float rotationAngle = 10.0f;  // 傾ける角度
-
-    private Vector3 movementForce = Vector3.zero; // 現在の移動力を保持する変数
-    private Vector3 targetRotation = Vector3.zero; // 目標回転角度
-
-    void FixedUpdate()
+    private enum MovePattern
     {
-        // 現在の移動力に基づいて床を移動させる
-        if (movementForce != Vector3.zero)
+        None,
+        Forward,    //前方
+        Backward,   //後方
+        Left,       //左
+        FrontLeft,  //左前方
+        RearLeft,   //左後方
+        Right,      //右
+        ForntRight, //右前方
+        RearRight   //右後方
+    }
+
+    //移動パターン別で詳細数値変更可能
+    [SerializeField] private MovePattern currentPattern = MovePattern.None;
+
+    // 移動速度
+    [Header("< 方向別移動速度 >")]
+    [SerializeField] private float forward = 3f; 　
+    [SerializeField] private float backward = -3f; 
+    [SerializeField] private float left = -3f; 　　
+    [SerializeField] private float right = 3f; 　　
+
+    // 前後・左右移動の有効条件
+    // ここで設定している数値は、探査機を動かす基準角度。つまりforwardTiltMinXを５にした場合、探査機の傾きがX=５度以上になると前方移動を有効化する仕組み。
+    [Header("< 前後・左右移動の有効条件角度 >\n例）forwardTiltMinXが5以上で前方移動")]
+    [SerializeField] private float forwardTiltX = 5f;　　// 前方移動の有効条件数値
+    [SerializeField] private float backwardTiltX = -5f;  // 後方移動
+    [SerializeField] private float leftTiltZ = 5f;       // 左移動
+    [SerializeField] private float rightTiltZ = -5f;     // 右移動
+
+    // 左前方・左後方移動の有効条件
+    [Header("< 左前方・左後方の有効条件角度 >\n例）frontLeftTiltMinが5以上かつ、referenceLeftTiltMinが5以上なら左前移動")]
+    [SerializeField] private float frontLeftTilt = 5f;      // 左前方移動の有効条件数値
+    [SerializeField] private float rearLeftTilt = -5f;　　　// 左後方移動
+    [SerializeField] private float standardLeftTilt = 5f;   // 左前方・左後方移動における左移動の基準有効条件数値
+
+    // 右前方・右後方移動の有効条件
+    [Header("< 右前方・右後方の有効条件角度 >\n例）frontRightTiltMinが5以上かつ、referenceRightTiltMinが-5以下なら左前移動")]
+    [SerializeField] private float frontRightTilt = 5f;      // 右前方移動の有効条件数値
+    [SerializeField] private float rearRightTilt = -5f;      // 右後方移動
+    [SerializeField] private float standardRightTilt = -5f;  // 右前方・右後方移動における右移動の基準有効条件数値
+
+    // 傾き範囲の振れ幅
+    // 全ての移動パターンは-7.5～7.5度以内(初期値)が有効範囲    
+    [Header("< 傾き有効範囲振れ幅 >\n例）左右移動を維持できる傾き角度の振れ幅はtiltMinX(-7.5)～tiltMaxX(7.5)以内")]
+    [SerializeField] private float tiltMinX = -7.5f; // X軸の感知する角度の最小値
+    [SerializeField] private float tiltMaxX = 7.5f;　// X軸の感知する角度の最大値
+    [SerializeField] private float tiltMinZ = -7.5f; // Z軸の感知する角度の最小値
+    [SerializeField] private float tiltMaxZ = 7.5f;  // Z軸の感知する角度の最大値
+
+    private Rigidbody m_rb;
+    private TiltControl m_tiltControl;
+
+    void Start()
+    {
+        m_rb = GetComponent<Rigidbody>();
+        m_tiltControl = GetComponent<TiltControl>();
+
+        if (m_rb == null)
         {
-            transform.Translate(movementForce * Time.fixedDeltaTime, Space.World);
-            // 目標回転角度に向けて回転する
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(targetRotation), Time.fixedDeltaTime * 2.0f);
+            Debug.LogError("Rigidbodyが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
         }
+
+        if (m_tiltControl == null)
+        {
+            Debug.LogError("TiltControlが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
+        }
+    }
+
+    void Update()
+    {
+        UpdateMovePattern();
+        ApplyMovement();
+    }
+
+    // 傾きに応じて移動パターンを更新
+    private void UpdateMovePattern()
+    {
+        float tiltX = m_tiltControl.CurrentTiltX;
+        float tiltZ = m_tiltControl.CurrentTiltZ;
+
+        // 前方移動の有効条件
+        if (tiltX >= forwardTiltX  && tiltZ > tiltMinZ && tiltZ < tiltMaxZ)
+        {
+            currentPattern = MovePattern.Forward;// 移動パターンを有効化
+        }
+        // 後方移動の有効条件
+        else if (tiltX <= backwardTiltX  && tiltZ > tiltMinZ && tiltZ < tiltMaxZ)
+        {
+            currentPattern = MovePattern.Backward;
+        }
+        // 左移動の有効条件
+        else if (tiltZ >= leftTiltZ  && tiltX > tiltMinX && tiltX < tiltMaxX)
+        {
+            currentPattern = MovePattern.Left;
+        }
+        // 左前方移動の有効条件
+        else if (tiltX >= frontLeftTilt && tiltZ >= standardLeftTilt) 
+        {
+            currentPattern = MovePattern.FrontLeft;
+        }
+        // 左後方移動の有効条件
+        else if(tiltX <= rearLeftTilt && tiltZ >= standardLeftTilt)
+        {
+            currentPattern = MovePattern.RearLeft;
+        }
+        // 右移動の有効条件
+        else if (tiltZ <= rightTiltZ  && tiltX >= tiltMinX && tiltX <= tiltMaxX)
+        {
+            currentPattern = MovePattern.Right;
+        }
+        // 右前方移動の有効条件
+        else if (tiltX >= frontRightTilt && tiltZ <= standardRightTilt)
+        {
+            currentPattern = MovePattern.ForntRight;
+        }
+        // 右後方移動の有効条件
+        else if (tiltX <= rearRightTilt && tiltZ <= standardRightTilt)
+        {
+            currentPattern = MovePattern.RearRight;
+        }
+
         else
         {
-            // 移動力がゼロの場合、回転をリセットする
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.fixedDeltaTime * 2.0f);
+            currentPattern = MovePattern.None;
         }
     }
 
-    public void AddForce(Vector3 force)
+    // 各MovePatternの動作内容
+    private void ApplyMovement()
     {
-        // 指定された方向に力を加える（倍率を適用）
-        movementForce += force * forceMultiplier;
-
-        // 移動方向に応じて回転角度を設定
-        if (force == Vector3.forward)
+        // 現在の移動パターンに基づいて探査機を動かす
+        switch (currentPattern)
         {
-            targetRotation = new Vector3(rotationAngle, 0, 0);
-        }
-        else if (force == Vector3.back)
-        {
-            targetRotation = new Vector3(-rotationAngle, 0, 0);
-        }
-        else if (force == Vector3.left)
-        {
-            targetRotation = new Vector3(0, 0, rotationAngle);
-        }
-        else if (force == Vector3.right)
-        {
-            targetRotation = new Vector3(0, 0, -rotationAngle);
-        }
-        // 他の方向の場合は、適宜調整する
-    }
-
-    public void RemoveForce(Vector3 force)
-    {
-        // 指定された方向の力を削除（倍率を適用）
-        movementForce -= force * forceMultiplier;
-
-        // 力がゼロになる場合、回転角度をリセット
-        if (movementForce == Vector3.zero)
-        {
-            targetRotation = Vector3.zero;
-        }
-    }
-
-    public void StopMoving()
-    {
-        // 力をゼロにして停止する
-        movementForce = Vector3.zero;
-        targetRotation = Vector3.zero;
-    }
-
-    public Vector3 GetCurrentMovementForce()
-    {
-        return movementForce;
-    }
-
-    public void StopMovement()
-    {
-        // StageMovement と GravitySensor の機能を停止する処理
-        StopAllCoroutines();
-        enabled = false;
-
-        // GravitySensor コンポーネントを取得して停止する
-        GravitySensor gravitySensor = GetComponent<GravitySensor>();
-        if (gravitySensor != null)
-        {
-            gravitySensor.enabled = false;
-        }
-
-        // StageのTransform.Rotationを(0,0,0)に初期化
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-
-        // RigidbodyのFreeze Positionを全てtrueにする
-        // RigidbodyのFreeze Rotationを全てtrueにする
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
-                              RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("EncountArea"))
-        {
-            StopMovement();
+            case MovePattern.Forward:
+                m_rb.velocity = new Vector3(m_rb.velocity.x, m_rb.velocity.y, forward); // 前方に移動
+                break;
+            case MovePattern.Backward:
+                m_rb.velocity = new Vector3(m_rb.velocity.x, m_rb.velocity.y, backward); // 後方に移動
+                break;
+            case MovePattern.Left:
+                m_rb.velocity = new Vector3(left, m_rb.velocity.y, m_rb.velocity.z); // 左に移動
+                break;
+            case MovePattern.FrontLeft:
+                m_rb.velocity = new Vector3(left, m_rb.velocity.y, forward); // 左前方に移動
+                break;
+            case MovePattern.RearLeft:
+                m_rb.velocity = new Vector3(left, m_rb.velocity.y, backward); // 左後方に移動
+                break;
+            case MovePattern.Right:
+                m_rb.velocity = new Vector3(right, m_rb.velocity.y, m_rb.velocity.z); // 右に移動
+                break;
+            case MovePattern.ForntRight:
+                m_rb.velocity = new Vector3(right, m_rb.velocity.y, forward); // 右前方に移動
+                break;
+            case MovePattern.RearRight:
+                m_rb.velocity = new Vector3(right, m_rb.velocity.y, backward); // 右後方に移動
+                break;
+            case MovePattern.None:
+                m_rb.velocity = Vector3.zero; // 全ての軸の速度をゼロにして静止
+                break;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -39,30 +40,37 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        isPlayerSpawn = new bool [2];
+
+        InitGame();
     }
    
     void Start()
     {
-        InitGame();
+      // StartGame();
     }
     
     private int m_life;
     private int m_wave;
-    private int m_parts;
+    private int m_mainParts;
+    private int m_subParts;
   
-    public void InitGame()
+    private void InitGame()
     {
-        Time.timeScale = 0;
+       // Time.timeScale = 0;
         m_life = initialLife;
         m_wave = initialWave;
-        m_parts = 0;
+        m_mainParts = 0;
+        m_subParts = 0;
+        isPlayerSpawn = new bool [2];
+      //  StartGame();
         //今後ScoreUIのUpdate呼び出す
     }
 
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-        InitGame();
+     //   InitGame();
         Time.timeScale = 1;
         CurrentState = GameState.Search;
     }
@@ -93,15 +101,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private Vector3 m_axis;
     private GameObject m_pivot;
+    private bool m_rescue;
     /// <summary>
     /// 振り子の方向制御用
     /// </summary>
     public Vector3 Axis
     {
-        get { return m_axis;}
+        get
+        {
+           // Debug.Log("axis = " + m_axis);
+            return m_axis;
+        }
         
         set { m_axis = value;}
     }
@@ -112,7 +124,7 @@ public class GameManager : MonoBehaviour
 
         set { m_pivot = value; }
     }
-    
+    //ステージ耐久値
     public int Life
     {
         get { return m_life;}
@@ -120,13 +132,44 @@ public class GameManager : MonoBehaviour
         set { m_life = value;}
     }
 
-    public void AddPartsNum()
+    public bool Rescue
     {
-        m_parts++;
+       get { return m_rescue; }
+       
+       set { m_rescue = value;}
     }
-    public int GetPartsNum()
+    
+    private bool[] isPlayerSpawn;
+    public bool P1Spawn
     {
-        return m_parts;
+        get { return isPlayerSpawn[0]; }
+
+        set { isPlayerSpawn[0] = value; }
+    }
+
+    public bool P2Spawn
+    {
+        get { return isPlayerSpawn[1]; }
+
+        set { isPlayerSpawn[1] = value; }
+    }
+
+    public void AddMainPartsNum()
+    {
+        m_mainParts++;
+    }
+    public int GetMainPartsNum()
+    {
+        return m_mainParts;
+    }
+
+    public void AddSubPartsNum()
+    {
+        m_subParts++;
+    }
+    public int GetSubPartsNum()
+    {
+        return m_subParts;
     }
     
     public void ChangeStageModeTo(GameState state)
@@ -143,6 +186,12 @@ public class GameManager : MonoBehaviour
         }*/
 
         //stageの移動停止と再開処理とかカメラの切り替え処理呼ぶ　ここは最悪相互参照になってもいいかも
-        
     }
+    
+    public void ResetRBVelocity(Rigidbody RB)
+    {
+        RB.velocity = Vector3.zero;
+        RB.angularVelocity = Vector3.zero;
+    }
+
 }

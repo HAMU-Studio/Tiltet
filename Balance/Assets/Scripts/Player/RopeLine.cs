@@ -8,18 +8,16 @@ public class RopeLine : MonoBehaviour
     private LineRenderer m_lineRenderer;
     private Transform m_startPoint;
     private Transform m_endPoint;
-    private RopeLine  m_ropeLine;
+  
     private void Start()
     {
-        m_ropeLine = gameObject.GetComponent<RopeLine>();
         m_startPoint = gameObject.transform;
-        m_ropeLine.enabled = false;
         m_lineRenderer = this.gameObject.GetComponent<LineRenderer>();
     }
 
     void Update()
     {
-        if (m_ropeLine.enabled)
+        if ( m_endPoint != null)
         {
             SetLinePos(m_startPoint.position, m_endPoint.position);
         }
@@ -35,13 +33,10 @@ public class RopeLine : MonoBehaviour
     public void SetEndPoint(GameObject playerInstance)
     {
         m_endPoint = playerInstance.transform;
-        m_ropeLine.enabled = true;
     }
 
     public void ResetRope()
     {
-        Debug.Log("RopeOff");
-        m_ropeLine.enabled = false;
         SetLinePos ( Vector3.zero, Vector3.zero );
         m_endPoint = null;
     }

@@ -5,83 +5,199 @@ using UnityEngine.AI;
 
 public class EnemySphere : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 0.5f;
-    [SerializeField] private bool testmove = false;
+    [Header("動くスピード")]
+    [SerializeField] private float m_moveSpeed = 1.0f;
 
-    private float[] distance;
-    private GameObject[] players;
-    private GameObject target;
-    private Rigidbody enemyRb;   
+    [Header("最低速度")]
+    [SerializeField] private float m_minSpeed = 0.1f;
 
-    Vector3 Direction = new Vector3();
+    [Header("最高速度")]
+    [SerializeField] private float m_maxSpeed = 0.2f;
+
+    [Header("踏ん張り始める角度")]
+    [SerializeField] private float m_funbariAngle = 15.0f;
+
+    private Animator anim;
+    private float[] m_distance;
+    private GameObject[] m_players;
+    private GameObject m_target;
+    private Rigidbody enemyRb;
+    private float funbariTime = 0.0f;
+    private float m_angle = 0.0f;
+
+    private bool arrived;
+    private bool brake;
+    private bool funbari;
+
+    Vector3 m_nowPos = new Vector3();
+    Vector3 m_prePosition = new Vector3();
+    Vector3 m_direction = new Vector3();
+    Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
     // Start is called before the first frame update
     void Start()
     {
-        //playerのタグがついているオブジェクトを代入
-        players = GameObject.FindGameObjectsWithTag("Player");
-
-        // players配列の長さに基づいてdistance配列を初期化
-        if (players.Length > 0)
-        {
-            distance = new float[players.Length];
-        }
-
-        enemyRb = GetComponent<Rigidbody>();
+        Set();
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(1.0f, 0, 0);
-        SearchPlayer();
-
-        // targetがnullでないことを確認
-        if (target != null)
+        if (arrived)
         {
-            //進行方向
-            Direction = (target.transform.position - transform.position).normalized;
+            m_nowPos = transform.position;
 
-            enemyRb.AddForce(Direction * moveSpeed);
+            SetMoveSpeed();
+            Funbari();
+            //Brake();
+
+            // targetがnullでないことを確認
+            if (m_target != null)
+            {
+                //進行方向
+                //方向に大きさはいらないので正規化
+                m_direction = (m_target.transform.position - transform.position).normalized;
+            }
+
+            if(funbari)
+            {
+                funbariTime += Time.deltaTime;
+
+                if (funbariTime > 1.0f)
+                {
+                    funbari = false;
+                    funbariTime = 0.0f;
+                }
+            }
         }
     }
 
     void FixedUpdate()
     {
-        if(testmove)
+        if (arrived)
         {
-            Direction =new Vector3 (0f, 0f, 5f);
-            enemyRb.AddForce(Direction);
+            /*if (funbari)
+            {
+                enemyRb.AddForce((m_stageCenter - transform.position).normalized * m_angle / 5.0f);
+            }*/
+           
+                enemyRb.AddForce(m_direction * m_moveSpeed);
+
+                Brake();
+            
         }
     }
 
-    private void SearchPlayer()
+    private void Set()
     {
-        //playerが1人もいない時
-        if (players.Length == 0)
-        {
-            players = GameObject.FindGameObjectsWithTag("Player");
-            return; 
-        }
-        //playerが1人の時
-        if (players.Length == 1)
-        {
-            players = GameObject.FindGameObjectsWithTag("Player");
-            target = players[0];
-            return;
-        }
+        arrived = false;
+        brake = false;
+        funbari = false;
 
+        //最初にこれでplayer初期化(消すな)
+        m_players = GameObject.FindGameObjectsWithTag("Player");
+
+        // players配列の長さに基づいてdistance配列を初期化
+        // どうせプレイヤーは二人なので二個で初期化
+        m_distance = new float[2];
+
+        enemyRb = GetComponent<Rigidbody>();
+        anim = gameObject.GetComponent<Animator>();
+    }
+
+    private void SetTarget()
+    {
         //距離を調査
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < m_players.Length; i++)
         {
-            distance[i] = Vector3.Distance(this.transform.position, players[i].transform.position);
+            m_distance[i] = Vector3.Distance(this.transform.position, m_players[i].transform.position);
         }
 
         //どっちのplayerのほうが近いか
-        target = players[0];
-        if (distance[1] < distance[0])
+        m_target = m_players[0];
+        if (m_distance[1] < m_distance[0])
         {
-            target = players[1];
+            m_target = m_players[1];
+        }
+    }
+    private void DebugSetTarget()
+    {
+        m_target = m_players[0];
+    }
+
+    private void SetMoveSpeed()
+    {
+        //距離の２乗が返ってくる
+        float distance = (m_stageCenter - m_target.transform.position).sqrMagnitude;
+
+        if (distance < 50)
+        {
+            m_moveSpeed = 1.0f;
+        }
+        else if (distance >= 50 && distance < 200)
+        {
+            m_moveSpeed = 2.0f;
+        }
+        else
+        {
+            m_moveSpeed = 3.0f;
+        }
+    }
+
+    private void Brake()
+    {
+        Vector3 nowPos = transform.position;
+        Vector3 enemyDirection = (nowPos - m_prePosition).normalized;
+        float speed = (nowPos - m_prePosition).magnitude;
+
+        if (speed > m_maxSpeed)
+        {
+            enemyRb.AddForce(-enemyDirection * (m_moveSpeed + 1.0f));
+        }
+
+        m_prePosition = nowPos;
+    }
+
+    private void Funbari()
+    {
+        float distance = (this.transform.position - m_stageCenter).magnitude;
+        Vector3 parallel = new Vector3(m_nowPos.x, m_stageCenter.y, m_nowPos.z);
+
+        m_angle = Vector3.Angle((parallel - m_stageCenter), (m_nowPos - m_stageCenter));
+
+        if (!funbari)
+        {
+            if (distance > 10.0f)
+            {
+                if (m_angle >= m_funbariAngle)
+                {
+                    Debug.Log("funbari");
+                    funbari = true;
+                }
+            }
+        }
+    }
+
+    //着地した時に近くにいたプレイヤーを追いかける
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (m_target == null)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                DebugSetTarget();
+               //SetTarget();
+                arrived = true;
+                m_prePosition = transform.position;
+            }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            anim.SetBool("Arrived", true);
         }
     }
 }

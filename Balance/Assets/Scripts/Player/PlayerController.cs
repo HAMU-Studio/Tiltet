@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] private Material m_material_2P = default!;
     
-    private Material m_defaultMaterial;
     [Header("ノックバックの強さ")]
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
@@ -60,16 +59,54 @@ public class PlayerController : MonoBehaviour
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
-    void Start()
+    
+    Animator animator;
+    AnimatorStateInfo stateInfo;
+    
+    [Header("Rendererがアタッチされているオブジェクト")]
+    [SerializeField] private Renderer m_playerRenderer;
+    void Awake()
     {
         m_player = GetComponent<Transform>();
         m_RB = GetComponent<Rigidbody>();
-        m_defaultMaterial = GetComponent<Renderer>().material;
+
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
-
+    
+        GetMaterialProcess();
+        
         m_PM = GetComponent<PlayerManager>();
+        
+        animator = GetComponent<Animator>();
+        animator.SetTrigger("toIdle");
+    }
+
+    /// <summary>
+    /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。->同じマテリアルだから配列必要なかった...
+    /// </summary>
+    private void GetMaterialProcess()
+    {
+        m_playerRenderer = m_playerRenderer.GetComponent<Renderer>();
+        
+        if ( m_playerRenderer != null)
+        {
+            if (m_playerRenderer.materials.Length > 1)
+            {
+              //  m_defaultMaterial = new Material[2]; 
+         
+              //  m_defaultMaterial[1] = m_playerRenderer.materials[1];
+            }
+            else 
+            {
+                Debug.LogError("Not enough materials assigned to the Renderer.");
+            }
+        } 
+        else
+        {
+            Debug.LogError("Renderer component is missing on the player object.");
+        }
+
     }
 
     private float elapsedTime;
@@ -93,7 +130,15 @@ public class PlayerController : MonoBehaviour
         {
             //PlayerFreeze();
         }
-       
+
+        if (m_PM.rescState == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            //スーパー着地
+            //   Debug.Log("Call 1");
+            SuperLanding();
+        }
+        
+        TransitionAnim();
     }
     private void FixedUpdate()
     {
@@ -112,6 +157,25 @@ public class PlayerController : MonoBehaviour
            
             DashSwitch();
         }
+    }
+
+    private float time;
+    private void TransitionAnim()
+    {
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        
+        if (m_inputMove != Vector2.zero)
+        {
+            time += Time.deltaTime;
+            animator.ResetTrigger("toIdle");           
+        }
+        else if (m_inputMove == Vector2.zero && stateInfo.IsName("Walk_01"))
+        {
+            time = 0f;
+            animator.SetTrigger("toIdle"); 
+        }
+        animator.SetFloat("time", (float)time);
+
     }
 
     public void  PlayerMoveInput(InputAction.CallbackContext context)
@@ -143,12 +207,18 @@ public class PlayerController : MonoBehaviour
         //落下中と攻撃中はジャンプをさせない
         if (isJumping|| canMove == false || isKnockBack) return;  
 
-        
+        if (m_RB == null)
+        {
+            Debug.Log("RB is null");
+            //Start();
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
             
             //ジャンプする直前の加速度加えて慣性を表現
+            
             m_RB.AddForce(m_RB.velocity.normalized, ForceMode.Impulse);
             
             //ジャンプ
@@ -164,24 +234,46 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            if (m_PM == null)
+            {
+                //Start();
+                Debug.Log("PM is null");
+                m_PM = GetComponent<PlayerManager>();
+            }
 
-            if (m_PM.RescueState == RescueState.Fly)
+            if (m_PM.rescState == RescueState.Fly)
             {
                 //スーパー着地
              //   Debug.Log("Call 1");
                 SuperLanding();
-                m_PM.RescueState = RescueState.SuperLand;
+                m_PM.rescState = RescueState.SuperLand;
             }
             if (canRescueAct)
             {
                 m_rescueCube.GetComponent<Rescue>().StartRescue();
                 canRescueAct = false;
             }
+            // CMSwitchを探し、プレイヤーが接触しているか確認する処理
+            CMSwitch[] switches = FindObjectsOfType<CMSwitch>();
+            foreach (var cmswitch in switches)
+            {
+                if (cmswitch.IsPlayerInContact())
+                {
+                    cmswitch.SetSwitchPressed(true); // スイッチを押す
+                }
+            }
         }
     }
     [SerializeField] private Vector3 scalePow;
     private void SuperLanding()
     {
+        if (CanSuperLand() == false)
+        {
+            Debug.Log("CanSuperLand = false");
+            return;
+        }
+            
+        
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
         
@@ -193,7 +285,7 @@ public class PlayerController : MonoBehaviour
     {   //落下速度の調整用
        
         //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
-        if (canMove == false || m_PM.RescueState != RescueState.None)
+        if (canMove == false || m_PM.rescState != RescueState.None)
             return;
         
         if (isKnockBack == false)
@@ -213,26 +305,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isFleezing)
         {
-            //このfreezePosを救出時に利用したい
-           // freezePos = transform.position;
-          
-            /*m_Rigidbody.angularVelocity = Vector3.zero;
-            m_Rigidbody.velocity = Vector3.zero;*/
-            
             canMove = false;
             this.isFleezing = true;
         }
         else
         {
             this.isFleezing = false;
-           // canMove = true; これを着地終了時に呼ぶ
         }
-    }
-
-    private Vector3 freezePos;
-    private void PlayerFreeze()
-    {
-       // transform.position = freezePos;
     }
         
     private bool isChanged;
@@ -247,10 +326,11 @@ public class PlayerController : MonoBehaviour
                 canMove = true;
                 //Debug.Log("toLanding" );
                 
-                if (m_PM.RescueState == RescueState.Fly ||
-                    m_PM.RescueState == RescueState.SuperLand)
+                if (m_PM.rescState == RescueState.Fly ||
+                    m_PM.rescState == RescueState.SuperLand)
                 {
-                    m_PM.RescueState = RescueState.None;
+                    m_PM.rescState = RescueState.None;
+                 //   Debug.Log("pm = " + m_PM.State);
                 }
             }
         }
@@ -262,6 +342,15 @@ public class PlayerController : MonoBehaviour
         
         if (isChanged)
             return;
+        
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            StageManager _stageManager = collision.gameObject.GetComponent<StageManager>();
+          
+            _stageManager.SetToStageChild(gameObject);
+            //_stageManager.CounterScaleCalc(gameObject);
+            isChanged = true;
+        }
     }
 
     /// <summary>
@@ -280,7 +369,8 @@ public class PlayerController : MonoBehaviour
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
-            GetComponent<Renderer>().material = m_defaultMaterial;
+            //今後マテリアルの変更ではなくエフェクト再生に変更
+        
             m_moveSpeed = walkSpeed;
             isResetTrigger_L = true;
             isDashing = false;
@@ -290,10 +380,36 @@ public class PlayerController : MonoBehaviour
 
         if (m_inputTrigger_L  > triggerTiming)  
         {
-            GetComponent<Renderer>().material = m_dashMaterial;
+            //ダッシュ時はマテリアルを変更->エフェクトを発生させたい
+           // m_playerRenderer.material = m_dashMaterial;
+           
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
+        }
+    }
+
+    private RaycastHit RaycastDown(int maxDistance)
+    {
+        m_ray = new Ray(m_player.position, -transform.up * maxDistance);
+        Physics.Raycast(m_ray, out m_hit, maxDistance);
+       // Debug.DrawRay(m_player.position, -transform.up * maxDistance, Color.red);
+
+        return m_hit;
+    }
+
+    private bool CanSuperLand()
+    {
+        RaycastHit _hit =  RaycastDown(50);
+
+        if (_hit.collider.gameObject.CompareTag("Ground"))
+        {
+            m_PM.SlipThroughOff();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -303,11 +419,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 GetNormal(Vector3　moveForward)
     {
         //プレイヤーの真下方向にRayを飛ばす
-        m_ray = new Ray(m_player.position, -transform.up);
-        Physics.Raycast(m_ray, out m_hit, 2);
+        RaycastHit _hit = RaycastDown(2);
         //平面に投影したいベクトルmoveForwardとrayを飛ばして取得した平面の法線ベクトルから
         //平面に沿ったベクトルを計算
-        return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
+        return Vector3.ProjectOnPlane(moveForward, _hit.normal);
     }
 
     void KnockBack(Collision collision)
@@ -418,8 +533,13 @@ public class PlayerController : MonoBehaviour
       
         if (index == 0)
         {
-            m_defaultMaterial = m_material_2P;
-            GetComponent<Renderer>().material = m_material_2P;
+          // Debug.Log("beforeMat = " + m_playerRenderer.sharedMaterials[0]);
+            Material[] newMaterials = m_playerRenderer.sharedMaterials;
+            //newMaterials[0] = m_material_2P;
+            newMaterials[1] = m_material_2P;
+            m_playerRenderer.sharedMaterials = newMaterials;
+            
+         //   Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
         }
     }
 
