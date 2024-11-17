@@ -27,18 +27,23 @@ public class JointManager : MonoBehaviour
         m_RB.freezeRotation = false;
 
         AddJoint();
-        SetSpring();
+     //   SetSpring();
         SetPivot();
         
         //この値によって挙動が変わってしまう。要注意 ->AutoConnectedAnchorだから関係ないかも
-       // m_hingeJoint.anchor = new Vector3(0f, m_hingeJoint.connectedBody.position.y, 0f);
-        m_hingeJoint.anchor = m_hingeJoint.connectedAnchor;
+
+        float temp = Vector3.Distance(m_hingeJoint.connectedBody.position, transform.position);  
+        Debug.Log(" tmp = " + temp);
+        m_hingeJoint.anchor = new Vector3(0f, temp, 0f);
+        //m_hingeJoint.anchor = m_hingeJoint.connectedAnchor;
+        m_hingeJoint.autoConfigureConnectedAnchor = false;
+        m_hingeJoint.connectedAnchor = Vector3.zero;
         SetLimit();
 
-        m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
+        /*m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
       //  m_springJoint.anchor = new Vector3(0f, m_springJoint.connectedBody.position.y, 0f);
         m_springJoint.spring = 30f;
-        m_springJoint.damper = 0.2f;
+        m_springJoint.damper = 0.2f;*/
        
         //GameManagerのAxisは二点間のベクトル、それを軸とすると手前側と奥側の挙動がおかしくなる
         Vector3 velocity = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
@@ -71,10 +76,10 @@ public class JointManager : MonoBehaviour
         //Debug.Log("state = " + GameManager.instance.RescueState);
         
         gameObject.AddComponent<HingeJoint>();
-        gameObject.AddComponent<SpringJoint>();
+       // gameObject.AddComponent<SpringJoint>();
         
         m_hingeJoint  = GetComponent<HingeJoint>();
-        m_springJoint = GetComponent<SpringJoint>();
+       // m_springJoint = GetComponent<SpringJoint>();
     }
 
     private void JointOff()
@@ -82,7 +87,7 @@ public class JointManager : MonoBehaviour
         m_hingeJoint = GetComponent<HingeJoint>();
         
         Destroy(m_hingeJoint);
-        Destroy(m_springJoint);
+      //  Destroy(m_springJoint);
         
         GameManager.instance.ResetRBVelocity(m_RB);
         
@@ -110,7 +115,7 @@ public class JointManager : MonoBehaviour
         
         m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
      
-        m_hingeJoint.axis = Vector3.zero;
+        m_hingeJoint.axis = Vector3.right;
     }
     
     private void GetPlayerManager()
