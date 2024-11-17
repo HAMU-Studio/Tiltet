@@ -160,11 +160,15 @@ public class PlayerController : MonoBehaviour
             DashSwitch();
         }
 
-        if (isChanged)
+        if (GameManager.instance.P1Spawn )
         {
-             m_RB.transform.position += m_stageManager.MovementAmount;
-            //m_RB.
-
+            if (isChanged)
+            {
+                //  m_RB.position += m_stageManager.MovementAmount;
+                Vector3 movementAmount = m_RB.position + m_stageManager.MovementAmount;
+                movementAmount = Vector3.Scale(movementAmount, new Vector3(1, 0, 1));
+                m_RB.MovePosition(movementAmount);
+            }
         }
     }
 
