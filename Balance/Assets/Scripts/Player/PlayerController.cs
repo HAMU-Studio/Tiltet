@@ -65,6 +65,8 @@ public class PlayerController : MonoBehaviour
     
     [Header("Rendererがアタッチされているオブジェクト")]
     [SerializeField] private Renderer m_playerRenderer;
+
+    private StageManager m_stageManager;
     void Awake()
     {
         m_player = GetComponent<Transform>();
@@ -156,6 +158,17 @@ public class PlayerController : MonoBehaviour
             }
            
             DashSwitch();
+        }
+
+        if (GameManager.instance.P1Spawn )
+        {
+            if (isChanged)
+            {
+                //  m_RB.position += m_stageManager.MovementAmount;
+                Vector3 movementAmount = m_RB.position + m_stageManager.MovementAmount;
+                movementAmount = Vector3.Scale(movementAmount, new Vector3(1, 0, 1));
+                m_RB.MovePosition(movementAmount);
+            }
         }
     }
 
@@ -335,7 +348,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("SphereEnemy") || collision.gameObject.CompareTag("EllipseEnemy"))
         {
             KnockBack(collision);
         }
@@ -345,9 +358,9 @@ public class PlayerController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Ground"))
         {
-            StageManager _stageManager = collision.gameObject.GetComponent<StageManager>();
+            m_stageManager = collision.gameObject.GetComponent<StageManager>();
           
-            _stageManager.SetToStageChild(gameObject);
+          //  _stageManager.SetToStageChild(gameObject);
             //_stageManager.CounterScaleCalc(gameObject);
             isChanged = true;
         }
