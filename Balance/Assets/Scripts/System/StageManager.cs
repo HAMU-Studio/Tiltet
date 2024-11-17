@@ -7,46 +7,45 @@ using UnityEngine.Serialization;
 public class StageManager : MonoBehaviour
 {
    // [SerializeField] private GameObject[] walls;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-  
-    private void OnCollisionEnter(Collision other)
-    {
-      
-        
-        /*if (other.gameObject.CompareTag("Player"))
-        {
-            SetToStageChild(other.gameObject);
-        }*/
-    }
+   private Vector3 m_beforePos;
+   private Vector3 m_currentPos;
 
-    [SerializeField] private float scaleSize;
+   private Vector3 m_movementAmount;
+
+   private void Start()
+   {
+       m_currentPos = transform.position;
+       m_beforePos = transform.position;
+   }
+
+   public Vector3 MovementAmount
+   {
+       get { return m_movementAmount; }
+   }
+
+   private void FixedUpdate()
+   {
+       m_currentPos = transform.position;
+
+       m_movementAmount = (m_currentPos - m_beforePos);
+
+       m_beforePos = transform.position;
+   }
+
+
+   [SerializeField] private float scaleSize;
  //   [SerializeField] private GameObject SetPos;
     public void SetToStageChild(GameObject obj)
     {
        
-        //親子付けしてもステージの移動に置いて行かれるからサイズとスピード変更
+     
         // Vector3.Scale(obj.transform.localScale, new Vector3(scaleSize, scaleSize, scaleSize));
         Debug.Log("callChange");
-        
-        
-     //   obj.transform.localScale =  new Vector3(0.02f, 0.02f, 0.02f);
-       // obj.transform.localScale =  new Vector3(scaleSize, scaleSize, scaleSize);
+
        
         //子オブジェクトのtransform.parentに親にしたいオブジェクトのtransformを代入
         obj.transform.parent = this.transform;
-       
-        //new Vector3(0.07f, 4.23f, 0.07f);
        
     }
 }
