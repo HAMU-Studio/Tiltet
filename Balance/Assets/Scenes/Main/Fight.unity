@@ -1017,11 +1017,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a4bf07aacafcc40a73f997611293e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Resilience: 10
-  MinXRotation: -30
-  MaxXRotation: 30
-  MinZRotation: -30
-  MaxZRotation: 30
+  maxTiltAngleX: 30
+  maxTiltAngleZ: 30
+  restoringForce: 10
 --- !u!4 &95382341 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -1585,8 +1583,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!1001 &276731012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1915,12 +1911,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage: {fileID: 0}
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnPositionNum: 4
   spawnLimit: 2
+  phasesText: {fileID: 0}
+  circleEnemyTest: 0
+  ellipseEnemyTest: 0
 --- !u!4 &375099181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -4018,6 +4015,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7249596636241904843, guid: c8f224c03cfbf7240b1e27d4ec98507b,
+        type: 3}
+      propertyPath: _playerController
+      value: 
+      objectReference: {fileID: 2630224644554453943, guid: 387c3324f5c92504aa284020bc0f3887,
+        type: 3}
+    - target: {fileID: 7249596636241904843, guid: c8f224c03cfbf7240b1e27d4ec98507b,
+        type: 3}
+      propertyPath: m_defaultMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 42a87e62f2738c94c94650068b296b06, type: 2}
     - target: {fileID: 7249596636241904844, guid: c8f224c03cfbf7240b1e27d4ec98507b,
         type: 3}
       propertyPath: m_Name
@@ -4027,7 +4035,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_PlayerPrefab
       value: 
-      objectReference: {fileID: 2530105368876131897, guid: 02f9918b3cea88241830e1ca2c4dd97b,
+      objectReference: {fileID: 4567397155698116036, guid: 387c3324f5c92504aa284020bc0f3887,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8f224c03cfbf7240b1e27d4ec98507b, type: 3}
@@ -4515,8 +4523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!4 &986210588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7942528409053613139, guid: 7c6cb345f8f5da644ad0094aab516b6b,
@@ -7482,8 +7488,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceMultiplier: 1
-  rotationAngle: 10
+  currentPattern: 0
+  forward: 3
+  backward: -3
+  left: -3
+  right: 3
+  forwardTiltX: 5
+  backwardTiltX: -5
+  leftTiltZ: 5
+  rightTiltZ: -5
+  frontLeftTilt: 5
+  rearLeftTilt: -5
+  standardLeftTilt: 5
+  frontRightTilt: 5
+  rearRightTilt: -5
+  standardRightTilt: -5
+  tiltMinX: -7.5
+  tiltMaxX: 7.5
+  tiltMinZ: -7.5
+  tiltMaxZ: 7.5
 --- !u!4 &1376594452 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -8782,8 +8805,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!1 &1586126056
 GameObject:
   m_ObjectHideFlags: 0
@@ -8948,7 +8969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage: {fileID: 0}
   enemys:
   - {fileID: 7359282681462766789, guid: a81489aaec5607e438714e971a569d75, type: 3}
   - {fileID: 1654121995944958511, guid: 4749abd0e06658c45bb95db8f1640ddc, type: 3}
@@ -8958,8 +8978,10 @@ MonoBehaviour:
   - {fileID: 1042376086}
   - {fileID: 437129183}
   spawnInterval: 3
-  spawnPositionNum: 4
   spawnLimit: 2
+  phasesText: {fileID: 0}
+  circleEnemyTest: 0
+  ellipseEnemyTest: 0
 --- !u!4 &1648347495
 Transform:
   m_ObjectHideFlags: 0
@@ -10254,6 +10276,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1402511453}
     m_Modifications:
+    - target: {fileID: 1843725117, guid: 8873c4bd252db2144a710e859b466650, type: 3}
+      propertyPath: P1mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 42a87e62f2738c94c94650068b296b06, type: 2}
+    - target: {fileID: 1843725117, guid: 8873c4bd252db2144a710e859b466650, type: 3}
+      propertyPath: P2mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 5f55b73e7f39aaf49b7ec3214e752548, type: 2}
     - target: {fileID: 1843725117, guid: 8873c4bd252db2144a710e859b466650, type: 3}
       propertyPath: P1Spawn
       value: 
@@ -11886,8 +11916,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c69b6f6266ab9d4082e87dddf1344f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorType: 0
-  stage: {fileID: 0}
 --- !u!1001 &2101510480
 PrefabInstance:
   m_ObjectHideFlags: 0
