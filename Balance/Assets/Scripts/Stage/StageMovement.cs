@@ -74,10 +74,11 @@ public class StageMovement : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateMovePattern();
         ApplyMovement();
+        Debug.Log(m_rb.velocity);
     }
 
     // 傾きに応じて移動パターンを更新

@@ -110,7 +110,7 @@ public class TiltControl : MonoBehaviour
             // 接触したオブジェクトの質量を取得
             contactMass = otherRb.mass;
             isContacting = true; // 接触状態を記録
-            Debug.Log("接触開始: 質量 " + contactMass);
+          //  Debug.Log("接触開始: 質量 " + contactMass);
         }
     }
 
@@ -132,6 +132,6 @@ public class TiltControl : MonoBehaviour
         // 接触が終わったので質量をリセット
         contactMass = 0f;
         isContacting = false;
-        Debug.Log("接触終了");
+      //  Debug.Log("接触終了");
     }
 }

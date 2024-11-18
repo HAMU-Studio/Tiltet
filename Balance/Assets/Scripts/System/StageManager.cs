@@ -13,7 +13,7 @@ public class StageManager : MonoBehaviour
 
    private void Start()
    {
-       m_currentPos = transform.position;
+     //  m_currentPos = transform.position;
        m_beforePos = transform.position;
    }
 
@@ -26,6 +26,11 @@ public class StageManager : MonoBehaviour
    private void FixedUpdate()
    {
        SetAircraftMovementAmount();
+   }
+
+   private void Update()
+   {
+     
    }
 
    /// <summary>

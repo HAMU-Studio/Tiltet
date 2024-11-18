@@ -163,7 +163,8 @@ public class PlayerController : MonoBehaviour
         if (isChanged)
         {
             Vector3 movementAmount = m_RB.position + m_stageManager.MovementAmount;
-            m_RB.MovePosition(movementAmount);
+           // m_RB.MovePosition(movementAmount);
+           m_RB.position = movementAmount;
         }
     }
 
