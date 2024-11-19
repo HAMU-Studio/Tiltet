@@ -7715,7 +7715,7 @@ PrefabInstance:
     - target: {fileID: 14537070572405698, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 14537070572405702, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
@@ -10067,17 +10067,17 @@ PrefabInstance:
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.000000008492101
+      value: 0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0000000013780784
+      value: 0.0000000013780783
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018225
+      value: -0.16018224
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
@@ -10092,27 +10092,77 @@ PrefabInstance:
     - target: {fileID: 7460071965275837817, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_AngularDrag
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: left
-      value: -10
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: right
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: forward
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: backward
-      value: -10
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: tiltMaxX
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: tiltMaxZ
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: tiltMinX
+      value: -6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: tiltMinZ
+      value: -6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: rearLeftTilt
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: frontLeftTilt
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: rearRightTilt
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: frontRightTilt
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: standardLeftTilt
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: standardRightTilt
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}

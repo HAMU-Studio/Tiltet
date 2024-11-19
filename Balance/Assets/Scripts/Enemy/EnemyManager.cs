@@ -39,6 +39,7 @@ public class EnemyManager : MonoBehaviour
     public Vector3 maxPos { get; set; }
 
     private float spawnTime;
+    private int m_EnemyNum = 0;
 
     //敵の数検知
     private bool ableSpawn;
@@ -64,7 +65,7 @@ public class EnemyManager : MonoBehaviour
 
         if (start)
         {
-            CheakEnemy();
+            CircleCheckEnemy();
             
             if(ableSpawn)
             {
@@ -91,6 +92,10 @@ public class EnemyManager : MonoBehaviour
                     spawnTime = 0;
                 }
             }
+        }
+        else
+        {
+            CheckPlayer();
         }
     }
 
@@ -127,12 +132,10 @@ public class EnemyManager : MonoBehaviour
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
-    private void CheakEnemy()
+    private void CircleCheckEnemy()
     {
         GameObject[] SphereNum;
-        GameObject[] EllipseNum;
         SphereNum = GameObject.FindGameObjectsWithTag("SphereEnemy");
-        EllipseNum = GameObject.FindGameObjectsWithTag("EllipseNum");
 
         if (spawnLimit <= SphereNum.Length)
         {
@@ -143,8 +146,15 @@ public class EnemyManager : MonoBehaviour
             ableSpawn = true;
         }
     }
+    private void CheckEllipseEnemy()
+    {
+        GameObject[] EllipseNum;
+        EllipseNum = GameObject.FindGameObjectsWithTag("EllipseEnemy");
 
-    private void CheakPlayer()
+
+    }
+
+    private void CheckPlayer()
     {
         GameObject[] players;
         players = GameObject.FindGameObjectsWithTag("Player");
@@ -154,7 +164,6 @@ public class EnemyManager : MonoBehaviour
             start = true;
         }
     }
-
 
     private void CircleEnemySpawn()
     {
