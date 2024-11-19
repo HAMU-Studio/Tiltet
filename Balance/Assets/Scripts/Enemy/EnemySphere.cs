@@ -17,6 +17,8 @@ public class EnemySphere : MonoBehaviour
     [Header("踏ん張り始める角度")]
     [SerializeField] private float m_funbariAngle = 15.0f;
 
+    [SerializeField] private GameObject[] home; 
+
     private Animator anim;
     private float[] m_distance;
     private GameObject[] m_players;
@@ -26,6 +28,8 @@ public class EnemySphere : MonoBehaviour
     private float m_angle = 0.0f;
 
     private bool arrived;
+    private bool life;
+    private bool escape;
     private bool brake;
     private bool funbari;
 
@@ -43,54 +47,76 @@ public class EnemySphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (arrived)
+        if (life)
         {
-            m_nowPos = transform.position;
-
-            SetMoveSpeed();
-            Funbari();
-            //Brake();
-
-            // targetがnullでないことを確認
-            if (m_target != null)
+            if (arrived)
             {
-                //進行方向
-                //方向に大きさはいらないので正規化
-                m_direction = (m_target.transform.position - transform.position).normalized;
-            }
+                m_nowPos = transform.position;
 
-            if(funbari)
-            {
-                funbariTime += Time.deltaTime;
+                SetMoveSpeed();
+                Funbari();
+                //Brake();
 
-                if (funbariTime > 1.0f)
+                // targetがnullでないことを確認
+                if (m_target != null)
                 {
-                    funbari = false;
-                    funbariTime = 0.0f;
+                    //進行方向
+                    //方向に大きさはいらないので正規化
+                    m_direction = (m_target.transform.position - transform.position).normalized;
                 }
+
+                if (funbari)
+                {
+                    funbariTime += Time.deltaTime;
+
+                    if (funbariTime > 1.0f)
+                    {
+                        funbari = false;
+                        funbariTime = 0.0f;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(escape)
+            {
+                m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
             }
         }
     }
 
     void FixedUpdate()
     {
-        if (arrived)
+        if (life)
         {
-            /*if (funbari)
+            if (arrived)
             {
-                enemyRb.AddForce((m_stageCenter - transform.position).normalized * m_angle / 5.0f);
-            }*/
-           
+                /*if (funbari)
+                {
+                    enemyRb.AddForce((m_stageCenter - transform.position).normalized * m_angle / 5.0f);
+                }*/
+
                 enemyRb.AddForce(m_direction * m_moveSpeed);
 
                 Brake();
-            
+
+            }
+        }
+        else
+        {
+            if (escape)
+            {
+                enemyRb.AddForce(m_direction * m_moveSpeed);
+            }
         }
     }
 
     private void Set()
     {
         arrived = false;
+        life = true;
+        escape= false;
         brake = false;
         funbari = false;
 
@@ -110,7 +136,7 @@ public class EnemySphere : MonoBehaviour
         //距離を調査
         for (int i = 0; i < m_players.Length; i++)
         {
-            m_distance[i] = Vector3.Distance(this.transform.position, m_players[i].transform.position);
+            m_distance[i] = Vector3.Distance(transform.position, m_players[i].transform.position);
         }
 
         //どっちのplayerのほうが近いか
@@ -152,7 +178,7 @@ public class EnemySphere : MonoBehaviour
 
         if (speed > m_maxSpeed)
         {
-            enemyRb.AddForce(-enemyDirection * (m_moveSpeed + 1.0f));
+            enemyRb.AddForce(-enemyDirection * (m_moveSpeed + 1.5f));
         }
 
         m_prePosition = nowPos;
@@ -191,6 +217,14 @@ public class EnemySphere : MonoBehaviour
                 m_prePosition = transform.position;
             }
         }
+
+        if(collision.gameObject.CompareTag("Terrain"))
+        {
+            if(!life)
+            {
+                escape = true;
+            }
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -198,6 +232,14 @@ public class EnemySphere : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             anim.SetBool("Arrived", true);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            life = false;
         }
     }
 }
