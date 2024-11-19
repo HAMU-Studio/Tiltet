@@ -159,6 +159,18 @@ public class Rescue : MonoBehaviour
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
+    private float yVelocity = 0.0f;
+    private void WireDirection()
+    {
+        Vector3 direction = transform.position - rescuedPlayer.transform.position;
+
+        float targetRotation = Mathf.Atan2(this.direction.x, direction.z) * Mathf.Rad2Deg;
+
+        float rotation = Mathf.SmoothDampAngle(rescuedPlayer.transform.eulerAngles.y, -targetRotation, ref yVelocity, 0.3f);
+        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        m_PM.TailBase.transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+    }
+
     private bool once;
     private void Update()
     {

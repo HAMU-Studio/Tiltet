@@ -244,7 +244,6 @@ public class PlayerController : MonoBehaviour
         {
             if (m_PM == null)
             {
-                //Start();
                 Debug.Log("PM is null");
                 m_PM = GetComponent<PlayerManager>();
             }
@@ -252,7 +251,6 @@ public class PlayerController : MonoBehaviour
             if (m_PM.rescState == RescueState.Fly)
             {
                 //スーパー着地
-             //   Debug.Log("Call 1");
                 SuperLanding();
                 m_PM.rescState = RescueState.SuperLand;
             }
@@ -559,18 +557,6 @@ public class PlayerController : MonoBehaviour
             m_playerRenderer.sharedMaterials = newMaterials;
             
          //   Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
-        }
-    }
-
-    public void ChangePlayerCanMove(bool canMove)
-    {
-        if (canMove)
-        {
-            this.canMove = true;
-        }
-        else
-        {
-            this.canMove = false;
         }
     }
 }

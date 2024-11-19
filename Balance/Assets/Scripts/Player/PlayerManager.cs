@@ -20,17 +20,15 @@ public enum RescueState
     SuperLand
 }
 
-public enum PlayerAnimState
-{
-    None,
-    Idle,
-    Walk,
-}
-
 public class PlayerManager : MonoBehaviour
 {
+    private Animator m_animator;
+    private AnimatorStateInfo m_animState;
+    
     private RescueState rescCurrentState;
 
+    [Header("しっぽの付け根オブジェクト")]
+    [SerializeField] private GameObject tailBase;
    // private PlayerAnimState animCurrenState;
     
     public RescueState rescState
@@ -38,17 +36,28 @@ public class PlayerManager : MonoBehaviour
         set { rescCurrentState = value; }
         get { return rescCurrentState; }
     }
-
-    /*public PlayerAnimState AnimState
+    
+    public AnimatorStateInfo AnimState
     {
-        set { animCurrenState = value; }
+        set { m_animState = value; }
 
-        get { return animCurrenState; }
-    }*/
+        get { return m_animState; }
+    }
+
+    public GameObject TailBase
+    {
+        get { return tailBase; }
+    }
 
     private void Start()
     {
         m_beforeState = rescCurrentState;
+        m_animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        m_animState = m_animator.GetCurrentAnimatorStateInfo(0);
     }
 
     private void FixedUpdate()
@@ -68,6 +77,8 @@ public class PlayerManager : MonoBehaviour
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
+            m_animator.Play("Wire");
+            
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)

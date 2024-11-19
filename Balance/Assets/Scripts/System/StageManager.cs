@@ -11,10 +11,13 @@ public class StageManager : MonoBehaviour
 
    private Vector3 m_movementAmount;
 
+   private Rigidbody m_rb;
+
    private void Start()
    {
        m_currentPos = transform.position;
        m_beforePos = transform.position;
+       m_rb = GetComponent<Rigidbody>();
    }
 
    
@@ -33,11 +36,11 @@ public class StageManager : MonoBehaviour
    /// </summary>
    private void SetAircraftMovementAmount()
    {
-       m_currentPos = transform.position;
+       m_currentPos = m_rb.position;
 
        m_movementAmount = (m_currentPos - m_beforePos);
 
-       m_beforePos = transform.position;
+       m_beforePos = m_rb.position;
    }
 
     public void SetToStageChild(GameObject obj)
