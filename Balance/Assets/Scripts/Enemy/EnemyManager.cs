@@ -93,6 +93,10 @@ public class EnemyManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            CheckPlayer();
+        }
     }
 
     private void Set()
