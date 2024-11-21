@@ -13,7 +13,7 @@ public class StageMovement : MonoBehaviour
         FrontLeft,  //左前方
         RearLeft,   //左後方
         Right,      //右
-        ForntRight, //右前方
+        FrontRight, //右前方
         RearRight   //右後方
     }
 
@@ -74,7 +74,7 @@ public class StageMovement : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateMovePattern();
         ApplyMovement();
@@ -119,7 +119,7 @@ public class StageMovement : MonoBehaviour
         // 右前方移動の有効条件
         else if (tiltX >= frontRightTilt && tiltZ <= standardRightTilt)
         {
-            currentPattern = MovePattern.ForntRight;
+            currentPattern = MovePattern.FrontRight;
         }
         // 右後方移動の有効条件
         else if (tiltX <= rearRightTilt && tiltZ <= standardRightTilt)
@@ -136,6 +136,9 @@ public class StageMovement : MonoBehaviour
     // 各MovePatternの動作内容
     private void ApplyMovement()
     {
+        // 変更前の速度を保持
+        //Vector3 previousVelocity = m_rb.velocity; 
+
         // 現在の移動パターンに基づいて探査機を動かす
         switch (currentPattern)
         {
@@ -157,7 +160,7 @@ public class StageMovement : MonoBehaviour
             case MovePattern.Right:
                 m_rb.velocity = new Vector3(right, m_rb.velocity.y, m_rb.velocity.z); // 右に移動
                 break;
-            case MovePattern.ForntRight:
+            case MovePattern.FrontRight:
                 m_rb.velocity = new Vector3(right, m_rb.velocity.y, forward); // 右前方に移動
                 break;
             case MovePattern.RearRight:
@@ -167,5 +170,11 @@ public class StageMovement : MonoBehaviour
                 m_rb.velocity = Vector3.zero; // 全ての軸の速度をゼロにして静止
                 break;
         }
+
+        // デバッグログを表示
+        /*if (m_rb.velocity != previousVelocity)
+        {
+            Debug.Log($"Velocity changed: 変更前 {previousVelocity}, 変更後 {m_rb.velocity}");
+        }*/
     }
 }
