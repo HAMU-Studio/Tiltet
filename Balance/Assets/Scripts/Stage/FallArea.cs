@@ -82,17 +82,15 @@ public class FallArea : MonoBehaviour
         if (m_PM.rescState != RescueState.None)
             return;
      
-        m_PM.rescState = RescueState.Wait;
+        // m_PM.rescState = RescueState.Wait;
+        m_PM.rescState = RescueState.Fall;
         CalcShortestDist();
-      //  Debug.Log("state is " + m_PM.State);
-        JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
-        jointManager.SetJointAndLine();
     }
 
     private void SetFallInstance(Collider col)
     {
         fallPlayerInstance = col.gameObject;
-        Debug.Log("FPI = " + fallPlayerInstance);
+      //  Debug.Log("FPI = " + fallPlayerInstance);
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
     }
@@ -134,8 +132,9 @@ public class FallArea : MonoBehaviour
         
         childPivot.GetComponent<RopeLine>().SetEndPoint(fallPlayerInstance);
         
-        GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
-        
+      //  GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
+      //ためしにaxis落下時の加速度保存してみる
+      GameManager.instance.Axis = fallPlayerInstance.GetComponent<Rigidbody>().velocity;
         //最短距離のオブジェクトだけon
         shortestDistArea.GetComponent<Renderer>().enabled = true;
         shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);

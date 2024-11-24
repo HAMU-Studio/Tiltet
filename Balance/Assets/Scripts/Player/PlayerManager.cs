@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +12,7 @@ public enum RescueState
     //紐を無くすタイミングのためThrowingとFlyに分ける
     //飛ばす直前の位置に移動させるためMove追加
     None,
+    Fall,
     Wait,
     Move,
     Fly,
@@ -71,14 +70,18 @@ public class PlayerManager : MonoBehaviour
     private RescueState m_beforeState;
     private void OnStateChange()
     {
-       // Debug.Log("state change " + m_beforeState + "->" + currentState);
-        
-        if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
+        // Debug.Log("state change " + m_beforeState + "->" + currentState);
+
+        if (m_beforeState == RescueState.Fall && rescCurrentState == RescueState.Wait)
+        {
+           SetJoint();
+        }
+       
+        if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Fall)
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
             m_animator.Play("Wire");
-            
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
@@ -101,10 +104,15 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
         {
             //飛んだらレイヤーですり抜けon
-           SlipThroughOn();
+            SlipThroughOn();
          
         }
         m_beforeState = rescCurrentState;
+    }
+    private void SetJoint()
+    {
+        JointManager jointManager = GetComponent<JointManager>();
+        jointManager.SetJointAndLine();
     }
     
     /// <summary>

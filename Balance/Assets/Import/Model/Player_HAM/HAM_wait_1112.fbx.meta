@@ -6,7 +6,17 @@ ModelImporter:
   - first:
       74: 1827226128182048838
     second: anim_Wait
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: aiStandardSurface1
+    second: {fileID: 2100000, guid: 42a87e62f2738c94c94650068b296b06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wiya
+    second: {fileID: 2100000, guid: fc4f3d8d229ed8241b8989743eb2fd1d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

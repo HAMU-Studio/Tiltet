@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 public class Rescue : MonoBehaviour
 {
     private Rigidbody m_RB;
     private GameObject rescuePlayer;
     private bool canRescueAct;
-    private Vector3 direction;
+   
  
     void Start()
     {
@@ -159,21 +160,66 @@ public class Rescue : MonoBehaviour
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
+    private Vector3 direction;
     private float yVelocity = 0.0f;
-    private void WireDirection()
+    private float tailVelocity = 0.0f;
+    private float threshold = 0.3f;   // 回転終了判定の角度誤差（度）
+   // private bool isRotationComplete = false;
+    private void WireRotation()
     {
-        Vector3 direction = transform.position - rescuedPlayer.transform.position;
+        if ( m_PM.rescState != RescueState.Fall)
+            return;
 
-        float targetRotation = Mathf.Atan2(this.direction.x, direction.z) * Mathf.Rad2Deg;
+        m_RB.freezeRotation = false;
+        m_RB.isKinematic = true;
 
-        float rotation = Mathf.SmoothDampAngle(rescuedPlayer.transform.eulerAngles.y, -targetRotation, ref yVelocity, 0.3f);
-        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-        m_PM.TailBase.transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        Transform tail = m_PM.TailBase.transform;
+        
+        direction = transform.position - rescuedPlayer.transform.position;
+
+        float targetAngle = Mathf.Atan2(-direction.x, -direction.z) * Mathf.Rad2Deg;
+        float taleAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // ref変数使いまわすと速度情報共有されておかしくなる
+        float currentAngle = Mathf.SmoothDampAngle(rescuedPlayer.transform.eulerAngles.y, targetAngle, ref yVelocity, 0.3f);
+        float taleCurrentAngle = Mathf.SmoothDampAngle(m_PM.TailBase.transform.eulerAngles.z, taleAngle, ref tailVelocity, 0.3f);
+
+        // Debug.Log("tailAngle = " + taleCurrentAngle);
+       
+        // 自機の反対側に正面を向けて、しっぽはpivotに向かって回転させたい
+        rescuedPlayer.transform.rotation = Quaternion.Euler(0.0f, currentAngle, 0.0f);
+        tail.localRotation = Quaternion.Euler(0.0f, 0.0f, taleCurrentAngle);
+        
+        if (CheckRotationComplete(currentAngle, targetAngle))
+        {
+            Debug.Log("Rotate Complete");
+            m_RB.freezeRotation = true;
+            m_RB.isKinematic = false;
+            m_PM.rescState = RescueState.Wait;
+        }
+    }
+
+    private bool CheckRotationComplete(float currentAngle, float targetAngle)
+    {
+        if (Mathf.Abs(Mathf.DeltaAngle(currentAngle, targetAngle)) < threshold)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private bool once;
     private void Update()
     {
+
+        if (m_PM.rescState == RescueState.Fall)
+        {
+            WireRotation();
+        }
+        
         if (once)
         {
             if (m_PM.rescState == RescueState.SuperLand || m_PM.rescState == RescueState.None)
