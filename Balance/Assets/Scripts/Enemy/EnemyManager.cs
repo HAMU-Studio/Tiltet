@@ -5,12 +5,6 @@ using System.Collections.Specialized;
 using UnityEngine;
 using TMPro;
 
-public enum FIELD_TYPE
-{ 
-    GREEN,    //緑地帯
-    VOLCANIC, //火山帯
-    SNOW      //寒冷帯
-}
 
 public class EnemyManager : MonoBehaviour
 {
@@ -21,8 +15,9 @@ public class EnemyManager : MonoBehaviour
     [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
-    [Header("敵が存在できる最大数")]
-    [SerializeField] private int spawnLimit = 2;
+    [Header("丸い敵が存在できる最大数")]
+    [SerializeField] private int circleLimit = 5;
+    [SerializeField] private int ellipseLimit = 2;
 
     [Header("敵が一回にスポーンする数")]
     private int spawnNum = 1;
@@ -42,7 +37,8 @@ public class EnemyManager : MonoBehaviour
     private int m_EnemyNum = 0;
 
     //敵の数検知
-    private bool ableSpawn;
+    private bool ableCircleSpawn;
+    private bool ableEllipseSpawn;
 
     //プレイヤーが二人いたら始まる
     private bool start;
@@ -65,32 +61,26 @@ public class EnemyManager : MonoBehaviour
 
         if (start)
         {
-            CircleCheckEnemy();
-            
-            if(ableSpawn)
-            {
-                spawnTime += Time.deltaTime;
+            CheckCircleEnemy();
+            CheckEllipseEnemy();
 
-                if (spawnTime > spawnInterval)
+            spawnTime += Time.deltaTime;
+
+            if (spawnTime > spawnInterval)
+            {
+                for (int i = 0; spawnNum > i; i++)
                 {
-                    for (int i = 0; spawnNum > i; i++)
+                    if (ableCircleSpawn)
                     {
-                        //デバッグ用
-                        if (circleEnemyTest)
-                        {
-                            CircleEnemySpawn();
-                        }
-                        else if (ellipseEnemyTest)
-                        {
-                            EllipseEnemySpawn();
-                        }
-                        else
-                        {
-                            EnemySpawn();
-                        }
+                        SpawnCircleEnemy();
                     }
-                    spawnTime = 0;
+
+                    if (ableEllipseSpawn)
+                    {
+                        SpawnEllipseEnemy();
+                    }
                 }
+                spawnTime = 0;
             }
         }
     }
@@ -101,7 +91,8 @@ public class EnemyManager : MonoBehaviour
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
 
-        ableSpawn = true;
+        ableCircleSpawn = true;
+        ableEllipseSpawn = true;
 
         //敵がスポーンする範囲
         GameObject stage = GameObject.FindWithTag("Ground");
@@ -128,18 +119,18 @@ public class EnemyManager : MonoBehaviour
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
-    private void CircleCheckEnemy()
+    private void CheckCircleEnemy()
     {
         GameObject[] SphereNum;
         SphereNum = GameObject.FindGameObjectsWithTag("SphereEnemy");
 
-        if (spawnLimit <= SphereNum.Length)
+        if (circleLimit <= SphereNum.Length)
         {
-            ableSpawn = false;
+            ableCircleSpawn = false;
         }
         else
         {
-            ableSpawn = true;
+            ableCircleSpawn = true;
         }
     }
     private void CheckEllipseEnemy()
@@ -147,7 +138,14 @@ public class EnemyManager : MonoBehaviour
         GameObject[] EllipseNum;
         EllipseNum = GameObject.FindGameObjectsWithTag("EllipseEnemy");
 
-
+        if (ellipseLimit <= EllipseNum.Length)
+        {
+            ableEllipseSpawn = false;
+        }
+        else
+        {
+            ableEllipseSpawn = true;
+        }
     }
 
     private void CheckPlayer()
@@ -161,7 +159,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void CircleEnemySpawn()
+    private void SpawnCircleEnemy()
     {
         int enemySpawnPos;
 
@@ -171,7 +169,7 @@ public class EnemyManager : MonoBehaviour
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
-    private void EllipseEnemySpawn()
+    private void SpawnEllipseEnemy()
     {
         int enemySpawnPos;
 
