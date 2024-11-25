@@ -170,8 +170,11 @@ public class Rescue : MonoBehaviour
         if ( m_PM.rescState != RescueState.Fall)
             return;
 
-        m_RB.freezeRotation = false;
-        m_RB.isKinematic = true;
+        if (m_RB.freezeRotation)
+        {
+            m_RB.freezeRotation = false;
+            m_RB.isKinematic = true;
+        }
 
         Transform tail = m_PM.TailBase.transform;
         
@@ -183,12 +186,12 @@ public class Rescue : MonoBehaviour
         // ref変数使いまわすと速度情報共有されておかしくなる
         float currentAngle = Mathf.SmoothDampAngle(rescuedPlayer.transform.eulerAngles.y, targetAngle, ref yVelocity, 0.3f);
         float taleCurrentAngle = Mathf.SmoothDampAngle(m_PM.TailBase.transform.eulerAngles.z, taleAngle, ref tailVelocity, 0.3f);
-
-        // Debug.Log("tailAngle = " + taleCurrentAngle);
+     
        
         // 自機の反対側に正面を向けて、しっぽはpivotに向かって回転させたい
         rescuedPlayer.transform.rotation = Quaternion.Euler(0.0f, currentAngle, 0.0f);
-        tail.localRotation = Quaternion.Euler(0.0f, 0.0f, taleCurrentAngle);
+     //   tail.rotation = Quaternion.identity;
+        tail.rotation = Quaternion.Euler(0.0f, 0.0f, taleCurrentAngle);
         
         if (CheckRotationComplete(currentAngle, targetAngle))
         {

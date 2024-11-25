@@ -38,9 +38,10 @@ public class PlayerManager : MonoBehaviour
     
     public AnimatorStateInfo AnimState
     {
-        set { m_animState = value; }
+      //  set { m_animState = value; }
 
         get { return m_animState; }
+        
     }
 
     public GameObject TailBase
@@ -81,7 +82,10 @@ public class PlayerManager : MonoBehaviour
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
-            m_animator.Play("Wire");
+            m_animator.applyRootMotion = false;
+            m_animator.StopRecording();
+            m_animator.SetTrigger("toWire");
+           // m_animator.applyRootMotion = false;
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
