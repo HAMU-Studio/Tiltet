@@ -160,9 +160,10 @@ public class Rescue : MonoBehaviour
         //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
     }
 
+    
     private Vector3 direction;
     private float yVelocity = 0.0f;
-    private float tailVelocity = 0.0f;
+   
     private float threshold = 0.3f;   // 回転終了判定の角度誤差（度）
    // private bool isRotationComplete = false;
     private void WireRotation()
@@ -176,22 +177,27 @@ public class Rescue : MonoBehaviour
             m_RB.isKinematic = true;
         }
 
-        Transform tail = m_PM.TailBase.transform;
+    
         
         direction = transform.position - rescuedPlayer.transform.position;
+       
+        
 
         float targetAngle = Mathf.Atan2(-direction.x, -direction.z) * Mathf.Rad2Deg;
-        float taleAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         // ref変数使いまわすと速度情報共有されておかしくなる
         float currentAngle = Mathf.SmoothDampAngle(rescuedPlayer.transform.eulerAngles.y, targetAngle, ref yVelocity, 0.3f);
-        float taleCurrentAngle = Mathf.SmoothDampAngle(m_PM.TailBase.transform.eulerAngles.z, taleAngle, ref tailVelocity, 0.3f);
+
+
+     //   Vector3 tailDir = tail.right;
+    //    float taleCurrentAngle = Mathf.Atan2(tailDir.y, tailDir.x) * Mathf.Rad2Deg;
      
        
         // 自機の反対側に正面を向けて、しっぽはpivotに向かって回転させたい
         rescuedPlayer.transform.rotation = Quaternion.Euler(0.0f, currentAngle, 0.0f);
      //   tail.rotation = Quaternion.identity;
-        tail.rotation = Quaternion.Euler(0.0f, 0.0f, taleCurrentAngle);
+     
+       // tail.Rotate(Vector3.back, taleAngle);
         
         if (CheckRotationComplete(currentAngle, targetAngle))
         {
