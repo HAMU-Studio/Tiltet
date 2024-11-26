@@ -15,12 +15,12 @@ public class EnemyManager : MonoBehaviour
     [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
-    [Header("丸い敵が存在できる最大数")]
+    [Header("それぞれの敵が存在できる最大数")]
     [SerializeField] private int circleLimit = 5;
     [SerializeField] private int ellipseLimit = 2;
 
     [Header("敵が一回にスポーンする数")]
-    private int spawnNum = 1;
+    private int numSpawnAtOnce = 1;
 
     [Header("フェーズ表示用テキスト")]
     [SerializeField] TextMeshProUGUI phasesText;
@@ -29,9 +29,14 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private bool circleEnemyTest;
     [SerializeField] private bool ellipseEnemyTest;
 
-    //敵がスポーンする範囲
+    //敵がスポーンする範囲→EnemyGetOnへ
     public Vector3 minPos { get; set; }
     public Vector3 maxPos { get; set; }
+
+    //敵のリミット渡し→PhaseManagerへ
+    public int CircleLimit {  get; set; }
+    public int EllipseLimit {  get; set; }
+    public int NumSpawnAtOnce {  get; set; }
 
     private float spawnTime;
     private int m_EnemyNum = 0;
@@ -68,17 +73,18 @@ public class EnemyManager : MonoBehaviour
 
             if (spawnTime > spawnInterval)
             {
-                for (int i = 0; spawnNum > i; i++)
+                for (int i = 0; numSpawnAtOnce > i; i++)
                 {
-                    if (ableCircleSpawn)
-                    {
-                        SpawnCircleEnemy();
-                    }
-
-                    if (ableEllipseSpawn)
-                    {
-                        SpawnEllipseEnemy();
-                    }
+                    //デバッグ用
+                    /*if (ableCircleSpawn)
+                     {
+                         SpawnCircleEnemy();
+                     }
+                     else if (ableEllipseSpawn)
+                     {
+                         SpawnEllipseEnemy();
+                     }*/
+                    EnemySpawn();
                 }
                 spawnTime = 0;
             }
@@ -108,15 +114,32 @@ public class EnemyManager : MonoBehaviour
     }
 
     private void EnemySpawn()
-    {
-        int enemyKinds;
-        int enemySpawnPos;
-        //0...丸 1...楕円
-        enemyKinds = Random.Range(0, enemys.Length);
-        GameObject newEnemy = Instantiate(enemys[enemyKinds]);
+    { 
+        if (ableCircleSpawn || ableEllipseSpawn)
+        {  
+            int enemyKinds;
+            //0...丸 1...楕円
+            enemyKinds = Random.Range(0, enemys.Length);
 
-        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
-        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
+            if (enemyKinds == 0)
+            {
+                if (!ableCircleSpawn)
+                {
+                    enemyKinds = 1;
+                }
+            }
+            else if (enemyKinds == 1)
+            {
+                if (!ableEllipseSpawn)
+                {
+                    enemyKinds = 0;
+                }
+            }
+            int enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+
+            GameObject newEnemy = Instantiate(enemys[enemyKinds]);
+            newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
+        }
     }
 
     private void CheckCircleEnemy()
