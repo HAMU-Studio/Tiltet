@@ -23,6 +23,9 @@ public class TiltControl : MonoBehaviour
     // 復元力の大きさ
     [SerializeField] private float restoringForce = 10f;
 
+    // 重力加速度
+    private const float Gravity = 9.81f;
+
     // 傾き角度を記録するプロパティ
     public float CurrentTiltX { get; private set; }
     public float CurrentTiltZ { get; private set; }
@@ -80,6 +83,19 @@ public class TiltControl : MonoBehaviour
 
         // 復元力を適用して傾きを戻す処理
         ApplyRestoringForce();
+
+        // 傾きに基づく力を計算して表示
+        DisplayTiltForces();
+    }
+
+    // 傾きに基づく力を計算し、デバッグログで表示する
+    private void DisplayTiltForces()
+    {
+        // 重力に基づく力を計算
+        float forceX = Mathf.Sin(CurrentTiltX * Mathf.Deg2Rad) * m_rb.mass * Gravity; // X方向の力
+        float forceZ = Mathf.Sin(CurrentTiltZ * Mathf.Deg2Rad) * m_rb.mass * Gravity; // Z方向の力
+
+        Debug.Log($"X方向の力: {forceX:F2}, Z方向の力: {forceZ:F2}");
     }
 
     // 復元力を適用して傾きを安定させる
