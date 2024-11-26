@@ -89,6 +89,10 @@ public class EnemyManager : MonoBehaviour
                 spawnTime = 0;
             }
         }
+        else
+        {
+            CheckPlayer();
+        }
     }
 
     private void Set()

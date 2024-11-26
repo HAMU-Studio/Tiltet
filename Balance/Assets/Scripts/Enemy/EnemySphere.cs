@@ -64,6 +64,10 @@ public class EnemySphere : MonoBehaviour
                     //方向に大きさはいらないので正規化
                     m_direction = (m_target.transform.position - transform.position).normalized;
                 }
+                /*else if (m_target == null)
+                {
+                    SetTarget();
+                }*/
 
                 if (funbari)
                 {
@@ -211,8 +215,8 @@ public class EnemySphere : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Ground"))
             {
-                DebugSetTarget();
-               //SetTarget();
+                //DebugSetTarget();
+               SetTarget();
                 arrived = true;
                 m_prePosition = transform.position;
             }
