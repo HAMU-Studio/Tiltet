@@ -1,25 +1,20 @@
 ﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace System
 {
     public class SoundManager : MonoBehaviour
     {
-        //別名(name)をキーとした管理用Dictionary
-        private Dictionary<string, BGMData> BGMDictionary = new Dictionary<string, BGMData>();
-        private Dictionary<string, SEData> SEDictionary = new Dictionary<string, SEData>();
         
-        private static SoundManager instance = null;
-        
-        //AudioSource（スピーカー）を同時に鳴らしたい音の数だけ用意
-        private AudioSource[] audioSourceList = new AudioSource[20];
-
         [Serializable]
         public class BGMData
         {
             public string    name; 
             public AudioClip audioClip;
+            [Range(0f, 1f)]
+            public float     volume;
         }
 
         [Serializable]
@@ -27,20 +22,36 @@ namespace System
         {
             public string    name;
             public AudioClip audioClip;
+            [HideInInspector]
+            public float     playedTime;  // 前回再生した時間 ※publicじゃないと動かないかも
+            [Range(0f, 1f)]
+            public float     volume;
         }
 
         [SerializeField] private BGMData[] bgmDatas;
         [SerializeField] private SEData[]  SEDatas;
+        [Header("一度再生してから、次再生出来るまでの間隔(秒)")]
+        [SerializeField] private　float playableDistance = 0.2f;
+        
+        //別名(name)をキーとした管理用Dictionary
+        private Dictionary<string, BGMData> BGMDictionary = new Dictionary<string, BGMData>();
+        private Dictionary<string, SEData> SEDictionary = new Dictionary<string, SEData>();
+        
+        public static SoundManager instance = null;
+        
+        //AudioSource（スピーカー）を同時に鳴らしたい音の数だけ用意
+        private AudioSource[] audioSourceList = new AudioSource[20];
+
         private void SetInstance()
         {
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
+              //  DontDestroyOnLoad(gameObject);
             }
             else
             {
-                Destroy(gameObject);
+              //  Destroy(gameObject);
             }
         }
         private void Awake()
@@ -77,7 +88,7 @@ namespace System
             return null; 
         }
         
-        public void PlayBGM(AudioClip bgm)
+        public void PlayBGM(AudioClip bgm, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
             AudioSource audioSource = GetUnusedAudioSource();
@@ -87,11 +98,14 @@ namespace System
                 Debug.Log("BGM play failed");
                 return;
             }
+
+            audioSource.volume = volume;
+            audioSource.loop = true;
             audioSource.clip = bgm;
             audioSource.Play();
         }
 
-        public void PlaySE(AudioClip clip)
+        public void PlaySE(AudioClip clip, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
             AudioSource audioSource = GetUnusedAudioSource();
@@ -102,6 +116,9 @@ namespace System
                 return;
             }
 
+            audioSource.volume = volume;
+            audioSource.playOnAwake = false;
+            audioSource.loop = false;
             audioSource.clip = clip;
             audioSource.PlayOneShot(clip);
         }
@@ -115,11 +132,17 @@ namespace System
             // それぞれの管理用Dictionaryから別名で検索、一致したら再生
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
-                PlayBGM(bgmData.audioClip);
+                PlayBGM(bgmData.audioClip, bgmData.volume);
+                Debug.Log("BGM play: " + name);
             }
             else if (SEDictionary.TryGetValue(name, out SEData seData))
             {
-                PlaySE(seData.audioClip);
+                if(Time.realtimeSinceStartup - seData.playedTime < playableDistance)
+                    return;
+                
+                seData.playedTime = Time.realtimeSinceStartup; 　//次回用に今回の再生時間の保持 
+                PlaySE(seData.audioClip, seData.volume);
+                Debug.Log("SE play: " + name);
             }
             else
             {

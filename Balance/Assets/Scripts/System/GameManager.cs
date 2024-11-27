@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            gameObject.transform.parent = null;
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -178,7 +179,7 @@ public class GameManager : MonoBehaviour
         //でスクリプトアタッチしなくても現在が探索中なのか戦闘中なのか確認できるよ
         
         if (state == GameState.EnemyBattle || state == GameState.Search)
-            GameManager.instance.CurrentState = state;
+            CurrentState = state;
         
         /*foreach (GameObject wall in walls)    壁はなくなりそう
         {
@@ -193,5 +194,12 @@ public class GameManager : MonoBehaviour
         RB.velocity = Vector3.zero;
         RB.angularVelocity = Vector3.zero;
     }
-
+    private void Update()
+    {
+        if (currentGamestate == GameState.WaitStart)
+        {
+            SoundManager.instance.Play("Title");
+            currentGamestate = GameState.None;
+        }
+    }
 }

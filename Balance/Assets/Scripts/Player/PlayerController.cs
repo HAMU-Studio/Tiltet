@@ -498,6 +498,12 @@ public class PlayerController : MonoBehaviour
             //SmoothDampAngle(現在の値, 目的の値, ref 現在の速度, 遷移時間, 最高速度); 現在の速度はnullで良いっぽい？
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+            if (isFlying == false)
+            {
+                SoundManager.instance.Play("PlayerMove");
+            }
+         
         }
     }
     
