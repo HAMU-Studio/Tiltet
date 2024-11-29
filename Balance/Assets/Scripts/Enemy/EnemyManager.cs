@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour
     [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
-    [Header("それぞれの敵が存在できる最大数")]
+    [Header("敵が存在できる最大数")]
     [SerializeField] private int circleLimit = 5;
     [SerializeField] private int ellipseLimit = 2;
 
@@ -36,7 +36,7 @@ public class EnemyManager : MonoBehaviour
     //敵のリミット渡し→PhaseManagerへ
     public int CircleLimit {  get; set; }
     public int EllipseLimit {  get; set; }
-    public int NumSpawnAtOnce {  get; set; }
+    public int NumSpawnAtOnceLimit {  get; set; }
 
     private float spawnTime;
     private int m_EnemyNum = 0;

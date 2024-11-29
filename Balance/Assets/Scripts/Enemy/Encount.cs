@@ -15,6 +15,7 @@ public class Encount : MonoBehaviour
     {
         
     }
+
     private void OnCollisionEnter(Collider collider)
     {
         if(collider.gameObject.CompareTag("Graund"))
