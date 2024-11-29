@@ -7,7 +7,7 @@ namespace FadeSystem
 {
     public class FadeAndSceneTransition : MonoBehaviour
     {
-        [Header("フェード処理")] public MonoBehaviour fadeHandler;
+        [Header("フェード処理")] public FadeImage fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
 
         private IFadeHandler m_fade;
