@@ -267,7 +267,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 2
+  circleLimit: 5
+  ellipseLimit: 2
   phasesText: {fileID: 0}
   circleEnemyTest: 0
   ellipseEnemyTest: 0
@@ -2208,7 +2209,7 @@ PrefabInstance:
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: rearLeftTilt
-      value: -5.2
+      value: -5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
@@ -2218,27 +2219,27 @@ PrefabInstance:
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: frontLeftTilt
-      value: 5.2
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: rearRightTilt
-      value: -5.2
+      value: -5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: frontRightTilt
-      value: 5.2
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: standardLeftTilt
-      value: 5.2
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: standardRightTilt
-      value: -5.2
+      value: -5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965758100724, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}

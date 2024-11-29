@@ -178,7 +178,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private CinemachineVirtualCamera GetActiveCamera()
+    public CinemachineVirtualCamera GetActiveCamera()
     {
         if (cmForward.Priority == 10) return cmForward;
         if (cmBackward.Priority == 10) return cmBackward;
@@ -187,7 +187,7 @@ public class CameraManager : MonoBehaviour
         return null;
     }
 
-    private IEnumerator ZoomCamera(CinemachineVirtualCamera camera, float targetFOV, float duration)
+    public IEnumerator ZoomCamera(CinemachineVirtualCamera camera, float targetFOV, float duration)
     {
         float startFOV = camera.m_Lens.FieldOfView;
         float elapsedTime = 0;
