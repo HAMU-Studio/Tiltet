@@ -16,6 +16,13 @@ namespace Test
             {
                 if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 {
+                    if (SoundManager.instance.GetIsPlaying(soundName[i]))
+                    {
+                        SoundManager.instance.StopPlay(soundName[i]);
+                        Debug.Log("再生停止");
+                        return;
+                    }
+                 
                     SoundManager.instance.Play(soundName[i]);
                     Debug.Log(i + "番目のサウンドを再生");
                 }

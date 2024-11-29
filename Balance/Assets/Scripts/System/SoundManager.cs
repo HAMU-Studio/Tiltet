@@ -150,5 +150,61 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// nameのAudioClipを使っているAudioSourceの取得
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public AudioSource GetUsingAudioSource(string name)
+        {
+            if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
+            {
+                for (int i = 0; i < audioSourceList.Length; i++)
+                {
+                    if (audioSourceList[i].clip == bgmData.audioClip)
+                        return audioSourceList[i];
+                }
+            }
+            else if (SEDictionary.TryGetValue(name, out SEData seData))
+            {
+                for (int i = 0; i < audioSourceList.Length; i++)
+                {
+                    if (audioSourceList[i].clip == seData.audioClip)
+                        return audioSourceList[i];
+                }
+            }
+           
+            Debug.Log("そのAudioClipは現在使われていません");
+            return null;
+            
+        }
+
+        public bool GetIsPlaying(string name)
+        {
+            AudioSource audioSource =  GetUsingAudioSource(name);
+            if (audioSource == null)
+            {
+             //   Debug.Log("そのクリップは再生されていません");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public void StopPlay(string name)
+        {
+            AudioSource audioSource =  GetUsingAudioSource(name);
+
+            if (audioSource == null)
+            {
+                Debug.Log("そのクリップは再生されていません");
+                return;
+            }
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
     }
 }
