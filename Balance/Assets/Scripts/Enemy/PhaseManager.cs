@@ -33,8 +33,7 @@ public class PhaseManager : MonoBehaviour
         enemymanager = this.GetComponent<EnemyManager>();
         circleLimit = enemymanager.CircleLimit;
         ellipseLimit = enemymanager.EllipseLimit;
-        numSpawnAtOnce = enemymanager.NumSpawnAtOnce;
-
+        numSpawnAtOnce = enemymanager.NumSpawnAtOnceLimit;
     }
     // Update is called once per frame
     void Update()
