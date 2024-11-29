@@ -10082,12 +10082,12 @@ PrefabInstance:
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -1e-45
+      value: 3e-45
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837817, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
@@ -10113,56 +10113,6 @@ PrefabInstance:
         type: 3}
       propertyPath: backward
       value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: tiltMaxX
-      value: 6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: tiltMaxZ
-      value: 6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: tiltMinX
-      value: -6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: tiltMinZ
-      value: -6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: rearLeftTilt
-      value: -7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: frontLeftTilt
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: rearRightTilt
-      value: -7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: frontRightTilt
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: standardLeftTilt
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
-        type: 3}
-      propertyPath: standardRightTilt
-      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
@@ -10363,7 +10313,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 2
+  circleLimit: 5
+  ellipseLimit: 2
   phasesText: {fileID: 0}
   circleEnemyTest: 0
   ellipseEnemyTest: 0
@@ -17489,6 +17440,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EncountArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011290209381604351, guid: f4ddc53c5ebb8024fba74878725f446b,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4ddc53c5ebb8024fba74878725f446b, type: 3}

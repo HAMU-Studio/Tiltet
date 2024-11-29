@@ -267,7 +267,8 @@ MonoBehaviour:
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 2
+  circleLimit: 5
+  ellipseLimit: 2
   phasesText: {fileID: 0}
   circleEnemyTest: 0
   ellipseEnemyTest: 0
@@ -2108,27 +2109,32 @@ PrefabInstance:
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000000008492101
+      value: -0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000000013780783
+      value: -0.0000000013780784
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018224
+      value: -0.16018225
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -1e-45
+      value: 3e-45
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1e-45
+      value: -1e-45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837817, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837817, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
@@ -2168,52 +2174,72 @@ PrefabInstance:
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: tiltMaxX
-      value: 6.8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: tiltMaxZ
-      value: 6.8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: tiltMinX
-      value: -6.8
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: tiltMinZ
-      value: -6.8
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: leftTiltZ
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: rightTiltZ
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: forwardTiltX
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: rearLeftTilt
-      value: -7
+      value: -5.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+        type: 3}
+      propertyPath: backwardTiltX
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: frontLeftTilt
-      value: 7
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: rearRightTilt
-      value: -7
+      value: -5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: frontRightTilt
-      value: 7
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: standardLeftTilt
-      value: 7
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837819, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: standardRightTilt
-      value: -7
+      value: -5.3
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965758100724, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}

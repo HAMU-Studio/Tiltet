@@ -178,6 +178,30 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    public CinemachineVirtualCamera GetActiveCamera()
+    {
+        if (cmForward.Priority == 10) return cmForward;
+        if (cmBackward.Priority == 10) return cmBackward;
+        if (cmLeft.Priority == 10) return cmLeft;
+        if (cmRight.Priority == 10) return cmRight;
+        return null;
+    }
+
+    public IEnumerator ZoomCamera(CinemachineVirtualCamera camera, float targetFOV, float duration)
+    {
+        float startFOV = camera.m_Lens.FieldOfView;
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            camera.m_Lens.FieldOfView = Mathf.Lerp(startFOV, targetFOV, elapsedTime / duration);
+            yield return null;
+        }
+
+        camera.m_Lens.FieldOfView = targetFOV;
+    }
+
     // バトルカメラに切り替える関数
     public void BattleCamera()
     {
