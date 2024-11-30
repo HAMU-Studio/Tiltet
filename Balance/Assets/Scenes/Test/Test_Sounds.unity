@@ -135,6 +135,76 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[3].name
+      value: snowStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[4].name
+      value: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[5].name
+      value: "\u6226\u95D8\u2161"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: SEDatas.Array.data[0].volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[0].volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[2].volume
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[3].volume
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[4].volume
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[5].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[2].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 4abc74b41bb82fd48a5ed39db2d9ca5c, type: 3}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[3].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: cc595e5c77539774f8d0dc64dc9c6e3b, type: 3}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[4].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 4eca4a6367458974eaaafddeb1395ad1, type: 3}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[5].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 99b6ad4238964614b80d733162726767, type: 3}
     - target: {fileID: 7795039349650907740, guid: 4d9324e406ffd9246aa7a8dadccab276,
         type: 3}
       propertyPath: m_RootOrder
@@ -432,6 +502,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[0]
+      value: Title
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[1]
+      value: Fight
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[2]
+      value: GreenStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[3]
+      value: snowStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[4]
+      value: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[5]
+      value: "\u6226\u95D8\u2161"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[7]
+      value: PlayerMove
+      objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132453, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: m_RootOrder
