@@ -95,7 +95,7 @@ public class TiltControl : MonoBehaviour
         float forceX = Mathf.Sin(CurrentTiltX * Mathf.Deg2Rad) * m_rb.mass * Gravity; // X方向の力
         float forceZ = Mathf.Sin(CurrentTiltZ * Mathf.Deg2Rad) * m_rb.mass * Gravity; // Z方向の力
 
-        Debug.Log($"X方向の力: {forceX:F2}, Z方向の力: {forceZ:F2}");
+        //Debug.Log($"X方向の力: {forceX:F2}, Z方向の力: {forceZ:F2}");
     }
 
     // 復元力を適用して傾きを安定させる
