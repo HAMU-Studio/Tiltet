@@ -28,11 +28,17 @@ public class PlayerSpawnSensor : MonoBehaviour
             if (playerMat.name == P1mat.name + " (Instance)")
             {
                 player.transform.position = P1Spawn.position;
-
+                
+                if (GameManager.instance.P1Spawn)
+                    return;
+                
+                DontDestroyOnLoad(player);
+                
                 if (player.transform.position == P1Spawn.position)
                 {
                     Debug.Log("player1 spawn success");
                     GameManager.instance.P1Spawn = true;
+                   // GameManager.instance.SetPlayerInstance(player);
                 }
                 else
                 {
@@ -42,7 +48,11 @@ public class PlayerSpawnSensor : MonoBehaviour
             else if (playerMat.name == P2mat.name + " (Instance)")
             {
                 player.transform.position = P2Spawn.position;
+          
+                if (GameManager.instance.P2Spawn)
+                    return;
                 
+                DontDestroyOnLoad(player);
                 if (player.transform.position == P2Spawn.position)
                 {
                     Debug.Log("player2 spawn success");

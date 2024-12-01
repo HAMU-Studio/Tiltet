@@ -10,13 +10,15 @@ namespace FadeSystem
         [Header("フェード処理")] public FadeImage fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
 
+        [SerializeField] private string fightSceneName;
+        [SerializeField] private string searchSceneName;
         private IFadeHandler m_fade;
         private bool isSceneTransitioning = false;
 
         private void Start()
         {
             //fadeHandlerがIFadeHandlerを実装していればIFadeHandler型に変換して代入
-            m_fade = fadeHandler as IFadeHandler;
+            m_fade = fadeHandler.GetComponent<IFadeHandler>(); 
 
             if (m_fade == null)
             {
@@ -30,19 +32,33 @@ namespace FadeSystem
                 return;
 
             isSceneTransitioning = true;
+            GameManager.instance.ResetPlayer();
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());
 
         }
 
+        /// <summary>
+        /// 名前指定してシーン移動
+        /// </summary>
+        /// <param name="nextSceneName"></param>
+        /*public void FadeStart(string nextSceneName)
+        {
+            this.nextSceneName = nextSceneName;
+            FadeStart();
+        }*/
+
+        [SerializeField] private GameObject m_stage;
         private IEnumerator LoadNextSceneAsync()
         {
             while (m_fade.IsFadeOutComplete() == false)
             {
                 yield return null;
             }
+    
+            yield return  SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
 
-            yield return SceneManager.LoadSceneAsync(nextSceneName);
+       //     yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         }
     }
 }

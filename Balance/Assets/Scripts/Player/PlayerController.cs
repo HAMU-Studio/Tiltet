@@ -84,6 +84,13 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("toIdle");
     }
 
+    public void Initialize()
+    {
+        canRescueAct = false;
+        isChanged = false;
+        animator.SetTrigger("toIdle");
+    }
+
     /// <summary>
     /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。->同じマテリアルだから配列必要なかった...
     /// </summary>
@@ -142,6 +149,8 @@ public class PlayerController : MonoBehaviour
         
         TransitionAnim();
     }
+
+    private Vector3 movementAmount;
     private void FixedUpdate()
     {
         Gravity();
@@ -162,7 +171,7 @@ public class PlayerController : MonoBehaviour
  
         if (isChanged)
         {
-            Vector3 movementAmount = m_RB.position + m_stageManager.MovementAmount;
+            movementAmount = m_RB.position + m_stageManager.MovementAmount;
             m_RB.MovePosition(movementAmount);
         }
     }

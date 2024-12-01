@@ -35,7 +35,7 @@ namespace FadeSystem
             }
             else
             {
-                StartCoroutine(WaitForFadeStart(0.1f));
+                StartCoroutine(WaitForFadeStart(0.5f));
             }
         }
 

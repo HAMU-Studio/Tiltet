@@ -17,13 +17,14 @@ public class JointManager : MonoBehaviour
     {
         GetPlayerManager();
         onceForce = false;
+        m_RB = gameObject.GetComponent<Rigidbody>();
     }
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
     private Rigidbody m_RB;
     public void SetJointAndLine()
     {
-        m_RB = gameObject.GetComponent<Rigidbody>();
+       
         m_RB.freezeRotation = false;
 
         AddJoint();
@@ -65,16 +66,31 @@ public class JointManager : MonoBehaviour
         m_hingeJoint.useLimits = true;
     }
 
-
     private void AddJoint()
     {
-        //Debug.Log("state = " + GameManager.instance.RescueState);
-        
         gameObject.AddComponent<HingeJoint>();
         gameObject.AddComponent<SpringJoint>();
         
         m_hingeJoint  = GetComponent<HingeJoint>();
         m_springJoint = GetComponent<SpringJoint>();
+    }
+
+    public void Reset()
+    {
+        m_hingeJoint = GetComponent<HingeJoint>();
+        
+        Destroy(m_hingeJoint);
+        Destroy(m_springJoint);
+        
+        GameManager.instance.ResetRBVelocity(m_RB);
+        
+        m_RB.rotation = quaternion.identity;
+      
+        m_RB.isKinematic = true;
+    
+        m_RB.isKinematic = false;
+        m_RB.freezeRotation = true;
+    
     }
 
     private void JointOff()
@@ -93,7 +109,7 @@ public class JointManager : MonoBehaviour
         StartCoroutine(ReleaseAndAddForce());
     }
 
-    public void RopeOff()
+    private void RopeOff()
     {
         RopeLine ropeLine = GameManager.instance.Pivot.GetComponent<RopeLine>();
         ropeLine.ResetRope();
@@ -230,9 +246,10 @@ public class JointManager : MonoBehaviour
 
     private void SetOutsideForce()
     {
-        if (GameManager.instance.Pivot != null)
+        if (GameManager.instance.Pivot == null)
         {
-            Debug.Log("pivot = " + GameManager.instance.Pivot);
+            Debug.LogError("pivot is null! ");
+            return;
         }
 
         direction = GameManager.instance.Pivot.GetComponentInParent<Rescue>().CalcOutsideForce();
@@ -251,8 +268,7 @@ public class JointManager : MonoBehaviour
         }
         
         m_RB.isKinematic = false; 　//再度物理的に解放
-        
-        Debug.Log("call OutsideForce");
+      
         //ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
         m_RB.AddForce(direction, ForceMode.Impulse);
     }
