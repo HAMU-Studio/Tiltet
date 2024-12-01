@@ -58,10 +58,24 @@ public class StageMovement : MonoBehaviour
     private Rigidbody m_rb;
     private TiltControl m_tiltControl;
 
+    // 移動量を管理するための変数
+    private Vector3 m_beforePos;  // 前フレームの位置
+    private Vector3 m_currentPos; // 現在の位置
+    private Vector3 m_movementAmount; // 移動量
+
+    // 移動量を外部から取得するためのプロパティ
+    public Vector3 MovementAmount
+    {
+        get { return m_movementAmount; }
+    }
+
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_tiltControl = GetComponent<TiltControl>();
+
+        m_currentPos = transform.position;
+        m_beforePos = transform.position;
 
         if (m_rb == null)
         {
@@ -78,6 +92,15 @@ public class StageMovement : MonoBehaviour
     {
         UpdateMovePattern();
         ApplyMovement();
+        CalculateMovementAmount(); 
+    }
+
+    // 移動量を計算するメソッド
+    private void CalculateMovementAmount()
+    {
+        m_currentPos = transform.position;
+        m_movementAmount = m_currentPos - m_beforePos;
+        m_beforePos = m_currentPos;
     }
 
     // 傾きに応じて移動パターンを更新
@@ -136,9 +159,6 @@ public class StageMovement : MonoBehaviour
     // 各MovePatternの動作内容
     private void ApplyMovement()
     {
-        // 変更前の速度を保持
-        //Vector3 previousVelocity = m_rb.velocity; 
-
         // 現在の移動パターンに基づいて探査機を動かす
         switch (currentPattern)
         {
@@ -170,11 +190,5 @@ public class StageMovement : MonoBehaviour
                 m_rb.velocity = Vector3.zero; // 全ての軸の速度をゼロにして静止
                 break;
         }
-
-        // デバッグログを表示
-        /*if (m_rb.velocity != previousVelocity)
-        {
-            Debug.Log($"Velocity changed: 変更前 {previousVelocity}, 変更後 {m_rb.velocity}");
-        }*/
     }
 }
