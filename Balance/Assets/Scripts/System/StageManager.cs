@@ -9,10 +9,9 @@ public class StageManager : MonoBehaviour
     // 初期のY座標を保持する変数
     private float m_initialY;
 
-    void Start()
+    private void Start()
     {
-        // 初期のY座標を記録
-        m_initialY = transform.position.y;
+        GameManager.instance.SaveAircraftInstance(gameObject);
     }
 
     void Update()

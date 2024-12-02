@@ -14,25 +14,22 @@ namespace Test
    //    private ThrowawayMethod method2;
         private void Update()
         {
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(KeyCode.U))
             {
                 if (!once)
                 {
-                    Debug.Log("PressQ");
                     _transition.FadeStart();
                     GameManager.instance.CurrentState = GameState.EnemyBattle;
                     once = true;
                 }
 
-               // method.RunOnce( );
             }
             
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.I))
             {
                 if (!once)
                 {
                     _transition.FadeStart();
-                    Debug.Log("PressE");
                     GameManager.instance.CurrentState = GameState.Search;
                     once = true;
                 }
