@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     [Header("Rendererがアタッチされているオブジェクト")]
     [SerializeField] private Renderer m_playerRenderer;
 
-    private StageManager m_stageManager;
+    private StageMovement m_stageMovement;
     void Awake()
     {
         m_player = GetComponent<Transform>();
@@ -81,6 +81,13 @@ public class PlayerController : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
         
         animator = GetComponent<Animator>();
+        animator.SetTrigger("toIdle");
+    }
+
+    public void Initialize()
+    {
+        canRescueAct = false;
+        isChanged = false;
         animator.SetTrigger("toIdle");
     }
 
@@ -142,6 +149,8 @@ public class PlayerController : MonoBehaviour
         
         TransitionAnim();
     }
+
+    private Vector3 movementAmount;
     private void FixedUpdate()
     {
         Gravity();
@@ -162,7 +171,7 @@ public class PlayerController : MonoBehaviour
  
         if (isChanged)
         {
-            Vector3 movementAmount = m_RB.position + m_stageManager.MovementAmount;
+            movementAmount = m_RB.position + m_stageMovement.MovementAmount;
             m_RB.MovePosition(movementAmount);
         }
     }
@@ -353,7 +362,7 @@ public class PlayerController : MonoBehaviour
         
         if (col.gameObject.CompareTag("Ground"))
         {
-            m_stageManager = col.gameObject.GetComponent<StageManager>();
+            m_stageMovement = col.gameObject.GetComponent<StageMovement>();
           
           //  _stageManager.SetToStageChild(gameObject);
             //_stageManager.CounterScaleCalc(gameObject);

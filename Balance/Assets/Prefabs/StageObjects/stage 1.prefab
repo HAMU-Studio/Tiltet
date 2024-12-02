@@ -1819,7 +1819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6921406524646535831}
   - component: {fileID: 7460071965275837817}
-  - component: {fileID: 7460071965275837818}
+  - component: {fileID: 1190926855064913666}
   - component: {fileID: 7460071965275837819}
   - component: {fileID: 7460071965275837816}
   - component: {fileID: 5265005458559318366}
@@ -1870,7 +1870,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 36
   m_CollisionDetection: 0
---- !u!114 &7460071965275837818
+--- !u!114 &1190926855064913666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1879,10 +1879,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7729890259614361645}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 852af6afbc1992141aa4a650122fd299, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a24f7eb0a88fcc4ab68868122f9da28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleSize: 1.25
 --- !u!114 &7460071965275837819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1895,25 +1894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPattern: 0
-  forward: 5
-  backward: -5
-  left: -5
-  right: 5
-  forwardTiltX: 5
-  backwardTiltX: -5
-  leftTiltZ: 5
-  rightTiltZ: -5
-  frontLeftTilt: 4
-  rearLeftTilt: -4
-  standardLeftTilt: 4
-  frontRightTilt: 4
-  rearRightTilt: -4
-  standardRightTilt: -4
-  tiltMinX: -4
-  tiltMaxX: 4
-  tiltMinZ: -4
-  tiltMaxZ: 4
+  movementScale: 1
 --- !u!114 &7460071965275837816
 MonoBehaviour:
   m_ObjectHideFlags: 0
