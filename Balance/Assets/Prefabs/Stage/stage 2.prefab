@@ -1338,9 +1338,9 @@ GameObject:
   - component: {fileID: 2942698911289713958}
   - component: {fileID: 4564555364397662376}
   - component: {fileID: 6936819068640883211}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: stage 2
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1532,7 +1532,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6302688869107699624}
-  m_LocalRotation: {x: 0.34042525, y: -1e-45, z: 1e-45, w: 0.9402717}
+  m_LocalRotation: {x: 0.34042525, y: -1e-45, z: -0, w: 0.9402717}
   m_LocalPosition: {x: -53.109325, y: 151.20676, z: 6.1865807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1997,7 +1997,7 @@ GameObject:
   - component: {fileID: 8736799262868671618}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
