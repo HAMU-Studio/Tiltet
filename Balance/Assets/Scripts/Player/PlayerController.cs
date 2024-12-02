@@ -194,12 +194,15 @@ public class PlayerController : MonoBehaviour
         if (m_inputMove != Vector2.zero)
         {
             time += Time.deltaTime;
-            animator.ResetTrigger("toIdle");           
+            animator.ResetTrigger("toIdle");       
         }
         else if (m_inputMove == Vector2.zero && stateInfo.IsName("Walk_01"))
         {
             time = 0f;
-            animator.SetTrigger("toIdle"); 
+            if (m_PM.rescState == RescueState.None)
+            {
+                animator.SetTrigger("toIdle"); 
+            }
         }
         animator.SetFloat("time", (float)time);
 
@@ -231,7 +234,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        //落下中と攻撃中はジャンプをさせない
+        /*//落下中と攻撃中はジャンプをさせない
         if (isFlying|| canMove == false || isKnockBack) return;  
 
         if (m_RB == null)
@@ -252,7 +255,7 @@ public class PlayerController : MonoBehaviour
             m_RB.AddForce(transform.up * jumpPower, ForceMode.Impulse);
            // canMove = false;
             isFlying = true;
-        }
+        }*/
     }
 
     private GameObject m_rescueCube;
@@ -287,6 +290,7 @@ public class PlayerController : MonoBehaviour
                 if (cmswitch.IsPlayerInContact())
                 {
                     cmswitch.SetSwitchPressed(true); // スイッチを押す
+                    animator.SetTrigger("toPush");
                 }
             }
         }
