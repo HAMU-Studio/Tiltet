@@ -146,6 +146,7 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(1.7f);
         
         GetComponent<JointManager>().Reset();
+        GameManager.instance.SetPlayerPos();
         _playerController.Initialize();
         _playerController.enabled = true;
     }

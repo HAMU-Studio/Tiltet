@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ポジション0にすればスポーンセンサーが検知して再セットしてくれる
     /// </summary>
-    private void SetPlayerPos()
+    public void SetPlayerPos()
     {
         foreach (GameObject player in playerInstances)
         {
@@ -328,7 +328,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator DelayResetPlayer()
     {
         yield return new WaitForSeconds(1.8f);
-        SetPlayerPos();
+        //急にうごかなくなったから消した
+      //  SetPlayerPos();
     }
     
 }

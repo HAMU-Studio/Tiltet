@@ -1932,6 +1932,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 470597755}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &470597758 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7729890259614361645, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 470597755}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &473025406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2716,6 +2722,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7810446846851615191, guid: 79d42eaef7ece164786d0a246fd0cf2a,
+        type: 3}
+      propertyPath: m_stage
+      value: 
+      objectReference: {fileID: 470597758}
     - target: {fileID: 7810446846851615191, guid: 79d42eaef7ece164786d0a246fd0cf2a,
         type: 3}
       propertyPath: fadeHandler
