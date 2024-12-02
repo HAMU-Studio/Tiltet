@@ -104,14 +104,13 @@ public class EnemySphere : MonoBehaviour
                 enemyRb.AddForce(m_direction * m_moveSpeed);
 
                 Brake();
-
             }
         }
         else
         {
             if (escape)
             {
-                enemyRb.AddForce(m_direction * m_moveSpeed);
+                //enemyRb.AddForce(m_direction * m_moveSpeed);
             }
         }
     }
@@ -244,6 +243,14 @@ public class EnemySphere : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             life = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Destroy"))
+        {
+            Destroy(gameObject);
         }
     }
 }
