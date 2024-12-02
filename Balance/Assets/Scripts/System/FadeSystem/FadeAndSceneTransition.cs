@@ -10,8 +10,6 @@ namespace FadeSystem
         [Header("フェード処理")] public FadeImage fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
 
-        [SerializeField] private string fightSceneName;
-        [SerializeField] private string searchSceneName;
         private IFadeHandler m_fade;
         private bool isSceneTransitioning = false;
 
@@ -32,10 +30,13 @@ namespace FadeSystem
                 return;
 
             isSceneTransitioning = true;
+            
+            //リセットは戦闘と探索の切り替えのみ
+          //  if (nextSceneName == "Fight" || nextSceneName == "GreenStage")
             GameManager.instance.ResetPlayer();
+         
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());
-
         }
 
         /// <summary>

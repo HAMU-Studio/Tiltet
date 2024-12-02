@@ -87,8 +87,8 @@ public class JointManager : MonoBehaviour
         m_RB.rotation = quaternion.identity;
       
         m_RB.isKinematic = true;
-    
-        m_RB.isKinematic = false;
+
+        StartCoroutine(WaitAndRelease());
         m_RB.freezeRotation = true;
     
     }
@@ -271,6 +271,19 @@ public class JointManager : MonoBehaviour
       
         //ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
         m_RB.AddForce(direction, ForceMode.Impulse);
+    }
+
+    private IEnumerator WaitAndRelease()
+    {
+        yield return new WaitForSeconds(0.1f); //物理挙動がおかしくならないように少し待つ
+
+        if (m_RB.isKinematic == false)
+        {
+            //弾く必要なし
+            yield break;
+        }
+
+        m_RB.isKinematic = false; //再度物理的に解放
     }
 
     private IEnumerator DelayFly()
