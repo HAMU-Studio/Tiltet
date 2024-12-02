@@ -45,11 +45,12 @@ public class PlayerManager : MonoBehaviour
 
         get { return animCurrenState; }
     }*/
-
+    Animator animator;
     private void Start()
     {
         m_beforeState = rescCurrentState;
         GameManager.instance.SavePlayerInstance(gameObject);
+        animator = GetComponent<Animator>();
     }
 
     private ThrowawayMethod method;
@@ -72,12 +73,14 @@ public class PlayerManager : MonoBehaviour
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
             SoundManager.instance.Play("Struggle");
+            animator.SetTrigger("toStruggle");
         }
 
         if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move
             || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
         {
             SoundManager.instance.StopPlay("Struggle");
+            animator.Play("Wait_01");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
