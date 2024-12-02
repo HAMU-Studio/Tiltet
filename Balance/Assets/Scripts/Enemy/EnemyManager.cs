@@ -1,108 +1,140 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+//using System.Diagnostics;
 using UnityEngine;
+using TMPro;
+
+public enum FIELD_TYPE
+{ 
+    GREEN,    //緑地帯
+    VOLCANIC, //火山帯
+    SNOW      //寒冷帯
+}
 
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] enemy;
+    [Header("0...丸 1...楕円")]
+    [SerializeField] private GameObject[] enemys;
+    [SerializeField] private GameObject[] enemySpawnPoints;
 
-    //スポーン範囲オブジェクト
-    [SerializeField] private GameObject minimumValue;
-    [SerializeField] private GameObject muximumValueX;
-    [SerializeField] private GameObject muximumValueZ;
-
-    //敵がスポーンするインターバル
+    [Header("敵がスポーンするインターバル")]
     [SerializeField] private float spawnInterval = 3.0f;
 
-    //一度にスポーンする数
-    [SerializeField] private int spawnNum = 1;
+    [Header("敵が存在できる最大数")]
+    [SerializeField] private int spawnLimit = 2;
+
+    [Header("敵が一回にスポーンする数")]
+    private int spawnNum = 1;
+
+    [Header("フェーズ表示用テキスト")]
+    [SerializeField] TextMeshProUGUI phasesText;
+
+    [Header("デバッグ用")]
+    [SerializeField] private bool circleEnemyTest;
+    [SerializeField] private bool ellipseEnemyTest;
+
+    //敵がスポーンする範囲
+    public Vector3 minPos { get; set; }
+    public Vector3 maxPos { get; set; }
 
     private float spawnTime;
 
-    //スポーンの範囲
-    private float lowestPositionX;
-    private float lowestPositionZ;
-    private float highestPositionX;
-    private float highestPositionZ;
-
     //敵の数検知
-    private GameObject[] enemies;
-    private int enemyKinds;
     private bool ableSpawn;
 
-    //敵のスポーン場所
-    Vector3 enemyPos = new Vector3();
+    //プレイヤーが二人いたら始まる
+    private bool start;
 
-    //スポーン範囲オブジェクト用
-    Vector3 miniPos = new Vector3();
-    Vector3 maxPosX = new Vector3();
-    Vector3 maxPosZ = new Vector3();
-
-    private float enemyCount;
     // Start is called before the first frame update
     void Start()
     {
-        //スポーン範囲オブジェクトのポジション取得
-        miniPos = minimumValue.transform.position;
-        maxPosX = muximumValueX.transform.position;
-        maxPosZ = muximumValueZ.transform.position;
-
-        //スポーン範囲代入
-        lowestPositionX = miniPos.x;
-        lowestPositionZ = miniPos.z;
-        highestPositionX = maxPosX.x;
-        highestPositionZ = maxPosZ.z;
-
-        //高さの取得
-        enemyPos.y = miniPos.y;
-
-        // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval;
-
-        ableSpawn = true;
-
-        enemyCount = 0;
+        Set();
     }
 
     // Update is called once per frame
     void Update()
     {
-        spawnTime += Time.deltaTime;
+        //デバッグ用
+        //Pを押すと1人でも始められる
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            start = true;
+        }
 
-        if (spawnTime > spawnInterval)
+        if (start)
         {
             CheakEnemy();
-
-            if (ableSpawn)
+            
+            if(ableSpawn)
             {
-                for (int i = 0; spawnNum > i; i++)
+                spawnTime += Time.deltaTime;
+
+                if (spawnTime > spawnInterval)
                 {
-                    EnemySpawn();
+                    for (int i = 0; spawnNum > i; i++)
+                    {
+                        //デバッグ用
+                        if (circleEnemyTest)
+                        {
+                            CircleEnemySpawn();
+                        }
+                        else if (ellipseEnemyTest)
+                        {
+                            EllipseEnemySpawn();
+                        }
+                        else
+                        {
+                            EnemySpawn();
+                        }
+                    }
+                    spawnTime = 0;
                 }
             }
-
-            spawnTime = 0;
         }
+    }
+
+    private void Set()
+    {
+        start = false;
+        // ゲームが始まったと同時にスポーン（なくてもいい）
+        spawnTime = spawnInterval;
+
+        ableSpawn = true;
+
+        //敵がスポーンする範囲
+        GameObject stage = GameObject.FindWithTag("Ground");
+        Vector3 stagePos = stage.transform.position;
+
+        minPos = new Vector3(stagePos.x - 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z - 6.0f);
+
+        maxPos = new Vector3(stagePos.x + 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z + 6.0f);
     }
 
     private void EnemySpawn()
     {
-        enemyKinds = Random.Range(0, 2);
-        GameObject newEnemy = Instantiate(enemy[enemyKinds]);
+        int enemyKinds;
+        int enemySpawnPos;
+        //0...丸 1...楕円
+        enemyKinds = Random.Range(0, enemys.Length);
+        GameObject newEnemy = Instantiate(enemys[enemyKinds]);
 
-        enemyPos.x = Random.Range(lowestPositionX, highestPositionX);
-        enemyPos.z = Random.Range(lowestPositionZ, highestPositionZ);
-        //enemyPos = new Vector3(ramdomPositionX, 0, ramdomPositionZ);
-
-        newEnemy.transform.position = enemyPos;
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
     private void CheakEnemy()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        //enemyNum = enemies.Length;
+        GameObject[] SphereNum;
+        GameObject[] EllipseNum;
+        SphereNum = GameObject.FindGameObjectsWithTag("SphereEnemy");
+        EllipseNum = GameObject.FindGameObjectsWithTag("EllipseNum");
 
-        if (2 < enemies.Length)
+        if (spawnLimit <= SphereNum.Length)
         {
             ableSpawn = false;
         }
@@ -110,7 +142,37 @@ public class EnemyManager : MonoBehaviour
         {
             ableSpawn = true;
         }
-
     }
 
+    private void CheakPlayer()
+    {
+        GameObject[] players;
+        players = GameObject.FindGameObjectsWithTag("Player");
+
+        if (players.Length == 2)
+        {
+            start = true;
+        }
+    }
+
+
+    private void CircleEnemySpawn()
+    {
+        int enemySpawnPos;
+
+        GameObject newEnemy = Instantiate(enemys[0]);
+
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
+    }
+
+    private void EllipseEnemySpawn()
+    {
+        int enemySpawnPos;
+
+        GameObject newEnemy = Instantiate(enemys[1]);
+
+        enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
+        newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
+    }
 }

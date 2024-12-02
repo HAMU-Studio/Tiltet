@@ -6,7 +6,7 @@ namespace UnityStandardAssets.Water
     [ExecuteInEditMode]
     public class WaterTile : MonoBehaviour
     {
-        public PlanarReflection reflection;
+      //  public PlanarReflection reflection;
         public WaterBase waterBase;
 
 
@@ -18,7 +18,7 @@ namespace UnityStandardAssets.Water
 
         void AcquireComponents()
         {
-            if (!reflection)
+            /*if (!reflection)
             {
                 if (transform.parent)
                 {
@@ -28,7 +28,7 @@ namespace UnityStandardAssets.Water
                 {
                     reflection = transform.GetComponent<PlanarReflection>();
                 }
-            }
+            }*/
 
             if (!waterBase)
             {
@@ -54,10 +54,10 @@ namespace UnityStandardAssets.Water
 
         public void OnWillRenderObject()
         {
-            if (reflection)
+            /*if (reflection)
             {
                 reflection.WaterTileBeingRendered(transform, Camera.current);
-            }
+            }*/
             if (waterBase)
             {
                 waterBase.WaterTileBeingRendered(transform, Camera.current);
