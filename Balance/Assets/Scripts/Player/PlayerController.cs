@@ -65,6 +65,16 @@ public class PlayerController : MonoBehaviour
     
     [Header("Rendererがアタッチされているオブジェクト")]
     [SerializeField] private Renderer m_playerRenderer;
+    
+    private string moveSoundName;
+    private string hitSoundName;
+
+    public void SetSoundName(string move, string hit)
+    {
+        moveSoundName = move;
+        hitSoundName = hit;
+    }
+
 
     private StageMovement m_stageMovement;
     void Awake()
@@ -463,7 +473,7 @@ public class PlayerController : MonoBehaviour
         direction.y = 0;
         m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
-
+        SoundManager.instance.Play(hitSoundName);
     }
 
     private const float controlPower = 0.1f;
@@ -507,6 +517,18 @@ public class PlayerController : MonoBehaviour
             //SmoothDampAngle(現在の値, 目的の値, ref 現在の速度, 遷移時間, 最高速度); 現在の速度はnullで良いっぽい？
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (isFlying == false)
+            {
+                SoundManager.instance.Play(moveSoundName);
+            }
+            else
+            {
+                SoundManager.instance.StopPlay(moveSoundName);
+            }
+        }
+        else
+        {
+            SoundManager.instance.StopPlay(moveSoundName);
         }
     }
     

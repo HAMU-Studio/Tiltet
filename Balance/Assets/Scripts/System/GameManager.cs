@@ -209,6 +209,15 @@ public class GameManager : MonoBehaviour
             return;
         
         playerInstances[i] = playerInstance;
+        if (i == 0)
+        {
+            playerInstances[i].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
+        }
+        else if (i == 1)
+        {
+            playerInstances[i].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
+        }
+       
         i++;
         
         //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
