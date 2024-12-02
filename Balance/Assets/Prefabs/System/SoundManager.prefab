@@ -46,17 +46,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmDatas:
   - name: Title
-    audioClip: {fileID: 8300000, guid: 2e28cd539e99a8e41bd12405b766bd2b, type: 3}
-    volume: 0.315
+    audioClip: {fileID: 8300000, guid: 9741912e2395d7d45802dcd515d344b2, type: 3}
+    volume: 0.6
   - name: Fight
-    audioClip: {fileID: 8300000, guid: 78049dc3ec0178c41a34c3b690f4e792, type: 3}
-    volume: 0.5
+    audioClip: {fileID: 8300000, guid: 1c79cf8415d61cf4591aff6cc6ba5790, type: 3}
+    volume: 0.2
+  - name: Menu
+    audioClip: {fileID: 8300000, guid: 95e5a18e3b7414e4bb75144b31e1e403, type: 3}
+    volume: 0.4
+  - name: snowStage
+    audioClip: {fileID: 8300000, guid: 27825fe372c766c4b9ab37c6fd5c1c09, type: 3}
+    volume: 0.2
+  - name: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+    audioClip: {fileID: 8300000, guid: 797e4f8f9b5dcc145a4f585c2c982866, type: 3}
+    volume: 0.9
   - name: GreenStage
-    audioClip: {fileID: 8300000, guid: fc6b6db3ee08d774693cff8612052dd6, type: 3}
+    audioClip: {fileID: 8300000, guid: 195df2cacb33d0f4b9cc8efd3fd846e1, type: 3}
     volume: 0.5
   SEDatas:
   - name: PlayerMove
     audioClip: {fileID: 8300000, guid: 7cad5f8762031e84d95e7edb1edeb95f, type: 3}
     playedTime: 0
-    volume: 0.5
+    volume: 0.6
+  - name: CursorMove
+    audioClip: {fileID: 8300000, guid: dde5b88db1ffe904bb94d1e2132c0513, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: CursorBack
+    audioClip: {fileID: 8300000, guid: 0d5afedd3b259ad48bd2f82f7533bb10, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: CursorDecision
+    audioClip: {fileID: 8300000, guid: d083edee05cb3af45846e38d2a27ffb6, type: 3}
+    playedTime: 0
+    volume: 1
+  - name: PlayerHit
+    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
+    playedTime: 0
+    volume: 0.8
+  - name: Siren
+    audioClip: {fileID: 8300000, guid: 4fbdd49727a279b40a2fe5749c0ac82b, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: Player2Move
+    audioClip: {fileID: 8300000, guid: 7cad5f8762031e84d95e7edb1edeb95f, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: Player2Hit
+    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
+    playedTime: 0
+    volume: 0.8
   playableDistance: 0.2

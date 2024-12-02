@@ -194,12 +194,4 @@ public class GameManager : MonoBehaviour
         RB.velocity = Vector3.zero;
         RB.angularVelocity = Vector3.zero;
     }
-    private void Update()
-    {
-        if (currentGamestate == GameState.WaitStart)
-        {
-            SoundManager.instance.Play("Title");
-            currentGamestate = GameState.None;
-        }
-    }
 }

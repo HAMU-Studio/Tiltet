@@ -454,6 +454,7 @@ public class PlayerController : MonoBehaviour
         direction.y = 0;
         m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
+        SoundManager.instance.Play("PlayerHit");
 
     }
 
@@ -503,7 +504,15 @@ public class PlayerController : MonoBehaviour
             {
                 SoundManager.instance.Play("PlayerMove");
             }
-         
+            else
+            {
+                SoundManager.instance.StopPlay("PlayerMove");
+            }
+        }
+        else
+        {
+          //  SoundManager.instance.GetIsPlaying("PlayerMove");
+            SoundManager.instance.StopPlay("PlayerMove");
         }
     }
     
