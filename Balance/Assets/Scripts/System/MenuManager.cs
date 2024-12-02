@@ -20,6 +20,6 @@ public class MenuManager : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("GreenStage");
+         GameManager.instance.Restart();
     }
 }

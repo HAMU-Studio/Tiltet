@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FadeSystem;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -82,7 +83,20 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _sceneManager.FadeStart();
+        currentGamestate = GameState.Search;
+        PlayerDestroy();
+    }
+
+    public void PlayerDestroy()
+    {
+        foreach (var player in playerInstances)
+        {
+            if (player == null)
+                return;
+            
+            Destroy(player);
+        }
     }
     
     public void EndGame()
@@ -101,6 +115,21 @@ public class GameManager : MonoBehaviour
         {
             OnStateChange();
         }
+        
+    }
+
+   
+    public void GameOver()
+    {
+        _sceneManager.nextSceneName = "GameOver";
+        _sceneManager.FadeStart();
+        CurrentState = GameState.Result;
+    }
+
+    private FadeAndSceneTransition _sceneManager;
+    public void SetSceneManager(FadeAndSceneTransition sceneManager)
+    {
+        _sceneManager = sceneManager;
     }
 
     public GameState CurrentState
@@ -209,9 +238,11 @@ public class GameManager : MonoBehaviour
             return;
         
         playerInstances[i] = playerInstance;
+       // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
         if (i == 0)
         {
             playerInstances[i].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
+           
         }
         else if (i == 1)
         {
@@ -249,6 +280,10 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject player in playerInstances)
         {
+            if (player == null)
+            {
+                return;
+            }
             StartCoroutine(player.GetComponent<PlayerManager>().ResetPlayerState());
         }
     }
