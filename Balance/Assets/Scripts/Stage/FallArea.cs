@@ -10,7 +10,7 @@ public class FallArea : MonoBehaviour
     private GameObject fallPlayerInstance;
     private PlayerManager m_PM;
    
-    private bool waitRescue;
+    public bool waitRescue;
 
     private void Start()
     {
@@ -62,6 +62,13 @@ public class FallArea : MonoBehaviour
                 HitPlayerProcess(other);
                 waitRescue = true;
             }
+            else
+            {
+                if (Player2Check(other) == true)
+                {
+                    GameManager.instance.GameOver();
+                }
+            }
         }
     }
 
@@ -89,10 +96,24 @@ public class FallArea : MonoBehaviour
         jointManager.SetJointAndLine();
     }
 
+    private bool Player2Check(Collider playerCol)
+    {
+        SetFallInstance(playerCol);
+        SetPlayerManager();
+        if (m_PM.rescState == RescueState.None)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void SetFallInstance(Collider col)
     {
         fallPlayerInstance = col.gameObject;
-        Debug.Log("FPI = " + fallPlayerInstance);
+     //   Debug.Log("FPI = " + fallPlayerInstance);
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerManager();
     }
