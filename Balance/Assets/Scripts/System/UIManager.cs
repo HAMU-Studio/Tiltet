@@ -29,6 +29,13 @@ public class UIManager : MonoBehaviour
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;
+        
+        if (GameManager.instance.isConnected == true)
+        {
+            ConnectionScreen.SetActive(false);
+            //   GameManager.instance.StartGame();
+            return;
+        }
     }
 
     private bool once;
@@ -69,7 +76,7 @@ public class UIManager : MonoBehaviour
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
-        
+        GameManager.instance.isConnected = true;
         GameManager.instance.StartGame();
         ConnectionScreen.SetActive(false);
     }

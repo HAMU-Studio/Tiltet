@@ -49,8 +49,11 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         m_beforeState = rescCurrentState;
+        GameManager.instance.SavePlayerInstance(gameObject);
     }
 
+    private ThrowawayMethod method;
+    private bool temp;
     private void FixedUpdate()
     {
         if (rescCurrentState != m_beforeState)
@@ -58,6 +61,7 @@ public class PlayerManager : MonoBehaviour
             OnStateChange();
         }
     }
+
 
     private RescueState m_beforeState;
     private void OnStateChange()
@@ -126,4 +130,24 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
         }
     }
+    
+    /// <summary>
+    /// シーン切り替え時に呼ぶプレイヤーのリセット シーンのロード前とロード後に行う処理がある
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator ResetPlayerState()
+    {
+        Debug.Log("Reset!");
+        PlayerController _playerController = GetComponent<PlayerController>();
+        _playerController.enabled = false;
+        GameManager.instance.Rescue = false;
+        rescState = RescueState.None;
+        
+        yield return new WaitForSeconds(1.7f);
+        
+        GetComponent<JointManager>().Reset();
+        _playerController.Initialize();
+        _playerController.enabled = true;
+    }
+  
 }
