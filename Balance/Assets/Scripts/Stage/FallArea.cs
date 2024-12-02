@@ -137,7 +137,7 @@ public class FallArea : MonoBehaviour
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         //最短距離のオブジェクトだけon
-        shortestDistArea.GetComponent<Renderer>().enabled = true;
+        shortestDistArea.GetComponentInChildren<Renderer>().enabled = true;
         shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
         shortestDistArea.SetActive(true);
         
@@ -155,6 +155,7 @@ public class FallArea : MonoBehaviour
       {
         //  area.SetActive(false);
           area.GetComponent<Renderer>().enabled = false;
+          area.GetComponentInChildren<Renderer>().enabled = false;
       }
     }
 }

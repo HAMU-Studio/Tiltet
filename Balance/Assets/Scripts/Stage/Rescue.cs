@@ -13,6 +13,7 @@ public class Rescue : MonoBehaviour
         canRescueAct = false;
         isThrowing = false;
         once = false;
+        gameObject.GetComponent<Renderer>().enabled = false;
     }
     
     private void OnTriggerEnter(Collider other)
@@ -81,7 +82,7 @@ public class Rescue : MonoBehaviour
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
 
-        GetComponent<Renderer>().enabled = false;
+        GetComponentInChildren<Renderer>().enabled = false;
     }
    
     /// <param name="pointA">飛ばす元(落ちたプレイヤー)</param>
