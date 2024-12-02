@@ -6201,8 +6201,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   part: {fileID: 334112061}
-  stopArea: {fileID: 943497933}
   needStayTime: 3
+  gaugeDeleteTime: 2
+  gauge: {fileID: 0}
+  gaugeText: {fileID: 0}
 --- !u!65 &943497936
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6670,6 +6672,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 14537070150068896, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 14537070572405698, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_Name
@@ -8843,27 +8850,27 @@ PrefabInstance:
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000000008492101
+      value: -0.000000008492101
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000000013780783
+      value: -0.0000000013780784
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964842353718, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16018224
+      value: -0.16018225
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 3e-45
+      value: -1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 7460071964894588678, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -1e-45
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7460071965275837817, guid: a2d36e0dc60c1e244a518f38eaedb9c4,
         type: 3}
