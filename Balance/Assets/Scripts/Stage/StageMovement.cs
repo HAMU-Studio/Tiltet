@@ -16,8 +16,18 @@ public class StageMovement : MonoBehaviour
 
     private State state = State.Moving; // 初期状態をMovingに設定
 
-    // オブジェクトの移動速度のスケール
-    [SerializeField] private float movementScale = 1f;
+    // 外部から制御可能なフラグ
+    private bool isStopActive = false;
+
+    public bool IsStopActive
+    {
+        get { return isStopActive; }
+        set
+        {
+            isStopActive = value;
+            UpdateState(); // フラグ変更時に状態を更新
+        }
+    }
 
     // 移動量を管理するための変数
     private Vector3 m_beforePos;  // 前フレームの位置
@@ -29,6 +39,9 @@ public class StageMovement : MonoBehaviour
     {
         get { return m_movementAmount; }
     }
+
+    // オブジェクトの移動速度のスケール
+    [SerializeField] private float movementScale = 1f;
 
     void Start()
     {
@@ -67,21 +80,33 @@ public class StageMovement : MonoBehaviour
         CalculateMovementAmount();
     }
 
-    // 状態を設定するメソッド
-    public void SetState(State newState)
+    // 状態を更新するメソッド
+    private void UpdateState()
     {
-        if (state == newState) return; // 同じ状態に変更しない
-
-        state = newState; // 状態を更新
-
-        if (state == State.Moving)
+        if (isStopActive)
         {
-            Debug.Log("State changed to Moving");
+            EnableStop();
         }
-        else if (state == State.Stop)
+        else
         {
-            Debug.Log("State changed to Stop");
+            EnableMoving();
         }
+    }
+
+    // Moving状態を有効にする処理
+    private void EnableMoving()
+    {
+        if (state == State.Moving) return; // すでにMovingなら何もしない
+        state = State.Moving;
+        Debug.Log("State changed to Moving");
+    }
+
+    // Stop状態を有効にする処理
+    private void EnableStop()
+    {
+        if (state == State.Stop) return; // すでにStopなら何もしない
+        state = State.Stop;
+        Debug.Log("State changed to Stop");
     }
 
     // 移動を適用する処理
@@ -101,7 +126,7 @@ public class StageMovement : MonoBehaviour
     // 移動を停止させる処理
     private void StopMovement()
     {
-        m_rb.velocity = Vector3.zero;
+        m_rb.velocity = Vector3.zero; // 速度をゼロにする
     }
 
     // 移動量を計算するメソッド

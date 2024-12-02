@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     [Header("Rendererがアタッチされているオブジェクト")]
     [SerializeField] private Renderer m_playerRenderer;
 
-    private StageManager m_stageManager;
+    private StageMovement m_stageManager;
     void Awake()
     {
         m_player = GetComponent<Transform>();
@@ -362,7 +362,7 @@ public class PlayerController : MonoBehaviour
         
         if (col.gameObject.CompareTag("Ground"))
         {
-            m_stageManager = col.gameObject.GetComponent<StageManager>();
+            m_stageManager = col.gameObject.GetComponent<StageMovement>();
           
           //  _stageManager.SetToStageChild(gameObject);
             //_stageManager.CounterScaleCalc(gameObject);
