@@ -20,13 +20,19 @@ public class WaveManager : MonoBehaviour
     [Header("FinalWaveの敵の数")]
     [SerializeField] private int finalWave = 20;
 
-    [Header("フェーズ表示用テキスト")]
+    [Header("戦闘UI")]
+    [SerializeField] GameObject waveGauge;
+    [Header("テキスト")]
     [SerializeField] TextMeshProUGUI phasesText;
+    [Header("ゲージ")]
+
 
     EnemyManager enemymanager;
     //enemymanager.CircleLimit;
     //enemymanager.EllipseLimit;
     //enemymanager.NumSpawnAtOnce;
+
+    private float time;
 
     // Start is called before the first frame update
     void Start()
@@ -37,12 +43,18 @@ public class WaveManager : MonoBehaviour
     private void Set()
     {
         enemymanager = this.GetComponent<EnemyManager>();
+        time = 0f;
+        waveGauge.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        time += Time.deltaTime;
+        if (time >= 5.0f)
+        {
+            waveGauge.SetActive(true);
+        }
     }
 
     private void FirstWave()

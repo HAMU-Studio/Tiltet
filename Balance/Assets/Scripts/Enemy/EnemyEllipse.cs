@@ -158,5 +158,13 @@ public class EnemyEllipse : MonoBehaviour
             m_arrived = true;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Destroy"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
 
