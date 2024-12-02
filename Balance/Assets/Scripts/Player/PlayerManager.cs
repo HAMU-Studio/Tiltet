@@ -68,6 +68,12 @@ public class PlayerManager : MonoBehaviour
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
+            SoundManager.instance.Play("Struggle");
+        }
+
+        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move)
+        {
+            SoundManager.instance.StopPlay("Struggle");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)

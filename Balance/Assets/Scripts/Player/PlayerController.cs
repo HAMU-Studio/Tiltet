@@ -66,6 +66,15 @@ public class PlayerController : MonoBehaviour
     [Header("Rendererがアタッチされているオブジェクト")]
     [SerializeField] private Renderer m_playerRenderer;
 
+    private string moveSoundName;
+    private string hitSoundName;
+
+    public void SetSoundName(string move, string hit)
+    {
+        moveSoundName = move;
+        hitSoundName = hit;
+    }
+    
     private StageManager m_stageManager;
     void Awake()
     {
@@ -454,7 +463,7 @@ public class PlayerController : MonoBehaviour
         direction.y = 0;
         m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
-        SoundManager.instance.Play("PlayerHit");
+        SoundManager.instance.Play(hitSoundName);
 
     }
 
@@ -502,17 +511,17 @@ public class PlayerController : MonoBehaviour
 
             if (isFlying == false)
             {
-                SoundManager.instance.Play("PlayerMove");
+                SoundManager.instance.Play(moveSoundName);
             }
             else
             {
-                SoundManager.instance.StopPlay("PlayerMove");
+                SoundManager.instance.StopPlay(moveSoundName);
             }
         }
         else
         {
           //  SoundManager.instance.GetIsPlaying("PlayerMove");
-            SoundManager.instance.StopPlay("PlayerMove");
+            SoundManager.instance.StopPlay(moveSoundName);
         }
     }
     
