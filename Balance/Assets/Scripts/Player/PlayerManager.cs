@@ -61,17 +61,23 @@ public class PlayerManager : MonoBehaviour
             OnStateChange();
         }
     }
-
-
+    
     private RescueState m_beforeState;
     private void OnStateChange()
     {
-       // Debug.Log("state change " + m_beforeState + "->" + currentState);
+        // Debug.Log("state change " + m_beforeState + "->" + currentState);
         
         if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
         {
             //落ちたら救出開始
             GameManager.instance.Rescue = true;
+            SoundManager.instance.Play("Struggle");
+        }
+
+        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move
+            || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
+        {
+            SoundManager.instance.StopPlay("Struggle");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
@@ -94,7 +100,7 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
         {
             //飛んだらレイヤーですり抜けon
-           SlipThroughOn();
+            SlipThroughOn();
          
         }
         m_beforeState = rescCurrentState;

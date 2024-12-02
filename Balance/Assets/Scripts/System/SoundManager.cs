@@ -129,11 +129,16 @@ namespace System
         /// <param name="name">AudioClipの名前でなく登録した別名</param>
         public void Play(string name)
         {
+            if (name == null)
+            {
+                Debug.Log("String is null !");
+                return;
+            }
             // それぞれの管理用Dictionaryから別名で検索、一致したら再生
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
                 PlayBGM(bgmData.audioClip, bgmData.volume);
-                Debug.Log("BGM play: " + name);
+               // Debug.Log("BGM play: " + name);
             }
             else if (SEDictionary.TryGetValue(name, out SEData seData))
             {
@@ -142,7 +147,7 @@ namespace System
                 
                 seData.playedTime = Time.realtimeSinceStartup; 　//次回用に今回の再生時間の保持 
                 PlaySE(seData.audioClip, seData.volume);
-                Debug.Log("SE play: " + name);
+            //    Debug.Log("SE play: " + name);
             }
             else
             {
