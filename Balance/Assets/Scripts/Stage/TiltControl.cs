@@ -61,7 +61,7 @@ public class TiltControl : MonoBehaviour
         // RotationXとRotationZに現在の回転を代入し、ログを表示
         RotationX = currentRotation.x;
         RotationZ = currentRotation.z;
-        Debug.Log($"Rotation X: {RotationX:F2}, Rotation Z: {RotationZ:F2}");
+        //Debug.Log($"Rotation X: {RotationX:F2}, Rotation Z: {RotationZ:F2}");
 
         // 制限後の回転を適用
         transform.rotation = Quaternion.Euler(currentRotation);

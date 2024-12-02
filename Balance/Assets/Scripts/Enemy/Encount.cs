@@ -4,11 +4,16 @@ using UnityEngine;
 using Cinemachine;
 
 public class Encount : MonoBehaviour
-{
+{ 
     private CameraManager cameraManager;
+
+    EncountManager encountmanager;
 
     void Start()
     {
+        GameObject encountManager = GameObject.Find("EncountManager");
+        encountmanager = encountManager.GetComponent<EncountManager>();
+
         // CameraManagerをシーン内から探して取得
         cameraManager = FindObjectOfType<CameraManager>();
 
@@ -18,10 +23,12 @@ public class Encount : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Graund"))
+        if (other.gameObject.CompareTag("Ground"))
         {
+            encountmanager.isEncount = true;
+
             if (cameraManager != null)
             {
                 // 現在アクティブなカメラを取得
@@ -36,6 +43,8 @@ public class Encount : MonoBehaviour
                     Debug.LogWarning("アクティブなカメラが見つかりません。");
                 }
             }
+
+            Destroy(gameObject);
         }
     }
 }

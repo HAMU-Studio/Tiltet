@@ -21,12 +21,12 @@ public class PartsArrival : MonoBehaviour
     private bool isStay;
     private bool inArea;
 
-    StageManager stagemanager;
+    StageMovement stagemovement;
 
     private void Start()
     {
-        GameObject stageManager = GameObject.Find("stage 1");
-        stagemanager = stageManager.GetComponent<StageManager>();
+        GameObject stageMovement= GameObject.Find("stage 1");
+        stagemovement = stageMovement.GetComponent<StageMovement>();
 
         gauge.SetActive(false);
         gaugeText.text = "";
@@ -68,15 +68,20 @@ public class PartsArrival : MonoBehaviour
 
             }
         }
+        else
+        {
+            gauge.SetActive(false);
+            gaugeText.text = "";
+        }
     }
 
     //エリアで自機が3秒止まるとクリア
     private void CheckMove()
     {
-        Vector3 movementAmount = stagemanager.MovementAmount;
+        Vector3 movementAmount = stagemovement.MovementAmount;
         checkMove = (movementAmount.x + movementAmount.y + movementAmount.z);
 
-        if (-0.01 < checkMove && checkMove < 0.01f)
+        if (-0.05 < checkMove && checkMove < 0.05f)
         {
             isStay = true;
         }
