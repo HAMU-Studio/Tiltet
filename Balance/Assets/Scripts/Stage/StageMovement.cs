@@ -14,7 +14,7 @@ public class StageMovement : MonoBehaviour
         Stop
     }
 
-    private State state = State.Moving; // 初期状態をMovingに設定
+    private State state = State.Stop; // 初期状態をMovingに設定
 
     // 外部から制御可能なフラグ
     private bool isStopActive = false;
@@ -62,6 +62,16 @@ public class StageMovement : MonoBehaviour
 
         m_currentPos = transform.position;
         m_beforePos = transform.position;
+    }
+
+    void Update()
+    {
+        // デバッグ用のUキー押下でStop状態の有効/無効を切り替える処理
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            IsStopActive = !IsStopActive; // 状態を切り替える
+            Debug.Log($"Uキーが押され、Stop状態が{(IsStopActive ? "有効" : "無効")}になりました。");
+        }
     }
 
     void FixedUpdate()

@@ -1,45 +1,53 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class StageManager : MonoBehaviour
 {
-    // 初期のY座標を保持する変数
-    private float m_initialY;
+    private FallArea m_fallArea;
+    private StageMovement m_stageMovement;
+    private Rigidbody m_rb;
+
+    [SerializeField] private float knockbackForce = 5f; // 横ノックバックの強さ
+    [SerializeField] private float knockbackUpForce = 2f; // 縦ノックバックの強さ
 
     private void Start()
     {
-        GameManager.instance.SaveAircraftInstance(gameObject);
-    }
-
-    void Update()
-    {
-        // オブジェクトのY座標を固定する処理を呼び出す
-        //LockPositionY();
-    }
-
-    // Y座標を初期位置から下がらないように固定する処理
-    private void LockPositionY()
-    {
-        Vector3 position = transform.position;
-
-        // Y座標が初期値より小さい場合、初期値に戻す
-        if (position.y < m_initialY)
+        // StageMovement コンポーネントを取得
+        m_stageMovement = GetComponent<StageMovement>();
+        if (m_stageMovement == null)
         {
-            position.y = m_initialY;
-            transform.position = position;
+            Debug.LogError("StageMovement コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+        }
+
+        // Rigidbody コンポーネントを取得
+        m_rb = GetComponent<Rigidbody>();
+        if (m_rb == null)
+        {
+            Debug.LogError("Rigidbody コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+        }
+
+        // FallArea コンポーネントを取得
+        m_fallArea = GetComponent<FallArea>();
+        if (m_fallArea == null)
+        {
+            Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
     }
 
-    // 衝突時の処理を追加
+    private void Update()
+    {
+        // FallArea の waitRescue が true なら StageMovement の Stop 状態を有効にし、false なら無効にする
+        //m_stageMovement.IsStopActive = fallArea.WaitRescue;
+    }
+
+    // 衝突時の処理
     private void OnCollisionEnter(Collision collision)
     {
         // 衝突相手のタグが "StageObject" の場合
         if (collision.gameObject.CompareTag("StageObject"))
         {
-            Debug.Log("衝突");
+            m_stageMovement.IsStopActive = true; // Stop 状態を有効にする
+            Debug.Log("StageMovement の Stop 状態を有効にしました。");
         }
     }
 }
