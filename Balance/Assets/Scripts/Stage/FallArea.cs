@@ -12,6 +12,11 @@ public class FallArea : MonoBehaviour
    
     public bool waitRescue;
 
+    public bool WaitRescue
+    {
+        get { return waitRescue; }
+    }
+
     private void Start()
     {
         waitRescue = false;
