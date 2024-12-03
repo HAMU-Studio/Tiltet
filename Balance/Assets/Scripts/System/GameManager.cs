@@ -109,13 +109,26 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
+    private bool once = false;
+
     private void Update()
     {
         if (m_beforeState != CurrentState)
         {
             OnStateChange();
         }
-        
+
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            if (!once)
+            {
+
+                GameManager.instance.GameClear();
+                once = true;
+            }
+        }
+
     }
 
    
@@ -124,6 +137,14 @@ public class GameManager : MonoBehaviour
         _sceneManager.nextSceneName = "GameOver";
         _sceneManager.FadeStart();
         CurrentState = GameState.Result;
+    }
+
+    public void GameClear()
+    {
+        _sceneManager.nextSceneName = "Clear";
+        _sceneManager.FadeStart();
+        CurrentState = GameState.Result;
+        PlayerDestroy();
     }
 
     private FadeAndSceneTransition _sceneManager;

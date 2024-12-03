@@ -12,6 +12,7 @@ public class PartsArrival : MonoBehaviour
     [SerializeField] private float needStayTime = 5.0f; // 滞在時間
     [Header("ゲージがなくなるまでの時間")]
     [SerializeField] private float gaugeDeleteTime = 2.0f;
+
     [SerializeField] private GameObject gauge;
     [SerializeField] private TextMeshProUGUI gaugeText;
 
@@ -25,7 +26,7 @@ public class PartsArrival : MonoBehaviour
 
     private void Start()
     {
-        GameObject stageMovement= GameObject.Find("stage 1");
+        GameObject stageMovement= GameObject.Find("stage 2");
         stagemovement = stageMovement.GetComponent<StageMovement>();
 
         gauge.SetActive(false);
@@ -56,6 +57,7 @@ public class PartsArrival : MonoBehaviour
                     Destroy(gauge);
                     Destroy(gaugeText);
                 }
+                Debug.Log("ge-ge");
             }
             else
             {
@@ -81,7 +83,14 @@ public class PartsArrival : MonoBehaviour
         Vector3 movementAmount = stagemovement.MovementAmount;
         checkMove = (movementAmount.x + movementAmount.y + movementAmount.z);
 
-        if (-0.05 < checkMove && checkMove < 0.05f)
+        //Debug.Log(checkMove);
+        /*if (movementAmount == null)
+        {
+            gauge.SetActive(false);
+            gaugeText.text = "";
+        }*/
+
+        if (-0.1 < checkMove && checkMove < 0.1f)
         {
             isStay = true;
         }
@@ -107,6 +116,7 @@ public class PartsArrival : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             inArea = true;
+            Debug.Log("haitta");
         }
     }
     // エリアから出たら滞在時間をリセット
