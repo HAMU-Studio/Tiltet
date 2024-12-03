@@ -14,7 +14,7 @@ public class StageMovement : MonoBehaviour
         Stop
     }
 
-    private State state = State.Stop; // 初期状態をMovingに設定
+    private State state = State.Moving; // 初期状態をMovingに設定
 
     // 外部から制御可能なフラグ
     private bool isStopActive = false;

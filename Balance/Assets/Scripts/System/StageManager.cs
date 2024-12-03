@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    private FallArea m_fallArea;
     private StageMovement m_stageMovement;
     private Rigidbody m_rb;
+
+    // FallArea への参照を追加
+    [SerializeField] private FallArea fallArea;
 
     [SerializeField] private float knockbackForce = 5f; // 横ノックバックの強さ
     [SerializeField] private float knockbackUpForce = 2f; // 縦ノックバックの強さ
@@ -27,8 +29,7 @@ public class StageManager : MonoBehaviour
         }
 
         // FallArea コンポーネントを取得
-        m_fallArea = GetComponent<FallArea>();
-        if (m_fallArea == null)
+        if (fallArea == null)
         {
             Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
@@ -37,7 +38,7 @@ public class StageManager : MonoBehaviour
     private void Update()
     {
         // FallArea の waitRescue が true なら StageMovement の Stop 状態を有効にし、false なら無効にする
-        //m_stageMovement.IsStopActive = fallArea.WaitRescue;
+        m_stageMovement.IsStopActive = fallArea.WaitRescue;
     }
 
     // 衝突時の処理

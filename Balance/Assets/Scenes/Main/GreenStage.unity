@@ -2468,13 +2468,18 @@ PrefabInstance:
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000022880092
+      value: 0.0000000228801
       objectReference: {fileID: 0}
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008283736
+      value: -0.000000008283737
       objectReference: {fileID: 0}
+    - target: {fileID: 4564555364397662376, guid: 75434909bf02b6543a8486cdad4777e6,
+        type: 3}
+      propertyPath: fallArea
+      value: 
+      objectReference: {fileID: 1705410546}
     - target: {fileID: 4836122575055820819, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_RootOrder
@@ -9718,6 +9723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _transition: {fileID: 0}
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
@@ -13274,6 +13280,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1704817387}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1705410546 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4412704955265268026, guid: 75434909bf02b6543a8486cdad4777e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 290617732}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2bbcbe49bb7a464dbd9d990aa702234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1715801132
 GameObject:
   m_ObjectHideFlags: 0
