@@ -57,19 +57,19 @@ public class GameManager : MonoBehaviour
         }
         isPlayerSpawn = new bool [2];
         playerInstances = new GameObject[2];
-
+        
         InitGame();
     }
     private void InitGame()
     {
-       // Time.timeScale = 0;
         m_life = initialLife;
-       // m_wave = initialWave;
         m_mainParts = 0;
         m_subParts = 0;
         isPlayerSpawn = new bool [2];
-        int i = 0;
-      //  StartGame();
+        method = new ThrowawayMethod();
+        count = 0;
+        isConnected = false;
+        playerInstances = new GameObject[2];
         //今後ScoreUIのUpdate呼び出す
     }
 
@@ -83,12 +83,10 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        _sceneManager.FadeStart();
-        currentGamestate = GameState.Search;
-        PlayerDestroy();
+        StartCoroutine(DelayRestart());
     }
 
-    public void PlayerDestroy()
+    private void PlayerDestroy()
     {
         foreach (var player in playerInstances)
         {
@@ -109,8 +107,8 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    private bool once = false;
-
+    private ThrowawayMethod method = new ThrowawayMethod();
+  
     private void Update()
     {
         if (m_beforeState != CurrentState)
@@ -121,28 +119,24 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.C))
         {
-            if (!once)
-            {
-
-                GameManager.instance.GameClear();
-                once = true;
-            }
+            method.RunOnce(GameClear); 
         }
 
+        if (Input.GetKey(KeyCode.R))
+        {
+            method.RunOnce(Restart);
+        }
     }
-
    
     public void GameOver()
     {
-        _sceneManager.nextSceneName = "GameOver";
-        _sceneManager.FadeStart();
+        _sceneManager.FadeStart("GameOver");
         CurrentState = GameState.Result;
     }
 
     public void GameClear()
     {
-        _sceneManager.nextSceneName = "Clear";
-        _sceneManager.FadeStart();
+        _sceneManager.FadeStart("Clear");
         CurrentState = GameState.Result;
         PlayerDestroy();
     }
@@ -183,7 +177,7 @@ public class GameManager : MonoBehaviour
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
-            StartCoroutine(DelayResetPlayer());
+            StartCoroutine(DelayRespawnPlayer());
         }
         
         m_beforeState = currentGamestate;
@@ -251,33 +245,32 @@ public class GameManager : MonoBehaviour
         set { m_axis = value;}
     }
 
-    private bool temp;
-    int i = 0;
+    
+    int count = 0;
     public void SavePlayerInstance(GameObject playerInstance)
     {
-        if (temp)
+        //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
+        if (count == 2)
             return;
         
-        playerInstances[i] = playerInstance;
+        playerInstances[count] = playerInstance;
        // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
-        if (i == 0)
+        if (count == 0)
         {
-            playerInstances[i].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
-           
+            playerInstances[count].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
         }
-        else if (i == 1)
+        else if (count == 1)
         {
-            playerInstances[i].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
         }
        
-        i++;
-        
-        //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
-        if (i == 2)
-        {
-         //   instance.SetPlayerPos();
-            temp = true;
-        }
+        count++;
+ 
+    }
+
+    private void ResetPlayer()
+    {
+        playerInstances = null;
     }
 
     /// <summary>
@@ -297,7 +290,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetPlayer()
+    public void RespawnPlayer()
     {
         foreach (GameObject player in playerInstances)
         {
@@ -390,11 +383,19 @@ public class GameManager : MonoBehaviour
     /// プレイヤーセットしたら自動で要改善
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DelayResetPlayer()
+    private IEnumerator DelayRespawnPlayer()
     {
         yield return new WaitForSeconds(1.8f);
-        //急にうごかなくなったから消した
-      //  SetPlayerPos();
+    }
+
+    private IEnumerator DelayRestart()
+    {
+        _sceneManager.FadeStart("GreenStage");
+        currentGamestate = GameState.Search;
+        PlayerDestroy();
+        InitGame();
+        yield return new WaitForSeconds(1.7f);
+     //   ResetPlayer();
     }
     
 }

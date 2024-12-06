@@ -78,12 +78,21 @@ namespace System
         /// <summary>
         /// 未使用のAudioSourceの取得 全て使用中ならnull
         /// </summary>
-        private AudioSource GetUnusedAudioSource()
+        private AudioSource GetUnusedAudioSource(AudioClip clip)
         {
-            for (int i = 0; i < audioSourceList.Length; i++)
+         
+            // すでに同じclipが入ったAudioSourceがあるならそれで再生
+            foreach (var audioSource in audioSourceList)
             {
-                if (audioSourceList[i].isPlaying == false)
-                    return audioSourceList[i];
+                if (audioSource.clip == clip)
+                {
+                    return audioSource;
+                }
+            }
+            foreach (var audioSource in audioSourceList)
+            {
+                if (audioSource.isPlaying == false)
+                    return audioSource;
             }
             return null; 
         }
@@ -91,7 +100,7 @@ namespace System
         public void PlayBGM(AudioClip bgm, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
-            AudioSource audioSource = GetUnusedAudioSource();
+            AudioSource audioSource = GetUnusedAudioSource(bgm);
 
             if (audioSource == null)
             {
@@ -108,11 +117,11 @@ namespace System
         public void PlaySE(AudioClip clip, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
-            AudioSource audioSource = GetUnusedAudioSource();
+            AudioSource audioSource = GetUnusedAudioSource(clip);
 
             if (audioSource == null)
             {
-                Debug.Log("BGM play failed");
+                Debug.Log("SE play failed");
                 return;
             }
 
@@ -162,6 +171,12 @@ namespace System
         /// <returns></returns>
         public AudioSource GetUsingAudioSource(string name)
         {
+            if (name == null)
+            {
+                Debug.Log("param name is null");
+                return null;
+            }
+            
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
                 for (int i = 0; i < audioSourceList.Length; i++)
