@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-//using System.Diagnostics;
 using UnityEngine;
 using TMPro;
 using FadeSystem;
-
-
 
 public class EnemyManager : MonoBehaviour
 {
@@ -52,6 +49,8 @@ public class EnemyManager : MonoBehaviour
     //プレイヤーが二人いたら始まる
     private bool start;
 
+    private string BGM = "Fight"; 
+
     private float time;
     private bool wave1;
     private int count1;
@@ -61,6 +60,7 @@ public class EnemyManager : MonoBehaviour
     private int count3;
     private bool noSphere;
     private bool noEllipse;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,6 +89,9 @@ public class EnemyManager : MonoBehaviour
 
         if (time >= 5.0f)
         {
+
+            //SoundManager.instance.Play();
+
             if (start)
             {
                 CheckCircleEnemy();
@@ -144,7 +147,6 @@ public class EnemyManager : MonoBehaviour
                                 {
                                     SpawnEllipseEnemy();
                                 }
-
                             }
                             else
                             {
@@ -169,7 +171,6 @@ public class EnemyManager : MonoBehaviour
                                 }
                             }
                         }
-                        
                     }
                     spawnTime = 0;
                 }

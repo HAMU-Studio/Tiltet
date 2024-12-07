@@ -129,6 +129,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (m_mainParts >= 1)
+        {
+            if (!once)
+            {
+                GameClear();
+                once = true;
+            }
+        }
     }
 
    
