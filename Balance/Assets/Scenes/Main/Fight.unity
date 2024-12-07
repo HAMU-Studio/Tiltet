@@ -882,6 +882,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7042175286598988680, guid: 4d9324e406ffd9246aa7a8dadccab276,
+        type: 3}
+      propertyPath: bgmDatas.Array.data[1].volume
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7795039349650907740, guid: 4d9324e406ffd9246aa7a8dadccab276,
         type: 3}
       propertyPath: m_RootOrder
@@ -10958,7 +10963,7 @@ PrefabInstance:
     - target: {fileID: 4952703685579114287, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7964c97ebd5c4c449c4b4021373fa88, type: 3}
