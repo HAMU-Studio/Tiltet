@@ -57,7 +57,6 @@ public class PartsArrival : MonoBehaviour
                     Destroy(gauge);
                     Destroy(gaugeText);
                 }
-                Debug.Log("ge-ge");
             }
             else
             {
@@ -116,7 +115,6 @@ public class PartsArrival : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             inArea = true;
-            Debug.Log("haitta");
         }
     }
     // エリアから出たら滞在時間をリセット
