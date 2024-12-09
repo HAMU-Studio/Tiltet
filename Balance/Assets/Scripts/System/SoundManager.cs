@@ -40,7 +40,7 @@ namespace System
         public static SoundManager instance = null;
         
         //AudioSource（スピーカー）を同時に鳴らしたい音の数だけ用意
-        private AudioSource[] audioSourceList = new AudioSource[20];
+        private AudioSource[] audioSourceList = new AudioSource[10];
 
         private void SetInstance()
         {
