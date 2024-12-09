@@ -71,9 +71,12 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
         {
             //落ちたら救出開始
-            GameManager.instance.Rescue = true;
-            SoundManager.instance.Play("Struggle");
-            animator.SetTrigger("toStruggle");
+            if (GameManager.instance.Rescue == false)
+            {
+                GameManager.instance.Rescue = true;
+                SoundManager.instance.Play("Struggle");
+                animator.SetTrigger("toStruggle");
+            }
         }
 
         if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move

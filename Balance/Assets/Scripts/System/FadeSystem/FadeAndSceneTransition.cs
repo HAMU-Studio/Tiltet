@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -31,6 +32,7 @@ namespace FadeSystem
                 return;
 
             isSceneTransitioning = true;
+            SoundManager.instance.StopAllSound();
             
             //リセットは戦闘と探索の切り替えのみ
           //  if (nextSceneName == "Fight" || nextSceneName == "GreenStage")

@@ -63,6 +63,7 @@ public class UIManager : MonoBehaviour
            if (m_1PImage.activeSelf == false)
            {
                m_1PImage.SetActive(true);
+               SoundManager.instance.Play("Connected");
            }
         }
         if (GameManager.instance.P2Spawn == true)
@@ -71,6 +72,7 @@ public class UIManager : MonoBehaviour
            if (m_2PImage.activeSelf == false)
            {
                m_2PImage.SetActive(true);
+               SoundManager.instance.Play("Connected");
            }
         }
     }

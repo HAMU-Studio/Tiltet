@@ -9,18 +9,13 @@ using UnityEngine.Rendering;
 public enum GameState
 {
     //制作の進捗具合によって逐次追加
-    
-    WaitStart,  //今後消す
-    None,
-    //SelectionScreen,
-    //ConnectionScreen,
-    //Countdown,
-    Search,
-    EnemyBattle,
-    //Pose,
-    Clear,
-    GameOver,
-   // Result
+   None,
+   StartMenu,
+   Search,
+   EnemyBattle,
+   //Pose,
+   Clear,
+   GameOver,
 }
 public class GameManager : MonoBehaviour
 {
@@ -57,9 +52,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        isPlayerSpawn = new bool [2];
-        playerInstances = new GameObject[2];
-        
         InitGame();
     }
     private void InitGame()
@@ -78,8 +70,8 @@ public class GameManager : MonoBehaviour
     //このあたりはプロトタイプのみ
     public void StartGame()
     {
-     //   InitGame();
-        Time.timeScale = 1;
+        InitGame();
+      //  Time.timeScale = 1;
     //    CurrentState = GameState.Search;
     }
 
@@ -179,6 +171,15 @@ public class GameManager : MonoBehaviour
     {
         _sceneManager.FadeStart("Clear");
         CurrentState = GameState.Clear;
+        PlayerDestroy();
+    }
+
+    public void Back2StartMenu()
+    {
+        _sceneManager.FadeStart("Start");
+        CurrentState = GameState.StartMenu;
+        
+        //ゲーム中から戻った時のためにプレイヤーいたら消す
         PlayerDestroy();
     }
 
@@ -438,13 +439,7 @@ public class GameManager : MonoBehaviour
         InitGame();
         yield return new WaitForSeconds(1.7f);
         ResetPlayer();
+        //Start->GreenStageになったときAwake呼ばなきゃなぜかバグる
+        Awake();
     }
-    void OnEnable()
-    {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
-    }
- 
 }

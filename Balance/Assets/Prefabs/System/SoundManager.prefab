@@ -57,7 +57,7 @@ MonoBehaviour:
   - name: snowStage
     audioClip: {fileID: 8300000, guid: 27825fe372c766c4b9ab37c6fd5c1c09, type: 3}
     volume: 0.2
-  - name: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+  - name: Ending
     audioClip: {fileID: 8300000, guid: 797e4f8f9b5dcc145a4f585c2c982866, type: 3}
     volume: 0.9
   - name: GreenStage
@@ -99,4 +99,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
     playedTime: 0
     volume: 0.8
+  - name: Connected
+    audioClip: {fileID: 8300000, guid: fbc9f9e15202bb84d9acd666bac06120, type: 3}
+    playedTime: 0
+    volume: 0.5
   playableDistance: 0.2

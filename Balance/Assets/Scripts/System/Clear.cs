@@ -16,8 +16,7 @@ public class Clear : MonoBehaviour
     {
         if(Input.anyKeyDown)
         {
-            SceneManager.LoadScene("Start");
+            GameManager.instance.Back2StartMenu();
         }
-           
     }
 }
