@@ -26,7 +26,7 @@ namespace Test
                 if (!once)
                 {
                     _transition.FadeStart();
-                    GameManager.instance.CurrentState = GameState.EnemyBattle;
+                    GameManager.instance.NextState = GameState.EnemyBattle;
                     once = true;
                 }
 
@@ -37,7 +37,7 @@ namespace Test
                 if (!once)
                 {
                     _transition.FadeStart();
-                    GameManager.instance.CurrentState = GameState.Search;
+                    GameManager.instance.NextState = GameState.Search;
                     once = true;
                 }
             }

@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            Debug.LogError("GameManager is already exists");
             Destroy(this.gameObject);
         }
         InitGame();
@@ -64,20 +65,21 @@ public class GameManager : MonoBehaviour
         count = 0;
         isConnected = false;
         playerInstances = new GameObject[2];
-        //今後ScoreUIのUpdate呼び出す
+        // SavePointの初期化はどうせ上書きされるから必要
     }
 
-    //このあたりはプロトタイプのみ
     public void StartGame()
     {
-        InitGame();
-      //  Time.timeScale = 1;
-    //    CurrentState = GameState.Search;
+        _sceneManager.FadeStart("GreenStage");
+        NextState = GameState.Search;
     }
 
     public void Restart()
     {
-        instance.StartCoroutine(DelayRestart());
+        _sceneManager.FadeStart("GreenStage");
+        m_nextState = GameState.Search;
+        PlayerDestroy();
+        InitGame();
     }
 
     /// <summary>
@@ -98,8 +100,6 @@ public class GameManager : MonoBehaviour
         SetAircraftPos();
         AircraftMoveSwitch(true);
     }
-    
-    
 
     private void PlayerDestroy()
     {
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
   
     private void Update()
     {
-        if (m_cuurentState != CurrentState)
+        if (m_cuurentState != m_nextState)
         {
             OnStateChange();
         }
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             _sceneManager.FadeStart("GreenStage");
-            instance.CurrentState = GameState.Search;
+            instance.NextState = GameState.Search;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
         
         if (m_mainParts >= 1)
         {
-            if (CurrentState != GameState.Clear)
+            if (NextState != GameState.Clear)
             {
                 GameClear();
             }
@@ -164,20 +164,20 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         _sceneManager.FadeStart("GameOver");
-        CurrentState = GameState.GameOver;
+        NextState = GameState.GameOver;
     }
 
     public void GameClear()
     {
         _sceneManager.FadeStart("Clear");
-        CurrentState = GameState.Clear;
+        NextState = GameState.Clear;
         PlayerDestroy();
     }
 
     public void Back2StartMenu()
     {
         _sceneManager.FadeStart("Start");
-        CurrentState = GameState.StartMenu;
+        NextState = GameState.StartMenu;
         
         //ゲーム中から戻った時のためにプレイヤーいたら消す
         PlayerDestroy();
@@ -189,12 +189,18 @@ public class GameManager : MonoBehaviour
         _sceneManager = sceneManager;
     }
 
-    public GameState CurrentState
+    public GameState NextState
     {
         set { m_nextState = value; }
-       
         get { return m_nextState; }
     }
+
+    public GameState CurrentState
+    {
+        set { m_cuurentState = value; }
+        get { return m_cuurentState; }
+    }
+    
 
     public bool isConnected
     {
@@ -207,7 +213,7 @@ public class GameManager : MonoBehaviour
     private GameState m_cuurentState;
     private void OnStateChange()
     {
-        //Debug.Log("stateChange " + m_beforeState + " to " + CurrentState);
+      //  Debug.Log("stateChange " + m_cuurentState + " to " + m_nextState);
         if (m_cuurentState == GameState.EnemyBattle &&
             m_nextState == GameState.Search)   // 戦闘->探索
         {
@@ -226,8 +232,8 @@ public class GameManager : MonoBehaviour
         if (m_cuurentState == GameState.Search &&
             m_nextState == GameState.GameOver) // 探索->ゲームオーバー
         {
-            /*SaveAircraftPos(m_aircraftInstance.transform.position);
-            AircraftMoveSwitch(false);*/
+            SaveAircraftPos(m_aircraftInstance.transform.position);
+            AircraftMoveSwitch(false);
         }
 
         if (m_cuurentState == GameState.GameOver &&
@@ -317,9 +323,8 @@ public class GameManager : MonoBehaviour
         {
             playerInstances[count].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
         }
-       
+        
         count++;
- 
     }
 
     private void ResetPlayer()
@@ -350,8 +355,10 @@ public class GameManager : MonoBehaviour
         {
             if (player == null)
             {
+                Debug.Log("PlayerInstance is null");
                 return;
             }
+         
             StartCoroutine(player.GetComponent<PlayerManager>().ResetPlayerState());
         }
     }
@@ -430,16 +437,5 @@ public class GameManager : MonoBehaviour
         SetAircraftPos();
         SetPlayerPos();
         AircraftMoveSwitch(true);
-    }
-    private IEnumerator DelayRestart()
-    {
-        _sceneManager.FadeStart("GreenStage");
-        m_nextState = GameState.Search;
-        PlayerDestroy();
-        InitGame();
-        yield return new WaitForSeconds(1.7f);
-        ResetPlayer();
-        //Start->GreenStageになったときAwake呼ばなきゃなぜかバグる
-        Awake();
     }
 }

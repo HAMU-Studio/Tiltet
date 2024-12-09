@@ -524,6 +524,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8734995878564543787, guid: 6fe3b528cf5af6c4091f2bd4b6df0983,
+        type: 3}
+      propertyPath: m_nextState
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8883353081518748972, guid: 6fe3b528cf5af6c4091f2bd4b6df0983,
         type: 3}
       propertyPath: m_RootOrder
@@ -1431,6 +1436,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7810446846851615191, guid: 79d42eaef7ece164786d0a246fd0cf2a,
         type: 3}
+      propertyPath: _state
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7810446846851615191, guid: 79d42eaef7ece164786d0a246fd0cf2a,
+        type: 3}
       propertyPath: fadeHandler
       value: 
       objectReference: {fileID: 2146983182}
@@ -2304,7 +2314,7 @@ PrefabInstance:
     - target: {fileID: 7045528151819134945, guid: a2c537df5a619e34f9b03c994e617439,
         type: 3}
       propertyPath: m_Name
-      value: kari
+      value: ChangeScene
       objectReference: {fileID: 0}
     - target: {fileID: 7045528151819134947, guid: a2c537df5a619e34f9b03c994e617439,
         type: 3}

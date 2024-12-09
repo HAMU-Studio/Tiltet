@@ -10,6 +10,7 @@ namespace FadeSystem
     {
         [Header("フェード処理")] public FadeImage fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
+        [Header("現在のState")] [SerializeField] private GameState _state; 
 
         private IFadeHandler m_fade;
         private bool isSceneTransitioning = false;
@@ -24,6 +25,7 @@ namespace FadeSystem
                 Debug.LogError("No IFadeHandler attached to fadeHandler");
             }
             GameManager.instance.SetSceneManager(GetComponent<FadeAndSceneTransition>());
+            GameManager.instance.CurrentState = _state;
         }
 
         public void FadeStart()
@@ -60,9 +62,9 @@ namespace FadeSystem
                 yield return null;
             }
     
-            yield return  SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
+            SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
 
-       //     yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+            yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         }
     }
 }

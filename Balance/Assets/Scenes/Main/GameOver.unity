@@ -1756,7 +1756,27 @@ PrefabInstance:
     - target: {fileID: 2072037877240584218, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072037877240584221, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: waitTime
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072037877240584221, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072037877240584221, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: StartBGMName
+      value: Ending
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739903895625598195, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_nextState
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2879315829045423266, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
@@ -1832,6 +1852,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5445180134286841147, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: _state
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5445180134286841147, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}

@@ -43,6 +43,9 @@ public class UIManager : MonoBehaviour
     private bool once;
     void Update()
     {
+        if (GameManager.instance.isConnected)
+            return;
+            
         if (m_1PImage.activeSelf && m_2PImage.activeSelf)
         {
             if (once == false)
@@ -85,9 +88,7 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         GameManager.instance.isConnected = true;
-        GameManager.instance.StartGame();
         ConnectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
-        
     }
 }

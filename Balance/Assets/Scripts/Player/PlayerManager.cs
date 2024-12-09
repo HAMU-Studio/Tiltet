@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -49,8 +50,14 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         m_beforeState = rescCurrentState;
-        GameManager.instance.SavePlayerInstance(gameObject);
         animator = GetComponent<Animator>();
+        if (GameManager.instance == null)
+        {
+            Debug.Log("GameManager is null");
+            return;
+        }
+        GameManager.instance.SavePlayerInstance(gameObject);
+       
     }
 
     private ThrowawayMethod method;
@@ -149,24 +156,27 @@ public class PlayerManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator ResetPlayerState()
     {
+       
         if (gameObject == null)
         {
             Debug.LogAssertion("this gameObject is null!");
             yield break;
         }
-        
+
+       // GetComponent<Rigidbody>().isKinematic = true;
         PlayerController _playerController = GetComponent<PlayerController>();
         _playerController.enabled = false;
         GameManager.instance.Rescue = false;
         rescState = RescueState.None;
         
-        
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(1.7f);
         animator.Play("Wait_01");
+       // GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();
         _playerController.enabled = true;
+        transform.rotation = quaternion.identity;
     }
   
 }
