@@ -34,7 +34,7 @@ namespace FadeSystem
             
             //リセットは戦闘と探索の切り替えのみ
           //  if (nextSceneName == "Fight" || nextSceneName == "GreenStage")
-            GameManager.instance.ResetPlayer();
+            GameManager.instance.RespawnPlayer();
          
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());
@@ -44,11 +44,11 @@ namespace FadeSystem
         /// 名前指定してシーン移動
         /// </summary>
         /// <param name="nextSceneName"></param>
-        /*public void FadeStart(string nextSceneName)
+        public void FadeStart(string nextSceneName)
         {
             this.nextSceneName = nextSceneName;
             FadeStart();
-        }*/
+        }
 
         [SerializeField] private GameObject m_stage;
         private IEnumerator LoadNextSceneAsync()

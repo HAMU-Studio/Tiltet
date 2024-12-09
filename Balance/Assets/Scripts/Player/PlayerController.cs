@@ -31,10 +31,10 @@ public class PlayerController : MonoBehaviour
     [Header("ジャンプの強さ")]
     [SerializeField] private float jumpPower = 5f; 
     
-    [FormerlySerializedAs("dashMaterial")]
-    [Header("ダッシュ時のマテリアル")]
-    [SerializeField] Material m_dashMaterial = default!;
+    [Header("1Pカラー")]
+    [SerializeField] Material m_material_1P = default!;
     
+    [Header("2Pカラー")]
     [SerializeField] private Material m_material_2P = default!;
     
     [Header("ノックバックの強さ")]
@@ -581,19 +581,21 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    public void Change2PColor(int index)
+    public void ChangePlayerColor(int index)
     {
-        //inputManager側で2Pのカラー変更が上手くいかないのでプレイヤーのスクリプトで試みる
-      
+        //1Pが湧いたら色変え
         if (index == 0)
         {
-          // Debug.Log("beforeMat = " + m_playerRenderer.sharedMaterials[0]);
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            //newMaterials[0] = m_material_2P;
             newMaterials[1] = m_material_2P;
             m_playerRenderer.sharedMaterials = newMaterials;
-            
-         //   Debug.Log("afterMat = " + m_playerRenderer.sharedMaterials[0]);
+        }
+        // 2P湧いたら元に戻す
+        else if (index == 1)
+        {
+            Material[] newMaterials = m_playerRenderer.sharedMaterials;
+            newMaterials[1] = m_material_1P;
+            m_playerRenderer.sharedMaterials = newMaterials;
         }
     }
 

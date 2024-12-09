@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.instance.isConnected == true)
         {
             ConnectionScreen.SetActive(false);
+            SoundManager.instance.Play("GreenStage");
             //   GameManager.instance.StartGame();
             return;
         }
@@ -73,11 +75,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 接続完了したら二秒待ってゲーム開始
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
         GameManager.instance.isConnected = true;
         GameManager.instance.StartGame();
         ConnectionScreen.SetActive(false);
+        SoundManager.instance.Play("GreenStage");
+        
     }
 }

@@ -18,7 +18,7 @@ public class ReceiveNotificationExample : MonoBehaviour
        GameObject obj =  playerInput.gameObject.GetComponent<GameObject>();
        
         //2Pならカラーを変える
-        _playerController.Change2PColor(playerInput.user.index);
+        _playerController.ChangePlayerColor(playerInput.user.index);
     }
 
     // プレイヤー退室時に受け取る通知

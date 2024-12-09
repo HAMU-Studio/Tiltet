@@ -146,14 +146,19 @@ public class PlayerManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator ResetPlayerState()
     {
-        Debug.Log("Reset!");
+        if (gameObject == null)
+        {
+            Debug.LogAssertion("this gameObject is null!");
+            yield break;
+        }
+        
         PlayerController _playerController = GetComponent<PlayerController>();
         _playerController.enabled = false;
         GameManager.instance.Rescue = false;
         rescState = RescueState.None;
         
         yield return new WaitForSeconds(1.7f);
-        
+    
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();
