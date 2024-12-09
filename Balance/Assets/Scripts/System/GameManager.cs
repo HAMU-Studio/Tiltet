@@ -9,22 +9,19 @@ using UnityEngine.Rendering;
 public enum GameState
 {
     //制作の進捗具合によって逐次追加
-    
-    WaitStart,  //今後消す
-    None,
-    //SelectionScreen,
-    //ConnectionScreen,
-    //Countdown,
-    Search,
-    EnemyBattle,
-    //Pose,
-    Result
+   None,
+   StartMenu,
+   Search,
+   EnemyBattle,
+   //Pose,
+   Clear,
+   GameOver,
 }
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
 
-    [SerializeField] private GameState currentGamestate;
+    [FormerlySerializedAs("currentGamestate")] [SerializeField] private GameState m_nextState;
     [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
@@ -53,42 +50,58 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            Debug.LogError("GameManager is already exists");
             Destroy(this.gameObject);
         }
-        isPlayerSpawn = new bool [2];
-        playerInstances = new GameObject[2];
-
         InitGame();
     }
     private void InitGame()
     {
-       // Time.timeScale = 0;
         m_life = initialLife;
-       // m_wave = initialWave;
         m_mainParts = 0;
         m_subParts = 0;
         isPlayerSpawn = new bool [2];
-        int i = 0;
-      //  StartGame();
-        //今後ScoreUIのUpdate呼び出す
+        method = new ThrowawayMethod();
+        count = 0;
+        isConnected = false;
+        playerInstances = new GameObject[2];
+        // SavePointの初期化はどうせ上書きされるから必要
     }
 
-    //このあたりはプロトタイプのみ
     public void StartGame()
     {
-     //   InitGame();
-        Time.timeScale = 1;
-    //    CurrentState = GameState.Search;
+        _sceneManager.FadeStart("GreenStage");
+        NextState = GameState.Search;
     }
 
     public void Restart()
     {
-        _sceneManager.FadeStart();
-        currentGamestate = GameState.Search;
+        _sceneManager.FadeStart("GreenStage");
+        m_nextState = GameState.Search;
         PlayerDestroy();
+        InitGame();
     }
 
-    public void PlayerDestroy()
+    /// <summary>
+    /// セーブポイントから再スタート GameManagerは基本ボタンから呼び出せなさそう
+    /// </summary>
+    public void RestartAtSavePoint()
+    {
+       instance.StartCoroutine(RestartCorutine());
+    }
+
+    private IEnumerator RestartCorutine()
+    {
+        _sceneManager.FadeStart("GreenStage");
+        m_nextState = GameState.Search;
+        PlayerDestroy();
+        InitGame();
+        yield return new WaitForSeconds(1.7f);
+        SetAircraftPos();
+        AircraftMoveSwitch(true);
+    }
+
+    private void PlayerDestroy()
     {
         foreach (var player in playerInstances)
         {
@@ -109,49 +122,64 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    private bool once = false;
-
+    private ThrowawayMethod method = new ThrowawayMethod();
+  
     private void Update()
     {
-        if (m_beforeState != CurrentState)
+        if (m_cuurentState != m_nextState)
         {
             OnStateChange();
         }
 
-
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            if (!once)
-            {
-
-                GameManager.instance.GameClear();
-                once = true;
-            }
+            method.RunOnce(GameClear); 
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            method.RunOnce(Restart);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            _sceneManager.FadeStart("GreenStage");
+            instance.NextState = GameState.Search;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EndGame();
+        }
+        
         if (m_mainParts >= 1)
         {
-            if (!once)
+            if (NextState != GameState.Clear)
             {
                 GameClear();
-                once = true;
             }
         }
     }
-
    
     public void GameOver()
     {
-        _sceneManager.nextSceneName = "GameOver";
-        _sceneManager.FadeStart();
-        CurrentState = GameState.Result;
+        _sceneManager.FadeStart("GameOver");
+        NextState = GameState.GameOver;
     }
 
     public void GameClear()
     {
-        _sceneManager.nextSceneName = "Clear";
-        _sceneManager.FadeStart();
-        CurrentState = GameState.Result;
+        _sceneManager.FadeStart("Clear");
+        NextState = GameState.Clear;
+        PlayerDestroy();
+    }
+
+    public void Back2StartMenu()
+    {
+        _sceneManager.FadeStart("Start");
+        NextState = GameState.StartMenu;
+        
+        //ゲーム中から戻った時のためにプレイヤーいたら消す
         PlayerDestroy();
     }
 
@@ -161,12 +189,18 @@ public class GameManager : MonoBehaviour
         _sceneManager = sceneManager;
     }
 
+    public GameState NextState
+    {
+        set { m_nextState = value; }
+        get { return m_nextState; }
+    }
+
     public GameState CurrentState
     {
-        set { currentGamestate = value; }
-       
-        get { return currentGamestate; }
+        set { m_cuurentState = value; }
+        get { return m_cuurentState; }
     }
+    
 
     public bool isConnected
     {
@@ -176,25 +210,39 @@ public class GameManager : MonoBehaviour
     }
     
     
-    private GameState m_beforeState;
+    private GameState m_cuurentState;
     private void OnStateChange()
     {
-        //Debug.Log("stateChange " + m_beforeState + " to " + CurrentState);
-        if (m_beforeState == GameState.EnemyBattle &&
-            currentGamestate == GameState.Search)   // 戦闘->探索
+      //  Debug.Log("stateChange " + m_cuurentState + " to " + m_nextState);
+        if (m_cuurentState == GameState.EnemyBattle &&
+            m_nextState == GameState.Search)   // 戦闘->探索
         {
+            RespawnPlayer();
             StartCoroutine(BetaDelayRun(1.7f));
         }
 
-        if (m_beforeState == GameState.Search &&
-            currentGamestate == GameState.EnemyBattle) // 探索->戦闘
+        if (m_cuurentState == GameState.Search &&
+            m_nextState == GameState.EnemyBattle) // 探索->戦闘
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
-            StartCoroutine(DelayResetPlayer());
+            RespawnPlayer();
         }
         
-        m_beforeState = currentGamestate;
+        if (m_cuurentState == GameState.Search &&
+            m_nextState == GameState.GameOver) // 探索->ゲームオーバー
+        {
+            SaveAircraftPos(m_aircraftInstance.transform.position);
+            AircraftMoveSwitch(false);
+        }
+
+        if (m_cuurentState == GameState.GameOver &&
+            m_nextState == GameState.Search)
+        {
+            //StartCoroutine(BetaDelayRun(1.7f));
+        }
+        
+        m_cuurentState = m_nextState;
     }
 
     /// <summary>
@@ -245,7 +293,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private Vector3 m_axis;
     private GameObject m_pivot;
     private bool m_rescue;
@@ -258,34 +305,31 @@ public class GameManager : MonoBehaviour
         
         set { m_axis = value;}
     }
-
-    private bool temp;
-    int i = 0;
+    
+    int count = 0;
     public void SavePlayerInstance(GameObject playerInstance)
     {
-        if (temp)
+        //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
+        if (count == 2)
             return;
         
-        playerInstances[i] = playerInstance;
+        playerInstances[count] = playerInstance;
        // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
-        if (i == 0)
+        if (count == 0)
         {
-            playerInstances[i].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
-           
+            playerInstances[count].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
         }
-        else if (i == 1)
+        else if (count == 1)
         {
-            playerInstances[i].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
         }
-       
-        i++;
         
-        //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
-        if (i == 2)
-        {
-         //   instance.SetPlayerPos();
-            temp = true;
-        }
+        count++;
+    }
+
+    private void ResetPlayer()
+    {
+        playerInstances = null;
     }
 
     /// <summary>
@@ -305,14 +349,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetPlayer()
+    public void RespawnPlayer()
     {
         foreach (GameObject player in playerInstances)
         {
             if (player == null)
             {
+                Debug.Log("PlayerInstance is null");
                 return;
             }
+         
             StartCoroutine(player.GetComponent<PlayerManager>().ResetPlayerState());
         }
     }
@@ -392,17 +438,4 @@ public class GameManager : MonoBehaviour
         SetPlayerPos();
         AircraftMoveSwitch(true);
     }
-    
-    /// <summary>
-    /// シーン移動が終わってからプレイヤーセット
-    /// プレイヤーセットしたら自動で要改善
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator DelayResetPlayer()
-    {
-        yield return new WaitForSeconds(1.8f);
-        //急にうごかなくなったから消した
-      //  SetPlayerPos();
-    }
-    
 }

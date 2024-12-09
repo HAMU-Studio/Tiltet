@@ -97,7 +97,7 @@ namespace System
             return null; 
         }
         
-        public void PlayBGM(AudioClip bgm, float volume)
+        private void PlayBGM(AudioClip bgm, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
             AudioSource audioSource = GetUnusedAudioSource(bgm);
@@ -114,7 +114,7 @@ namespace System
             audioSource.Play();
         }
 
-        public void PlaySE(AudioClip clip, float volume)
+        private void PlaySE(AudioClip clip, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
             AudioSource audioSource = GetUnusedAudioSource(clip);
@@ -147,7 +147,6 @@ namespace System
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
                 PlayBGM(bgmData.audioClip, bgmData.volume);
-               // Debug.Log("BGM play: " + name);
             }
             else if (SEDictionary.TryGetValue(name, out SEData seData))
             {
@@ -156,7 +155,6 @@ namespace System
                 
                 seData.playedTime = Time.realtimeSinceStartup; 　//次回用に今回の再生時間の保持 
                 PlaySE(seData.audioClip, seData.volume);
-            //    Debug.Log("SE play: " + name);
             }
             else
             {
@@ -218,12 +216,26 @@ namespace System
 
             if (audioSource == null)
             {
-                Debug.Log("そのクリップは再生されていません");
+                //Debug.Log("そのクリップは再生されていません");
                 return;
             }
             if (audioSource.isPlaying)
             {
                 audioSource.Stop();
+            }
+        }
+
+        /// <summary>
+        /// 今流している音をすべて止める
+        /// </summary>
+        public void StopAllSound()
+        {
+            foreach (var audioSource in audioSourceList)
+            {
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
             }
         }
     }

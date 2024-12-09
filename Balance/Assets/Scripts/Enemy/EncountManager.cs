@@ -18,7 +18,7 @@ public class EncountManager : MonoBehaviour
        if (isEncount)
        {
            _transition.FadeStart();
-           GameManager.instance.CurrentState = GameState.EnemyBattle;
+           GameManager.instance.NextState = GameState.EnemyBattle;
        }
 
        if (Input.GetKeyDown(KeyCode.E))
@@ -29,7 +29,7 @@ public class EncountManager : MonoBehaviour
 
     void Encount()
     {
-        _transition.FadeStart();
-        GameManager.instance.CurrentState = GameState.EnemyBattle;
+        _transition.FadeStart("Fight");
+        GameManager.instance.NextState = GameState.EnemyBattle;
     }
 }

@@ -47,22 +47,22 @@ MonoBehaviour:
   bgmDatas:
   - name: Title
     audioClip: {fileID: 8300000, guid: 9741912e2395d7d45802dcd515d344b2, type: 3}
-    volume: 0.6
+    volume: 0.35
   - name: Fight
     audioClip: {fileID: 8300000, guid: 1c79cf8415d61cf4591aff6cc6ba5790, type: 3}
-    volume: 0.2
+    volume: 0.265
   - name: Menu
     audioClip: {fileID: 8300000, guid: 95e5a18e3b7414e4bb75144b31e1e403, type: 3}
     volume: 0.4
   - name: snowStage
     audioClip: {fileID: 8300000, guid: 27825fe372c766c4b9ab37c6fd5c1c09, type: 3}
     volume: 0.2
-  - name: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+  - name: Ending
     audioClip: {fileID: 8300000, guid: 797e4f8f9b5dcc145a4f585c2c982866, type: 3}
     volume: 0.9
   - name: GreenStage
     audioClip: {fileID: 8300000, guid: 195df2cacb33d0f4b9cc8efd3fd846e1, type: 3}
-    volume: 0.5
+    volume: 0.35
   - name: Struggle
     audioClip: {fileID: 8300000, guid: e767ba01184d3f644a7aa68c13dc0afe, type: 3}
     volume: 0.39
@@ -70,7 +70,7 @@ MonoBehaviour:
   - name: PlayerMove
     audioClip: {fileID: 8300000, guid: 7cad5f8762031e84d95e7edb1edeb95f, type: 3}
     playedTime: 0
-    volume: 0.6
+    volume: 0.47
   - name: CursorMove
     audioClip: {fileID: 8300000, guid: dde5b88db1ffe904bb94d1e2132c0513, type: 3}
     playedTime: 0
@@ -94,9 +94,13 @@ MonoBehaviour:
   - name: Player2Move
     audioClip: {fileID: 8300000, guid: 031127932b50546488ad9edb38d1035c, type: 3}
     playedTime: 0
-    volume: 0.6
+    volume: 0.5
   - name: Player2Hit
     audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
     playedTime: 0
     volume: 0.8
+  - name: Connected
+    audioClip: {fileID: 8300000, guid: fbc9f9e15202bb84d9acd666bac06120, type: 3}
+    playedTime: 0
+    volume: 0.37
   playableDistance: 0.2

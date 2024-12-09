@@ -6,7 +6,6 @@ using TMPro;
 
 public class GimmickManager : MonoBehaviour
 {
-    GameManager gamemanager;
     [SerializeField] private GameObject coin;
     [SerializeField] private GameObject[] stands;
     [SerializeField] private GameObject[] parts;
@@ -39,15 +38,10 @@ public class GimmickManager : MonoBehaviour
 
         }
     }
-    void FixUpdate()
-    {
-
-    }
 
     private void Set()
     {
-        gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
+        
         countCoin = 0;
         countParts = 0;
 
@@ -100,7 +94,7 @@ public class GimmickManager : MonoBehaviour
         if(collision.gameObject.CompareTag("Parts"))
         {
             Destroy(collision.gameObject);
-            gamemanager.AddSubPartsNum();
+            GameManager.instance.AddSubPartsNum();
         }
     }
 }

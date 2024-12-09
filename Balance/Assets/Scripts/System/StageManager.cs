@@ -33,6 +33,8 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
+        
+        GameManager.instance.SaveAircraftInstance(gameObject);
     }
 
     private void Update()
