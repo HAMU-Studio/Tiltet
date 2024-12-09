@@ -218,7 +218,7 @@ namespace System
 
             if (audioSource == null)
             {
-                Debug.Log("そのクリップは再生されていません");
+                //Debug.Log("そのクリップは再生されていません");
                 return;
             }
             if (audioSource.isPlaying)

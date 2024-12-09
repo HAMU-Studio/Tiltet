@@ -157,8 +157,9 @@ public class PlayerManager : MonoBehaviour
         GameManager.instance.Rescue = false;
         rescState = RescueState.None;
         
-        yield return new WaitForSeconds(1.7f);
-    
+        
+        yield return new WaitForSeconds(1.6f);
+        animator.Play("Wait_01");
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();

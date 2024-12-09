@@ -10,7 +10,7 @@ public class ChangeScene : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+       // DontDestroyOnLoad(gameObject);
     }
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,11 @@ public class ChangeScene : MonoBehaviour
 
     public void ToGreenScene()
     {
-        SceneManager.LoadScene(greenSceneName);
+        GameManager.instance.Restart();
+    }
+
+    public void ToSavePoint()
+    {
+        GameManager.instance.RestartAtSavePoint();
     }
 }

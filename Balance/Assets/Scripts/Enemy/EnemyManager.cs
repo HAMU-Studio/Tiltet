@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using UnityEngine;
 using TMPro;
 using FadeSystem;
+using System;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -72,11 +74,10 @@ public class EnemyManager : MonoBehaviour
         count3 = 0;
         noSphere = true;
         noEllipse = true;
-
-
         Set();
     }
 
+    private ThrowawayMethod medhod;
     // Update is called once per frame
     void Update()
     {
@@ -89,8 +90,10 @@ public class EnemyManager : MonoBehaviour
 
         if (time >= 5.0f)
         {
-
-            //SoundManager.instance.Play();
+            if (!start)
+            {
+                SoundManager.instance.Play(BGM);
+            }
 
             if (start)
             {
