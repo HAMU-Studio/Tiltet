@@ -384,26 +384,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision col)
+    /// <summary>
+    /// 救出可能エリアにいるか
+    /// </summary>
+    private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.CompareTag("Ground"))
+        if (col.gameObject.CompareTag("RescueArea"))
         {
-            if (isFlying == false)
-            {
-                isFlying = true;
-            }
+            canRescueAct = true;
+            m_rescueCube = col.gameObject;
         }
     }
 
     /// <summary>
-    /// 救出可能エリアにいるか
+    /// 自機の揺れで少し浮くだけでも空中判定になり足音が止まるからTriggerに変更
     /// </summary>
-    private void OnTriggerEnter(Collider other)
+    /// <param name="col"></param>
+    private void OnTriggerExit(Collider col)
     {
-        if (other.gameObject.CompareTag("RescueArea"))
+        if (col.gameObject.CompareTag("Ground"))
         {
-            canRescueAct = true;
-            m_rescueCube = other.gameObject;
+            if (isFlying == false)
+                isFlying = true;
         }
     }
 
@@ -440,6 +442,9 @@ public class PlayerController : MonoBehaviour
         return m_hit;
     }
 
+    /// <summary>
+    /// 真下にRayを飛ばして自機に当たればスーパー着地可能
+    /// </summary>
     private bool CanSuperLand()
     {
         RaycastHit _hit =  RaycastDown(50);
