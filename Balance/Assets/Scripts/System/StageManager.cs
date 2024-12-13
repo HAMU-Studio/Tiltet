@@ -49,6 +49,18 @@ public class StageManager : MonoBehaviour
         {
             m_stageMovement.IsStopActive = true; // Stop 状態を有効にする
             Debug.Log("StageMovement の Stop 状態を有効にしました。");
+
+            // ノックバック方向の計算
+            Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
+            direction.y = 0; // 水平方向のみに制限
+
+            // 水平方向のノックバック
+            m_rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+
+            // 上方向のノックバック
+            m_rb.AddForce(transform.up * knockbackUpForce, ForceMode.Impulse);
+
+            Debug.Log("ノックバック処理を適用しました。");
         }
     }
 }
