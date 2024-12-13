@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2178944381084319285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7795039349650907740}
+  - component: {fileID: 7042175286598988680}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7795039349650907740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178944381084319285}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.2801307, y: 4.1851482, z: -16.012907}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7042175286598988680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178944381084319285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782a833c8ba1458caa015cebc992f942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmDatas:
+  - name: Title
+    audioClip: {fileID: 8300000, guid: 9741912e2395d7d45802dcd515d344b2, type: 3}
+    volume: 0.35
+  - name: Fight
+    audioClip: {fileID: 8300000, guid: 1c79cf8415d61cf4591aff6cc6ba5790, type: 3}
+    volume: 0.265
+  - name: Menu
+    audioClip: {fileID: 8300000, guid: 95e5a18e3b7414e4bb75144b31e1e403, type: 3}
+    volume: 0.4
+  - name: snowStage
+    audioClip: {fileID: 8300000, guid: 27825fe372c766c4b9ab37c6fd5c1c09, type: 3}
+    volume: 0.2
+  - name: Ending
+    audioClip: {fileID: 8300000, guid: 797e4f8f9b5dcc145a4f585c2c982866, type: 3}
+    volume: 0.9
+  - name: GreenStage
+    audioClip: {fileID: 8300000, guid: 195df2cacb33d0f4b9cc8efd3fd846e1, type: 3}
+    volume: 0.35
+  - name: Struggle
+    audioClip: {fileID: 8300000, guid: e767ba01184d3f644a7aa68c13dc0afe, type: 3}
+    volume: 0.39
+  SEDatas:
+  - name: PlayerMove
+    audioClip: {fileID: 8300000, guid: 7cad5f8762031e84d95e7edb1edeb95f, type: 3}
+    playedTime: 0
+    volume: 0.47
+  - name: CursorMove
+    audioClip: {fileID: 8300000, guid: dde5b88db1ffe904bb94d1e2132c0513, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: CursorBack
+    audioClip: {fileID: 8300000, guid: 0d5afedd3b259ad48bd2f82f7533bb10, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: CursorDecision
+    audioClip: {fileID: 8300000, guid: d083edee05cb3af45846e38d2a27ffb6, type: 3}
+    playedTime: 0
+    volume: 1
+  - name: PlayerHit
+    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
+    playedTime: 0
+    volume: 0.8
+  - name: Siren
+    audioClip: {fileID: 8300000, guid: 4fbdd49727a279b40a2fe5749c0ac82b, type: 3}
+    playedTime: 0
+    volume: 0.6
+  - name: Player2Move
+    audioClip: {fileID: 8300000, guid: 031127932b50546488ad9edb38d1035c, type: 3}
+    playedTime: 0
+    volume: 0.5
+  - name: Player2Hit
+    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
+    playedTime: 0
+    volume: 0.8
+  - name: Connected
+    audioClip: {fileID: 8300000, guid: fbc9f9e15202bb84d9acd666bac06120, type: 3}
+    playedTime: 0
+    volume: 0.37
+  playableDistance: 0.2

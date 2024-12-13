@@ -1,34 +1,46 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TestSetting : MonoBehaviour
 {
-    [SerializeField] private Vector3 velocity;              // ˆÚ“®•ûŒü
-    [SerializeField] private float moveSpeed = 5.0f;        // ˆÚ“®‘¬“x
 
+    [SerializeField] float speed = 3f;
+
+    void Start()
+    {
+
+
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        // WASD“ü—Í‚©‚çAXZ•½–Ê(…•½‚È’n–Ê)‚ğˆÚ“®‚·‚é•ûŒü(velocity)‚ğ“¾‚Ü‚·
-        velocity = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-            velocity.z += 1;
-        if (Input.GetKey(KeyCode.A))
-            velocity.x -= 1;
-        if (Input.GetKey(KeyCode.S))
-            velocity.z -= 1;
-        if (Input.GetKey(KeyCode.D))
-            velocity.x += 1;
+        //ã‚­ãƒ¼å…¥åŠ›ã‚’å–å¾—
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        // ‘¬“xƒxƒNƒgƒ‹‚Ì’·‚³‚ğ1•b‚ÅmoveSpeed‚¾‚¯i‚Ş‚æ‚¤‚É’²®‚µ‚Ü‚·
-        velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+        //ç§»å‹•æ–¹å‘ã®è¨ˆç®—
+        Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-        // ‚¢‚¸‚ê‚©‚Ì•ûŒü‚ÉˆÚ“®‚µ‚Ä‚¢‚éê‡
-        if (velocity.magnitude > 0)
+        //ç§»å‹•æ–¹å‘ãŒå¤‰ã‚ã‚‹å ´åˆã®ã¿å›è»¢ã‚’è¨ˆç®—
+        if (moveDirection.magnitude >= 0.1f)
         {
-            // ƒvƒŒƒCƒ„[‚ÌˆÊ’u(transform.position)‚ÌXV
-            // ˆÚ“®•ûŒüƒxƒNƒgƒ‹(velocity)‚ğ‘«‚µ‚İ‚Ü‚·
-            transform.position += velocity;
+            //ç§»å‹•
+            Vector3 moveVector = moveDirection * speed * Time.deltaTime;
+            transform.Translate(moveVector, Space.World);
+            Vector3 newPosition = transform.position;
+            newPosition.x = transform.position.x + 1.1f;
+            newPosition.z = transform.position.z + 0.2f;
+                
+
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­£é¢ã‚’ç§»å‹•æ–¹å‘ã«å‘ã‘ã‚‹
+            Quaternion toRotation = Quaternion.LookRotation(-moveDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 0.1f);
+
+               
         }
+
     }
+
 }

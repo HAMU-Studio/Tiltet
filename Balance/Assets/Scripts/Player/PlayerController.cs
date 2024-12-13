@@ -1,23 +1,27 @@
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody m_Rigidbody;
+    private PlayerManager m_PM;
+    
+    private Rigidbody m_RB;
     private Vector3 m_Velocity;
     private float m_moveSpeed;
     
-     private Transform m_player;
+    private Transform m_player;
     private Ray m_ray;
     private RaycastHit m_hit;
     private Quaternion m_rot;
+   
     //地面の上なら歩きモーション、違うなら落下モーション 
     
     [Header("通常時移動速度")]
-    [SerializeField] private float walkSpeed = 4f;
+    public float walkSpeed = 4f;
     [Header("ダッシュ時の速度")]
-    [SerializeField] private float dashSpeed = 8f;
+    public float dashSpeed = 8f;
     [Header("落下速度の調整　-つける")]
     [SerializeField] float gravityPower = default!;
     [Header("トリガーの反応タイミング")]
@@ -27,65 +31,181 @@ public class PlayerController : MonoBehaviour
     [Header("ジャンプの強さ")]
     [SerializeField] private float jumpPower = 5f; 
     
-    [FormerlySerializedAs("dashMaterial")]
-    [Header("ダッシュ時のマテリアル")]
-    [SerializeField] Material m_dashMaterial = default!;
+    [Header("1Pカラー")]
+    [SerializeField] Material m_material_1P = default!;
     
+    [Header("2Pカラー")]
     [SerializeField] private Material m_material_2P = default!;
     
-    private Material m_defaultMaterial;
-    // [Header("ノックバックの強さ")]
-    // [SerializeField] private float knockBackP = 5f;              
-    // [Header("ノックバック時上方向の力")]
-    // [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
-
-
+    [Header("ノックバックの強さ")]
+    [SerializeField] private float knockBackP = 5f;              
+    [Header("ノックバック時上方向の力")]
+    [SerializeField] float knockBackUpP = 3f;            //ノックバック時少し上に浮かす
+    
     //入力値
     private Vector2 m_inputMove;
-    /*private float inputHorizontal;      //水平方向の入力値
-    private float inputVertical;        //垂直方向の入力値*/
-    
     private float m_inputTrigger_L;
     private float m_inputTrigger_R;
     
-    //flag アニメーション実装したら減らしたい
+    //flag アニメーション実装したら減らしたい、enum使えばもっといろいろ楽そう
     private bool isEnteredAttack;
     private bool isResetTrigger_R;
     private bool isResetTrigger_L;
-    private bool isJumping = false;         
-    private bool isFalling = false;
+    private bool isFlying = false;         
+    private bool isKnockBack = false;
     private bool isAttacking = false;
     private bool isDashing = false;
     private bool canMove = true;
-    // private bool onlyFirst = false;
-    //private bool isKnockBack = false;
-    
     
     private float targetRotation;   //回転に使う
     private float yVelocity = 0.0f;
-    void Start()
+    
+    Animator animator;
+    AnimatorStateInfo stateInfo;
+    
+    [Header("Rendererがアタッチされているオブジェクト")]
+    [SerializeField] private Renderer m_playerRenderer;
+    
+    private string moveSoundName;
+    private string hitSoundName;
+
+    public void SetSoundName(string move, string hit)
     {
-        m_player = GetComponent<Transform>();
-        m_Rigidbody = GetComponent<Rigidbody>();
-        m_defaultMaterial = GetComponent<Renderer>().material;
-        m_moveSpeed = walkSpeed;
+        moveSoundName = move;
+        hitSoundName = hit;
     }
 
+
+    private StageMovement m_stageMovement;
+    void Awake()
+    {
+        m_player = GetComponent<Transform>();
+        m_RB = GetComponent<Rigidbody>();
+
+        m_moveSpeed = walkSpeed;
+        canRescueAct = false;
+        isChanged = false;
+    
+        GetMaterialProcess();
+        
+        m_PM = GetComponent<PlayerManager>();
+        
+        animator = GetComponent<Animator>();
+        animator.SetTrigger("toIdle");
+    }
+
+    public void Initialize()
+    {
+        canRescueAct = false;
+        isChanged = false;
+        animator.SetTrigger("toIdle");
+    }
+
+    /// <summary>
+    /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。->同じマテリアルだから配列必要なかった...
+    /// </summary>
+    private void GetMaterialProcess()
+    {
+        m_playerRenderer = m_playerRenderer.GetComponent<SkinnedMeshRenderer>();
+        
+        if ( m_playerRenderer != null)
+        {
+            if (m_playerRenderer.materials.Length > 1)
+            {
+              //  m_defaultMaterial = new Material[2]; 
+         
+              //  m_defaultMaterial[1] = m_playerRenderer.materials[1];
+            }
+            else 
+            {
+                Debug.LogError("Not enough materials assigned to the Renderer.");
+            }
+        } 
+        else
+        {
+            Debug.LogError("Renderer component is missing on the player object.");
+        }
+
+    }
+
+    private float elapsedTime;
+    [Header("ノックバックされてから動けるようになるまでの時間")]
+    [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
-        //Input();
-      //  Jump();
-        //Attack(); //プロトタイプは現状攻撃なし
-       
+        if (isKnockBack && canMove == false)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime >= canMoveTime)
+            {
+                //移動不能だけ解除、低減した重力は着地までそのまま
+                canMove = true;
+                elapsedTime = 0;
+            }
+        }
+
+        if (isFleezing)
+        {
+            //PlayerFreeze();
+        }
+
+        if (m_PM.rescState == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            //スーパー着地
+            //   Debug.Log("Call 1");
+            SuperLanding();
+        }
+        
+        TransitionAnim();
     }
+
+    private Vector3 movementAmount;
     private void FixedUpdate()
     {
         Gravity();
-        if (canMove) //攻撃中は移動もジャンプもできない->returnじゃなくてその場で固定させたい
+        if (canMove) 
         {
-            Move(); 
-            Dash();
+            MoveCalc(); 
+            if (isFlying || isKnockBack)
+            { 
+                AirMovement();
+            }
+            else
+            {
+                NormalMovement();
+            }
+           
+            DashSwitch();
         }
+ 
+        if (isChanged)
+        {
+            movementAmount = m_RB.position + m_stageMovement.MovementAmount;
+            m_RB.MovePosition(movementAmount);
+        }
+    }
+
+    private float time;
+    private void TransitionAnim()
+    {
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        
+        if (m_inputMove != Vector2.zero)
+        {
+            time += Time.deltaTime;
+            animator.ResetTrigger("toIdle");       
+        }
+        else if (m_inputMove == Vector2.zero && stateInfo.IsName("Walk_01"))
+        {
+            time = 0f;
+            if (m_PM.rescState == RescueState.None)
+            {
+                animator.SetTrigger("toIdle"); 
+            }
+        }
+        animator.SetFloat("time", (float)time);
+
     }
 
     public void  PlayerMoveInput(InputAction.CallbackContext context)
@@ -114,45 +234,185 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        //落下中と攻撃中はジャンプをさせない
-        if (isJumping == true || isFalling == true || isAttacking == true) return;  
+        /*//落下中と攻撃中はジャンプをさせない
+        if (isFlying|| canMove == false || isKnockBack) return;  
+
+        if (m_RB == null)
+        {
+            Debug.Log("RB is null");
+            //Start();
+        }
 
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
-            m_Rigidbody.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            isJumping = true;
+            
+            //ジャンプする直前の加速度加えて慣性を表現
+            
+            m_RB.AddForce(m_RB.velocity.normalized, ForceMode.Impulse);
+            
+            //ジャンプ
+            m_RB.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+           // canMove = false;
+            isFlying = true;
+        }*/
+    }
+
+    private GameObject m_rescueCube;
+    private bool canRescueAct;
+    public void RescueActionInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (m_PM == null)
+            {
+                //Start();
+                Debug.Log("PM is null");
+                m_PM = GetComponent<PlayerManager>();
+            }
+
+            if (m_PM.rescState == RescueState.Fly)
+            {
+                //スーパー着地
+             //   Debug.Log("Call 1");
+                SuperLanding();
+                m_PM.rescState = RescueState.SuperLand;
+            }
+            if (canRescueAct)
+            {
+                m_rescueCube.GetComponent<Rescue>().StartRescue();
+                canRescueAct = false;
+            }
+            // CMSwitchを探し、プレイヤーが接触しているか確認する処理
+            CMSwitch[] switches = FindObjectsOfType<CMSwitch>();
+            foreach (var cmswitch in switches)
+            {
+                if (cmswitch.IsPlayerInContact())
+                {
+                    cmswitch.SetSwitchPressed(true); // スイッチを押す
+                    animator.SetTrigger("toPush");
+                }
+            }
         }
+    }
+    [SerializeField] private Vector3 scalePow;
+    private void SuperLanding()
+    {
+        if (CanSuperLand() == false)
+        {
+            Debug.Log("CanSuperLand = false");
+            return;
+        }
+            
+        
+        m_RB.velocity = Vector3.zero;
+        m_RB.angularVelocity = Vector3.zero;
+        
+        m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
+       // Debug.Log("call 2");
     }
 
     private void Gravity()
-    {
-        //落下速度の調整用
-        if (isJumping == true)
+    {   //落下速度の調整用
+       
+        //ジャンプ中のみ重力 -> 常に重力でノックバック時のみ低減 ->救出アクション中は重力なし
+        if (canMove == false || m_PM.rescState != RescueState.None)
+            return;
+        
+        if (isKnockBack == false)
         {
-            m_Rigidbody.AddForce(new Vector3(0, gravityPower, 0));
+            m_RB.AddForce(new Vector3(0, gravityPower, 0));
+        }
+        else
+        {
+            //ノックバック時はふんわり落下
+            m_RB.AddForce(new Vector3(0, gravityPower * 0.5f, 0));
         }
     }
-    private void OnCollisionEnter(Collision collision)
+
+    //その場で固定するかどうか。-> 振り子。救出アクション待機でつかう。
+    private bool isFleezing = false;
+    public void ChangePlayerState(bool isFleezing)
     {
-        //難しい方法はできないからTriggerで判定したい
-        if (isJumping == true || isFalling == true)
+        if (isFleezing)
         {
-            if (collision.gameObject.CompareTag("Ground"))  //着地した時
+            canMove = false;
+            this.isFleezing = true;
+        }
+        else
+        {
+            this.isFleezing = false;
+        }
+    }
+        
+    private bool isChanged;
+    private void OnCollisionEnter(Collision col)
+    {
+        if (isFlying|| isKnockBack || canMove == false)
+        {
+            if (col.gameObject.CompareTag("Ground"))  
             {
-                isJumping = false;
-                isFalling = false;
+                isFlying = false;
+                isKnockBack = false;
                 canMove = true;
                 //Debug.Log("toLanding" );
+                
+                if (m_PM.rescState == RescueState.Fly ||
+                    m_PM.rescState == RescueState.SuperLand)
+                {
+                    m_PM.rescState = RescueState.None;
+                 //   Debug.Log("pm = " + m_PM.State);
+                }
+            }
+        }
+        
+        if (col.gameObject.CompareTag("SphereEnemy") || col.gameObject.CompareTag("EllipseEnemy"))
+        {
+            KnockBack(col);
+        }
+        
+        if (isChanged)
+            return;
+        
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            m_stageMovement = col.gameObject.GetComponent<StageMovement>();
+          
+          //  _stageManager.SetToStageChild(gameObject);
+            //_stageManager.CounterScaleCalc(gameObject);
+            isChanged = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            if (isFlying == false)
+            {
+                isFlying = true;
             }
         }
     }
 
-    private void Dash()
+    /// <summary>
+    /// 救出可能エリアにいるか
+    /// </summary>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RescueArea"))
+        {
+            canRescueAct = true;
+            m_rescueCube = other.gameObject;
+        }
+    }
+
+    private void DashSwitch()
     {
         if (m_inputTrigger_L == 0 && isResetTrigger_L == false)
         {
-            GetComponent<Renderer>().material = m_defaultMaterial;
+            //今後マテリアルの変更ではなくエフェクト再生に変更
+        
             m_moveSpeed = walkSpeed;
             isResetTrigger_L = true;
             isDashing = false;
@@ -162,10 +422,36 @@ public class PlayerController : MonoBehaviour
 
         if (m_inputTrigger_L  > triggerTiming)  
         {
-            GetComponent<Renderer>().material = m_dashMaterial;
+            //ダッシュ時はマテリアルを変更->エフェクトを発生させたい
+           // m_playerRenderer.material = m_dashMaterial;
+           
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
+        }
+    }
+
+    private RaycastHit RaycastDown(int maxDistance)
+    {
+        m_ray = new Ray(m_player.position, -transform.up * maxDistance);
+        Physics.Raycast(m_ray, out m_hit, maxDistance);
+       // Debug.DrawRay(m_player.position, -transform.up * maxDistance, Color.red);
+
+        return m_hit;
+    }
+
+    private bool CanSuperLand()
+    {
+        RaycastHit _hit =  RaycastDown(50);
+
+        if (_hit.collider.gameObject.CompareTag("Ground"))
+        {
+            m_PM.SlipThroughOff();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -175,50 +461,27 @@ public class PlayerController : MonoBehaviour
     private Vector3 GetNormal(Vector3　moveForward)
     {
         //プレイヤーの真下方向にRayを飛ばす
-        m_ray = new Ray(m_player.position, -transform.up);
-        Physics.Raycast(m_ray, out m_hit, 2);
+        RaycastHit _hit = RaycastDown(2);
         //平面に投影したいベクトルmoveForwardとrayを飛ばして取得した平面の法線ベクトルから
         //平面に沿ったベクトルを計算
-        return Vector3.ProjectOnPlane(moveForward, m_hit.normal);
+        return Vector3.ProjectOnPlane(moveForward, _hit.normal);
     }
-    /*void Attack()   //ジャンプ中は攻撃できない
+
+    void KnockBack(Collision collision)
     {
-        if (R_inputTrigger == 0 && inputAttack == false)
-        {
-            R_isReset = true;
-            return;
-        }
-        if (isAttack == true || isJump == true || R_isReset == false)
-            return;
-
-        if (R_inputTrigger > triggerTiming || inputAttack)  //AボタンかRTで攻撃
-        {
-            isAttack = true;
-            R_isReset = false;
-        }
-    }*/
-    
-    /*void KnockBack(Collision collision)
-    {
-        isJump = true;
-        Debug.Log("isKnockBack");
-        Vector3 direction = collision.gameObject.transform.forward;
-
-        m_Rigidbody.AddForce(-direction * knockBackP, ForceMode.Impulse);      
-        m_Rigidbody.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
-
-    }*/
-
-    /*public void fall()  //落下判定エリアで使う
-    {
-        isFall = true;
+        isKnockBack = true;
         canMove = false;
+        
+        //プレイヤーの場所 - 敵の場所をして得た進行方向を正規化
+        Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
+        direction.y = 0;
+        m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
+        m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
+        SoundManager.instance.Play(hitSoundName);
+    }
 
-        //ここで操作不能にすればすれすれから復帰した時にジャンプができなくなることを防げそう
-        //落下モーションへの遷移
-    }*/
-
-    void Move()
+    private const float controlPower = 0.1f;
+    void MoveCalc()
     {
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
@@ -243,7 +506,7 @@ public class PlayerController : MonoBehaviour
         //Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
         //AddForceに加える力をwalkSpeedで設定した速さ以上にはならないように
         //今入力から計算した速度から現在のRigidbodyの速度を引く
-        m_Velocity = m_Velocity - m_Rigidbody.velocity;
+        m_Velocity = m_Velocity - m_RB.velocity;
 
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
         m_Velocity = new Vector3(Mathf.Clamp(m_Velocity.x, -m_moveSpeed, m_moveSpeed), 0f, Mathf.Clamp(m_Velocity.z, -m_moveSpeed, m_moveSpeed));
@@ -258,24 +521,93 @@ public class PlayerController : MonoBehaviour
             //SmoothDampAngle(現在の値, 目的の値, ref 現在の速度, 遷移時間, 最高速度); 現在の速度はnullで良いっぽい？
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (isFlying == false)
+            {
+                SoundManager.instance.Play(moveSoundName);
+            }
+            else
+            {
+                SoundManager.instance.StopPlay(moveSoundName);
+            }
         }
-        
+        else
+        {
+            SoundManager.instance.StopPlay(moveSoundName);
+        }
+    }
+    
+    //AddForceの部分を通常移動と空中移動で分けた
+    private void NormalMovement()
+    {
         // F・・・力  
         // m・・・質量  
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
-        m_Rigidbody.AddForce(m_Rigidbody.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+      
+        if (isFlying == false && isKnockBack == false)
+        {
+            m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
     }
 
-    public void Change2PColor(int index)
+    private void AirMovement()
     {
-        //inputManager側で2Pのカラー変更が上手くいかないのでプレイヤーのスクリプトで試みる
-      
+        if (MoveDuaringAir())
+        {
+            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
+            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
+            m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
+            m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
+        }
+    }
+
+    private const float reference = 0.2f;
+    private bool MoveDuaringAir()
+    {
+        //入力が小さい時は切り捨てて空中移動を制限
+        if (isFlying || isKnockBack && canMove)
+        {
+            if (m_inputMove.y < -reference || m_inputMove.y > reference)
+            {
+                return true;
+            }
+
+            if (m_inputMove.x < -reference || m_inputMove.x > reference)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ChangePlayerColor(int index)
+    {
+        //1Pが湧いたら色変え
         if (index == 0)
         {
-            m_defaultMaterial = m_material_2P;
-            GetComponent<Renderer>().material = m_material_2P;
+            Material[] newMaterials = m_playerRenderer.sharedMaterials;
+            newMaterials[1] = m_material_2P;
+            m_playerRenderer.sharedMaterials = newMaterials;
+        }
+        // 2P湧いたら元に戻す
+        else if (index == 1)
+        {
+            Material[] newMaterials = m_playerRenderer.sharedMaterials;
+            newMaterials[1] = m_material_1P;
+            m_playerRenderer.sharedMaterials = newMaterials;
+        }
+    }
+
+    public void ChangePlayerCanMove(bool canMove)
+    {
+        if (canMove)
+        {
+            this.canMove = true;
+        }
+        else
+        {
+            this.canMove = false;
         }
     }
 }

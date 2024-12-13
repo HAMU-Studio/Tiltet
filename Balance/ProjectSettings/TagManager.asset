@@ -6,19 +6,29 @@ TagManager:
   tags:
   - Ground
   - Destroy
-  - Enemy
+  - Coin
+  - Parts
+  - EncountArea
+  - RescueArea
+  - Temp
+  - MainParts
+  - Undefined
+  - SphereEnemy
+  - EllipseEnemy
+  - Terrain
+  - StageObject
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Floor
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Player
+  - Sensor
+  - Fly
+  - FallArea
   - 
   - 
   - 

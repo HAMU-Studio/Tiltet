@@ -6,8 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ProtoType.unity
-    guid: f2294346ee6df7c49b3d9d959242c119
+    path: Assets/Scenes/Main/Start.unity
+    guid: 919b49bc8ad6e53419ee35c35359f01a
+  - enabled: 1
+    path: Assets/Scenes/Main/GreenStage.unity
+    guid: 7ba514c678d39254db905a7c2bc2e748
+  - enabled: 1
+    path: Assets/Scenes/Main/Fight.unity
+    guid: 0ccaa94ecf9107c4fba5b954b20717e6
+  - enabled: 1
+    path: Assets/Scenes/Main/Clear.unity
+    guid: e5433fa650637744b9b318cca140e9b3
+  - enabled: 1
+    path: Assets/Scenes/Main/GameOver.unity
+    guid: bc956e9beb412d94f8701b75c81de733
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: fe6b3da7258569d42abd311e5c16baeb,
       type: 2}
