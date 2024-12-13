@@ -4,80 +4,23 @@ using UnityEngine;
 
 public class GravitySensor : MonoBehaviour
 {
-    /*public enum SensorType
-    {
-        Forward,  // 前方移動センサー
-        Backward, // 後方移動センサー
-        Left,     // 左移動センサー
-        Right     // 右移動センサー
-    }
+    [SerializeField] private TiltControl tiltControl; // TiltControlスクリプトへの参照
 
-    public SensorType sensorType; // センサーの種類を指定
-    public GameObject stage; // 動かす床オブジェクト
-    private StageMovement stageMovement; // StageMovement コンポーネントへの参照
-    private HashSet<Collider> playersInRange = new HashSet<Collider>(); // 範囲内のプレイヤーをトラッキングするためのセット
-
-    void Start()
+    void Update()
     {
-        // 床オブジェクトが設定されている場合、StageMovement コンポーネントを取得
-        if (stage != null)
+        // TiltControlからRotationXとRotationZを取得
+        if (tiltControl != null)
         {
-            stageMovement = stage.GetComponent<StageMovement>();
+            float rotationX = tiltControl.RotationX;
+            float rotationZ = tiltControl.RotationZ;
+
+            // 現在の回転を反映 (Y軸回転は維持)
+            Vector3 currentRotation = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(-rotationX, currentRotation.y, rotationZ);
+        }
+        else
+        {
+            Debug.LogError("TiltControlが設定されていません。Inspectorで設定してください。");
         }
     }
-
-    void OnTriggerEnter(Collider other)
-    {
-        // プレイヤーがセンサーの範囲に入ったとき
-        if (other.CompareTag("Player") && stageMovement != null)
-        {
-            playersInRange.Add(other); // プレイヤーをセットに追加
-
-            switch (sensorType)
-            {
-                case SensorType.Forward:
-                    // センサーが「前方」の場合、床を前方に移動させる
-                    stageMovement.AddForce(Vector3.forward);
-                    break;
-                case SensorType.Backward:
-                    // センサーが「後方」の場合、床を後方に移動させる
-                    stageMovement.AddForce(Vector3.back);
-                    break;
-                case SensorType.Left:
-                    // センサーが「左」の場合、床を左に移動させる
-                    stageMovement.AddForce(Vector3.left);
-                    break;
-                case SensorType.Right:
-                    // センサーが「右」の場合、床を右に移動させる
-                    stageMovement.AddForce(Vector3.right);
-                    break;
-            }
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        // プレイヤーがセンサーの範囲から出たとき
-        if (other.CompareTag("Player") && stageMovement != null)
-        {
-            playersInRange.Remove(other); // プレイヤーをセットから削除
-
-            // センサーの種類に応じて力を削除
-            switch (sensorType)
-            {
-                case SensorType.Forward:
-                    stageMovement.RemoveForce(Vector3.forward);
-                    break;
-                case SensorType.Backward:
-                    stageMovement.RemoveForce(Vector3.back);
-                    break;
-                case SensorType.Left:
-                    stageMovement.RemoveForce(Vector3.left);
-                    break;
-                case SensorType.Right:
-                    stageMovement.RemoveForce(Vector3.right);
-                    break;
-            }
-        }
-    }*/
 }
