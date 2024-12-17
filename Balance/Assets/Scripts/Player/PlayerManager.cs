@@ -78,9 +78,9 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
         {
             //落ちたら救出開始
-            if (GameManager.instance.Rescue == false)
+            if (GameManager.instance.IsRescue == false)
             {
-                GameManager.instance.Rescue = true;
+                GameManager.instance.IsRescue = true;
                 SoundManager.instance.Play("Struggle");
                 animator.SetTrigger("toStruggle");
             }
@@ -98,7 +98,7 @@ public class PlayerManager : MonoBehaviour
             //着地したら救出終了
             if (rescCurrentState == RescueState.None)
             {
-                GameManager.instance.Rescue = false;
+                GameManager.instance.IsRescue = false;
             }
         }
 
@@ -154,24 +154,26 @@ public class PlayerManager : MonoBehaviour
     /// シーン切り替え時に呼ぶプレイヤーのリセット シーンのロード前とロード後に行う処理がある
     /// </summary>
     /// <returns></returns>
-    public IEnumerator ResetPlayerState()
+    private PlayerController _playerController;
+    public void ResetPlayer_Unloaded()
     {
-       
+              
         if (gameObject == null)
         {
             Debug.LogAssertion("this gameObject is null!");
-            yield break;
+            return;
         }
 
-       // GetComponent<Rigidbody>().isKinematic = true;
-        PlayerController _playerController = GetComponent<PlayerController>();
+        _playerController = GetComponent<PlayerController>();
         _playerController.enabled = false;
-        GameManager.instance.Rescue = false;
+        GameManager.instance.IsRescue = false;
         rescState = RescueState.None;
-        
-        yield return new WaitForSeconds(1.7f);
+    }
+
+    public void ResetPlayer_Loaded()
+    {
         animator.Play("Wait_01");
-       // GetComponent<Rigidbody>().isKinematic = false;
+        // GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();

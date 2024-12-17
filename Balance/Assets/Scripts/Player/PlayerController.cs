@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     public void Initialize()
     {
+        m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
         animator.SetTrigger("toIdle");
