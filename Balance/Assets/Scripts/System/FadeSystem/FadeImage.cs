@@ -66,7 +66,7 @@ namespace FadeSystem
             if (m_fadeState != FadeState.None)
                 return;
             
-            Debug.Log("フェードアウト開始");
+            Debug.Log("Start FadeOut");
 
             m_fadeState = FadeState.FadingOut;
             ResetTimer();
@@ -138,13 +138,6 @@ namespace FadeSystem
             yield return new WaitForSeconds(waitTime);
             StartFadeIn();
         }
-
-        /*private IEnumerator FadeOut()
-        {
-            // 仮
-            yield return new WaitForSeconds(2.0f);
-       
-            Debug.Log("フェードアウト完了");
-        }*/
+        
     }
 }

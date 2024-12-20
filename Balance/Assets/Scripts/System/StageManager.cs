@@ -11,8 +11,8 @@ public class StageManager : MonoBehaviour
 
     [SerializeField] private float knockbackForce = 5f; // 横ノックバックの強さ
     [SerializeField] private float knockbackUpForce = 2f; // 縦ノックバックの強さ
-
-    private void Start()
+    
+    private void Awake()
     {
         // StageMovement コンポーネントを取得
         m_stageMovement = GetComponent<StageMovement>();

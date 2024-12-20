@@ -40,14 +40,13 @@ namespace System
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
                 GameManager.instance.RestartAtSavePoint(true);
-                Debug.Log("call A");
             }
 
             m_beforeSceneName = scene.name;
         }
 
         /// <summary>
-        /// 新しいシーンがロードされた直後の処理
+        /// 新しいシーンがロードされた直後の処理  注意：Awakeより後、Startより前に呼ばれる
         /// </summary>
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -66,7 +65,6 @@ namespace System
             }
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
-                Debug.Log("call B");
                 GameManager.instance.RestartAtSavePoint(false);
                 GameManager.instance.CurrentState = GameState.Search;
             }
@@ -79,7 +77,5 @@ namespace System
         {
             Debug.Log($"アクティブシーンが変更されました : {oldScene.name} -> {newScene.name}");
         }
-        
-        
     }
 }

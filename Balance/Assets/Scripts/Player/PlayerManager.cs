@@ -47,7 +47,7 @@ public class PlayerManager : MonoBehaviour
         get { return animCurrenState; }
     }*/
     Animator animator;
-    private void Start()
+    private void Awake()
     {
         m_beforeState = rescCurrentState;
         animator = GetComponent<Animator>();
