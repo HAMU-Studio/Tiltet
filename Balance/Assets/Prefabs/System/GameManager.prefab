@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8883353081518748972}
   - component: {fileID: 8734995878564543787}
+  - component: {fileID: 5363307510222640679}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,9 +45,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3daf2addea597f14a9ea5beef20bebfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGamestate: 0
-  currentStage: 0
+  m_currentState: 0
+  currentRescue: 0
   initialLife: 0
   initialWave: 0
-  startText: {fileID: 0}
-  startButton: {fileID: 0}
+--- !u!114 &5363307510222640679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740474131758099480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8e183ee6a64c86a34f2280ea2ba6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleDatas:
+  - Name: RunDust1
+    Prefab: {fileID: 2988785997014593063, guid: 1db3b77c7ce1b3c4e9d10797397cf928,
+      type: 3}
+    Transform: {fileID: 0}
+    Quaternion: {x: 0, y: 0, z: 0, w: 0}
+    UseCount: 0
+    StopTime: 1
+    IsDiscardOnStop: 1
+  - Name: RunDust2
+    Prefab: {fileID: 2988785997014593063, guid: 1db3b77c7ce1b3c4e9d10797397cf928,
+      type: 3}
+    Transform: {fileID: 0}
+    Quaternion: {x: 0, y: 0, z: 0, w: 0}
+    UseCount: 0
+    StopTime: 0
+    IsDiscardOnStop: 1

@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
         
         animator = GetComponent<Animator>();
         animator.SetTrigger("toIdle");
+        ParticleManager.instance.Register("RunDust1", transform, Quaternion.identity);
     }
 
     public void Initialize()
@@ -530,6 +531,7 @@ public class PlayerController : MonoBehaviour
             if (isFlying == false)
             {
                 SoundManager.instance.Play(moveSoundName);
+                ParticleManager.instance.GenerateAndPlay("RunDust1");
             }
             else
             {

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager is already exists");
+            // 他のシーン遷移した時の二重生成防ぐ
             Destroy(this.gameObject);
         }
         InitGame();
