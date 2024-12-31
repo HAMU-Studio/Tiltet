@@ -239,6 +239,7 @@ public class GameManager : MonoBehaviour
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
+            
         }
         */
         
@@ -274,23 +275,31 @@ public class GameManager : MonoBehaviour
         m_aircraftInstance.transform.position = m_aircraftPos;
     }
 
+
+    private StageMovement _stageStageMovement;
     /// <summary>
     /// 自機が移動するかどうかの切り替え 戦闘と探索の切り替えで使用
     /// </summary>
     /// <param name="activate"></param>
     public void AircraftMoveSwitch(bool activate)
     {
-        StageMovement stageMovement = m_aircraftInstance.GetComponent<StageMovement>();
+        StageMovement = m_aircraftInstance.GetComponent<StageMovement>();
 
         if (activate)
         {
-            stageMovement.enabled = true;
+            _stageStageMovement.enabled = true;
         }
         else
         {
-            stageMovement.enabled = false;
+            _stageStageMovement.enabled = false;
             ResetRBVelocity(m_aircraftInstance);
         }
+    }
+
+    public StageMovement StageMovement
+    {
+        get { return _stageStageMovement; }
+        set { _stageStageMovement = value; }
     }
 
     private Vector3 m_axis;

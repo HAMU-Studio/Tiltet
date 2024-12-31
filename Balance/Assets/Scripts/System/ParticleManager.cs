@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -82,20 +83,25 @@ namespace System
 
         private ParticleInstance Generate(string name)
         {
-            //  AddOrIncrementAsync参考
             ParticleList part =  GetParticleData(name);
-            ParticleInstance partInstance = GetUnusedParticleInstance();
             
-            if (part == null)
-                return null;
+            if (part == null) return null;
 
             if (Time.realtimeSinceStartup - part.playedTime < playableDistance)
                 return null;
             
+            ParticleInstance partInstance = GetUnusedParticleInstance();
+            if (partInstance == null) return null;
+            
             partInstance.Instance = Instantiate(part.Prefab, part.Transform.position, part.Quaternion);
             partInstance.List = part;
-            partInstance.Instance.GetComponent<ParticleSystem>().Stop();
             partInstance.Particle = partInstance.Instance.GetComponent<ParticleSystem>();
+            
+            // StopEmitting         : 新たな生成のみ停止(徐々にパーティクルが消える)
+            // StopEmittingAndClear : 生成を停止し、画面上の既存のパーティクルも全消去
+            partInstance.Particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+            partInstance.IsPlay = false;
             part.playedTime = Time.realtimeSinceStartup;
             return partInstance;
         }
@@ -117,18 +123,16 @@ namespace System
 
         public void ForceRemove(ParticleInstance part)
         { 
-            /*if (!instance._instances.TryGetValue(name, out ParticleInstance particle))
+            if (part.Instance != null)
             {
-                Debug.LogError("The particle does not exist");
-                return;
+                Destroy(part.Instance);
+                part.Instance = null;
             }
-            instance._instances.Remove(name);*/
-           // Destroy(particle.Particle.gameObject);
-           part.Instance = null;
-           part.IsPlay = false;
-           part.PlayTime = 0f;
-           part.Particle = null;
-           part.List = null;
+         
+            part.IsPlay = false;
+            part.PlayTime = 0f;
+            part.Particle = null;
+            part.List = null;
         }
 
         public void RemoveAll()
@@ -139,27 +143,42 @@ namespace System
             }
         }
 
+        // 遅延付き削除用のコルーチン
+        private IEnumerator DestroyParticleWithDelay(GameObject instance)
+        {
+            yield return new WaitForSeconds(0.1f); // 停止処理が完了するまで待機
+            Destroy(instance);
+        }
+
         private void Update()
         {
             foreach (var particle in particleInstances)
             {
-                if (particle.Instance == null)
-                    return;
+                if (particle.Instance == null || !particle.IsPlay) 
+                    continue;
                 
-                if (particle.IsPlay)
+                particle.PlayTime += Time.deltaTime;
+                
+                // パーティクルの移動処理
+                Vector3 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
+                particle.Instance.transform.position = movementAmount;
+                //  particle.Instance.transform.position += GameManager.instance.StageMovement.MovementAmount;
+                    
+                // 停止時間を超えた場合の処理
+                if (particle.PlayTime >= particle.List.StopTime)
                 {
-                    particle.PlayTime += Time.deltaTime;
-                    if (particle.PlayTime >= particle.List.StopTime)
+                    particle.Particle.Stop();
+                    
+                    if (particle.List.IsDiscardOnStop)
                     {
-                        particle.Particle.Stop();
-                        if (particle.List.IsDiscardOnStop)
-                        {
-                            // instance._instances.Remove(particle.Name);
-                          //  Debug.Log("call remove");
-                            Destroy(particle.Instance);
-                            ForceRemove(particle);
-                           
-                        }
+                        //Destroy(particle.Instance);
+                        StartCoroutine(DestroyParticleWithDelay(particle.Instance));
+                        ForceRemove(particle);
+                    }
+                    else
+                    {
+                        particle.IsPlay = false; // 再利用のため停止フラグを更新
+                        particle.PlayTime = 0f;
                     }
                 }
             }

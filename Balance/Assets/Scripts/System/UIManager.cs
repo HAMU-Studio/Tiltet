@@ -30,11 +30,13 @@ public class UIManager : MonoBehaviour
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;
+        GameManager.instance.AircraftMoveSwitch(false);
         
         if (GameManager.instance.isConnected == true)
         {
             ConnectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
+            GameManager.instance.AircraftMoveSwitch(true);
             //   GameManager.instance.StartGame();
             return;
         }
@@ -90,5 +92,6 @@ public class UIManager : MonoBehaviour
         GameManager.instance.isConnected = true;
         ConnectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
+        GameManager.instance.AircraftMoveSwitch(true);
     }
 }
