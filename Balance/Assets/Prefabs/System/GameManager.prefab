@@ -70,11 +70,14 @@ MonoBehaviour:
     UseCount: 0
     StopTime: 1
     IsDiscardOnStop: 1
+    playedTime: 0
   - Name: RunDust2
     Prefab: {fileID: 2988785997014593063, guid: 1db3b77c7ce1b3c4e9d10797397cf928,
       type: 3}
     Transform: {fileID: 0}
     Quaternion: {x: 0, y: 0, z: 0, w: 0}
     UseCount: 0
-    StopTime: 0
+    StopTime: 1
     IsDiscardOnStop: 1
+    playedTime: 0
+  playableDistance: 0.5

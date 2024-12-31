@@ -68,11 +68,13 @@ public class PlayerController : MonoBehaviour
     
     private string moveSoundName;
     private string hitSoundName;
+    private string runParticleName;
 
-    public void SetSoundName(string move, string hit)
+    public void SetSoundAndParticleName(string move, string hit, string run)
     {
         moveSoundName = move;
         hitSoundName = hit;
+        runParticleName = run;
     }
 
 
@@ -92,7 +94,11 @@ public class PlayerController : MonoBehaviour
         
         animator = GetComponent<Animator>();
         animator.SetTrigger("toIdle");
-        ParticleManager.instance.Register("RunDust1", transform, Quaternion.identity);
+    }
+
+    private void Start()
+    {
+        ParticleManager.instance.Register(runParticleName, transform, Quaternion.identity);
     }
 
     public void Initialize()
@@ -531,7 +537,7 @@ public class PlayerController : MonoBehaviour
             if (isFlying == false)
             {
                 SoundManager.instance.Play(moveSoundName);
-                ParticleManager.instance.GenerateAndPlay("RunDust1");
+                ParticleManager.instance.GenerateAndPlay(runParticleName);
             }
             else
             {

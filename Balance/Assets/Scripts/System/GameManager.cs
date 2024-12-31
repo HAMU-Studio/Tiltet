@@ -317,11 +317,11 @@ public class GameManager : MonoBehaviour
        // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
         if (count == 0)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("PlayerMove", "PlayerHit", "RunDust1");
         }
         else if (count == 1)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("Player2Move", "Player2Hit", "RunDust2");
         }
         
         count++;

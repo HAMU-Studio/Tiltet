@@ -13,13 +13,16 @@ namespace System
         [SerializeField] private ParticleList[] particleDatas;
         private ParticleInstance[] particleInstances;
         
+        [Header("一度生成してから、次生成出来るまでの間隔(秒)")]
+        [SerializeField] private　float playableDistance = 0.2f;
+        
         [Serializable]
         public class ParticleList
         {
             public string     Name;
             [Header("ParticleのPrefab")]
             public  GameObject Prefab;
-      //      public ParticleSystem Particle; //= Prefab.GetComponent<ParticleSystem>();
+            //  public ParticleSystem Particle; //= Prefab.GetComponent<ParticleSystem>();
             [Header("Position")]
             public Transform  Transform;
             public Quaternion Quaternion;
@@ -30,13 +33,13 @@ namespace System
             [Header("停止時に破棄するか")]
             public bool　　　  IsDiscardOnStop;
             [HideInInspector]
-            public float     playedTime;  // 前回再生した時間
+            public float      playedTime;  // 前回再生した時間
         }
        
         public class ParticleInstance
         {
             public GameObject     Instance;
-            public ParticleSystem Particle; //= Instance.GetComponent<ParticleSystem>();
+            public ParticleSystem Particle;  //= Instance.GetComponent<ParticleSystem>();
             public float          PlayTime;
             public ParticleList   List;
             public bool           IsPlay;
@@ -85,11 +88,15 @@ namespace System
             
             if (part == null)
                 return null;
+
+            if (Time.realtimeSinceStartup - part.playedTime < playableDistance)
+                return null;
             
             partInstance.Instance = Instantiate(part.Prefab, part.Transform.position, part.Quaternion);
             partInstance.List = part;
             partInstance.Instance.GetComponent<ParticleSystem>().Stop();
             partInstance.Particle = partInstance.Instance.GetComponent<ParticleSystem>();
+            part.playedTime = Time.realtimeSinceStartup;
             return partInstance;
         }
 
@@ -100,7 +107,8 @@ namespace System
         {
             if (instance._lists.TryGetValue(name, out ParticleList particle))
             {
-                particle.Transform = transform;
+                transform.position = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
+                particle.Transform =  transform;
                 particle.Quaternion = quaternion;
             }
         }
@@ -108,7 +116,7 @@ namespace System
         private void OnDestroy() => RemoveAll();
 
         public void ForceRemove(ParticleInstance part)
-        {
+        { 
             /*if (!instance._instances.TryGetValue(name, out ParticleInstance particle))
             {
                 Debug.LogError("The particle does not exist");
@@ -121,7 +129,6 @@ namespace System
            part.PlayTime = 0f;
            part.Particle = null;
            part.List = null;
-
         }
 
         public void RemoveAll()
@@ -147,9 +154,11 @@ namespace System
                         particle.Particle.Stop();
                         if (particle.List.IsDiscardOnStop)
                         {
-                            //instance._instances.Remove(particle.Name);
-                            ForceRemove(particle);
+                            // instance._instances.Remove(particle.Name);
+                          //  Debug.Log("call remove");
                             Destroy(particle.Instance);
+                            ForceRemove(particle);
+                           
                         }
                     }
                 }
@@ -172,7 +181,7 @@ namespace System
             ParticleInstance part = Generate(name);
             if (part == null)
             {
-                Debug.LogError("generate failed!");
+                //Debug.Log("generate failed!");
                 return;
             }
             part.Particle.Play();
