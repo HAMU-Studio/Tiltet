@@ -11,7 +11,7 @@ namespace System
         private Dictionary<string, ParticleList> _lists = new();
 
         [SerializeField] private ParticleList[] particleDatas;
-        [SerializeField] private ParticleInstance[] particleInstances;
+        private ParticleInstance[] particleInstances;
         
         [Header("一度生成してから、次生成出来るまでの間隔(秒)")]
         [SerializeField] private　float playableDistance = 0.2f;
@@ -34,8 +34,7 @@ namespace System
             [HideInInspector]
             public float      playedTime;  // 前回再生した時間
         }
-       
-        [Serializable]
+        
         public class ParticleInstance
         {
             public GameObject     Instance;
@@ -198,6 +197,9 @@ namespace System
         private Vector3 movementAmount;
         private void FollowAircraftMovement()
         {
+            if (GameManager.instance.CurrentState != GameState.Search)
+                return;
+            
             foreach (var particle in particleInstances)
             {
                 if (particle.Instance == null || !particle.IsPlay)
@@ -231,11 +233,7 @@ namespace System
 
         private void Play(ParticleInstance part)
         {
-            if (part == null)
-            {
-                Debug.Log("generate failed!");
-                return;
-            }
+            if (part == null) return;
             
             part.Particle.Play();
             part.IsPlay = true;

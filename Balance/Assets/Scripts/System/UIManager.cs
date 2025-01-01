@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -37,8 +34,6 @@ public class UIManager : MonoBehaviour
             ConnectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
             GameManager.instance.AircraftMoveSwitch(true);
-            //   GameManager.instance.StartGame();
-            return;
         }
     }
 
