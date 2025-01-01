@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2988785997014593063}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.005, y: 43.005, z: -4.529}
-  m_LocalScale: {x: 5.453796, y: 5.453796, z: 5.453796}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,7 +51,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -107,8 +107,9 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 1
-  moveWithCustomTransform: {fileID: 0}
+  moveWithTransform: 0
+  moveWithCustomTransform: {fileID: 4836122575055820819, guid: 75434909bf02b6543a8486cdad4777e6,
+    type: 3}
   scalingMode: 1
   randomSeed: 0
   InitialModule:

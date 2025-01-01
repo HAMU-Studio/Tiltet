@@ -12,7 +12,7 @@ namespace System
         private Dictionary<string, ParticleList> _lists = new();
 
         [SerializeField] private ParticleList[] particleDatas;
-        private ParticleInstance[] particleInstances;
+        [SerializeField] private ParticleInstance[] particleInstances;
         
         [Header("一度生成してから、次生成出来るまでの間隔(秒)")]
         [SerializeField] private　float playableDistance = 0.2f;
@@ -23,7 +23,6 @@ namespace System
             public string     Name;
             [Header("ParticleのPrefab")]
             public  GameObject Prefab;
-            //  public ParticleSystem Particle; //= Prefab.GetComponent<ParticleSystem>();
             [Header("Position")]
             public Transform  Transform;
             public Quaternion Quaternion;
@@ -37,10 +36,11 @@ namespace System
             public float      playedTime;  // 前回再生した時間
         }
        
+        [Serializable]
         public class ParticleInstance
         {
             public GameObject     Instance;
-            public ParticleSystem Particle;  //= Instance.GetComponent<ParticleSystem>();
+            public ParticleSystem Particle;  
             public float          PlayTime;
             public ParticleList   List;
             public bool           IsPlay;
@@ -159,9 +159,7 @@ namespace System
                 
                 particle.PlayTime += Time.deltaTime;
                 
-                // パーティクルの移動処理
-                Vector3 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
-                particle.Instance.transform.position = movementAmount;
+            
                 //  particle.Instance.transform.position += GameManager.instance.StageMovement.MovementAmount;
                     
                 // 停止時間を超えた場合の処理
@@ -181,6 +179,19 @@ namespace System
                         particle.PlayTime = 0f;
                     }
                 }
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            foreach (var particle in particleInstances)
+            {
+                if (particle.Instance == null || !particle.IsPlay)
+                    continue;
+                
+                // パーティクルの移動処理 simulation spaceをLocalにしないと動かない
+                Vector3 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
+                particle.Instance.transform.position = movementAmount;
             }
         }
 
