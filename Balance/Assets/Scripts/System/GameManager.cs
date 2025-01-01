@@ -1,10 +1,6 @@
 ﻿using FadeSystem;
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using System.Collections;
-using UnityEngine.Rendering;
 
 public enum GameState
 {
@@ -45,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         if (instance == null)
         {
-            gameObject.transform.parent = null;
+            transform.parent = null;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }

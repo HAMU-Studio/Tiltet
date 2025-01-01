@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace System
 {
@@ -48,17 +47,16 @@ namespace System
 
         private void Awake()
         {
-            /*if (instance == null)
+            if (instance == null)
             {
                 transform.parent = null;
-              
+                instance = this;
                 DontDestroyOnLoad(this);
             }
             else
             {
                 Destroy(this);
-            }*/
-            instance = this;
+            }
         }
 
         private void Start()
@@ -87,9 +85,10 @@ namespace System
             
             if (part == null) return null;
 
-            if (Time.realtimeSinceStartup - part.playedTime < playableDistance)
+            if (Time.realtimeSinceStartup - part.playedTime < playableDistance)  // 連続生成を防ぐ 
                 return null;
             
+            // 未使用の配列を取得しインスタンスの登録
             ParticleInstance partInstance = GetUnusedParticleInstance();
             if (partInstance == null) return null;
             
@@ -102,12 +101,13 @@ namespace System
             partInstance.Particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
             partInstance.IsPlay = false;
-            part.playedTime = Time.realtimeSinceStartup;
+            part.playedTime = Time.realtimeSinceStartup;    //前回再生した時間を登録
+            
             return partInstance;
         }
 
         /// <summary>
-        /// 場所と回転だけ追加で登録する
+        /// 場所と回転だけ追加で登録する  ※ Quaternion.Euler(x, y, z)でRotationと同じように登録可能
         /// </summary>
         public void Register(string name, Transform transform, Quaternion quaternion)
         {
@@ -116,6 +116,16 @@ namespace System
                 transform.position = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
                 particle.Transform =  transform;
                 particle.Quaternion = quaternion;
+            }
+        }
+        
+        // 場所のみ
+        public void Register(string name, Transform transform)
+        {
+            if (instance._lists.TryGetValue(name, out ParticleList particle))
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
+                particle.Transform =  transform;
             }
         }
         
@@ -150,26 +160,26 @@ namespace System
             Destroy(instance);
         }
 
-        private void Update()
+        private void Update() => TimeManage();
+
+        private void FixedUpdate() =>  FollowAircraftMovement();
+       
+        private void TimeManage()
         {
             foreach (var particle in particleInstances)
             {
                 if (particle.Instance == null || !particle.IsPlay) 
-                    continue;
+                    continue;   // 先頭から
                 
                 particle.PlayTime += Time.deltaTime;
-                
-            
-                //  particle.Instance.transform.position += GameManager.instance.StageMovement.MovementAmount;
                     
                 // 停止時間を超えた場合の処理
-                if (particle.PlayTime >= particle.List.StopTime)
+                if (particle.PlayTime >= particle.List.StopTime && particle.List.StopTime != 0f)   // 0なら停止なし
                 {
                     particle.Particle.Stop();
                     
                     if (particle.List.IsDiscardOnStop)
                     {
-                        //Destroy(particle.Instance);
                         StartCoroutine(DestroyParticleWithDelay(particle.Instance));
                         ForceRemove(particle);
                     }
@@ -182,86 +192,60 @@ namespace System
             }
         }
 
-        private void FixedUpdate()
+        /// <summary>
+        /// 自機の移動に合わせてパーティクルを移動 　※ simulation spaceをLocalにしないと動かない
+        /// </summary>
+        private Vector3 movementAmount;
+        private void FollowAircraftMovement()
         {
             foreach (var particle in particleInstances)
             {
                 if (particle.Instance == null || !particle.IsPlay)
                     continue;
-                
-                // パーティクルの移動処理 simulation spaceをLocalにしないと動かない
-                Vector3 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
+               
+                movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
                 particle.Instance.transform.position = movementAmount;
             }
         }
 
-        public void GenerateAndPlay(string name, Transform transform,  Quaternion? quaternion = null)
+        // 動作未確認
+        public void GenerateAndPlay(string name, Transform transform,  Quaternion quaternion)
         {
+            Register(name, transform, quaternion);
             ParticleInstance part = Generate(name);
-            quaternion ??= Quaternion.identity;   // nullならidentity入れる
-            // instantiate()
-            ParticleSystem particle = part.Particle;
-            particle.transform.SetPositionAndRotation(transform.position, quaternion.Value);
-            particle.Play();
-            part.IsPlay = true;
+            Play(part);
+        }
+
+        public void GenerateAndPlay(string name, Transform transform)
+        {
+            Register(name, transform);
+            ParticleInstance part = Generate(name);
+            Play(part);
         }
 
         public void GenerateAndPlay(string name)
         {
             ParticleInstance part = Generate(name);
+            Play(part);
+        }
+
+        private void Play(ParticleInstance part)
+        {
             if (part == null)
             {
-                //Debug.Log("generate failed!");
+                Debug.Log("generate failed!");
                 return;
             }
+            
             part.Particle.Play();
             part.IsPlay = true;
         }
-
-        /*public void Play(string name)
-        {
-            ParticleInstance part = GetUnusedParticleInstance(name);
-            
-            if (part == null) return;
-            
-            part.Particle.Play();
-            
-            if (!part.IsPlay)
-                part.IsPlay = true;
-        }*/
-
-        /*public void Restart(string name)
-        {
-            ParticleInstance part = GetUnusedParticleInstance(name);
-            if (part == null)
-                return;
-            part.Particle.Stop();
-            part.Particle.Clear();
-            part.Particle.Play();
-        }*/
-
-        /*public void Stop(string name)
-        {
-            ParticleInstance part = GetUnusedParticleInstance(name);
-            if (part == null)
-                return;
-            part.Particle.Stop();
-        }*/
-
-        /*public void Pause(string name)
-        {
-            ParticleInstance part = GetUnusedParticleInstance(name);
-            if (part == null)
-                return;
-            part.Particle.Pause();
-        }*/
 
         private ParticleInstance GetUnusedParticleInstance()
         {
             foreach (var particle in particleInstances)
             {
-                if (particle.Instance == null)
-                    return particle;
+                if (particle.Instance == null) return particle;
             }
             Debug.LogError("There is no room in the array");
             return null;
@@ -270,9 +254,8 @@ namespace System
         private ParticleList GetParticleData(string name)
         {
             if (instance._lists.TryGetValue(name, out ParticleList particle))
-            {
                 return particle;
-            }
+            
             Debug.LogError("The particle does not exist");
             return null;
         }

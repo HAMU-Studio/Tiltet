@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -96,10 +95,7 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("toIdle");
     }
 
-    private void Start()
-    {
-        ParticleManager.instance.Register(runParticleName, transform, Quaternion.identity);
-    }
+    private void Start() => ParticleManager.instance.Register(runParticleName, transform);
 
     public void Initialize()
     {
@@ -274,7 +270,6 @@ public class PlayerController : MonoBehaviour
         {
             if (m_PM == null)
             {
-                //Start();
                 Debug.Log("PM is null");
                 m_PM = GetComponent<PlayerManager>();
             }
@@ -282,7 +277,6 @@ public class PlayerController : MonoBehaviour
             if (m_PM.rescState == RescueState.Fly)
             {
                 //スーパー着地
-             //   Debug.Log("Call 1");
                 SuperLanding();
                 m_PM.rescState = RescueState.SuperLand;
             }
@@ -291,6 +285,7 @@ public class PlayerController : MonoBehaviour
                 m_rescueCube.GetComponent<Rescue>().StartRescue();
                 canRescueAct = false;
             }
+            
             // CMSwitchを探し、プレイヤーが接触しているか確認する処理
             CMSwitch[] switches = FindObjectsOfType<CMSwitch>();
             foreach (var cmswitch in switches)
@@ -303,21 +298,20 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
     [SerializeField] private Vector3 scalePow;
     private void SuperLanding()
     {
         if (CanSuperLand() == false)
         {
-            Debug.Log("CanSuperLand = false");
+            Debug.LogError("CanSuperLand = false");
             return;
         }
-            
         
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
         
         m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
-       // Debug.Log("call 2");
     }
 
     private void Gravity()
@@ -385,9 +379,6 @@ public class PlayerController : MonoBehaviour
         if (col.gameObject.CompareTag("Ground"))
         {
             m_stageMovement = col.gameObject.GetComponent<StageMovement>();
-          
-          //  _stageManager.SetToStageChild(gameObject);
-            //_stageManager.CounterScaleCalc(gameObject);
             isChanged = true;
         }
     }
@@ -432,9 +423,6 @@ public class PlayerController : MonoBehaviour
 
         if (m_inputTrigger_L  > triggerTiming)  
         {
-            //ダッシュ時はマテリアルを変更->エフェクトを発生させたい
-           // m_playerRenderer.material = m_dashMaterial;
-           
             m_moveSpeed = dashSpeed;
             isResetTrigger_L = false;
             isDashing = true;
@@ -445,8 +433,7 @@ public class PlayerController : MonoBehaviour
     {
         m_ray = new Ray(m_player.position, -transform.up * maxDistance);
         Physics.Raycast(m_ray, out m_hit, maxDistance);
-       // Debug.DrawRay(m_player.position, -transform.up * maxDistance, Color.red);
-
+     
         return m_hit;
     }
 
@@ -516,9 +503,9 @@ public class PlayerController : MonoBehaviour
         m_Velocity = clampedInput * m_moveSpeed;
         // transform.LookAt(m_Rigidbody.position + input); //キャラクターの向きを現在地＋入力値の方に向ける
 
-        //Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
-        //AddForceに加える力をwalkSpeedで設定した速さ以上にはならないように
-        //今入力から計算した速度から現在のRigidbodyの速度を引く
+        // Rigidbodyに一度力を加えると抵抗する力がない限りずっと力が加わる
+        // AddForceに加える力をwalkSpeedで設定した速さ以上にはならないように
+        // 今入力から計算した速度から現在のRigidbodyの速度を引く
         m_Velocity = m_Velocity - m_RB.velocity;
 
         //　速度のXZを-walkSpeedとwalkSpeed内に収めて再設定
@@ -527,11 +514,11 @@ public class PlayerController : MonoBehaviour
       
         if (moveForward != Vector3.zero)
         {
-            //SmoothDampAngleで滑らかな回転をするためには引数（moveForwardとvelocityだけ）をVector3からfloatに変換しなければいけない
+            // SmoothDampAngleで滑らかな回転をするためには引数（moveForwardとvelocityだけ）をVector3からfloatに変換しなければいけない
 
             targetRotation = Mathf.Atan2(moveForward.x, moveForward.z) * Mathf.Rad2Deg;     //Atan2, ベクトルを角度(ラジアン)に変換する Rad2Deg(radian to degrees?)ラジアンから度に変換する
 
-            //SmoothDampAngle(現在の値, 目的の値, ref 現在の速度, 遷移時間, 最高速度); 現在の速度はnullで良いっぽい？
+            // SmoothDampAngle(現在の値, 目的の値, ref 現在の速度, 遷移時間, 最高速度); 現在の速度はnullで良いっぽい？
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref yVelocity, smoothTime);
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             if (isFlying == false)
@@ -557,7 +544,7 @@ public class PlayerController : MonoBehaviour
         // m・・・質量  
         // a・・・加速度
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
-        //F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
+        // F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
       
         if (isFlying == false && isKnockBack == false)
         {
@@ -569,8 +556,8 @@ public class PlayerController : MonoBehaviour
     {
         if (MoveDuaringAir())
         {
-            //ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
-            //入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
+            // ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
+            // 入力値が大きいと力を十分の一にして加える->若干空中移動ができるように。
             m_Velocity = Vector3.Scale( m_Velocity, new Vector3(controlPower, controlPower, controlPower));
             m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }

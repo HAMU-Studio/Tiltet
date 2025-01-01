@@ -98,6 +98,17 @@ public class PlayerManager : MonoBehaviour
             if (rescCurrentState == RescueState.None)
             {
                 GameManager.instance.IsRescue = false;
+                
+                if (m_beforeState == RescueState.Fly)   //通常着地
+                {
+                   ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
+                   Debug.Log("normal landing");
+                }
+                else  // スーパー着地
+                {
+                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
+                    Debug.Log("Super landing");
+                }
             }
         }
 
