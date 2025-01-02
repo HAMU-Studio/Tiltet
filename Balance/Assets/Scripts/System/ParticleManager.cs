@@ -31,6 +31,9 @@ namespace System
             public  float     StopTime;
             [Header("停止時に破棄するか")]
             public bool　　　  IsDiscardOnStop;
+            [Header("自機の移動に合わせて動かすか")]
+            public bool       IsFollowAircraft;
+            
             [HideInInspector]
             public float      playedTime;  // 前回再生した時間
         }
@@ -144,7 +147,7 @@ namespace System
             part.List = null;
         }
 
-        public void RemoveAll()
+        private void RemoveAll()
         {
             foreach (var particle in particleInstances)
             {
@@ -202,7 +205,7 @@ namespace System
             
             foreach (var particle in particleInstances)
             {
-                if (particle.Instance == null || !particle.IsPlay)
+                if (particle.Instance == null || !particle.IsPlay || !particle.List.IsFollowAircraft)
                     continue;
                
                 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
