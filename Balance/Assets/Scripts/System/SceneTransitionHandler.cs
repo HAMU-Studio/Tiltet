@@ -35,6 +35,7 @@ namespace System
             if (scene.name == "Fight" || scene.name == "GreenStage")
             {
                 GameManager.instance.RespawnPlayer(true);
+                ParticleManager.instance.RemoveAll();
             }
 
             if (GameManager.instance.CurrentState == GameState.Restart)
