@@ -163,7 +163,7 @@ public class EnemyManager : MonoBehaviour
                                         {
                                             wave3 = true;
                                             _transition.FadeStart();
-                                            GameManager.instance.NextState = GameState.Search;
+                                            GameManager.instance.CurrentState = GameState.Search;
                                         }
                                     }
                                     else
