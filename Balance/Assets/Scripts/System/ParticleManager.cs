@@ -131,7 +131,7 @@ namespace System
             }
         }
         
-        private void OnDestroy() => RemoveAll();
+       // private void OnDestroy() => RemoveAll();
 
         public void ForceRemove(ParticleInstance part)
         { 
@@ -147,7 +147,7 @@ namespace System
             part.List = null;
         }
 
-        private void RemoveAll()
+        public void RemoveAll()
         {
             foreach (var particle in particleInstances)
             {
