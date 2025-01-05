@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: DialogueData
+  m_EditorClassIdentifier: 
+  data:
+  - Name: OP01
+    Dialogue: {fileID: 21300000, guid: 8be7d1a3545b6044c80d21802e4d3110, type: 3}
+    DisplayTime: 1
+  - Name: OP02
+    Dialogue: {fileID: 21300000, guid: 5767bb75e0681414b9a8d9430bc7042f, type: 3}
+    DisplayTime: 2
+  - Name: OP03
+    Dialogue: {fileID: 21300000, guid: 5dfbbc1a70d485d40ab8603d1de9a47e, type: 3}
+    DisplayTime: 1
+  - Name: OP04
+    Dialogue: {fileID: 21300000, guid: caf594ca56f2be84888f000579f23c5a, type: 3}
+    DisplayTime: 1
+  - Name: OP05
+    Dialogue: {fileID: 21300000, guid: 44e3f27c8ff7f2f419fc484dcfbbeb15, type: 3}
+    DisplayTime: 1
