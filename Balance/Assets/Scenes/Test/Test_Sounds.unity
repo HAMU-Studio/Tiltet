@@ -434,52 +434,62 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
+      propertyPath: soundName.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
       propertyPath: soundName.Array.data[0]
-      value: Title
+      value: Fly
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[1]
-      value: Fight
+      value: SuperLanding
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[2]
-      value: GreenStage
+      value: NormalLanding
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[3]
-      value: snowStage
+      value: CointGet
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[4]
-      value: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+      value: Connected
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[5]
-      value: "\u6226\u95D8\u2161"
+      value: Close
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[6]
-      value: Siren
+      value: AircraftHit
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[7]
-      value: PlayerMove
+      value: GetMainPart
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[8]
-      value: PlayerHit
+      value: GetSubPart
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
         type: 3}
       propertyPath: soundName.Array.data[9]
+      value: Option
+      objectReference: {fileID: 0}
+    - target: {fileID: 1679430389806132452, guid: 1e95ee63d022a5c47a3ba3a21af04199,
+        type: 3}
+      propertyPath: soundName.Array.data[10]
       value: Struggle
       objectReference: {fileID: 0}
     - target: {fileID: 1679430389806132453, guid: 1e95ee63d022a5c47a3ba3a21af04199,

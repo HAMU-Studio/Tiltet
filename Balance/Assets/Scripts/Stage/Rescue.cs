@@ -155,7 +155,7 @@ public class Rescue : MonoBehaviour
 
     public void StartRescue()
     {
-        m_PM.rescState = RescueState.Move;
+        m_PM.rescState = RescueState.OutsideMove;
         RescAreaDisable();
     }
 
@@ -192,7 +192,7 @@ public class Rescue : MonoBehaviour
     [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 2f;
     private void FixedUpdate()
     {
-        if (m_PM.rescState == RescueState.Move)
+        if (m_PM.rescState == RescueState.OutsideMove)
         {
             Vector3 force = Vector3.up * upPowoer / Time.fixedDeltaTime;
             m_RB.AddForce(force);
