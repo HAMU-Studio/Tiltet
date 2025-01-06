@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
+    [Header("このゲートの通る順番")]
     [SerializeField] private int gateNumber;
 
-    private GateManager gatemanager;
     private int nextNumber;
 
     // Start is called before the first frame update
     void Start()
     {
-        //gatemanagerから変数を共有
-        this.gatemanager = FindObjectOfType<GateManager>();
-        gatemanager.Order = gateNumber;
-        //GameObject obj = GameOblect.Find("GateManager");
-        //gatemanager = obj.GetComponent<GateManager>();
-
-        gateNumber = 0;
+        GameObject gateManager = GameObject.Find("GateManager");
+        GateManager gatemanager;
+        gatemanager = gateManager.GetComponent<GateManager>();
+        nextNumber = gatemanager.GateNumber;
     }
 
     // Update is called once per frame
@@ -27,20 +24,16 @@ public class Gate : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void CheckNumber()
     {
-        if(collision.gameObject.name=="Floor")
-        {
-            nextNumber = gatemanager.Order + 1;
 
-            if (gateNumber == nextNumber)
-            {
-                gatemanager.Order = gateNumber;
-            }
-            else
-            {
-                gatemanager.Order = 0;
-            }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "Ground")
+        {
+
         }
     }
 }

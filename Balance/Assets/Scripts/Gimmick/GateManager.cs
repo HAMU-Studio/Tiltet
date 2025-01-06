@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class GateManager : MonoBehaviour
 {
-    private int nowNumber;
-    public int Order
-    {
-        get { return nowNumber; }
-        set { nowNumber = value; }
-    }
+    [Header("置くゲートを通る順番に入れていく")]
+    [SerializeField] private GameObject[] gates;
+
+    public int GateNumber { get; set; }
+
+    private int nuwNumber;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        nuwNumber = 0;
     }
 
     // Update is called once per frame
