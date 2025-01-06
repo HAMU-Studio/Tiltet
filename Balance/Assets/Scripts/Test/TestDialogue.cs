@@ -7,14 +7,18 @@ namespace Test
 {
     public class TestDialogue : MonoBehaviour
     {
-        [SerializeField] private DialogueDatas dialogueDatas;
+        [SerializeField] private DialogueDatas[] dialogueDatas;
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
+
+            for (int i = 0; i < dialogueDatas.Length; i++)
             {
-                foreach (var data in dialogueDatas.data)
+                if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 {
-                    DisplayDialogue.instance.EnqueueDialogue(data.Name);
+                    foreach (var data in dialogueDatas[i].data)
+                    {
+                        DisplayDialogue.instance.EnqueueDialogue(data.Name);
+                    }
                 }
             }
         }

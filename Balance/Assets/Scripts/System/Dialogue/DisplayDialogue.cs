@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +16,6 @@ namespace Dialogue
 
         [SerializeField] private Image image;
         
-        [Header("次のセリフ表示までのディレイ")]
-        [SerializeField] private float delay;
-
         private void Awake()
         {
             instance = this;
@@ -57,13 +55,15 @@ namespace Dialogue
             {
                 elapsedTime += Time.deltaTime;
 
-                if (elapsedTime > _data.DisplayTime)
+                if (elapsedTime > _data.DisplayTime / 2f)
                 {
-                    Hidden();
+                    // 表示時間の半分でしゃべり停止
+                    SoundManager.instance.StopPlay("Speak");
                 }
 
-                if (elapsedTime > _data.DisplayTime + delay)
+                if (elapsedTime > _data.DisplayTime)
                 {
+                    CheckHide();
                     isShowing = false;
                     elapsedTime = 0f;
                 }
@@ -73,16 +73,20 @@ namespace Dialogue
         private void Display(Sprite dialogue)
         {
             image.sprite = dialogue;
-            image.enabled = true;
+            SoundManager.instance.Play("Speak");
+            if (!image.enabled) image.enabled = true;
         }
 
-        private void Hidden()
+        private void CheckHide()
         {
             if (image.sprite == null)
                 return;
             
-            image.enabled = false;
-            image.sprite = null;
+            // 一連のセリフ表示の最後ならimageの表示off
+            if (_task.Count == 0)
+             image.enabled = false;
+          
+           　// image.sprite = null;
         }
         
         public void EnqueueDialogue(string name)
