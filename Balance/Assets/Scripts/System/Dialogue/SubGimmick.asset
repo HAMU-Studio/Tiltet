@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: SubGimmick
+  m_EditorClassIdentifier: 
+  data:
+  - Name: FindCoinGimmick
+    Dialogue: {fileID: 21300000, guid: f9f0416613ae2f644b2a7b2d43ea11a9, type: 3}
+    DisplayTime: 3
+  - Name: SubPartGimmick
+    Dialogue: {fileID: 21300000, guid: 6101643a68e0a364ba661c4c41e60e28, type: 3}
+    DisplayTime: 2.5
+  - Name: GetSubPart01
+    Dialogue: {fileID: 21300000, guid: c131266f43fad5c4d85bcae79f55e7df, type: 3}
+    DisplayTime: 2.5
+  - Name: GetSubPart02
+    Dialogue: {fileID: 21300000, guid: 4cf703785d50d3342b21daf5f7a55dd1, type: 3}
+    DisplayTime: 3
+  - Name: GetSubPart03
+    Dialogue: {fileID: 21300000, guid: 119c35fdc4244c745b707f4fcceb66bc, type: 3}
+    DisplayTime: 2.7
