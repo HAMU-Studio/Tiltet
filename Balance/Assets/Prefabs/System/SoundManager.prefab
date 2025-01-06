@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782a833c8ba1458caa015cebc992f942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixerGroups:
+    BGM: {fileID: 6831453306590912820, guid: d185e673fbde87f4dac0ed1bc61159eb, type: 2}
+    SE: {fileID: -2477362160114360575, guid: d185e673fbde87f4dac0ed1bc61159eb, type: 2}
   bgmDatas:
   - name: Title
     audioClip: {fileID: 8300000, guid: 9741912e2395d7d45802dcd515d344b2, type: 3}
