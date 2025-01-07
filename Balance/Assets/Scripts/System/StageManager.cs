@@ -53,7 +53,7 @@ public class StageManager : MonoBehaviour
             Vector3 contactPoint = collision.contacts[0].point; // 衝突点
             Vector3 forceDirection = (transform.position - contactPoint).normalized; // オブジェクトの中心方向を計算
 
-            float forceMagnitude = 500f; // 力の大きさ
+            float forceMagnitude = 100f; // 力の大きさ
             Vector3 force = forceDirection * forceMagnitude; // 力のベクトルを生成
 
             m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える

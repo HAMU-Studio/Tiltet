@@ -42,7 +42,7 @@ public class GimmickManager : MonoBehaviour
     private void Set()
     {
         
-        countCoin = 0;
+        countCoin = -1;
         countParts = 0;
 
         SubPartsPosition[0] = stands[0].transform.position + new Vector3(0, 15.0f, 0);

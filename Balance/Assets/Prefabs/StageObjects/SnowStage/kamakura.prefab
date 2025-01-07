@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 732506069193871339}
   - component: {fileID: 726186163340628422}
   - component: {fileID: 7598248799071854010}
-  - component: {fileID: 8730550554430348702}
   m_Layer: 0
   m_Name: kamakura_01
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8730550554430348702
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3168382859208581987}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7502024487270517218, guid: 68b25a06e00fbf24a815deffed099c6e, type: 3}
 --- !u!1 &3389733154502726449
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +94,6 @@ GameObject:
   - component: {fileID: 8569763552825243562}
   - component: {fileID: 3597998454601932971}
   - component: {fileID: 6755520598109306335}
-  - component: {fileID: 6310068123453548859}
   m_Layer: 0
   m_Name: kamakura_02
   m_TagString: Untagged
@@ -182,20 +166,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6310068123453548859
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3389733154502726449}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2950080938446908693, guid: 68b25a06e00fbf24a815deffed099c6e, type: 3}
 --- !u!1 &5002279759366041631
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,9 +176,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5629634072026540709}
   - component: {fileID: 7976977080067429895}
+  - component: {fileID: 5680472734138432047}
   m_Layer: 0
   m_Name: kamakura
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -249,6 +220,19 @@ LODGroup:
     - renderer: {fileID: 7598248799071854010}
     - renderer: {fileID: 6755520598109306335}
   m_Enabled: 1
+--- !u!65 &5680472734138432047
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5002279759366041631}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.21745266, y: 0.26554817, z: 0.17398849}
+  m_Center: {x: 0.001739521, y: 0.13420108, z: -0.007432136}
 --- !u!1 &5050749667759041465
 GameObject:
   m_ObjectHideFlags: 0
