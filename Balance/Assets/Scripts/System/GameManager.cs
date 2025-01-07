@@ -22,12 +22,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
-    [SerializeField] private int initialWave = default!;
 
     private bool connectFlag = false;
   
     private int m_life;
-   // private int m_wave;
     private int m_mainParts;
     private int m_subParts;
 
@@ -290,6 +288,11 @@ public class GameManager : MonoBehaviour
             _stageStageMovement.enabled = false;
             ResetRBVelocity(m_aircraftInstance);
         }
+    }
+
+    public void HitObstacle()
+    { 
+        // blinkingScript.StartCoroutine(blinkingScript.DamageIndication(i));
     }
 
     public StageMovement StageMovement
