@@ -278,7 +278,6 @@ public class PlayerController : MonoBehaviour
             {
                 //スーパー着地
                 SuperLanding();
-                m_PM.rescState = RescueState.SuperLand;
             }
             if (canRescueAct)
             {
@@ -310,6 +309,8 @@ public class PlayerController : MonoBehaviour
         
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
+        
+        m_PM.rescState = RescueState.SuperLand;
         
         m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
     }
@@ -357,7 +358,6 @@ public class PlayerController : MonoBehaviour
                 isFlying = false;
                 isKnockBack = false;
                 canMove = true;
-                //Debug.Log("toLanding" );
                 
                 if (m_PM.rescState == RescueState.Fly ||
                     m_PM.rescState == RescueState.SuperLand)

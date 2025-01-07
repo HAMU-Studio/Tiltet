@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782a833c8ba1458caa015cebc992f942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixerGroups:
+    BGM: {fileID: 6831453306590912820, guid: d185e673fbde87f4dac0ed1bc61159eb, type: 2}
+    SE: {fileID: -2477362160114360575, guid: d185e673fbde87f4dac0ed1bc61159eb, type: 2}
   bgmDatas:
   - name: Title
     audioClip: {fileID: 8300000, guid: 9741912e2395d7d45802dcd515d344b2, type: 3}
@@ -67,47 +70,79 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: e767ba01184d3f644a7aa68c13dc0afe, type: 3}
     volume: 0.39
   - name: Speak
-    audioClip: {fileID: 8300000, guid: 0ca6f8c495191cb4e9131fb24792beba, type: 3}
-    volume: 0.515
+    audioClip: {fileID: 8300000, guid: 8460cf4d9f32d2e42b50eeb6a2d8866d, type: 3}
+    volume: 1
   SEDatas:
   - name: PlayerMove
     audioClip: {fileID: 8300000, guid: 7cad5f8762031e84d95e7edb1edeb95f, type: 3}
     playedTime: 0
-    volume: 0.47
-  - name: CursorMove
-    audioClip: {fileID: 8300000, guid: dde5b88db1ffe904bb94d1e2132c0513, type: 3}
-    playedTime: 0
-    volume: 0.6
-  - name: CursorBack
-    audioClip: {fileID: 8300000, guid: 0d5afedd3b259ad48bd2f82f7533bb10, type: 3}
-    playedTime: 0
-    volume: 0.6
-  - name: CursorDecision
-    audioClip: {fileID: 8300000, guid: d083edee05cb3af45846e38d2a27ffb6, type: 3}
-    playedTime: 0
-    volume: 1
-  - name: PlayerHit
-    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
-    playedTime: 0
-    volume: 0.8
-  - name: Siren
-    audioClip: {fileID: 8300000, guid: 4fbdd49727a279b40a2fe5749c0ac82b, type: 3}
-    playedTime: 0
-    volume: 0.6
+    volume: 0.7
   - name: Player2Move
     audioClip: {fileID: 8300000, guid: 031127932b50546488ad9edb38d1035c, type: 3}
     playedTime: 0
-    volume: 0.5
+    volume: 0.7
+  - name: PlayerHit
+    audioClip: {fileID: 8300000, guid: 60c4e34bbbc518442a99b6fa8af355d5, type: 3}
+    playedTime: 0
+    volume: 0.2
   - name: Player2Hit
-    audioClip: {fileID: 8300000, guid: 11a08c5daf4c8ec41933e1ee867b0944, type: 3}
+    audioClip: {fileID: 8300000, guid: 1c2cc3cda53ed5846a2ed260c03dfefd, type: 3}
+    playedTime: 0
+    volume: 0.2
+  - name: Fly
+    audioClip: {fileID: 8300000, guid: 8143a0d86173d6046b951001f6775c40, type: 3}
+    playedTime: 0
+    volume: 1
+  - name: SuperLanding
+    audioClip: {fileID: 8300000, guid: 866a8c1462e962d459e319a55bbba4bd, type: 3}
     playedTime: 0
     volume: 0.8
+  - name: NormalLanding
+    audioClip: {fileID: 8300000, guid: 6c7450b4082708048a86c88f6cd9da31, type: 3}
+    playedTime: 0
+    volume: 0.75
+  - name: CursorMove
+    audioClip: {fileID: 8300000, guid: 0f39647f8db03a444919afa0471f8fd7, type: 3}
+    playedTime: 0
+    volume: 0.4
+  - name: CursorBack
+    audioClip: {fileID: 8300000, guid: b71882270fe230044a6bd5929ada06a3, type: 3}
+    playedTime: 0
+    volume: 0.4
+  - name: CursorDecision
+    audioClip: {fileID: 8300000, guid: 8714cc72f4ea937428c4221369644134, type: 3}
+    playedTime: 0
+    volume: 1
+  - name: Siren
+    audioClip: {fileID: 8300000, guid: 4fbdd49727a279b40a2fe5749c0ac82b, type: 3}
+    playedTime: 0
+    volume: 0.75
   - name: Connected
     audioClip: {fileID: 8300000, guid: fbc9f9e15202bb84d9acd666bac06120, type: 3}
     playedTime: 0
     volume: 0.37
-  - name: CointGet
-    audioClip: {fileID: 8300000, guid: e9b8259f27e907d429d5c31640f93aca, type: 3}
+  - name: Option
+    audioClip: {fileID: 8300000, guid: 2a14435f83ba3c04f90a5c8d0891cf20, type: 3}
     playedTime: 0
-    volume: 0.65
+    volume: 0.7
+  - name: Close
+    audioClip: {fileID: 8300000, guid: bdf09cad7b461304da00ad2145c48b55, type: 3}
+    playedTime: 0
+    volume: 1
+  - name: AircraftHit
+    audioClip: {fileID: 8300000, guid: 5884a3e8adf918a4e9ee383af0d018ca, type: 3}
+    playedTime: 0
+    volume: 0.35
+  - name: CointGet
+    audioClip: {fileID: 8300000, guid: 40e368d34dabeb0458c25c461d28ae82, type: 3}
+    playedTime: 0
+    volume: 0.45
+  - name: GetMainPart
+    audioClip: {fileID: 8300000, guid: 8f36f2d2465b5af49bef25602e73f996, type: 3}
+    playedTime: 0
+    volume: 0.35
+  - name: GetSubPart
+    audioClip: {fileID: 8300000, guid: 3d534dccbc83dc7429a964801a3754eb, type: 3}
+    playedTime: 0
+    volume: 0.45
   playableDistance: 0.2
