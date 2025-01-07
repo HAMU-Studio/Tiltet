@@ -9,23 +9,20 @@ public class StageManager : MonoBehaviour
     // FallArea への参照を追加
     [SerializeField] private FallArea fallArea;
 
-    [SerializeField] private float knockbackForce = 5f; // 横ノックバックの強さ
-    [SerializeField] private float knockbackUpForce = 2f; // 縦ノックバックの強さ
-    
-    private void Awake()
+    private void Start()
     {
         // StageMovement コンポーネントを取得
         m_stageMovement = GetComponent<StageMovement>();
         if (m_stageMovement == null)
         {
-            Debug.LogError("StageMovement コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+            Debug.LogError("StageMovement コンポーネントが見つかりません。");
         }
 
         // Rigidbody コンポーネントを取得
         m_rb = GetComponent<Rigidbody>();
         if (m_rb == null)
         {
-            Debug.LogError("Rigidbody コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+            Debug.LogError("Rigidbody コンポーネントが見つかりません。");
         }
 
         // FallArea コンポーネントを取得
@@ -49,20 +46,17 @@ public class StageManager : MonoBehaviour
         // 衝突相手のタグが "StageObject" の場合
         if (collision.gameObject.CompareTag("StageObject"))
         {
-            m_stageMovement.IsStopActive = true; // Stop 状態を有効にする
-            Debug.Log("StageMovement の Stop 状態を有効にしました。");
+            m_stageMovement.IsNeutralActive = true; // Neutral 状態を有効にする
+            Debug.Log("StageMovement の Neutral 状態を有効にしました。");
 
-            // ノックバック方向の計算
-            Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
-            direction.y = 0; // 水平方向のみに制限
+            // 衝突点からオブジェクトの中心方向を計算
+            Vector3 contactPoint = collision.contacts[0].point; // 衝突点
+            Vector3 forceDirection = (transform.position - contactPoint).normalized; // オブジェクトの中心方向を計算
 
-            // 水平方向のノックバック
-            m_rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+            float forceMagnitude = 500f; // 力の大きさ
+            Vector3 force = forceDirection * forceMagnitude; // 力のベクトルを生成
 
-            // 上方向のノックバック
-            m_rb.AddForce(transform.up * knockbackUpForce, ForceMode.Impulse);
-
-            Debug.Log("ノックバック処理を適用しました。");
+            m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
         }
     }
 }
