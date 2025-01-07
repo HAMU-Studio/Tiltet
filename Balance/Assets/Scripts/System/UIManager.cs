@@ -1,9 +1,7 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -29,18 +27,22 @@ public class UIManager : MonoBehaviour
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;
+        GameManager.instance.AircraftMoveSwitch(false);
         
         if (GameManager.instance.isConnected == true)
         {
             ConnectionScreen.SetActive(false);
-            //   GameManager.instance.StartGame();
-            return;
+            SoundManager.instance.Play("GreenStage");
+            GameManager.instance.AircraftMoveSwitch(true);
         }
     }
 
     private bool once;
     void Update()
     {
+        if (GameManager.instance.isConnected)
+            return;
+            
         if (m_1PImage.activeSelf && m_2PImage.activeSelf)
         {
             if (once == false)
@@ -61,6 +63,7 @@ public class UIManager : MonoBehaviour
            if (m_1PImage.activeSelf == false)
            {
                m_1PImage.SetActive(true);
+               SoundManager.instance.Play("Connected");
            }
         }
         if (GameManager.instance.P2Spawn == true)
@@ -69,15 +72,21 @@ public class UIManager : MonoBehaviour
            if (m_2PImage.activeSelf == false)
            {
                m_2PImage.SetActive(true);
+               SoundManager.instance.Play("Connected");
            }
         }
     }
 
+    /// <summary>
+    /// 接続完了したら二秒待ってゲーム開始
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
         GameManager.instance.isConnected = true;
-        GameManager.instance.StartGame();
         ConnectionScreen.SetActive(false);
+        SoundManager.instance.Play("GreenStage");
+        GameManager.instance.AircraftMoveSwitch(true);
     }
 }

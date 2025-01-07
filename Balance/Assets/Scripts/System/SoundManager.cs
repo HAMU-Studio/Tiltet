@@ -2,6 +2,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System;
+using UnityEngine.Audio;
+using UnityEngine.Serialization;
+
 
 namespace System
 {
@@ -27,6 +31,14 @@ namespace System
             [Range(0f, 1f)]
             public float     volume;
         }
+        
+        [Serializable]
+        private class AudioMixerGroups
+        {
+            public AudioMixerGroup BGM;
+            public AudioMixerGroup SE;
+        }
+        [SerializeField] private AudioMixerGroups audioMixerGroups;
 
         [SerializeField] private BGMData[] bgmDatas;
         [SerializeField] private SEData[]  SEDatas;
@@ -40,18 +52,18 @@ namespace System
         public static SoundManager instance = null;
         
         //AudioSource（スピーカー）を同時に鳴らしたい音の数だけ用意
-        private AudioSource[] audioSourceList = new AudioSource[20];
+        private AudioSource[] audioSourceList = new AudioSource[10];
 
         private void SetInstance()
         {
             if (instance == null)
             {
                 instance = this;
-              //  DontDestroyOnLoad(gameObject);
+                //  DontDestroyOnLoad(gameObject);
             }
             else
             {
-              //  Destroy(gameObject);
+                //  Destroy(gameObject);
             }
         }
         private void Awake()
@@ -78,20 +90,29 @@ namespace System
         /// <summary>
         /// 未使用のAudioSourceの取得 全て使用中ならnull
         /// </summary>
-        private AudioSource GetUnusedAudioSource()
+        private AudioSource GetUnusedAudioSource(AudioClip clip)
         {
-            for (int i = 0; i < audioSourceList.Length; i++)
+         
+            // すでに同じclipが入ったAudioSourceがあるならそれで再生
+            foreach (var audioSource in audioSourceList)
             {
-                if (audioSourceList[i].isPlaying == false)
-                    return audioSourceList[i];
+                if (audioSource.clip == clip)
+                {
+                    return audioSource;
+                }
+            }
+            foreach (var audioSource in audioSourceList)
+            {
+                if (audioSource.isPlaying == false)
+                    return audioSource;
             }
             return null; 
         }
         
-        public void PlayBGM(AudioClip bgm, float volume)
+        private void PlayBGM(AudioClip bgm, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
-            AudioSource audioSource = GetUnusedAudioSource();
+            AudioSource audioSource = GetUnusedAudioSource(bgm);
 
             if (audioSource == null)
             {
@@ -102,17 +123,18 @@ namespace System
             audioSource.volume = volume;
             audioSource.loop = true;
             audioSource.clip = bgm;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.BGM;
             audioSource.Play();
         }
 
-        public void PlaySE(AudioClip clip, float volume)
+        private void PlaySE(AudioClip clip, float volume)
         {
             // 同時に鳴らす場合を考慮して毎回変数生成する(必要ないかも)
-            AudioSource audioSource = GetUnusedAudioSource();
+            AudioSource audioSource = GetUnusedAudioSource(clip);
 
             if (audioSource == null)
             {
-                Debug.Log("BGM play failed");
+                Debug.Log("SE play failed");
                 return;
             }
 
@@ -120,6 +142,7 @@ namespace System
             audioSource.playOnAwake = false;
             audioSource.loop = false;
             audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.SE;
             audioSource.PlayOneShot(clip);
         }
 
@@ -138,7 +161,6 @@ namespace System
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
                 PlayBGM(bgmData.audioClip, bgmData.volume);
-               // Debug.Log("BGM play: " + name);
             }
             else if (SEDictionary.TryGetValue(name, out SEData seData))
             {
@@ -147,7 +169,6 @@ namespace System
                 
                 seData.playedTime = Time.realtimeSinceStartup; 　//次回用に今回の再生時間の保持 
                 PlaySE(seData.audioClip, seData.volume);
-            //    Debug.Log("SE play: " + name);
             }
             else
             {
@@ -162,6 +183,12 @@ namespace System
         /// <returns></returns>
         public AudioSource GetUsingAudioSource(string name)
         {
+            if (name == null)
+            {
+                Debug.Log("param name is null");
+                return null;
+            }
+            
             if (BGMDictionary.TryGetValue(name, out BGMData bgmData))
             {
                 for (int i = 0; i < audioSourceList.Length; i++)
@@ -179,7 +206,7 @@ namespace System
                 }
             }
            
-            Debug.Log("そのAudioClipは現在使われていません");
+            //  Debug.Log("そのAudioClipは現在使われていません");
             return null;
             
         }
@@ -203,12 +230,26 @@ namespace System
 
             if (audioSource == null)
             {
-                Debug.Log("そのクリップは再生されていません");
+                //Debug.Log("そのクリップは再生されていません");
                 return;
             }
             if (audioSource.isPlaying)
             {
                 audioSource.Stop();
+            }
+        }
+
+        /// <summary>
+        /// 今流している音をすべて止める
+        /// </summary>
+        public void StopAllSound()
+        {
+            foreach (var audioSource in audioSourceList)
+            {
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
             }
         }
     }

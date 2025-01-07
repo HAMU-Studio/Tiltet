@@ -4,23 +4,30 @@ using UnityEngine;
 
 public class GateManager : MonoBehaviour
 {
-    [Header("置くゲートを通る順番に入れていく")]
-    [SerializeField] private GameObject[] gates;
+    [Header("ゲートの数")]
+    [SerializeField] private int clearNum;
+    [Header("出てくるパーツ")]
+    [SerializeField] private GameObject parts;
 
     public int GateNumber { get; set; }
-
-    private int nuwNumber;
-
 
     // Start is called before the first frame update
     void Start()
     {
-        nuwNumber = 0;
+        GateNumber = 1;
+        clearNum++;
+        parts.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log(GateNumber);
+
+        if(GateNumber==clearNum)
+        {
+            parts.SetActive(true);
+        }
+
     }
 }

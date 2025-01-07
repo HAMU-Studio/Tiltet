@@ -11,13 +11,19 @@ public class StageMovement : MonoBehaviour
     public enum State
     {
         Moving,
-        Stop
+        Stop,
+        Neutral // Neutral状態を追加
     }
 
     private State state = State.Moving; // 初期状態をMovingに設定
 
+    // デバック用の制御フラグ
+    private bool debugStop = false;
+    private bool debugNeutral = false;
+
     // 外部から制御可能なフラグ
     private bool isStopActive = false;
+    private bool isNeutralActive = false;  
 
     public bool IsStopActive
     {
@@ -25,6 +31,16 @@ public class StageMovement : MonoBehaviour
         set
         {
             isStopActive = value;
+            UpdateState(); // フラグ変更時に状態を更新
+        }
+    }
+
+    public bool IsNeutralActive
+    {
+        get { return isNeutralActive; }
+        set
+        {
+            isNeutralActive = value;
             UpdateState(); // フラグ変更時に状態を更新
         }
     }
@@ -64,13 +80,26 @@ public class StageMovement : MonoBehaviour
         m_beforePos = transform.position;
     }
 
-    void Update()
+    private void Update()
     {
-        // デバッグ用のUキー押下でStop状態の有効/無効を切り替える処理
-        if (Input.GetKeyDown(KeyCode.U))
+        // デバック用
+        // UキーでStop状態をトグル
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            IsStopActive = !IsStopActive; // 状態を切り替える
-            Debug.Log($"Uキーが押され、Stop状態が{(IsStopActive ? "有効" : "無効")}になりました。");
+            debugStop = !debugStop;     // Stop状態のトグル
+            debugNeutral = false;            // Neutral状態は解除
+            UpdateState();                        // 状態を更新
+            Debug.Log($"Stop状態が{(debugStop ? "有効" : "無効")}になりました。");
+        }
+
+        // デバック用
+        // NキーでNeutral状態をトグル
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            debugNeutral = !debugNeutral; // Neutral状態のトグル
+            debugStop = false;                 // Stop状態は解除
+            UpdateState();                          // 状態を更新
+            Debug.Log($"Neutral状態が{(debugNeutral ? "有効" : "無効")}になりました。");
         }
     }
 
@@ -85,17 +114,24 @@ public class StageMovement : MonoBehaviour
             case State.Stop:
                 StopMovement();
                 break;
-        }
 
+            case State.Neutral:
+                // Neutral状態では何もしない（外部スクリプトの力を優先）
+                break;
+        }
         CalculateMovementAmount();
     }
 
     // 状態を更新するメソッド
     private void UpdateState()
     {
-        if (isStopActive)
+        if (isStopActive || debugStop)
         {
             EnableStop();
+        }
+        else if (isNeutralActive || debugNeutral)
+        {
+            EnableNeutral();
         }
         else
         {
@@ -117,6 +153,15 @@ public class StageMovement : MonoBehaviour
         if (state == State.Stop) return; // すでにStopなら何もしない
         state = State.Stop;
         Debug.Log("State changed to Stop");
+    }
+
+    // Neutral状態を有効にする処理
+    private void EnableNeutral()
+    {
+        if (state == State.Neutral) return; // すでにNeutralなら何もしない
+        state = State.Neutral;
+        m_rb.velocity = Vector3.zero;
+        Debug.Log("State changed to Neutral");
     }
 
     // 移動を適用する処理

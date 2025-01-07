@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ namespace FadeSystem
     {
         [Header("フェード処理")] public FadeImage fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
+        [Header("現在のState")] [SerializeField] private GameState _state; 
 
         private IFadeHandler m_fade;
         private bool isSceneTransitioning = false;
@@ -22,7 +24,8 @@ namespace FadeSystem
             {
                 Debug.LogError("No IFadeHandler attached to fadeHandler");
             }
-            GameManager.instance.SetSceneManager(GetComponent<FadeAndSceneTransition>());
+            GameManager.instance.SceneManager = GetComponent<FadeAndSceneTransition>();
+            GameManager.instance.BeforeState = _state;
         }
 
         public void FadeStart()
@@ -31,10 +34,10 @@ namespace FadeSystem
                 return;
 
             isSceneTransitioning = true;
+            SoundManager.instance.StopAllSound();
             
             //リセットは戦闘と探索の切り替えのみ
-          //  if (nextSceneName == "Fight" || nextSceneName == "GreenStage")
-            GameManager.instance.ResetPlayer();
+            //     GameManager.instance.RespawnPlayer_Unloaded();
          
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());
@@ -44,11 +47,11 @@ namespace FadeSystem
         /// 名前指定してシーン移動
         /// </summary>
         /// <param name="nextSceneName"></param>
-        /*public void FadeStart(string nextSceneName)
+        public void FadeStart(string nextSceneName)
         {
             this.nextSceneName = nextSceneName;
             FadeStart();
-        }*/
+        }
 
         [SerializeField] private GameObject m_stage;
         private IEnumerator LoadNextSceneAsync()
@@ -58,9 +61,9 @@ namespace FadeSystem
                 yield return null;
             }
     
-            yield return  SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
+            SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
 
-       //     yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+            yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         }
     }
 }

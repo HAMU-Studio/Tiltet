@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +15,7 @@ public enum RescueState
     //飛ばす直前の位置に移動させるためMove追加
     None,
     Wait,
-    Move,
+    OutsideMove,   
     Fly,
     SuperLand
 }
@@ -46,11 +46,17 @@ public class PlayerManager : MonoBehaviour
         get { return animCurrenState; }
     }*/
     Animator animator;
-    private void Start()
+    private void Awake()
     {
         m_beforeState = rescCurrentState;
-        GameManager.instance.SavePlayerInstance(gameObject);
         animator = GetComponent<Animator>();
+        if (GameManager.instance == null)
+        {
+            Debug.Log("GameManager is null");
+            return;
+        }
+        GameManager.instance.SavePlayerInstance(gameObject);
+       
     }
 
     private ThrowawayMethod method;
@@ -71,16 +77,35 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
         {
             //落ちたら救出開始
-            GameManager.instance.Rescue = true;
-            SoundManager.instance.Play("Struggle");
-            animator.SetTrigger("toStruggle");
+            if (GameManager.instance.IsRescue == false)
+            {
+                GameManager.instance.IsRescue = true;
+                SoundManager.instance.Play("Struggle");
+                animator.SetTrigger("toStruggle");
+            }
         }
 
-        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move
+        // Wait to Move or Wait to Fly
+        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.OutsideMove
             || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
         {
             SoundManager.instance.StopPlay("Struggle");
             animator.Play("Wait_01");
+
+            if (rescCurrentState == RescueState.OutsideMove)
+            {
+                // 外側に飛ばす音
+            }
+            else
+            {
+                SoundManager.instance.Play("Fly");
+            }
+        }
+        
+        // Move to Fly
+        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
+        {
+            SoundManager.instance.Play("Fly");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
@@ -88,7 +113,21 @@ public class PlayerManager : MonoBehaviour
             //着地したら救出終了
             if (rescCurrentState == RescueState.None)
             {
-                GameManager.instance.Rescue = false;
+                GameManager.instance.IsRescue = false;
+                
+                if (m_beforeState == RescueState.Fly)   //通常着地
+                {
+                   ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
+                   SoundManager.instance.Play("NormalLanding");
+                   Debug.Log("NormalLanding");
+                }
+                else
+                {
+                    // スーパー着地
+                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
+                    SoundManager.instance.Play("SuperLanding");
+                    Debug.Log("SuperLanding");
+                }
             }
         }
 
@@ -100,7 +139,7 @@ public class PlayerManager : MonoBehaviour
             }
         }*/
 
-        if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
+        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
         {
             //飛んだらレイヤーですり抜けon
             SlipThroughOn();
@@ -144,20 +183,31 @@ public class PlayerManager : MonoBehaviour
     /// シーン切り替え時に呼ぶプレイヤーのリセット シーンのロード前とロード後に行う処理がある
     /// </summary>
     /// <returns></returns>
-    public IEnumerator ResetPlayerState()
+    private PlayerController _playerController;
+    public void ResetPlayer_Unloaded()
     {
-        Debug.Log("Reset!");
-        PlayerController _playerController = GetComponent<PlayerController>();
+              
+        if (gameObject == null)
+        {
+            Debug.LogAssertion("this gameObject is null!");
+            return;
+        }
+
+        _playerController = GetComponent<PlayerController>();
         _playerController.enabled = false;
-        GameManager.instance.Rescue = false;
+        GameManager.instance.IsRescue = false;
         rescState = RescueState.None;
-        
-        yield return new WaitForSeconds(1.7f);
-        
+    }
+
+    public void ResetPlayer_Loaded()
+    {
+        animator.Play("Wait_01");
+        // GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();
         _playerController.enabled = true;
+        transform.rotation = quaternion.identity;
     }
   
 }
