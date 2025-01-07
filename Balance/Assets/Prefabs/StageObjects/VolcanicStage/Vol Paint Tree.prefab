@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5430955011888726679}
   - component: {fileID: 1948430132829230861}
   - component: {fileID: 125505878738452374}
-  - component: {fileID: -7130627353630974889}
   m_Layer: 0
   m_Name: stem_M
   m_TagString: Untagged
@@ -84,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-7130627353630974889
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: -7738750208739635629}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2028995895357015015, guid: 474a93ca49b4a1b4fb0da2490cbe9da9, type: 3}
 --- !u!1 &983829057080428297
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,10 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7942528409053613139}
   - component: {fileID: 2774791210898867307}
-  - component: {fileID: 5202596839125408550}
+  - component: {fileID: 6798905883960161205}
   m_Layer: 0
   m_Name: Vol Paint Tree
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,8 +136,8 @@ LODGroup:
     renderers:
     - renderer: {fileID: 125505878738452374}
   m_Enabled: 1
---- !u!136 &5202596839125408550
-CapsuleCollider:
+--- !u!65 &6798905883960161205
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -161,10 +146,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.22
-  m_Height: 1.48
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.56, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.2000521, y: 0.9577468, z: 0.16164352}
+  m_Center: {x: 0.024065988, y: 0.4776257, z: 0.014362946}
 --- !u!1 &7184868557553975864
 GameObject:
   m_ObjectHideFlags: 0

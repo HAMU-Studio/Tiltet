@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 588613501513091345}
   - component: {fileID: 2606120960279932241}
+  - component: {fileID: 3171738879026132382}
   m_Layer: 0
   m_Name: leaf_snow_150
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,6 +77,19 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6943524283921838072}
   m_Enabled: 1
+--- !u!65 &3171738879026132382
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243471941889921963}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5273193, y: 1.5613079, z: 0.5421027}
+  m_Center: {x: 0.019695053, y: 0.77796996, z: -0.01722845}
 --- !u!1 &575557089066464170
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +101,6 @@ GameObject:
   - component: {fileID: 7514011716689848261}
   - component: {fileID: 5642544502871036265}
   - component: {fileID: 7380362005577210801}
-  - component: {fileID: 7298388396092889864}
   m_Layer: 0
   m_Name: leaf_snow_12
   m_TagString: Untagged
@@ -160,20 +173,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7298388396092889864
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 575557089066464170}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -915879037394392709, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &700092988620222132
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +184,6 @@ GameObject:
   - component: {fileID: 2488155975515924591}
   - component: {fileID: 5932399534988193761}
   - component: {fileID: 8762236814289722550}
-  - component: {fileID: 6359604695963824501}
   m_Layer: 0
   m_Name: leaf_snow_10
   m_TagString: Untagged
@@ -258,20 +256,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6359604695963824501
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700092988620222132}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3473931618418479921, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &1383864892106613829
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +267,6 @@ GameObject:
   - component: {fileID: 7925004054785850612}
   - component: {fileID: 5756431192471132198}
   - component: {fileID: 2157431144980446785}
-  - component: {fileID: 5030812067365035354}
   m_Layer: 0
   m_Name: cover_snow_4
   m_TagString: Untagged
@@ -356,20 +339,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5030812067365035354
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383864892106613829}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8402602533027551249, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &1493794407456629727
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +350,6 @@ GameObject:
   - component: {fileID: 63969677915379515}
   - component: {fileID: 5214853409995758661}
   - component: {fileID: 403535784295312903}
-  - component: {fileID: 7516908124226406066}
   m_Layer: 0
   m_Name: cover_snow3
   m_TagString: Untagged
@@ -454,20 +422,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7516908124226406066
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1493794407456629727}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3757922739103499565, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &1963399722355609758
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +433,6 @@ GameObject:
   - component: {fileID: 3332698388976812837}
   - component: {fileID: 4195932534035005949}
   - component: {fileID: 1773896762593099838}
-  - component: {fileID: 5581374938352405641}
   m_Layer: 0
   m_Name: leaf_snow_8
   m_TagString: Untagged
@@ -552,20 +505,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5581374938352405641
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1963399722355609758}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2312380763466426521, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &2390273850631410017
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,7 +559,6 @@ GameObject:
   - component: {fileID: 3413920769268275585}
   - component: {fileID: 2684646390214354513}
   - component: {fileID: 2016399666551423234}
-  - component: {fileID: 5460150102478785349}
   m_Layer: 0
   m_Name: leaf_snow_11
   m_TagString: Untagged
@@ -693,20 +631,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5460150102478785349
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2495974705352803713}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4207650000798332949, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &3463913148283723740
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,7 +642,6 @@ GameObject:
   - component: {fileID: 6801719589122592556}
   - component: {fileID: 769685868623490304}
   - component: {fileID: 7008036994716039056}
-  - component: {fileID: 3083284486729068284}
   m_Layer: 0
   m_Name: leaf_snow_2
   m_TagString: Untagged
@@ -791,20 +714,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3083284486729068284
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3463913148283723740}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8963542319958852396, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &4453171371724731788
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +725,6 @@ GameObject:
   - component: {fileID: 4613784540381653387}
   - component: {fileID: 4555391292491692495}
   - component: {fileID: 3806373206298227358}
-  - component: {fileID: 1533536733474382138}
   m_Layer: 0
   m_Name: leaf_snow_5
   m_TagString: Untagged
@@ -889,20 +797,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1533536733474382138
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4453171371724731788}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5674925152478440324, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &4910261856693967723
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,7 +808,6 @@ GameObject:
   - component: {fileID: 9050462886978030178}
   - component: {fileID: 8371937391732178372}
   - component: {fileID: 8014545524691620500}
-  - component: {fileID: 5126079199202262384}
   m_Layer: 0
   m_Name: leaf_snow_7
   m_TagString: Untagged
@@ -987,20 +880,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5126079199202262384
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4910261856693967723}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3578424471233784024, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &6053061497752423756
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +891,6 @@ GameObject:
   - component: {fileID: 1929473094508829255}
   - component: {fileID: 8186224682228752836}
   - component: {fileID: 6943524283921838072}
-  - component: {fileID: 6757206167283746116}
   m_Layer: 0
   m_Name: tree_snow
   m_TagString: Untagged
@@ -1085,20 +963,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6757206167283746116
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6053061497752423756}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8098688476570842729, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &6090746162126062434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,7 +974,6 @@ GameObject:
   - component: {fileID: 2324135563105355503}
   - component: {fileID: 1310702209084954714}
   - component: {fileID: 1673960115264708455}
-  - component: {fileID: 193715701789951778}
   m_Layer: 0
   m_Name: cover_snow_6
   m_TagString: Untagged
@@ -1183,20 +1046,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &193715701789951778
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6090746162126062434}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6111680584744202454, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &6366716219001769466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,7 +1155,6 @@ GameObject:
   - component: {fileID: 1452418852191911575}
   - component: {fileID: 3173498090975427937}
   - component: {fileID: 5712259678658600382}
-  - component: {fileID: 5463439095528617079}
   m_Layer: 0
   m_Name: leaf_snow_9
   m_TagString: Untagged
@@ -1379,20 +1227,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5463439095528617079
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7653691455559009465}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3922929146264032639, guid: b6f21bd3572896e4bb15e74a4a561026, type: 3}
 --- !u!1 &7801242513359436566
 GameObject:
   m_ObjectHideFlags: 0
