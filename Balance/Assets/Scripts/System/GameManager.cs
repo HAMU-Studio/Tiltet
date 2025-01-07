@@ -240,6 +240,11 @@ public class GameManager : MonoBehaviour
         m_beforeState = m_currentState;
     }
 
+    public GameObject Aircraft
+    {
+        get { return m_aircraftInstance; }
+    }
+
     /// <summary>
     /// 自機のインスタンス保存 シーン読み込んだら呼びたい
     /// </summary>

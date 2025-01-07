@@ -15,6 +15,13 @@ namespace System
         float time, beforeTime, floarTime;
         private bool isStopTimer;
 
+        private void Awake()
+        {
+            timeArray = new int[3] { 0, 0, 0 };
+            time = 0f;
+            isStopTimer = true;
+        }
+
         public bool IsStop
         {
             get { return isStopTimer; }
@@ -28,11 +35,7 @@ namespace System
 
         private void TimeDisplayUpdate()
         {
-            if (isStopTimer)
-            {
-                Debug.Log("TimerStop !");
-                return;
-            }
+            if (isStopTimer) return;
             
             time += Time.deltaTime;
 

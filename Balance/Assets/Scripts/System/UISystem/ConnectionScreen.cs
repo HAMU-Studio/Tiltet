@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
-public class UIManager : MonoBehaviour
+public class ConnectionScreen : MonoBehaviour
 {
     //このあたりはプロトタイプのみ
     /*[SerializeField] private TextMeshProUGUI startText;
     [SerializeField] private Button startButton;*/
-    [SerializeField] private GameObject ConnectionScreen;
+    [SerializeField] private GameObject connectionScreen;
+    [SerializeField] private InGameUISystems UISystems;
     
     [SerializeField] private GameObject m_1PImage;
     [SerializeField] private GameObject m_2PImage;
@@ -31,7 +33,7 @@ public class UIManager : MonoBehaviour
         
         if (GameManager.instance.isConnected == true)
         {
-            ConnectionScreen.SetActive(false);
+            connectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
             GameManager.instance.AircraftMoveSwitch(true);
         }
@@ -85,8 +87,9 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         GameManager.instance.isConnected = true;
-        ConnectionScreen.SetActive(false);
+        connectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
         GameManager.instance.AircraftMoveSwitch(true);
+        UISystems.StartTimer();
     }
 }

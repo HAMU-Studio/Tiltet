@@ -6,14 +6,14 @@ namespace System
 {
     public class BlinkingSystem : MonoBehaviour
     {
-        [SerializeField] GameObject player = default!;
+        // GameObject aircraft; 自機の半透明は時間的にむりそう
         [Header("表示場所")] [SerializeField] Image[] lifeImage = default!;
         [Header("通常時画像")] [SerializeField] Sprite truelife = default!;
         [Header("ダメージ時画像")] [SerializeField] Sprite falselife = default!;
-        [Header("通常時マテリアル")] [SerializeField] Material trueMaterial = default!;
+        /*[Header("通常時マテリアル")] [SerializeField] Material trueMaterial = default!;
 
         [Header("ダメージ時マテリアル")] [SerializeField]
-        Material falseMaterial = default!;
+        Material falseMaterial = default!;*/
 
         [Header("ダメージ時の表示間隔")] [SerializeField]
         float[] duration = default!;
@@ -27,6 +27,8 @@ namespace System
             {
                 t.enabled = truelife;
             }
+
+            //  aircraft = GameManager.instance.Aircraft;
         }
 
         //number：表示画像番号 x：偶数奇数判定
@@ -35,12 +37,12 @@ namespace System
             if (x % 2 == 0)
             {
                 lifeImage[number].sprite = falselife;
-                player.gameObject.GetComponent<Renderer>().material = falseMaterial;
+            //    aircraft.gameObject.GetComponent<Renderer>().material = falseMaterial;
             }
             else
             {
                 lifeImage[number].sprite = truelife;
-                player.gameObject.GetComponent<Renderer>().material = trueMaterial;
+               // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
             }
         }
 
@@ -61,7 +63,7 @@ namespace System
 
             //プレイヤーのマテリアルを通常に。ハートのより点滅の回数が増えてしまう
             // yield return new WaitForSeconds(0.1f);
-            player.gameObject.GetComponent<Renderer>().material = trueMaterial;
+           // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
             GameManager.instance.Life--;
             if (GameManager.instance.Life <= 0)
             {
