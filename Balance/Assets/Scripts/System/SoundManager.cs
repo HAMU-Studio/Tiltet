@@ -2,6 +2,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System;
+using UnityEngine.Audio;
+using UnityEngine.Serialization;
+
 
 namespace System
 {
@@ -27,6 +31,14 @@ namespace System
             [Range(0f, 1f)]
             public float     volume;
         }
+        
+        [Serializable]
+        private class AudioMixerGroups
+        {
+            public AudioMixerGroup BGM;
+            public AudioMixerGroup SE;
+        }
+        [SerializeField] private AudioMixerGroups audioMixerGroups;
 
         [SerializeField] private BGMData[] bgmDatas;
         [SerializeField] private SEData[]  SEDatas;
@@ -111,6 +123,7 @@ namespace System
             audioSource.volume = volume;
             audioSource.loop = true;
             audioSource.clip = bgm;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.BGM;
             audioSource.Play();
         }
 
@@ -129,6 +142,7 @@ namespace System
             audioSource.playOnAwake = false;
             audioSource.loop = false;
             audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.SE;
             audioSource.PlayOneShot(clip);
         }
 

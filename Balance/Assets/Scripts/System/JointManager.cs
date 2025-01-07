@@ -212,7 +212,7 @@ public class JointManager : MonoBehaviour
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
-        if (m_PM.rescState == RescueState.Move)
+        if (m_PM.rescState == RescueState.OutsideMove)
         {
             if (CheckDistanceFromStage() > lowerLimit)
             {

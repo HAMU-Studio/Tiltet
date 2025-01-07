@@ -15,7 +15,7 @@ public enum RescueState
     //飛ばす直前の位置に移動させるためMove追加
     None,
     Wait,
-    Move,
+    OutsideMove,   
     Fly,
     SuperLand
 }
@@ -85,11 +85,27 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Move
+        // Wait to Move or Wait to Fly
+        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.OutsideMove
             || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
         {
             SoundManager.instance.StopPlay("Struggle");
             animator.Play("Wait_01");
+
+            if (rescCurrentState == RescueState.OutsideMove)
+            {
+                // 外側に飛ばす音
+            }
+            else
+            {
+                SoundManager.instance.Play("Fly");
+            }
+        }
+        
+        // Move to Fly
+        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
+        {
+            SoundManager.instance.Play("Fly");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
@@ -102,12 +118,15 @@ public class PlayerManager : MonoBehaviour
                 if (m_beforeState == RescueState.Fly)   //通常着地
                 {
                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
-                   Debug.Log("normal landing");
+                   SoundManager.instance.Play("NormalLanding");
+                   Debug.Log("NormalLanding");
                 }
-                else  // スーパー着地
+                else
                 {
+                    // スーパー着地
                     ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
-                    Debug.Log("Super landing");
+                    SoundManager.instance.Play("SuperLanding");
+                    Debug.Log("SuperLanding");
                 }
             }
         }
@@ -120,7 +139,7 @@ public class PlayerManager : MonoBehaviour
             }
         }*/
 
-        if (m_beforeState == RescueState.Move && rescCurrentState == RescueState.Fly)
+        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
         {
             //飛んだらレイヤーですり抜けon
             SlipThroughOn();
