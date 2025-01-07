@@ -44,9 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3daf2addea597f14a9ea5beef20bebfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGamestate: 0
-  currentStage: 0
+  m_currentState: 0
+  currentRescue: 0
   initialLife: 0
   initialWave: 0
-  startText: {fileID: 0}
-  startButton: {fileID: 0}

@@ -15,7 +15,10 @@ public class ChangeScene : MonoBehaviour
 
     public void ToSavePoint()
     {
-        GameManager.instance.RestartAtSavePoint();
+        GameManager.instance.SceneManager.FadeStart("GreenStage");
+        GameManager.instance.RestartAtSavePoint(true);
+        GameManager.instance.CurrentState = GameState.Restart;
         SoundManager.instance.Play("CursorDecision");
+        Debug.Log("State = " + GameManager.instance.CurrentState);
     }
 }

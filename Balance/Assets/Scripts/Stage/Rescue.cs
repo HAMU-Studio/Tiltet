@@ -13,7 +13,8 @@ public class Rescue : MonoBehaviour
         canRescueAct = false;
         isThrowing = false;
         once = false;
-        gameObject.GetComponent<Renderer>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
     }
     
     private void OnTriggerEnter(Collider other)
@@ -81,8 +82,6 @@ public class Rescue : MonoBehaviour
         
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.velocity = velocity;
-
-        GetComponentInChildren<Renderer>().enabled = false;
     }
    
     /// <param name="pointA">飛ばす元(落ちたプレイヤー)</param>
@@ -157,7 +156,18 @@ public class Rescue : MonoBehaviour
     public void StartRescue()
     {
         m_PM.rescState = RescueState.Move;
-        //rescuedPlayer.GetComponent<JointManager>().RescueAdjust();
+        RescAreaDisable();
+    }
+
+    /// <summary>
+    /// 視覚的な無効化
+    /// </summary>
+    private void RescAreaDisable()
+    {
+        // GetComponentsInChildrenはおそらく[0]が親、[1]以降がその子
+        MeshRenderer[] childrens = GetComponentsInChildren<MeshRenderer>();
+        childrens[1].enabled = false;
+        childrens[2].enabled = false;
     }
 
     private bool once;

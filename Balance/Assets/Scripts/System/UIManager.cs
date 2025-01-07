@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -30,13 +27,13 @@ public class UIManager : MonoBehaviour
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;
+        GameManager.instance.AircraftMoveSwitch(false);
         
         if (GameManager.instance.isConnected == true)
         {
             ConnectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
-            //   GameManager.instance.StartGame();
-            return;
+            GameManager.instance.AircraftMoveSwitch(true);
         }
     }
 
@@ -90,5 +87,6 @@ public class UIManager : MonoBehaviour
         GameManager.instance.isConnected = true;
         ConnectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
+        GameManager.instance.AircraftMoveSwitch(true);
     }
 }

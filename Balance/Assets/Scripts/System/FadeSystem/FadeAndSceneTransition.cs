@@ -24,8 +24,8 @@ namespace FadeSystem
             {
                 Debug.LogError("No IFadeHandler attached to fadeHandler");
             }
-            GameManager.instance.SetSceneManager(GetComponent<FadeAndSceneTransition>());
-            GameManager.instance.CurrentState = _state;
+            GameManager.instance.SceneManager = GetComponent<FadeAndSceneTransition>();
+            GameManager.instance.BeforeState = _state;
         }
 
         public void FadeStart()
@@ -37,8 +37,7 @@ namespace FadeSystem
             SoundManager.instance.StopAllSound();
             
             //リセットは戦闘と探索の切り替えのみ
-          //  if (nextSceneName == "Fight" || nextSceneName == "GreenStage")
-            GameManager.instance.RespawnPlayer();
+            //     GameManager.instance.RespawnPlayer_Unloaded();
          
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());
