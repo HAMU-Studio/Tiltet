@@ -121,11 +121,13 @@ public class PlayerManager : MonoBehaviour
                 {
                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                    SoundManager.instance.Play("NormalLanding");
+                   animator.SetTrigger("toLand");
                    Debug.Log("NormalLanding");
                 }
                 else
                 {
                     // スーパー着地
+                    animator.SetTrigger("toLand");
                     ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                     SoundManager.instance.Play("SuperLanding");
                     Debug.Log("SuperLanding");
@@ -133,13 +135,10 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        /*if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
+        if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
         {
-            if (gameObject.layer ==  LayerMask.NameToLayer("Fly"))
-            {
-                SlipThroughOff();
-            }
-        }*/
+            animator.SetTrigger("toSuperLand"); 
+        }
 
         if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
         {

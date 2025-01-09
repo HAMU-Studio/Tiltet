@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -158,7 +159,7 @@ public class PlayerController : MonoBehaviour
         {
             //スーパー着地
             //   Debug.Log("Call 1");
-            SuperLanding();
+           StartCoroutine(SuperLanding());
         }
         
         TransitionAnim();
@@ -277,7 +278,7 @@ public class PlayerController : MonoBehaviour
             if (m_PM.rescState == RescueState.Fly)
             {
                 //スーパー着地
-                SuperLanding();
+               StartCoroutine( SuperLanding());
             }
             if (canRescueAct)
             {
@@ -299,18 +300,18 @@ public class PlayerController : MonoBehaviour
     }
     
     [SerializeField] private Vector3 scalePow;
-    private void SuperLanding()
+    private IEnumerator SuperLanding()
     {
         if (CanSuperLand() == false)
         {
             Debug.LogError("CanSuperLand = false");
-            return;
+            yield break;
         }
-        
+        m_PM.rescState = RescueState.SuperLand;
+
+        yield return new WaitForSeconds(0.8f);
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
-        
-        m_PM.rescState = RescueState.SuperLand;
         
         m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
     }
