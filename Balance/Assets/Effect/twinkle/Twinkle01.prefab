@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9170805540575837230
+--- !u!1 &2656793014852561063
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9170805540575837227}
-  - component: {fileID: 9170805540575837224}
-  - component: {fileID: 9170805540575837225}
-  - component: {fileID: 458913064102905594}
+  - component: {fileID: 2656793014852561058}
+  - component: {fileID: 2656793014852561057}
+  - component: {fileID: 2656793014852561056}
+  - component: {fileID: 6756964215662154355}
+  - component: {fileID: 2171541319965371697}
   m_Layer: 0
-  m_Name: Twinkle
+  m_Name: Twinkle01
   m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9170805540575837227
+--- !u!4 &2656793014852561058
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170805540575837230}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_GameObject: {fileID: 2656793014852561063}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 211.97273, y: -46.77, z: -634.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!2083052967 &9170805540575837224
+--- !u!2083052967 &2656793014852561057
 VisualEffect:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170805540575837230}
+  m_GameObject: {fileID: 2656793014852561063}
   m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: 121c10e4c491f914692ddfcda3efdccc, type: 3}
   m_InitialEventName: OnPlay
@@ -51,7 +52,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 50
+      - m_Value: 25
         m_Name: ParticleSize
         m_Overridden: 1
       - m_Value: 7
@@ -77,14 +78,14 @@ VisualEffect:
       m_Array: []
     m_Bool:
       m_Array: []
---- !u!73398921 &9170805540575837225
+--- !u!73398921 &2656793014852561056
 VFXRenderer:
   serializedVersion: 1
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170805540575837230}
+  m_GameObject: {fileID: 2656793014852561063}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -117,16 +118,28 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &458913064102905594
+--- !u!65 &6756964215662154355
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9170805540575837230}
+  m_GameObject: {fileID: 2656793014852561063}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 18.923862, y: 23.509218, z: 21.08807}
   m_Center: {x: -0.58283615, y: 0.68376255, z: -0.073313236}
+--- !u!114 &2171541319965371697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656793014852561063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8caa756503cea1443a83f3f049d49ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

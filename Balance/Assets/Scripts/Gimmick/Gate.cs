@@ -16,7 +16,6 @@ public class Gate : MonoBehaviour
     {
         GameObject gateManager = GameObject.Find("GateManager");
         gatemanager = gateManager.GetComponent<GateManager>();
-        //nowNumber = gatemanager.GateNumber;
     }
 
     // Update is called once per frame
@@ -25,27 +24,22 @@ public class Gate : MonoBehaviour
         //Debug.Log(nowNumber);
     }
 
-    public void CheckNumber()
-    {
-
-    }
-
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             nowNumber = gatemanager.GateNumber;
-            Debug.Log("ぶつかった");
+            //Debug.Log("ぶつかった");
 
             if (nowNumber == gateNumber)
             {
                 gatemanager.GateNumber = gateNumber + 1;
-                Debug.Log("正解");
+                //Debug.Log("正解");
             }
             else
             {
                 gatemanager.GateNumber = 1;
-                Debug.Log("残念");
+                //Debug.Log("残念");
             }
         }
     }
