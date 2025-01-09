@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -30,7 +31,7 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
-        
+
         GameManager.instance.SaveAircraftInstance(gameObject);
     }
 
@@ -53,10 +54,21 @@ public class StageManager : MonoBehaviour
             Vector3 contactPoint = collision.contacts[0].point; // 衝突点
             Vector3 forceDirection = (transform.position - contactPoint).normalized; // オブジェクトの中心方向を計算
 
-            float forceMagnitude = 500f; // 力の大きさ
+            float forceMagnitude = 100f; // 力の大きさ
             Vector3 force = forceDirection * forceMagnitude; // 力のベクトルを生成
 
             m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
+
+            // Neutral 状態を1秒後に無効にする処理を開始
+            StartCoroutine(DisableNeutralStateAfterDelay(1f));
         }
+    }
+
+    // Neutral 状態を遅延して無効にするコルーチン
+    private IEnumerator DisableNeutralStateAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        m_stageMovement.IsNeutralActive = false; // Neutral 状態を無効にする
+        Debug.Log("StageMovement の Neutral 状態を無効にしました。");
     }
 }

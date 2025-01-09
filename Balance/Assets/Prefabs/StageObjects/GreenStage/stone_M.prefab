@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 9046031659711519571}
   - component: {fileID: 8948802961226866377}
   - component: {fileID: 3825172439747675669}
-  - component: {fileID: 8114313385135499386}
   m_Layer: 0
   m_Name: stone_2step
   m_TagString: Untagged
@@ -119,20 +118,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8114313385135499386
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551201829268656395}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6668394516207353073, guid: e147b6147d58fca4196687982087364d, type: 3}
 --- !u!1 &4516002350642504203
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,9 +226,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5945720779824813946}
   - component: {fileID: 4597729303061393300}
+  - component: {fileID: 782675412824595335}
   m_Layer: 0
   m_Name: stone_M
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -295,6 +281,19 @@ LODGroup:
     renderers:
     - renderer: {fileID: 3825172439747675669}
   m_Enabled: 1
+--- !u!65 &782675412824595335
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6469598026711010752}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14368485, y: 0.097149916, z: 0.18045963}
+  m_Center: {x: 0.030208714, y: 0.039894473, z: -0.036773358}
 --- !u!1 &8140579816017708095
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +305,6 @@ GameObject:
   - component: {fileID: 1060475340271475555}
   - component: {fileID: 6472387149175244936}
   - component: {fileID: 6118530613484933722}
-  - component: {fileID: 1814272191556165907}
   m_Layer: 0
   m_Name: stone_small
   m_TagString: Untagged
@@ -379,20 +377,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1814272191556165907
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8140579816017708095}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1210687744809190094, guid: e147b6147d58fca4196687982087364d, type: 3}
 --- !u!1 &8408779500513153177
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +388,6 @@ GameObject:
   - component: {fileID: 6434663364573735179}
   - component: {fileID: 3987603381381548072}
   - component: {fileID: 7429847442122594692}
-  - component: {fileID: 8187439873982355670}
   m_Layer: 0
   m_Name: stone_sqare1
   m_TagString: Untagged
@@ -477,17 +460,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8187439873982355670
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408779500513153177}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4654318786712002974, guid: e147b6147d58fca4196687982087364d, type: 3}

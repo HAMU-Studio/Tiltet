@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 7005162028054754086}
   - component: {fileID: 3111537110291531355}
   - component: {fileID: 2901586303316147993}
-  - component: {fileID: 5577848899064043707}
   m_Layer: 0
   m_Name: Pillar_04
   m_TagString: Untagged
@@ -116,20 +115,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5577848899064043707
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7136169131716933841}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5383792986729347659, guid: d3b1dbd9e6cb41c4a9d54486823fedbb, type: 3}
 --- !u!1 &7455637434737306780
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,9 +125,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7799229679850714662}
   - component: {fileID: 5431291158543422183}
+  - component: {fileID: 2844598668260755065}
   m_Layer: 0
   m_Name: Pillar_01
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182,3 +168,16 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2901586303316147993}
   m_Enabled: 1
+--- !u!65 &2844598668260755065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7455637434737306780}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.48451376, z: 0.27240825}
+  m_Center: {x: 0, y: 0.23669674, z: -0.0044543105}

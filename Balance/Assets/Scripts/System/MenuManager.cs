@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    [Header("タイトル画面")]
+    [SerializeField] private GameObject title;
+    [Header("オプション画面")]
+    [SerializeField] private GameObject option;
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +22,15 @@ public class MenuManager : MonoBehaviour
         
     }
 
-    public void Play()
+    public void Title()
     {
-         GameManager.instance.Restart();
+        title.SetActive(true);
+        option.SetActive(false);
+    }
+
+    public void Option()
+    {
+        title.SetActive(false);
+        option.SetActive(true);
     }
 }
