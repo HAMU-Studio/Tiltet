@@ -5,6 +5,16 @@ using UnityEngine.AI;
 
 public class EnemySphere : MonoBehaviour
 {
+    private enum EnemyType
+    {
+        GREEN,
+        SNOW,
+        VOLCANO
+    }
+
+    [Header("この敵がでるフィールド")]
+    [SerializeField] private  EnemyType enemyType;
+
     [Header("動くスピード")]
     [SerializeField] private float m_moveSpeed = 1.0f;
 
@@ -17,7 +27,12 @@ public class EnemySphere : MonoBehaviour
     [Header("踏ん張り始める角度")]
     [SerializeField] private float m_funbariAngle = 15.0f;
 
-    [SerializeField] private GameObject[] home; 
+    [Header("爆発の範囲")]
+    [SerializeField] private GameObject explosionRenge;
+
+    [SerializeField] private GameObject explosionEffect;
+
+    //[SerializeField] private GameObject[] home; 
 
     private Animator anim;
     private float[] m_distance;
@@ -26,12 +41,15 @@ public class EnemySphere : MonoBehaviour
     private Rigidbody enemyRb;
     private float funbariTime = 0.0f;
     private float m_angle = 0.0f;
+    private float explosionTime = 0.0f;
 
     private bool arrived;
     private bool life;
     private bool escape;
     private bool brake;
     private bool funbari;
+    private bool ableExplosion;
+    private bool stop;
 
     Vector3 m_nowPos = new Vector3();
     Vector3 m_prePosition = new Vector3();
@@ -47,36 +65,43 @@ public class EnemySphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        explosionTime += Time.deltaTime;
+        Debug.Log(arrived);
+
         if (life)
         {
             if (arrived)
             {
-                m_nowPos = transform.position;
-
-                SetMoveSpeed();
-                Funbari();
-                //Brake();
-
-                // targetがnullでないことを確認
-                if (m_target != null)
+                if (!stop)
                 {
-                    //進行方向
-                    //方向に大きさはいらないので正規化
-                    m_direction = (m_target.transform.position - transform.position).normalized;
-                }
-                /*else if (m_target == null)
-                {
-                    SetTarget();
-                }*/
+                    m_nowPos = transform.position;
 
-                if (funbari)
-                {
-                    funbariTime += Time.deltaTime;
+                    SetMoveSpeed();
+                    Funbari();
 
-                    if (funbariTime > 1.0f)
+                    // targetがnullでないことを確認
+                    if (m_target != null)
                     {
-                        funbari = false;
-                        funbariTime = 0.0f;
+                        //進行方向
+                        //方向に大きさはいらないので正規化
+                        m_direction = (m_target.transform.position - transform.position).normalized;
+
+
+                    }
+                    /*else if (m_target == null)
+                    {
+                        SetTarget();
+                    }*/
+
+                    if (funbari)
+                    {
+                        funbariTime += Time.deltaTime;
+
+                        if (funbariTime > 1.0f)
+                        {
+                            funbari = false;
+                            funbariTime = 0.0f;
+                        }
                     }
                 }
             }
@@ -86,6 +111,29 @@ public class EnemySphere : MonoBehaviour
             if(escape)
             {
                 m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
+            }
+        }
+
+        if (enemyType == EnemyType.VOLCANO)
+        {
+            //Explosion();
+
+            if (explosionTime > 6.0f)
+            {
+                //enemyRb.constraints = RigidbodyConstraints.FreezeAll;
+                stop = true;
+                anim.SetBool("explosion", true);
+            }
+
+            if (explosionTime > 7.0f)
+            {
+                explosionEffect.SetActive(true);
+            }
+
+            if (explosionTime > 7.5f)
+            {
+                //Debug.Log("爆発");
+                Destroy(this.gameObject);
             }
         }
     }
@@ -100,10 +148,12 @@ public class EnemySphere : MonoBehaviour
                 {
                     enemyRb.AddForce((m_stageCenter - transform.position).normalized * m_angle / 5.0f);
                 }*/
+                if (!stop)
+                {
+                    enemyRb.AddForce(m_direction * m_moveSpeed);
 
-                enemyRb.AddForce(m_direction * m_moveSpeed);
-
-                Brake();
+                    Brake();
+                }
             }
         }
         else
@@ -122,6 +172,8 @@ public class EnemySphere : MonoBehaviour
         escape= false;
         brake = false;
         funbari = false;
+        stop = false;
+        ableExplosion = false;
 
         //最初にこれでplayer初期化(消すな)
         m_players = GameObject.FindGameObjectsWithTag("Player");
@@ -207,6 +259,26 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
+    /*private void Explosion()
+    {
+        explosionTime += Time.deltaTime;
+        if (time >= 2.0f)
+        {
+            enemyRb.constraints = RigidbodyConstraints.FreezeAll;
+            stop = true;
+            anim.SetBool("explosion", true);
+        }
+        if (time >= 3.0f)
+        {
+            explosionRenge.SetActive(true);
+            explosionEffect.SetActive(true);    
+        }
+        if (time >= 3.5f)
+        {
+            Destroy(gameObject);
+        }
+    }*/
+
     //着地した時に近くにいたプレイヤーを追いかける
     private void OnCollisionEnter(Collision collision)
     {
@@ -234,6 +306,7 @@ public class EnemySphere : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
+            arrived = true;
             anim.SetBool("Arrived", true);
         }
     }

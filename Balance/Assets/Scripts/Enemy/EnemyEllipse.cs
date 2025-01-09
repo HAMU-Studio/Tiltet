@@ -10,6 +10,16 @@ using UnityEngine.AI;
 
 public class EnemyEllipse : MonoBehaviour
 {
+    private enum EnemyType
+    {
+        GREEN,
+        SNOW,
+        VOLCANO
+    }
+
+    [Header("この敵がでるフィールド")]
+    [SerializeField] private EnemyType enemyType;
+
     [Header("突撃する強さ")]
     [SerializeField] private float moveSpeed = 50.0f;
 
