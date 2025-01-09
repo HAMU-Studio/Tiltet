@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1824025392954165241}
   - component: {fileID: 2740239460393344428}
+  - component: {fileID: 2146737585496675128}
   m_Layer: 0
   m_Name: snow_stone
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,6 +58,19 @@ LODGroup:
     renderers:
     - renderer: {fileID: 266109528766010411}
   m_Enabled: 1
+--- !u!65 &2146737585496675128
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304897938071428419}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.094786905, y: 0.07699252, z: 0.048308093}
+  m_Center: {x: 0.00077387865, y: 0.036316104, z: -0.0012914385}
 --- !u!1 &3156612715796925389
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +115,6 @@ GameObject:
   - component: {fileID: 4158498995330962690}
   - component: {fileID: 543253507260590697}
   - component: {fileID: 266109528766010411}
-  - component: {fileID: 1023234903529163666}
   m_Layer: 0
   m_Name: snow_stone
   m_TagString: Untagged
@@ -174,20 +187,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1023234903529163666
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653180225425816597}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8058135767140614403, guid: f3661e30c25d69d42a01ee0817da7e01, type: 3}
 --- !u!1 &5121742594146279073
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +198,6 @@ GameObject:
   - component: {fileID: 1373469679485756102}
   - component: {fileID: 8070685668302815207}
   - component: {fileID: 684764171163724025}
-  - component: {fileID: 5883587149789902383}
   m_Layer: 0
   m_Name: snow_stone_cover
   m_TagString: Untagged
@@ -272,17 +270,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5883587149789902383
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5121742594146279073}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 925868752979909739, guid: f3661e30c25d69d42a01ee0817da7e01, type: 3}
