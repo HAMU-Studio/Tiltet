@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    //private TiltControl m_tillControl;
     private StageMovement m_stageMovement;
     private Rigidbody m_rb;
 
@@ -12,6 +14,13 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
+        // TiltControl コンポーネントを取得
+        /*m_tillControl = GetComponent<TiltControl>();
+        if (m_tillControl == null)
+        {
+            Debug.LogError("TiltControl コンポーネントが見つかりません。");
+        }*/
+
         // StageMovement コンポーネントを取得
         m_stageMovement = GetComponent<StageMovement>();
         if (m_stageMovement == null)
@@ -59,8 +68,10 @@ public class StageManager : MonoBehaviour
 
             m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
 
-            // Neutral 状態を1秒後に無効にする処理を開始
-            StartCoroutine(DisableNeutralStateAfterDelay(1f));
+            //m_tillControl.ForceZeroTilt = true;
+
+            // Neutral 状態を数秒後に無効にする処理を開始
+            StartCoroutine(DisableNeutralStateAfterDelay(2f));
         }
     }
 
@@ -68,6 +79,9 @@ public class StageManager : MonoBehaviour
     private IEnumerator DisableNeutralStateAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+
+        //m_tillControl.ForceZeroTilt = false;
+
         m_stageMovement.IsNeutralActive = false; // Neutral 状態を無効にする
         Debug.Log("StageMovement の Neutral 状態を無効にしました。");
     }
