@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour
             DashSwitch();
         }
  
-        if (isChanged)
+        if (isChanged && m_RB.isKinematic == false)
         {
             movementAmount = m_RB.position + m_stageMovement.MovementAmount;
             m_RB.MovePosition(movementAmount);

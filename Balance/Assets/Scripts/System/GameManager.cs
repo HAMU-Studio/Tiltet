@@ -214,7 +214,10 @@ public class GameManager : MonoBehaviour
     // ここで呼んでるコルーチンを
     private void OnStateChange()
     {
-        Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
+       // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
+       
+        instance.PlayerLock();
+       
         if (m_beforeState == GameState.EnemyBattle &&
             m_currentState == GameState.Search)   // 戦闘->探索
         {
@@ -224,13 +227,13 @@ public class GameManager : MonoBehaviour
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.EnemyBattle) // 探索->戦闘
         {
-            SaveAircraftPos(m_aircraftInstance.transform.position);
+          //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.GameOver) // 探索->ゲームオーバー
         {
-            SaveAircraftPos(m_aircraftInstance.transform.position);
+          //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
         /*
@@ -261,7 +264,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 自機の場所保存 探索->戦闘に切り替わったとき呼びたい
     /// </summary>
-    private void SaveAircraftPos(Vector3 position)
+    public void SaveAircraftPos(Vector3 position)
     {
         m_aircraftPos = position;
     }
@@ -406,6 +409,35 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public void PlayerLock()
+    {
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            player.GetComponent<PlayerManager>().LockPos();
+        }
+    }
+    
+    public void PlayerUnLock()
+    {
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            player.GetComponent<PlayerManager>().UnLockPos();
+
+        }
+    }
     /// <summary>
     /// 戦闘->探索に戻った時の処理
     /// </summary>
@@ -489,7 +521,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogAssertion("m_aircraftInstance is null!");
             yield break;
-        }
+        } 
+        
         m_aircraftInstance.transform.position = m_aircraftPos;
         
         SetPlayerPos();

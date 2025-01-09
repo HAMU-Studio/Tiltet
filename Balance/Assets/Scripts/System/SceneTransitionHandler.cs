@@ -43,6 +43,8 @@ namespace System
                 GameManager.instance.RestartAtSavePoint(true);
                 Debug.Log("Restart 1 ");
             }
+            
+            
 
             m_beforeSceneName = scene.name;
         }
@@ -78,7 +80,7 @@ namespace System
               //  GameManager.instance.Back2Search();
                 GameManager.instance.CurrentState = GameState.Search;
             }
-
+            GameManager.instance.PlayerUnLock();
             m_beforeSceneName = null;
 
         }
