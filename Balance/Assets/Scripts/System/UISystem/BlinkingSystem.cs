@@ -22,13 +22,17 @@ namespace System
 
         void Awake()
         {
-            //最初に全てのLife画像をtrueに
-            foreach (Image t in lifeImage)
-            {
-                t.enabled = truelife;
-            }
+            InitializeLife();
+        }
 
-            //  aircraft = GameManager.instance.Aircraft;
+        private void InitializeLife()
+        {
+            // シーン切り替わった時とかのために体力状況を確認した初期化
+            for (int i = 0; i < GameManager.instance.Life; i++)
+            {
+                //lifeImage[i].enabled = truelife;
+                lifeImage[i].sprite = truelife;
+            }
         }
 
         //number：表示画像番号 x：偶数奇数判定
