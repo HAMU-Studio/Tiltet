@@ -205,7 +205,7 @@ namespace System
             
             foreach (var particle in particleInstances)
             {
-                if (particle.Instance == null || !particle.IsPlay || !particle.List.IsFollowAircraft)
+                if (particle.Instance == null || !particle.IsPlay || !particle.List.IsFollowAircraft || GameManager.instance.StageMovement == null)
                     continue;
                
                 movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
