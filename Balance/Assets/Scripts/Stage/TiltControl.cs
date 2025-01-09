@@ -23,9 +23,33 @@ public class TiltControl : MonoBehaviour
     // 復元力の大きさ
     [SerializeField] private float restoringForce = 10f;
 
+    // 外部スクリプトから制御するフラグ
+    //private bool forceZeroTilt = false;
+
+    // 水平に戻るまでの時間（秒）
+    //[SerializeField] private float levelingTime = 1f;
+
+    // 水平に戻る速度
+    //private float levelingSpeed;
+
     // RotationのXとZの値を公開
     public float RotationX { get; private set; }
     public float RotationZ { get; private set; }
+
+    // 外部からフラグを設定するプロパティ
+    /*public bool ForceZeroTilt
+    {
+        get => forceZeroTilt;
+        set
+        {
+            forceZeroTilt = value;
+            if (forceZeroTilt)
+            {
+                // 水平に戻る速度を計算 (1秒あたりの戻る割合)
+                levelingSpeed = 1f / levelingTime;
+            }
+        }
+    }*/
 
     void Start()
     {
@@ -47,33 +71,55 @@ public class TiltControl : MonoBehaviour
     {
         // Y軸方向の移動を固定
         Vector3 currentPosition = transform.position;
-        currentPosition.y = initialYPosition; // Y軸の位置を初期位置に固定
+        currentPosition.y = initialYPosition; // オブジェクトのY座標を初期位置に固定
         transform.position = currentPosition;
 
         // Y軸の回転を固定
         Vector3 currentRotation = transform.rotation.eulerAngles;
-        currentRotation.y = initialYRotation; // Y軸の回転を初期回転角度に固定
+        currentRotation.y = initialYRotation; // Y軸の回転角度を初期値に固定
 
-        // X軸とZ軸の回転を±maxTiltAngleX、±maxTiltAngleZに制限
+        /*if (forceZeroTilt)
+        {
+            // 傾きをゼロに戻す処理
+            float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
+            float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
+
+            // 水平に戻る回転角度を徐々に計算
+            tiltX = Mathf.MoveTowards(tiltX, 0f, levelingSpeed * Time.fixedDeltaTime * maxTiltAngleX);
+            tiltZ = Mathf.MoveTowards(tiltZ, 0f, levelingSpeed * Time.fixedDeltaTime * maxTiltAngleZ);
+
+            // 回転を更新
+            currentRotation.x = tiltX;
+            currentRotation.z = tiltZ;
+
+            // RotationXとRotationZを更新
+            RotationX = tiltX;
+            RotationZ = tiltZ;
+
+            // 回転を適用
+            transform.rotation = Quaternion.Euler(currentRotation);
+
+            // フラグが有効な間はこれ以降の処理をスキップ
+            return;
+        }*/
+
+        // X軸とZ軸の回転を制限（最大角度を超えないようにする）
         currentRotation.x = Mathf.Clamp(currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x, -maxTiltAngleX, maxTiltAngleX);
         currentRotation.z = Mathf.Clamp(currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z, -maxTiltAngleZ, maxTiltAngleZ);
 
-        // RotationXとRotationZに現在の回転を代入し、ログを表示
+        // RotationXとRotationZに現在の回転を代入
         RotationX = currentRotation.x;
         RotationZ = currentRotation.z;
-        //Debug.Log($"Rotation X: {RotationX:F2}, Rotation Z: {RotationZ:F2}");
 
         // 制限後の回転を適用
         transform.rotation = Quaternion.Euler(currentRotation);
-        
+
         // 接触中のオブジェクトがある場合、その質量に応じて傾きを加える
         if (isContacting && contactMass > 0f)
         {
-            // 質量に応じた傾きの強さを計算
-            float tiltAmount = Mathf.Clamp(contactMass, 1f, 10f); // 1～10の範囲で傾きを制限
-            // X軸とZ軸の傾きを計算（質量に応じて傾く強さを変更）
-            Vector3 xTiltTorque = Vector3.right * -tiltAmount;
-            Vector3 zTiltTorque = Vector3.forward * -tiltAmount;
+            float tiltAmount = Mathf.Clamp(contactMass, 1f, 10f); // 質量に応じた傾きの量を計算
+            Vector3 xTiltTorque = Vector3.right * -tiltAmount;    // X軸方向のトルク
+            Vector3 zTiltTorque = Vector3.forward * -tiltAmount; // Z軸方向のトルク
 
             // Rigidbodyにトルクを加える（傾きを適用）
             m_rb.AddTorque(xTiltTorque + zTiltTorque);
@@ -86,53 +132,52 @@ public class TiltControl : MonoBehaviour
     // 復元力を適用して傾きを安定させる
     private void ApplyRestoringForce()
     {
-        // 現在の回転角度を取得
         Vector3 currentRotation = transform.rotation.eulerAngles;
 
-        // 回転角度を[-180, 180]の範囲に正規化
+        // 現在のX軸、Z軸の傾きを計算
         float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
         float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
 
-        // X軸とZ軸の傾きに対する復元力を計算
+        // 傾きに対する復元トルクを計算
         Vector3 restoringTorqueX = Vector3.right * -tiltX * restoringForce;
         Vector3 restoringTorqueZ = Vector3.forward * -tiltZ * restoringForce;
 
-        // 復元力をRigidbodyに適用
+        // Rigidbodyに復元トルクを加える
         m_rb.AddTorque(restoringTorqueX + restoringTorqueZ);
     }
 
-    // オブジェクトが接触を開始したとき
     void OnCollisionEnter(Collision collision)
     {
+        // 衝突相手のRigidbodyを取得
         Rigidbody otherRb = collision.rigidbody;
 
-        if (otherRb != null)
+        // 衝突相手がPlayerタグを持っている場合、質量を記録し接触状態を有効化
+        if (otherRb != null && collision.gameObject.CompareTag("Player"))
         {
-            // 接触したオブジェクトの質量を取得
             contactMass = otherRb.mass;
-            isContacting = true; // 接触状態を記録
-            //Debug.Log("接触開始: 質量 " + contactMass);
+            isContacting = true;
         }
     }
 
-    // オブジェクトが接触している間
     void OnCollisionStay(Collision collision)
     {
+        // 衝突相手のRigidbodyを取得
         Rigidbody otherRb = collision.rigidbody;
 
-        if (otherRb != null)
+        // 衝突相手がPlayerタグを持っている場合、質量を更新
+        if (otherRb != null && collision.gameObject.CompareTag("Player"))
         {
-            // 接触している間は質量を更新
             contactMass = otherRb.mass;
         }
     }
 
-    // オブジェクトが接触を終了したとき
     void OnCollisionExit(Collision collision)
     {
-        // 接触が終わったので質量をリセット
-        contactMass = 0f;
-        isContacting = false;
-        //Debug.Log("接触終了");
+        // 衝突相手がPlayerタグを持っている場合、質量をリセットし接触状態を無効化
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            contactMass = 0f;
+            isContacting = false;
+        }
     }
 }
