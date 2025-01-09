@@ -28,7 +28,7 @@ namespace System
         {
             if (GameManager.instance.Life <= 0) return;
             
-            int i = 3 - GameManager.instance.Life;  // 体力を逆順にしないと動かないっぽい
+            int i = GameManager.instance.Life-1;  // 体力を逆順にしないと動かないっぽい
             _blinkingSystem.StartCoroutine(_blinkingSystem.DamageIndication(i));
         }
 
