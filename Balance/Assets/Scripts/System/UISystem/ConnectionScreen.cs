@@ -33,9 +33,11 @@ public class ConnectionScreen : MonoBehaviour
         
         if (GameManager.instance.isConnected == true)
         {
+            // すでに接続済み(戦闘から探索に戻った時など)
             connectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
             GameManager.instance.AircraftMoveSwitch(true);
+            UISystems.StartTimer();
         }
     }
 
@@ -87,6 +89,7 @@ public class ConnectionScreen : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         GameManager.instance.isConnected = true;
+        Debug.Log("isConnected = " + GameManager.instance.isConnected);
         connectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
         GameManager.instance.AircraftMoveSwitch(true);

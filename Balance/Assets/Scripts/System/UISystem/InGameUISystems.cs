@@ -5,6 +5,8 @@ namespace System
    
     public class InGameUISystems : MonoBehaviour
     {
+        public static InGameUISystems instance = null;
+        
         public BlinkingSystem _blinkingSystem;
         public Score _score;
         public TimeCalc _timeCalc;
@@ -14,6 +16,11 @@ namespace System
         private void Awake()
         {
             hitCount = 0;
+            if (instance == null)
+            {
+                transform.parent = null;
+                instance = this;
+            }
         }
 
         private void Update()
@@ -41,7 +48,7 @@ namespace System
         {
             _timeCalc.IsStop = true;
         }
-        
-        
+
+     
     }
 }
