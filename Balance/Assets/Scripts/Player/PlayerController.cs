@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class PlayerController : MonoBehaviour
 {
@@ -228,7 +229,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void  PlayerMoveInput(InputAction.CallbackContext context)
+    public void PlayerMoveInput(InputAction.CallbackContext context)
     {
         //入力値の格納
         if (context.phase == InputActionPhase.Performed)
@@ -312,6 +313,28 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void MenuInput(InputAction.CallbackContext context)
+    {
+        /*if (context.phase == InputActionPhase.Started)
+        {
+            if (isOpenMenu)
+            {
+                // menu閉じる関数
+                
+              //  m_PM.UnLockPos(); menu関数先で呼び出す
+            }
+            else
+            {
+                // menu表示関数
+               // m_PM.LockPos();
+            }
+          
+        }*/
+    
+        
+      
     }
     
     [SerializeField] private Vector3 scalePow;
