@@ -13,8 +13,7 @@ public class PartsArrival : MonoBehaviour
     [Header("ゲージがなくなるまでの時間")]
     [SerializeField] private float gaugeDeleteTime = 2.0f;
 
-    [SerializeField] private GameObject gauge;
-    [SerializeField] private TextMeshProUGUI gaugeText;
+
 
     private float m_stayTime; // 現在の滞在時間を保持
     private float m_leaveTime;
@@ -29,8 +28,7 @@ public class PartsArrival : MonoBehaviour
         GameObject stageMovement= GameObject.Find("stage 2");
         stagemovement = stageMovement.GetComponent<StageMovement>();
 
-        gauge.SetActive(false);
-        gaugeText.text = "";
+    
 
         part.SetActive(false); // サブパーツを見えないようにする
         m_stayTime = 0f; // 現在の滞在時間を初期化
@@ -47,15 +45,14 @@ public class PartsArrival : MonoBehaviour
 
             if (isStay)
             {
-                gauge.SetActive(true);
+            
                 TimeGauge();
                 m_stayTime += Time.deltaTime; // 滞在時間を減少させる
                 if (m_stayTime >= needStayTime)
                 {
                     part.SetActive(true); // サブパーツを表示
                     Destroy(gameObject); // エリアを削除
-                    Destroy(gauge);
-                    Destroy(gaugeText);
+                   
                 }
             }
             else
@@ -63,16 +60,14 @@ public class PartsArrival : MonoBehaviour
                 m_leaveTime += Time.deltaTime;
                 if(m_leaveTime>=gaugeDeleteTime)
                 {
-                    gauge.SetActive(false);
-                    gaugeText.text = "";
+                  
                 }
 
             }
         }
         else
         {
-            gauge.SetActive(false);
-            gaugeText.text = "";
+          
         }
     }
 
@@ -105,9 +100,6 @@ public class PartsArrival : MonoBehaviour
     {
         //double displaytext = Math.Floor(m_stayTime);
         int displaytext = (int)m_stayTime;
-        gaugeText.text = displaytext.ToString();
-
-        gauge.GetComponent<Image>().fillAmount = m_stayTime - displaytext;
     }
 
     private void OnTriggerEnter(Collider other)

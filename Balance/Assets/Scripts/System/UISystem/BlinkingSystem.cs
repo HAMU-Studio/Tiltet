@@ -71,7 +71,7 @@ namespace System
             GameManager.instance.Life--;
             if (GameManager.instance.Life <= 0)
             {
-                // 負け判定
+                GameManager.instance.GameOver();
             }
 
             //  _MainGameManager.isInvincible = false;

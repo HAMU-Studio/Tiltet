@@ -2635,7 +2635,7 @@ PrefabInstance:
     - target: {fileID: 5445180134286841147, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: nextSceneName
-      value: GreenStage
+      value: MainStage
       objectReference: {fileID: 0}
     - target: {fileID: 5551500621265395336, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
@@ -2647,6 +2647,11 @@ PrefabInstance:
       propertyPath: P2Spawn
       value: 
       objectReference: {fileID: 1000636100}
+    - target: {fileID: 6124964549295651373, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7002411443313462220, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive
