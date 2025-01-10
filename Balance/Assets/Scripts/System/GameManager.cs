@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
             EndGame();
         }
         
-        if (m_mainParts >= 1)
+        if (m_mainParts >= 3)
         {
             if (CurrentState != GameState.Clear)
             {

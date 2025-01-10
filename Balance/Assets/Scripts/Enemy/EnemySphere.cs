@@ -66,7 +66,7 @@ public class EnemySphere : MonoBehaviour
     void Update()
     {
         explosionTime += Time.deltaTime;
-        Debug.Log(arrived);
+//        Debug.Log(arrived);
 
         if (life)
         {

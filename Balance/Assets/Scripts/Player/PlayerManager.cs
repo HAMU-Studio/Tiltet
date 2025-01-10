@@ -86,8 +86,7 @@ public class PlayerManager : MonoBehaviour
             if (GameManager.instance.IsRescue == false)
             {
                 GameManager.instance.IsRescue = true;
-                SoundManager.instance.Play("Struggle");
-                animator.SetTrigger("toStruggle");
+                PlayStruggle();
             }
         }
 
@@ -154,6 +153,12 @@ public class PlayerManager : MonoBehaviour
          
         }
         m_beforeState = rescCurrentState;
+    }
+
+    public void PlayStruggle()
+    {
+        SoundManager.instance.Play("Struggle");
+        animator.SetTrigger("toStruggle");
     }
     
     /// <summary>

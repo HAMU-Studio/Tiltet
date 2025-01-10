@@ -58,8 +58,7 @@ namespace System
             Debug.Log("BeforeScene = " + m_beforeSceneName);
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
-                GameManager.instance.RespawnPlayer(false);
-                Debug.Log("call resp");
+                GameManager.instance.RespawnPlayer(false); 
             }
             
             // 戦闘->探索

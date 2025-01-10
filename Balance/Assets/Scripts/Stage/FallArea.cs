@@ -48,17 +48,22 @@ public class FallArea : MonoBehaviour
     }
 
     //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
+    //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //ここ絶対エラー出るからどうにかしたい
-           // if ( m_PM.RescueState != RescueState.None )
-               // return;
+            if (m_PM.rescState == RescueState.SuperLand)
+            {
+                Debug.Log("スーパー着地中に落下しました");
+                m_PM.rescState = RescueState.None;
+                ResetFlag();
+                PostProcess();
+            }
 
             if (!waitRescue)
             {
-                Debug.Log("callHItPlayerProcess");
+                //    Debug.Log("callHItPlayerProcess");
                 HitPlayerProcess(other);
                 waitRescue = true;
             }
@@ -67,6 +72,12 @@ public class FallArea : MonoBehaviour
                 if (Player2Check(other) == true)
                 {
                    StartCoroutine(GameManager.instance.GameOver());
+                }
+
+                { 
+                    m_PM.PlayStruggle();
+                    HitPlayerProcess(other);
+                    StartCoroutine(GameManager.instance.GameOver());
                 }
             }
         }
