@@ -25,7 +25,7 @@ public class CoinManager : MonoBehaviour
     void Update()
     {
         InstanceParts();
-        Debug.Log(countCoin);
+//        Debug.Log(countCoin);
     }
 
     private void Set()

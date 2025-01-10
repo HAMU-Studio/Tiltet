@@ -12,7 +12,8 @@ public class ConnectionScreen : MonoBehaviour
     [SerializeField] private Button startButton;*/
     [SerializeField] private GameObject connectionScreen;
     [SerializeField] private InGameUISystems UISystems;
-    [SerializeField] private DisplayDialogue systemMessege;
+  //  [SerializeField] private DisplayDialogue systemMessege;
+ //   [SerializeField] private DisplayDialogue dialogue;
     
     
     [SerializeField] private GameObject m_1PImage;
@@ -91,13 +92,43 @@ public class ConnectionScreen : MonoBehaviour
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
-        systemMessege.EnqueueDialogue("Start");
-        GameManager.instance.isConnected = true;
-        Debug.Log("isConnected = " + GameManager.instance.isConnected);
+        
         connectionScreen.SetActive(false);
+        GameManager.instance.PlayerLock();
+        
+        OPDialogue();
+        yield return new WaitForSeconds(15.5f);
+        
+        GameManager.instance.isConnected = true;
+ 
+        DisplayDialogue.system.EnqueueDialogue("Start");
+        
         SoundManager.instance.Play("GreenStage");
         SoundManager.instance.Play("Start");
+        GameManager.instance.PlayerUnLock();
+        
         GameManager.instance.AircraftMoveSwitch(true);
         UISystems.StartTimer();
+        
+        yield return new WaitForSeconds(2f);
+      
+        StartDialogue();
+
+    }
+
+    private void OPDialogue()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            DisplayDialogue.dialogue.EnqueueDialogue($"OP0{i + 1}");
+        }
+    }
+
+    private void StartDialogue()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            DisplayDialogue.dialogue.EnqueueDialogue($"InGame0{i + 1}");
+        }
     }
 }
