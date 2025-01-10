@@ -65,6 +65,16 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        /*if (GameManager.instance.P1Spawn == false || GameManager.instance.P2Spawn == false)
+        {
+            GameManager.instance.SavePlayerInstance(gameObject);
+            GameManager.instance.P1Spawn = true;
+            GameManager.instance.P2Spawn = true;
+        }*/
+    }
+
     private ThrowawayMethod method;
     private bool temp;
     private void FixedUpdate()

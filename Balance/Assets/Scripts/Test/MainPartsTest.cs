@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,8 @@ public class MainPartsTest : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             GameManager.instance.AddMainPartsNum();
+            Destroy(this.gameObject);
+            SoundManager.instance.Play("GetMainPart");
         }
     }
 }

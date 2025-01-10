@@ -53,13 +53,13 @@ public class FallArea : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (m_PM.rescState == RescueState.SuperLand)
+            /*if (m_PM.rescState == RescueState.SuperLand)
             {
                 Debug.Log("スーパー着地中に落下しました");
                 m_PM.rescState = RescueState.None;
                 ResetFlag();
                 PostProcess();
-            }
+            }*/
 
             if (!waitRescue)
             {
@@ -71,10 +71,6 @@ public class FallArea : MonoBehaviour
             {
                 if (Player2Check(other) == true)
                 {
-                   StartCoroutine(GameManager.instance.GameOver());
-                }
-
-                { 
                     m_PM.PlayStruggle();
                     HitPlayerProcess(other);
                     StartCoroutine(GameManager.instance.GameOver());
