@@ -162,7 +162,7 @@ public class EnemyManager : MonoBehaviour
                                         if (noSphere && noEllipse)
                                         {
                                             wave3 = true;
-                                            _transition.FadeStart();
+                                            _transition.FadeStart("MainStage");
                                             GameManager.instance.CurrentState = GameState.Search;
                                         }
                                     }

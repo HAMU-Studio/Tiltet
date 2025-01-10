@@ -50,8 +50,15 @@ namespace System
             }
         }
 
+        private bool isInvicible;
         public IEnumerator DamageIndication(int i)
         {
+            if (!isInvicible)
+                isInvicible = true;
+            else
+            {
+                yield break;
+            }
             //  _MainGameManager.isInvincible = true;   //点滅中は無敵に
 
             yield return new WaitForSeconds(0.15f);
@@ -75,6 +82,7 @@ namespace System
             }
 
             //  _MainGameManager.isInvincible = false;
+            isInvicible = false;
             yield return null;
         }
     }
