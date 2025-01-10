@@ -346,12 +346,14 @@ public class PlayerController : MonoBehaviour
             yield break;
         }
         m_PM.rescState = RescueState.SuperLand;
+        ChangePlayerState(true);
 
         yield return new WaitForSeconds(0.8f);
         m_RB.velocity = Vector3.zero;
         m_RB.angularVelocity = Vector3.zero;
         
         m_RB.AddForce(Vector3.Scale(Vector3.down, scalePow), ForceMode.Impulse);
+        ChangePlayerState(false);
     }
 
     private void Gravity()
@@ -651,7 +653,7 @@ public class PlayerController : MonoBehaviour
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         // F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
       
-        if (isFlying == false && isKnockBack == false && canMove && !isFleezing)
+        if (isFlying == false && isKnockBack == false && !isFleezing)
         {
             m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
@@ -659,7 +661,7 @@ public class PlayerController : MonoBehaviour
 
     private void AirMovement()
     {
-        if (!canMove && isKnockBack && isFleezing)
+        if ( isKnockBack && isFleezing)
             return;
         
         if (MoveDuaringAir())
