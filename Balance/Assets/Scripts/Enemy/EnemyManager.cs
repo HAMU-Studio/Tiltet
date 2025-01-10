@@ -120,7 +120,7 @@ public class EnemyManager : MonoBehaviour
                         if(!wave1)
                         {
                             phasesText.text = "FirstWave";
-                            count1++;
+                            //count1++;
                             if (count1 >= 5)
                             {
                                 if (noSphere)
@@ -131,6 +131,7 @@ public class EnemyManager : MonoBehaviour
                             else
                             {
                                 SpawnCircleEnemy();
+                                count1++;
                             }
                         }
                         else
@@ -138,7 +139,7 @@ public class EnemyManager : MonoBehaviour
                             if(!wave2)
                             {
                                 phasesText.text = "SecondWave";
-                                count2++;
+                                //count2++;
                                 if (count2 >= 3)
                                 {
                                     if (noEllipse)
@@ -149,6 +150,7 @@ public class EnemyManager : MonoBehaviour
                                 else
                                 {
                                     SpawnEllipseEnemy();
+                                    count2++;
                                 }
                             }
                             else
@@ -156,19 +158,22 @@ public class EnemyManager : MonoBehaviour
                                 if (!wave3)
                                 {
                                     phasesText.text = "LastWave";
-                                    count3++;
-                                    if (count3 >= 8)
+                                    //count3++;
+                                    if (count3 >= 6)
                                     {
-                                        if (noSphere && noEllipse)
-                                        {
-                                            wave3 = true;
-                                            _transition.FadeStart();
+                                        //if (noSphere && noEllipse)
+                                        //{
+                                            //wave3 = true;
+                                            Debug.Log("idou");
+                                            
+                                            _transition.FadeStart("MainStage");
                                             GameManager.instance.CurrentState = GameState.Search;
-                                        }
+                                        //}
                                     }
                                     else
                                     {
                                         EnemySpawn();
+                                        count3++;
                                     }
 
                                 }
