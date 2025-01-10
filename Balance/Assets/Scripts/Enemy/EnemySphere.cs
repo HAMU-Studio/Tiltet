@@ -120,7 +120,7 @@ public class EnemySphere : MonoBehaviour
 
             if (explosionTime > 6.0f)
             {
-                //enemyRb.constraints = RigidbodyConstraints.FreezeAll;
+                enemyRb.constraints = RigidbodyConstraints.FreezeAll;
                 stop = true;
                 anim.SetBool("explosion", true);
             }
