@@ -2355,12 +2355,12 @@ PrefabInstance:
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002288009
+      value: 0.0000000228801
       objectReference: {fileID: 0}
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008283735
+      value: -0.000000008283737
       objectReference: {fileID: 0}
     - target: {fileID: 4564555364397662376, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
@@ -6556,8 +6556,6 @@ MonoBehaviour:
   part: {fileID: 857630209}
   needStayTime: 3
   gaugeDeleteTime: 2
-  gauge: {fileID: 0}
-  gaugeText: {fileID: 0}
 --- !u!65 &943497936
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15407,6 +15405,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2986039606335571844, guid: f4ddc53c5ebb8024fba74878725f446b,
+        type: 3}
+      propertyPath: fightSceneName
+      value: fight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4ddc53c5ebb8024fba74878725f446b, type: 3}
