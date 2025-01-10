@@ -37,6 +37,19 @@ public class PlayerController : MonoBehaviour
     [Header("2Pカラー")]
     [SerializeField] private Material m_material_2P = default!;
     
+    [Header("通常時のワイヤー")]
+    [SerializeField] private Material m_material_wire = default!;
+    
+    [Header("凍りやられ1P")]
+    [SerializeField] private Material m_ice_1P = default!;
+    
+    [Header("凍りやられ2P")]
+    [SerializeField] private Material m_ice_2P = default!;
+    
+    [Header("凍りやられwire")]
+    [SerializeField] private Material m_ice_wire = default!;
+    
+    
     [Header("ノックバックの強さ")]
     [SerializeField] private float knockBackP = 5f;              
     [Header("ノックバック時上方向の力")]
@@ -87,6 +100,7 @@ public class PlayerController : MonoBehaviour
         m_moveSpeed = walkSpeed;
         canRescueAct = false;
         isChanged = false;
+        is1P = false;
     
         GetMaterialProcess();
         
@@ -94,6 +108,7 @@ public class PlayerController : MonoBehaviour
         
         animator = GetComponent<Animator>();
         animator.SetTrigger("toIdle");
+        CheckPlayer();
     }
 
     private void Start() => ParticleManager.instance.Register(runParticleName, transform);
@@ -117,9 +132,9 @@ public class PlayerController : MonoBehaviour
         {
             if (m_playerRenderer.materials.Length > 1)
             {
-              //  m_defaultMaterial = new Material[2]; 
+               // m_defaultMaterial = new Material[2]; 
          
-              //  m_defaultMaterial[1] = m_playerRenderer.materials[1];
+               // m_defaultMaterial[1] = m_playerRenderer.materials[1];
             }
             else 
             {
@@ -240,7 +255,7 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         /*//落下中と攻撃中はジャンプをさせない
-        if (isFlying|| canMove == false || isKnockBack) return;  
+        if (isFlying|| canMove == false || isKnockBack) return;
 
         if (m_RB == null)
         {
@@ -251,11 +266,11 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             //移動中またはその場でジャンプした時の遷移
-            
+
             //ジャンプする直前の加速度加えて慣性を表現
-            
+
             m_RB.AddForce(m_RB.velocity.normalized, ForceMode.Impulse);
-            
+
             //ジャンプ
             m_RB.AddForce(transform.up * jumpPower, ForceMode.Impulse);
            // canMove = false;
@@ -394,6 +409,12 @@ public class PlayerController : MonoBehaviour
             canRescueAct = true;
             m_rescueCube = col.gameObject;
         }
+
+        if (col.gameObject.CompareTag("Ice"))
+        {
+           StartCoroutine(IceDamage());
+        }
+       
     }
 
     /// <summary>
@@ -470,6 +491,9 @@ public class PlayerController : MonoBehaviour
 
     void KnockBack(Collision collision)
     {
+        if (isFleezing)
+            return;
+        
         isKnockBack = true;
         canMove = false;
         
@@ -479,6 +503,58 @@ public class PlayerController : MonoBehaviour
         m_RB.AddForce(direction * knockBackP, ForceMode.Impulse);      
         m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
         SoundManager.instance.Play(hitSoundName);
+    }
+
+    private void BombDamage()
+    {
+        
+    }
+
+    [Header("凍る時間")]
+    [SerializeField] private float iceTime;
+    private IEnumerator IceDamage()
+    {
+        SoundManager.instance.Play("Ice");
+        ChangePlayerState(true);
+        ChangeMaterial(m_ice_1P, m_ice_2P, m_ice_wire);
+        m_playerRenderer.materials[0] = m_ice_wire;
+
+        yield return new WaitForSeconds(iceTime);
+        
+        ChangeMaterial(m_material_1P, m_material_2P, m_material_wire);
+        ChangePlayerState(false);
+        canMove = true;
+
+    }
+
+    private void CheckPlayer()
+    {
+        Material[] newMaterials = m_playerRenderer.sharedMaterials;
+
+        if (newMaterials[1].mainTexture == m_material_1P.mainTexture)
+        {
+            is1P = true;
+            Debug.Log("is 1P");
+        }
+        else
+        {
+            is1P = false;
+            Debug.Log("is 2P");
+        }
+    }
+
+    private void ChangeMaterial(Material P1, Material P2, Material wire)
+    {
+        Material[] newMaterials = m_playerRenderer.sharedMaterials;
+       
+        if (is1P)
+            newMaterials[1]  = P1;
+        else
+            newMaterials[1] = P2;
+        
+        newMaterials[0] = wire;
+        
+        m_playerRenderer.sharedMaterials = newMaterials;
     }
 
     private const float controlPower = 0.1f;
@@ -547,7 +623,7 @@ public class PlayerController : MonoBehaviour
         // Δt・・・力を加えた時間 (Time.fixedDeltatime) 
         // F = ｍ * a / Δt    Forceは力を加えた時間を使って計算
       
-        if (isFlying == false && isKnockBack == false)
+        if (isFlying == false && isKnockBack == false && canMove && !isFleezing)
         {
             m_RB.AddForce(m_RB.mass * m_Velocity / Time.fixedDeltaTime, ForceMode.Force);
         }
@@ -555,6 +631,9 @@ public class PlayerController : MonoBehaviour
 
     private void AirMovement()
     {
+        if (!canMove && isKnockBack && isFleezing)
+            return;
+        
         if (MoveDuaringAir())
         {
             // ジャンプ中スティックの入力値が基準以下なら力加えずに慣性を働かす。
@@ -583,6 +662,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    private bool is1P;
     public void ChangePlayerColor(int index)
     {
         //1Pが湧いたら色変え
