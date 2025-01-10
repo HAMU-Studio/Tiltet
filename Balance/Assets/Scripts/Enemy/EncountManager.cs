@@ -31,5 +31,6 @@ public class EncountManager : MonoBehaviour
     {
         _transition.FadeStart(sceneName);
         GameManager.instance.CurrentState = GameState.EnemyBattle;
+        isEncount = true;
     }
 }
