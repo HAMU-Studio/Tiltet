@@ -161,14 +161,12 @@ public class EnemyManager : MonoBehaviour
                                     //count3++;
                                     if (count3 >= 6)
                                     {
-                                        //if (noSphere && noEllipse)
-                                        //{
-                                            //wave3 = true;
-                                            Debug.Log("idou");
-                                            
-                                            _transition.FadeStart("MainStage");
+                                        if (noSphere && noEllipse)
+                                        {
+                                            GameManager.instance.SceneManager.FadeStart("MainStage");
                                             GameManager.instance.CurrentState = GameState.Search;
-                                        //}
+                                            wave3 = true;
+                                        }
                                     }
                                     else
                                     {
