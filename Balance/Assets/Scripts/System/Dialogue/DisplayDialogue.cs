@@ -7,7 +7,7 @@ namespace Dialogue
 {
     public class DisplayDialogue : MonoBehaviour
     {
-        public static DisplayDialogue instance;
+       // public static DisplayDialogue instance;
         
         Queue<DialogueData> _task = new Queue<DialogueData>();
 
@@ -18,7 +18,7 @@ namespace Dialogue
         
         private void Awake()
         {
-            instance = this;
+          //  instance = this;
             InitializeDataDictionary();
             image.enabled = false;
         }
@@ -99,7 +99,7 @@ namespace Dialogue
 
         private DialogueData GetDialogueData(string name)
         {
-            if (instance.dataDictionary.TryGetValue(name, out DialogueData data))
+            if (dataDictionary.TryGetValue(name, out DialogueData data))
             {
                 return data;
             }

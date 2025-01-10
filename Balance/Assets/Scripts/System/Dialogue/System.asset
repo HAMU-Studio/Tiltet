@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: System
+  m_EditorClassIdentifier: 
+  data:
+  - Name: Start
+    Dialogue: {fileID: 21300000, guid: 1bfb3823913cf15449f88ca380ed634e, type: 3}
+    DisplayTime: 1
+  - Name: Clear
+    Dialogue: {fileID: 21300000, guid: b5c053b1644af8c4a8881789d47e243c, type: 3}
+    DisplayTime: 1
+  - Name: Finish
+    Dialogue: {fileID: 21300000, guid: 40dee282bdf949740a4dab4f08ec6451, type: 3}
+    DisplayTime: 1

@@ -7,6 +7,7 @@ namespace Test
 {
     public class TestDialogue : MonoBehaviour
     {
+        [SerializeField] private DisplayDialogue _displayDialogue;
         [SerializeField] private DialogueDatas[] dialogueDatas;
         private void Update()
         {
@@ -17,7 +18,7 @@ namespace Test
                 {
                     foreach (var data in dialogueDatas[i].data)
                     {
-                        DisplayDialogue.instance.EnqueueDialogue(data.Name);
+                        _displayDialogue.EnqueueDialogue(data.Name);
                     }
                 }
             }
