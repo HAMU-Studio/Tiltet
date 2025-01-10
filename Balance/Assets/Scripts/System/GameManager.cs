@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.FadeStart("GreenStage");
+            _sceneManager.FadeStart("MainStage");
             instance.CurrentState = GameState.Search;
         }
 
