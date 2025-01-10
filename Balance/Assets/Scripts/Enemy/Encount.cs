@@ -8,6 +8,7 @@ public class Encount : MonoBehaviour
     private CameraManager cameraManager;
 
     EncountManager encountmanager;
+    [SerializeField] private string fightSceneName;
 
     void Start()
     {
@@ -27,7 +28,8 @@ public class Encount : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            encountmanager.isEncount = true;
+           // encountmanager.isEncount = true;
+            encountmanager.Encount(fightSceneName);
 
             if (cameraManager != null)
             {
