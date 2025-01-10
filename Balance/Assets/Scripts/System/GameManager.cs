@@ -74,11 +74,10 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        _sceneManager.FadeStart("GreenStage");
+        _sceneManager.FadeStart("MainStage");
         m_currentState = GameState.Search;
         PlayerDestroy();
         InitGame();
-        Debug.Log("InitGame!");
     }
 
     /// <summary>
@@ -90,13 +89,11 @@ public class GameManager : MonoBehaviour
         {
             PlayerDestroy();
             InitGame();
-            Debug.Log("InitGame!");
         }
         else
         {
             SetAircraftPos();
             AircraftMoveSwitch(true);
-            Debug.Log("restart at save pos");
         }
     }
     
@@ -144,6 +141,12 @@ public class GameManager : MonoBehaviour
         {
             _sceneManager.FadeStart("MainStage");
             instance.CurrentState = GameState.Search;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            _sceneManager.FadeStart("Fight");
+            instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.H))

@@ -773,6 +773,11 @@ PrefabInstance:
       propertyPath: m_nextState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8734995878564543787, guid: 6fe3b528cf5af6c4091f2bd4b6df0983,
+        type: 3}
+      propertyPath: m_currentState
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8883353081518748972, guid: 6fe3b528cf5af6c4091f2bd4b6df0983,
         type: 3}
       propertyPath: m_RootOrder
@@ -1886,7 +1891,7 @@ PrefabInstance:
     - target: {fileID: 4952703685579114285, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
       propertyPath: firstFadeInComp
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4952703685579114286, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
