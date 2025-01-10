@@ -67,19 +67,24 @@ public class StageManager : MonoBehaviour
             Vector3 force = forceDirection * forceMagnitude; // 力のベクトルを生成
 
             m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
+            
+            InGameUISystems.instance.HitObstacle();
+            SoundManager.instance.Play("AircraftHit");
+            
 
             //m_tillControl.ForceZeroTilt = true;
 
             // Neutral 状態を数秒後に無効にする処理を開始
-            StartCoroutine(DisableNeutralStateAfterDelay(1.5f));
+            StartCoroutine(DisableNeutralStateAfterDelay(2f));
         }
     }
 
     // Neutral 状態を遅延して無効にするコルーチン
     private IEnumerator DisableNeutralStateAfterDelay(float delay)
     {
+        
         yield return new WaitForSeconds(delay);
-
+    
         //m_tillControl.ForceZeroTilt = false;
 
         m_stageMovement.IsNeutralActive = false; // Neutral 状態を無効にする

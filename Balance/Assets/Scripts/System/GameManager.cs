@@ -142,8 +142,20 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.FadeStart("GreenStage");
+            _sceneManager.FadeStart("MainStage");
             instance.CurrentState = GameState.Search;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            _sceneManager.FadeStart("SnowFight");
+            instance.CurrentState = GameState.EnemyBattle;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            _sceneManager.FadeStart("VolcanoFight");
+            instance.CurrentState = GameState.EnemyBattle;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
