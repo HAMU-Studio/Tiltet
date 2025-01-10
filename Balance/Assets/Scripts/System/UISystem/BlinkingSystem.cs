@@ -83,7 +83,7 @@ namespace System
             GameManager.instance.Life--;
             if (GameManager.instance.Life <= 0)
             {
-                GameManager.instance.GameOver();
+                StartCoroutine(GameManager.instance.GameOver());
             }
 
             //  _MainGameManager.isInvincible = false;
