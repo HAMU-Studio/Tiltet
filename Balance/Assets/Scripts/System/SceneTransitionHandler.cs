@@ -41,7 +41,10 @@ namespace System
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
                 GameManager.instance.RestartAtSavePoint(true);
+                Debug.Log("Restart 1 ");
             }
+            
+            
 
             m_beforeSceneName = scene.name;
         }
@@ -52,24 +55,32 @@ namespace System
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Debug.Log($"シーンがロードされました: {scene.name} | モード: {mode}");
-           
+            Debug.Log("BeforeScene = " + m_beforeSceneName);
             if (scene.name == "Fight" || scene.name == "GreenStage")
             {
                 GameManager.instance.RespawnPlayer(false);
+                Debug.Log("call resp");
             }
             
             // 戦闘->探索
             if (m_beforeSceneName == "Fight" && scene.name == "GreenStage")
             {
-                GameManager.instance.RespawnPlayer(false);
+                //GameManager.instance.RespawnPlayer(false);
                 GameManager.instance.Back2Search();
+                Debug.Log("Restart 2 ");
+                /*if (GameManager.instance.CurrentState == GameState.Restart)
+                {
+                    GameManager.instance.CurrentState = GameState.Search;
+                }*/
             }
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
+                Debug.Log("Restart 3 ");
                 GameManager.instance.RestartAtSavePoint(false);
+              //  GameManager.instance.Back2Search();
                 GameManager.instance.CurrentState = GameState.Search;
             }
-
+            GameManager.instance.PlayerUnLock();
             m_beforeSceneName = null;
 
         }

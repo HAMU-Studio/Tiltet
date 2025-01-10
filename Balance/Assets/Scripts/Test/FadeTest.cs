@@ -27,6 +27,7 @@ namespace Test
                 {
                     _transition.FadeStart();
                     GameManager.instance.CurrentState = GameState.EnemyBattle;
+                    Debug.Log("書き換え");
                     once = true;
                 }
 
@@ -38,6 +39,7 @@ namespace Test
                 {
                     _transition.FadeStart();
                     GameManager.instance.CurrentState = GameState.Search;
+                    Debug.Log("書き換え");
                     once = true;
                 }
             }

@@ -56,7 +56,9 @@ public class PlayerManager : MonoBehaviour
             return;
         }
         GameManager.instance.SavePlayerInstance(gameObject);
-       
+
+        m_RB = GetComponent<Rigidbody>();
+
     }
 
     private ThrowawayMethod method;
@@ -119,11 +121,13 @@ public class PlayerManager : MonoBehaviour
                 {
                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                    SoundManager.instance.Play("NormalLanding");
+                   animator.SetTrigger("toLand");
                    Debug.Log("NormalLanding");
                 }
                 else
                 {
                     // スーパー着地
+                    animator.SetTrigger("toLand");
                     ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                     SoundManager.instance.Play("SuperLanding");
                     Debug.Log("SuperLanding");
@@ -131,13 +135,10 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        /*if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
+        if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
         {
-            if (gameObject.layer ==  LayerMask.NameToLayer("Fly"))
-            {
-                SlipThroughOff();
-            }
-        }*/
+            animator.SetTrigger("toSuperLand"); 
+        }
 
         if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
         {
@@ -209,5 +210,16 @@ public class PlayerManager : MonoBehaviour
         _playerController.enabled = true;
         transform.rotation = quaternion.identity;
     }
-  
+
+    private Rigidbody m_RB;
+
+    public void LockPos()
+    {
+        GameManager.instance.ResetRBVelocity(m_RB);
+        m_RB.isKinematic = true;
+        Debug.Log("call Lock");
+        //GameManager.instance.ResetRBVelocity(m_RB);
+    }
+ 
+    public void UnLockPos() => m_RB.isKinematic = false;
 }

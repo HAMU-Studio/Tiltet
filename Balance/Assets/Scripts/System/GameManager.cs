@@ -1,5 +1,6 @@
 ﻿using FadeSystem;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public enum GameState
@@ -22,12 +23,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
-    [SerializeField] private int initialWave = default!;
 
     private bool connectFlag = false;
   
     private int m_life;
-   // private int m_wave;
     private int m_mainParts;
     private int m_subParts;
 
@@ -62,13 +61,15 @@ public class GameManager : MonoBehaviour
         count = 0;
         isConnected = false;
         playerInstances = new GameObject[2];
+        _timeArray = new int[4] { 0, 0, 0, 0 };
+        Debug.Log("isConnected = " + GameManager.instance.isConnected);
         // SavePointの初期化はどうせ上書きされるから必要
     }
 
     public void StartGame()
     {
-        _sceneManager.FadeStart("GreenStage");
-        CurrentState = GameState.Search;
+        /*_sceneManager.FadeStart("GreenStage");
+        CurrentState = GameState.Search;*/
     }
 
     public void Restart()
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
         m_currentState = GameState.Search;
         PlayerDestroy();
         InitGame();
+        Debug.Log("InitGame!");
     }
 
     /// <summary>
@@ -88,11 +90,13 @@ public class GameManager : MonoBehaviour
         {
             PlayerDestroy();
             InitGame();
+            Debug.Log("InitGame!");
         }
         else
         {
             SetAircraftPos();
             AircraftMoveSwitch(true);
+            Debug.Log("restart at save pos");
         }
     }
     
@@ -210,7 +214,10 @@ public class GameManager : MonoBehaviour
     // ここで呼んでるコルーチンを
     private void OnStateChange()
     {
-      //  Debug.Log("stateChange " + m_cuurentState + " to " + m_nextState);
+       // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
+       
+        instance.PlayerLock();
+       
         if (m_beforeState == GameState.EnemyBattle &&
             m_currentState == GameState.Search)   // 戦闘->探索
         {
@@ -220,13 +227,13 @@ public class GameManager : MonoBehaviour
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.EnemyBattle) // 探索->戦闘
         {
-            SaveAircraftPos(m_aircraftInstance.transform.position);
+          //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.GameOver) // 探索->ゲームオーバー
         {
-            SaveAircraftPos(m_aircraftInstance.transform.position);
+          //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
         /*
@@ -234,12 +241,16 @@ public class GameManager : MonoBehaviour
                  m_currentState == GameState.Restart)
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
-            AircraftMoveSwitch(false);
-            
+            AircraftMoveSwitch(false);            
         }
         */
         
         m_beforeState = m_currentState;
+    }
+
+    public GameObject Aircraft
+    {
+        get { return m_aircraftInstance; }
     }
 
     /// <summary>
@@ -253,7 +264,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 自機の場所保存 探索->戦闘に切り替わったとき呼びたい
     /// </summary>
-    private void SaveAircraftPos(Vector3 position)
+    public void SaveAircraftPos(Vector3 position)
     {
         m_aircraftPos = position;
     }
@@ -263,12 +274,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SetAircraftPos()
     {
-        if (m_aircraftInstance == null)
-        {
-            Debug.LogAssertion("m_aircraftInstance is null!");
-            return;
-        }
-        m_aircraftInstance.transform.position = m_aircraftPos;
+        StartCoroutine(DelaySetAirCraft());
     }
 
 
@@ -279,6 +285,9 @@ public class GameManager : MonoBehaviour
     /// <param name="activate"></param>
     public void AircraftMoveSwitch(bool activate)
     {
+        if (m_aircraftInstance == null)
+            return;
+        
         StageMovement = m_aircraftInstance.GetComponent<StageMovement>();
 
         if (activate)
@@ -290,6 +299,29 @@ public class GameManager : MonoBehaviour
             _stageStageMovement.enabled = false;
             ResetRBVelocity(m_aircraftInstance);
         }
+    }
+
+    int[] _timeArray;
+
+    public int[] SetTimeArray(int[] timeArray)
+    {
+        for (int i = 0; i < timeArray.Length; i++)
+        {
+            timeArray[i] = _timeArray[i];
+        }
+        return timeArray;
+    }
+    public void SaveCurrentTime(int[] timeArray)
+    {
+        for (int i = 0; i < timeArray.Length; i++)
+        {
+            _timeArray[i] = timeArray[i];
+        }
+    }
+
+    public void HitObstacle()
+    { 
+        // blinkingScript.StartCoroutine(blinkingScript.DamageIndication(i));
     }
 
     public StageMovement StageMovement
@@ -377,14 +409,41 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public void PlayerLock()
+    {
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            player.GetComponent<PlayerManager>().LockPos();
+        }
+    }
+    
+    public void PlayerUnLock()
+    {
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            player.GetComponent<PlayerManager>().UnLockPos();
+
+        }
+    }
     /// <summary>
     /// 戦闘->探索に戻った時の処理
     /// </summary>
     public void Back2Search()
     {
         SetAircraftPos();
-        SetPlayerPos();
-        AircraftMoveSwitch(true);
     }
     
     public GameObject Pivot
@@ -453,5 +512,21 @@ public class GameManager : MonoBehaviour
         
         RB.velocity = Vector3.zero;
         RB.angularVelocity = Vector3.zero;
+    }
+
+    private IEnumerator DelaySetAirCraft()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (m_aircraftInstance == null)
+        {
+            Debug.LogAssertion("m_aircraftInstance is null!");
+            yield break;
+        } 
+        
+        m_aircraftInstance.transform.position = m_aircraftPos;
+        
+        SetPlayerPos();
+        AircraftMoveSwitch(true);
+        
     }
 }

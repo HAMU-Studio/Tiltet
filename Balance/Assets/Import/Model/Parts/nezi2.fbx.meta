@@ -3,7 +3,32 @@ guid: 57da5471889495e47b0b96089daf07e4
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 8415e0ee8c14c50478d327fd57b2479c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert6
+    second: {fileID: 2100000, guid: f40bd6642c621c546871ef1b06b8b4c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert7
+    second: {fileID: 2100000, guid: 60b933456f32feb41a6a04b5f4ca1b79, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: nezi2_1001_BaseColor
+    second: {fileID: 2800000, guid: 1b6312997817a5f4e9bf127ba28494d1, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: nezi_1001_BaseColor
+    second: {fileID: 2800000, guid: 827735102af3e6643bb98e98cd4f452b, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
