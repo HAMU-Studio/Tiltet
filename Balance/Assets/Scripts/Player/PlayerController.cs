@@ -414,6 +414,11 @@ public class PlayerController : MonoBehaviour
         {
            StartCoroutine(IceDamage());
         }
+
+        if (col.gameObject.CompareTag("SphereEnemy"))
+        {
+            KnockBack(col.gameObject.GetComponentInParent<Collision>());
+        }
        
     }
 
