@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.UI;
+
 namespace System
 {
    
@@ -10,6 +12,8 @@ namespace System
         public BlinkingSystem _blinkingSystem;
         public Score _score;
         public TimeCalc _timeCalc;
+
+        //[SerializeField] private GameObject[] systemMessege;
 
         private int hitCount = 0;
 

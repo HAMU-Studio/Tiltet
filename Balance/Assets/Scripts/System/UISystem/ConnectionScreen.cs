@@ -1,3 +1,4 @@
+using Dialogue;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class ConnectionScreen : MonoBehaviour
     [SerializeField] private Button startButton;*/
     [SerializeField] private GameObject connectionScreen;
     [SerializeField] private InGameUISystems UISystems;
+    [SerializeField] private DisplayDialogue systemMessege;
+    
     
     [SerializeField] private GameObject m_1PImage;
     [SerializeField] private GameObject m_2PImage;
@@ -88,10 +91,12 @@ public class ConnectionScreen : MonoBehaviour
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
+        systemMessege.EnqueueDialogue("Start");
         GameManager.instance.isConnected = true;
         Debug.Log("isConnected = " + GameManager.instance.isConnected);
         connectionScreen.SetActive(false);
         SoundManager.instance.Play("GreenStage");
+        SoundManager.instance.Play("Start");
         GameManager.instance.AircraftMoveSwitch(true);
         UISystems.StartTimer();
     }
