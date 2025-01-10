@@ -71,7 +71,7 @@ public class StageManager : MonoBehaviour
             //m_tillControl.ForceZeroTilt = true;
 
             // Neutral 状態を数秒後に無効にする処理を開始
-            StartCoroutine(DisableNeutralStateAfterDelay(2f));
+            StartCoroutine(DisableNeutralStateAfterDelay(1.5f));
         }
     }
 
