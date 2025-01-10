@@ -66,7 +66,6 @@ public class EnemySphere : MonoBehaviour
     void Update()
     {
         explosionTime += Time.deltaTime;
-        Debug.Log(arrived);
 
         if (life)
         {
@@ -132,7 +131,6 @@ public class EnemySphere : MonoBehaviour
 
             if (explosionTime > 7.5f)
             {
-                //Debug.Log("爆発");
                 Destroy(this.gameObject);
             }
         }

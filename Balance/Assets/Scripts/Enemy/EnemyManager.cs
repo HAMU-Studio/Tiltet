@@ -107,14 +107,14 @@ public class EnemyManager : MonoBehaviour
                     for (int i = 0; numSpawnAtOnce > i; i++)
                     {
                         //デバッグ用
-                        /*if (ableCircleSpawn)
+                        if (ableCircleSpawn)
                          {
                              SpawnCircleEnemy();
                          }
                          else if (ableEllipseSpawn)
                          {
                              SpawnEllipseEnemy();
-                         }*/
+                         }
 
                         //β用
                         if(!wave1)
@@ -302,7 +302,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void SpawnCircleEnemy()
+    public void SpawnCircleEnemy()
     {
         int enemySpawnPos;
 
@@ -312,7 +312,7 @@ public class EnemyManager : MonoBehaviour
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
-    private void SpawnEllipseEnemy()
+    public void SpawnEllipseEnemy()
     {
         int enemySpawnPos;
 
