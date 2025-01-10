@@ -1,4 +1,5 @@
-﻿using FadeSystem;
+﻿using Dialogue;
+using FadeSystem;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -96,6 +97,13 @@ public class GameManager : MonoBehaviour
             AircraftMoveSwitch(true);
         }
     }
+
+    private bool skipStartDialogue;
+    public bool isSkip
+    {
+        get { return skipStartDialogue; }
+        set { skipStartDialogue = value; }
+    }
     
     private void PlayerDestroy()
     {
@@ -129,7 +137,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            method.RunOnce(GameClear); 
+            StartCoroutine(GameClear());
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -170,22 +178,34 @@ public class GameManager : MonoBehaviour
         {
             if (CurrentState != GameState.Clear)
             {
-                GameClear();
+                StartCoroutine(GameClear());
             }
         }
     }
    
-    public void GameOver()
+    public IEnumerator GameOver()
     {
+        DisplayDialogue.system.EnqueueDialogue("Finish");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("GameOver");
         CurrentState = GameState.GameOver;
+        
+        yield return null;
     }
 
-    public void GameClear()
+    public IEnumerator GameClear()
     {
+        DisplayDialogue.system.EnqueueDialogue("Finish");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("Clear");
         CurrentState = GameState.Clear;
+        yield return new WaitForSeconds(1.5f);
         PlayerDestroy();
+        yield return null;
     }
 
     public void Back2StartMenu()
