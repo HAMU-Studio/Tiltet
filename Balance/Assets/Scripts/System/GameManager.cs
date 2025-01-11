@@ -520,7 +520,18 @@ public class GameManager : MonoBehaviour
 
     public void AddMainPartsNum()
     {
+        Debug.Log("get main part");
         m_mainParts++;
+        if (m_mainParts == 1)
+        {
+            DisplayDialogue.dialogue.EnqueueDialogue("GetMainPart");
+            DisplayDialogue.dialogue.EnqueueDialogue("TwoLeft");
+        }
+        else if (m_mainParts == 2)
+        {
+            DisplayDialogue.dialogue.EnqueueDialogue("GetMainPart");
+            DisplayDialogue.dialogue.EnqueueDialogue("OneLeft");
+        }
     }
     public int GetMainPartsNum()
     {
@@ -530,6 +541,13 @@ public class GameManager : MonoBehaviour
     public void AddSubPartsNum()
     {
         m_subParts++;
+        if (m_subParts == 1)
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                DisplayDialogue.dialogue.EnqueueDialogue($"GetSubPart0{i}");
+            }
+        }
     }
     public int GetSubPartsNum()
     {
