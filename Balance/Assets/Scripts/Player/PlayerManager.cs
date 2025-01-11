@@ -59,6 +59,10 @@ public class PlayerManager : MonoBehaviour
 
         m_RB = GetComponent<Rigidbody>();
 
+        if (GameManager.instance.isConnected == false)
+        {
+            LockPos();
+        }
     }
 
     private ThrowawayMethod method;
@@ -220,9 +224,11 @@ public class PlayerManager : MonoBehaviour
     {
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.isKinematic = true;
-        Debug.Log("call Lock");
+      //  Debug.Log("call Lock");
         //GameManager.instance.ResetRBVelocity(m_RB);
     }
  
     public void UnLockPos() => m_RB.isKinematic = false;
+    
+    public bool IsLockPos() => m_RB.isKinematic;
 }

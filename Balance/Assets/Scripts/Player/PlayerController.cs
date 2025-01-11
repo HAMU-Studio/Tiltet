@@ -232,6 +232,9 @@ public class PlayerController : MonoBehaviour
     public void PlayerMoveInput(InputAction.CallbackContext context)
     {
         //入力値の格納
+        if (m_PM.IsLockPos())
+            return;
+        
         if (context.phase == InputActionPhase.Performed)
         {
             m_inputMove = context.ReadValue<Vector2>();

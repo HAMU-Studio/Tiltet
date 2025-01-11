@@ -7,7 +7,9 @@ namespace Dialogue
 {
     public class DisplayDialogue : MonoBehaviour
     {
-       // public static DisplayDialogue instance;
+        [SerializeField] private bool isDialogue;
+        public static DisplayDialogue dialogue;
+        public static DisplayDialogue system;
         
         Queue<DialogueData> _task = new Queue<DialogueData>();
 
@@ -18,7 +20,15 @@ namespace Dialogue
         
         private void Awake()
         {
-          //  instance = this;
+            // セリフ表示用とシステムメッセージ表示用で分ける
+            if (isDialogue)
+            {
+                dialogue = this;
+            }
+            else
+            {
+                system = this;
+            }
             InitializeDataDictionary();
             image.enabled = false;
         }
@@ -73,8 +83,11 @@ namespace Dialogue
         private void Display(Sprite dialogue)
         {
             image.sprite = dialogue;
-            SoundManager.instance.Play("Speak");
             if (!image.enabled) image.enabled = true;
+            
+            if (isDialogue)
+             SoundManager.instance.Play("Speak");   // しゃべるのはセリフの時だけ
+        
         }
 
         private void CheckHide()

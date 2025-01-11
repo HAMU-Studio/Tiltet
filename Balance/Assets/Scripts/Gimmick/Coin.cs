@@ -14,6 +14,8 @@ public class Coin : MonoBehaviour
     [Header("このコインが置いてある場所")]
     [SerializeField] private FieldType fieldType;
 
+    private bool count;
+
     CoinManager coinmanager;
 
     // Start is called before the first frame update
@@ -24,6 +26,7 @@ public class Coin : MonoBehaviour
             case FieldType.GREEN:
                 GameObject greenCoinManager = GameObject.Find("GreenCoinManager");
                 coinmanager = greenCoinManager.GetComponent<CoinManager>();
+                Debug.Log("みどり");
                 break;
             case FieldType.SNOW:
                 GameObject snowCoinManager = GameObject.Find("SnowCoinManager");
@@ -36,20 +39,25 @@ public class Coin : MonoBehaviour
             default:
                 break;
         }
+
+        count = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if(count)
+        {
+            coinmanager.Count();
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.CompareTag("Ground"))
         {
-            coinmanager.Count();
-            Destroy(gameObject);
+            count = true;
         }
     }
 }
