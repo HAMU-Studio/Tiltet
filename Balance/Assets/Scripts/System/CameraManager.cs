@@ -121,7 +121,7 @@ public class CameraManager : MonoBehaviour
                 // 前方のカメラの場合
                 case CameraState.Forward: 
                     cmRight.Priority = 10; // 右カメラをアクティブ
-                    yield return new WaitForSeconds(1.7f); // 待機時間
+                    yield return new WaitForSeconds(1.5f); // 待機時間
                     cmForward.Priority = 0; // 前方カメラの優先度をリセット
                     currentCameraState = CameraState.Right; // 現在の状態を右に設定
                     break;
@@ -129,7 +129,7 @@ public class CameraManager : MonoBehaviour
                 // 右のカメラの場合
                 case CameraState.Right:
                     cmBackward.Priority = 10;
-                    yield return new WaitForSeconds(1.7f);
+                    yield return new WaitForSeconds(1.5f);
                     cmRight.Priority = 0;
                     currentCameraState = CameraState.Backward;
                     break;
@@ -137,7 +137,7 @@ public class CameraManager : MonoBehaviour
                 // 後方のカメラの場合
                 case CameraState.Backward:
                     cmLeft.Priority = 10;
-                    yield return new WaitForSeconds(1.7f);
+                    yield return new WaitForSeconds(1.5f);
                     cmBackward.Priority = 0;
                     currentCameraState = CameraState.Left;
                     break;
@@ -145,7 +145,7 @@ public class CameraManager : MonoBehaviour
                 // 左のカメラの場合
                 case CameraState.Left:
                     cmForward.Priority = 10;
-                    yield return new WaitForSeconds(1.7f);
+                    yield return new WaitForSeconds(1.5f);
                     cmLeft.Priority = 0;
                     currentCameraState = CameraState.Forward;
                     break;

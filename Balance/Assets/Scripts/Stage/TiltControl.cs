@@ -23,33 +23,22 @@ public class TiltControl : MonoBehaviour
     // 復元力の大きさ
     [SerializeField] private float restoringForce = 10f;
 
-    // 外部スクリプトから制御するフラグ
-    //private bool forceZeroTilt = false;
-
-    // 水平に戻るまでの時間（秒）
-    //[SerializeField] private float levelingTime = 1f;
-
-    // 水平に戻る速度
-    //private float levelingSpeed;
-
     // RotationのXとZの値を公開
     public float RotationX { get; private set; }
     public float RotationZ { get; private set; }
 
-    // 外部からフラグを設定するプロパティ
-    /*public bool ForceZeroTilt
+    // 列挙型で状態を定義
+    private enum TiltState
     {
-        get => forceZeroTilt;
-        set
-        {
-            forceZeroTilt = value;
-            if (forceZeroTilt)
-            {
-                // 水平に戻る速度を計算 (1秒あたりの戻る割合)
-                levelingSpeed = 1f / levelingTime;
-            }
-        }
-    }*/
+        TiltAdapting, // 傾きを適用する状態
+        TiltReset     // 傾きをリセットする状態
+    }
+
+    // 現在の状態を保持
+    private TiltState currentState = TiltState.TiltAdapting;
+
+    // TiltResetの有効性を管理
+    private bool isTiltResetActive = false;
 
     void Start()
     {
@@ -69,41 +58,35 @@ public class TiltControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 状態による処理の分岐
+        switch (currentState)
+        {
+            case TiltState.TiltAdapting:
+                ApplyTiltAdapting(); // 傾きを適用
+                break;
+
+            case TiltState.TiltReset:
+                ApplyTiltReset(); // 傾きをリセット
+                break;
+        }
+
+        // 状態切り替えの監視
+        MonitorStateSwitch();
+    }
+
+    // 傾きを適用する処理
+    private void ApplyTiltAdapting()
+    {
         // Y軸方向の移動を固定
         Vector3 currentPosition = transform.position;
-        currentPosition.y = initialYPosition; // オブジェクトのY座標を初期位置に固定
+        currentPosition.y = initialYPosition;
         transform.position = currentPosition;
 
         // Y軸の回転を固定
         Vector3 currentRotation = transform.rotation.eulerAngles;
-        currentRotation.y = initialYRotation; // Y軸の回転角度を初期値に固定
+        currentRotation.y = initialYRotation;
 
-        /*if (forceZeroTilt)
-        {
-            // 傾きをゼロに戻す処理
-            float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
-            float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
-
-            // 水平に戻る回転角度を徐々に計算
-            tiltX = Mathf.MoveTowards(tiltX, 0f, levelingSpeed * Time.fixedDeltaTime * maxTiltAngleX);
-            tiltZ = Mathf.MoveTowards(tiltZ, 0f, levelingSpeed * Time.fixedDeltaTime * maxTiltAngleZ);
-
-            // 回転を更新
-            currentRotation.x = tiltX;
-            currentRotation.z = tiltZ;
-
-            // RotationXとRotationZを更新
-            RotationX = tiltX;
-            RotationZ = tiltZ;
-
-            // 回転を適用
-            transform.rotation = Quaternion.Euler(currentRotation);
-
-            // フラグが有効な間はこれ以降の処理をスキップ
-            return;
-        }*/
-
-        // X軸とZ軸の回転を制限（最大角度を超えないようにする）
+        // X軸とZ軸の回転を制限
         currentRotation.x = Mathf.Clamp(currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x, -maxTiltAngleX, maxTiltAngleX);
         currentRotation.z = Mathf.Clamp(currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z, -maxTiltAngleZ, maxTiltAngleZ);
 
@@ -121,22 +104,40 @@ public class TiltControl : MonoBehaviour
             Vector3 xTiltTorque = Vector3.right * -tiltAmount;    // X軸方向のトルク
             Vector3 zTiltTorque = Vector3.forward * -tiltAmount; // Z軸方向のトルク
 
-            // Rigidbodyにトルクを加える（傾きを適用）
+            // Rigidbodyにトルクを加える
             m_rb.AddTorque(xTiltTorque + zTiltTorque);
         }
 
-        // 復元力を適用して傾きを戻す処理
+        // 復元力を適用して傾きを戻す
         ApplyRestoringForce();
     }
 
+    // 傾きをリセットする処理
+    private void ApplyTiltReset()
+    {
+        // 角速度をリセット
+        m_rb.angularVelocity = Vector3.zero; // 角速度をリセット
+        
+        // 現在のX軸とZ軸の傾きを取得
+        (float currentTiltX, float currentTiltZ) = GetCurrentTiltAngles();
+
+        // 徐々に初期状態に戻す
+        float newTiltX = Mathf.MoveTowards(currentTiltX, 0, restoringForce * Time.fixedDeltaTime);
+        float newTiltZ = Mathf.MoveTowards(currentTiltZ, 0, restoringForce * Time.fixedDeltaTime);
+
+        // 回転を適用
+        transform.rotation = Quaternion.Euler(newTiltX, initialYRotation, newTiltZ);
+
+        // RotationXとRotationZを更新
+        RotationX = newTiltX;
+        RotationZ = newTiltZ;
+    }
+    
     // 復元力を適用して傾きを安定させる
     private void ApplyRestoringForce()
     {
-        Vector3 currentRotation = transform.rotation.eulerAngles;
-
-        // 現在のX軸、Z軸の傾きを計算
-        float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
-        float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
+        // 現在のX軸とZ軸の傾きを取得
+        (float tiltX, float tiltZ) = GetCurrentTiltAngles();
 
         // 傾きに対する復元トルクを計算
         Vector3 restoringTorqueX = Vector3.right * -tiltX * restoringForce;
@@ -145,39 +146,71 @@ public class TiltControl : MonoBehaviour
         // Rigidbodyに復元トルクを加える
         m_rb.AddTorque(restoringTorqueX + restoringTorqueZ);
     }
+    
+    // 現在の傾き角度を取得するメソッド
+    private (float, float) GetCurrentTiltAngles()
+    {
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        float tiltX = currentRotation.x > 180 ? currentRotation.x - 360 : currentRotation.x;
+        float tiltZ = currentRotation.z > 180 ? currentRotation.z - 360 : currentRotation.z;
+        return (tiltX, tiltZ);
+    }
 
+    // 状態切り替えを監視
+    private void MonitorStateSwitch()
+    {
+        // TiltResetが無効化された場合、自動でTiltAdaptingに切り替え
+        if (!isTiltResetActive && currentState == TiltState.TiltReset)
+        {
+            currentState = TiltState.TiltAdapting;
+        }
+    }
+
+    // 外部スクリプトからTiltResetの状態を設定
+    public void SetTiltResetState(bool isActive)
+    {
+        isTiltResetActive = isActive;
+
+        if (isActive)
+        {
+            currentState = TiltState.TiltReset;
+        }
+        else
+        {
+            currentState = TiltState.TiltAdapting;
+        }
+    }
+
+    // プレイヤーとの接触時に呼ばれる
     void OnCollisionEnter(Collision collision)
     {
-        // 衝突相手のRigidbodyを取得
         Rigidbody otherRb = collision.rigidbody;
 
-        // 衝突相手がPlayerタグを持っている場合、質量を記録し接触状態を有効化
         if (otherRb != null && collision.gameObject.CompareTag("Player"))
         {
-            contactMass = otherRb.mass;
-            isContacting = true;
+            contactMass = otherRb.mass; // プレイヤーの質量を記録
+            isContacting = true; // 接触中フラグを立てる
         }
     }
 
+    // 接触中に呼ばれる
     void OnCollisionStay(Collision collision)
     {
-        // 衝突相手のRigidbodyを取得
         Rigidbody otherRb = collision.rigidbody;
 
-        // 衝突相手がPlayerタグを持っている場合、質量を更新
         if (otherRb != null && collision.gameObject.CompareTag("Player"))
         {
-            contactMass = otherRb.mass;
+            contactMass = otherRb.mass; // プレイヤーの質量を更新
         }
     }
 
+    // 接触が終了した時に呼ばれる
     void OnCollisionExit(Collision collision)
     {
-        // 衝突相手がPlayerタグを持っている場合、質量をリセットし接触状態を無効化
         if (collision.gameObject.CompareTag("Player"))
         {
-            contactMass = 0f;
-            isContacting = false;
+            contactMass = 0f; // 接触が終了したので質量をリセット
+            isContacting = false; // 接触中フラグを解除
         }
     }
 }
