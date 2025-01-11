@@ -29,10 +29,10 @@ namespace System
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            /*if (Input.GetKeyDown(KeyCode.P))
             {
                 HitObstacle();
-            }
+            }*/
         }
 
         public void HitObstacle()

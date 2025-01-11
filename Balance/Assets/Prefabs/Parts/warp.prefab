@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 9215904718139877549}
   - component: {fileID: 5209155234539890440}
   - component: {fileID: 8047462354588079042}
+  - component: {fileID: 1462936117020589158}
   m_Layer: 0
   m_Name: warp
-  m_TagString: Untagged
+  m_TagString: MainParts
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1462936117020589158
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407842478360801815}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.26011902, y: 0.4473374, z: 0.20181364}
+  m_Center: {x: -0.000000029802322, y: -0.093609214, z: 0.0024757981}

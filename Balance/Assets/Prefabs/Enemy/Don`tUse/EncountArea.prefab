@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1011290209381604344}
   - component: {fileID: 1011290209381604351}
   - component: {fileID: 2986039606335571844}
+  - component: {fileID: 583888885499115339}
   m_Layer: 0
   m_Name: EncountArea
   m_TagString: EncountArea
@@ -30,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 125.5, y: 30.5, z: 209.7}
   m_LocalScale: {x: 44.46287, y: 44.46287, z: 44.46287}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7140707032865629863}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,3 +103,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 497f9c3f7788e2744958379fb9eaea8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fightSceneName: 
+--- !u!114 &583888885499115339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011290209381604350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5613e944d34c6facb0684ef186ef72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  savePoint: {fileID: 5186034774702906565}
+--- !u!1 &5186034774702906565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7140707032865629863}
+  m_Layer: 0
+  m_Name: savePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7140707032865629863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5186034774702906565}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.044, z: -2.958}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1011290209381604346}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -28,7 +28,9 @@ public class Encount : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-           // encountmanager.isEncount = true;
+            if (encountmanager.isEncount)
+                return;
+            
             encountmanager.Encount(fightSceneName);
 
             if (cameraManager != null)

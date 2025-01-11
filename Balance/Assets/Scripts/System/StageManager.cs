@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    //private TiltControl m_tillControl;
-    private StageMovement m_stageMovement;
-    private Rigidbody m_rb;
+    private TiltControl m_tiltControl; // TiltControl の参照
+    private StageMovement m_stageMovement; // StageMovement の参照
+    private Rigidbody m_rb; // Rigidbody の参照
 
     // FallArea への参照を追加
-    [SerializeField] private FallArea fallArea;
+    [SerializeField] private FallArea fallArea; // 落下エリアを管理するクラス
 
     private void Start()
     {
         // TiltControl コンポーネントを取得
-        /*m_tillControl = GetComponent<TiltControl>();
-        if (m_tillControl == null)
+        m_tiltControl = GetComponent<TiltControl>();
+        if (m_tiltControl == null)
         {
             Debug.LogError("TiltControl コンポーネントが見つかりません。");
-        }*/
+        }
 
         // StageMovement コンポーネントを取得
         m_stageMovement = GetComponent<StageMovement>();
@@ -41,7 +41,11 @@ public class StageManager : MonoBehaviour
             Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
 
+        // ゲーム管理システムに航空機インスタンスを保存
         GameManager.instance.SaveAircraftInstance(gameObject);
+
+        // スタート時の位置を設定
+        transform.position = new Vector3(transform.position.x, 50f, transform.position.z);
     }
 
     private void Update()
@@ -68,10 +72,15 @@ public class StageManager : MonoBehaviour
 
             m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
 
-            //m_tillControl.ForceZeroTilt = true;
+            m_tiltControl.SetTiltResetState(true); // 傾きをリセットする状態に切り替え
+            Debug.Log("TiltReset を有効にしました。");
+
+            // 衝突時にUIや音を処理
+            InGameUISystems.instance.HitObstacle();
+            SoundManager.instance.Play("AircraftHit");
 
             // Neutral 状態を数秒後に無効にする処理を開始
-            StartCoroutine(DisableNeutralStateAfterDelay(1.5f));
+            StartCoroutine(DisableNeutralStateAfterDelay(2f));
         }
     }
 
@@ -80,9 +89,11 @@ public class StageManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        //m_tillControl.ForceZeroTilt = false;
-
-        m_stageMovement.IsNeutralActive = false; // Neutral 状態を無効にする
+        // Neutral 状態を無効にする
+        m_stageMovement.IsNeutralActive = false;
         Debug.Log("StageMovement の Neutral 状態を無効にしました。");
+
+        m_tiltControl.SetTiltResetState(false); // 傾きリセットを無効にする
+        Debug.Log("TiltReset を無効にしました。");
     }
 }

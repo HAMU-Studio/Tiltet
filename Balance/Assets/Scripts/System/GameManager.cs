@@ -1,4 +1,5 @@
-﻿using FadeSystem;
+﻿using Dialogue;
+using FadeSystem;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -74,11 +75,10 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        _sceneManager.FadeStart("GreenStage");
+        _sceneManager.FadeStart("MainStage");
         m_currentState = GameState.Search;
         PlayerDestroy();
         InitGame();
-        Debug.Log("InitGame!");
     }
 
     /// <summary>
@@ -90,14 +90,19 @@ public class GameManager : MonoBehaviour
         {
             PlayerDestroy();
             InitGame();
-            Debug.Log("InitGame!");
         }
         else
         {
             SetAircraftPos();
             AircraftMoveSwitch(true);
-            Debug.Log("restart at save pos");
         }
+    }
+
+    private bool skipStartDialogue;
+    public bool isSkip
+    {
+        get { return skipStartDialogue; }
+        set { skipStartDialogue = value; }
     }
     
     private void PlayerDestroy()
@@ -132,7 +137,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            method.RunOnce(GameClear); 
+            StartCoroutine(GameClear());
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -142,8 +147,26 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.FadeStart("GreenStage");
+            _sceneManager.FadeStart("MainStage");
             instance.CurrentState = GameState.Search;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            _sceneManager.FadeStart("Fight");
+            instance.CurrentState = GameState.EnemyBattle;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            _sceneManager.FadeStart("SnowFight");
+            instance.CurrentState = GameState.EnemyBattle;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            _sceneManager.FadeStart("VolcanoFight");
+            instance.CurrentState = GameState.EnemyBattle;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -155,22 +178,34 @@ public class GameManager : MonoBehaviour
         {
             if (CurrentState != GameState.Clear)
             {
-                GameClear();
+                StartCoroutine(GameClear());
             }
         }
     }
    
-    public void GameOver()
+    public IEnumerator GameOver()
     {
+        DisplayDialogue.system.EnqueueDialogue("Finish");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("GameOver");
         CurrentState = GameState.GameOver;
+        
+        yield return null;
     }
 
-    public void GameClear()
+    public IEnumerator GameClear()
     {
+        DisplayDialogue.system.EnqueueDialogue("Finish");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("Clear");
         CurrentState = GameState.Clear;
+        yield return new WaitForSeconds(1.5f);
         PlayerDestroy();
+        yield return null;
     }
 
     public void Back2StartMenu()

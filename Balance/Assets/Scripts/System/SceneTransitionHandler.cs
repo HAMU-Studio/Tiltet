@@ -32,7 +32,7 @@ namespace System
         private void OnSceneUnloaded(Scene scene)
         {
             Debug.Log($"シーンが破棄されました : {scene.name}");
-            if (scene.name == "Fight" || scene.name == "GreenStage")
+            if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 GameManager.instance.RespawnPlayer(true);
                 ParticleManager.instance.RemoveAll();
@@ -56,23 +56,27 @@ namespace System
         {
             Debug.Log($"シーンがロードされました: {scene.name} | モード: {mode}");
             Debug.Log("BeforeScene = " + m_beforeSceneName);
-            if (scene.name == "Fight" || scene.name == "GreenStage")
+            if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 GameManager.instance.RespawnPlayer(false);
                 Debug.Log("call resp");
             }
             
             // 戦闘->探索
-            if (m_beforeSceneName == "Fight" && scene.name == "GreenStage")
+            if (m_beforeSceneName == "Fight" || m_beforeSceneName == "VolcanoFight" || m_beforeSceneName == "SnowFight")
             {
-                //GameManager.instance.RespawnPlayer(false);
-                GameManager.instance.Back2Search();
-                Debug.Log("Restart 2 ");
-                /*if (GameManager.instance.CurrentState == GameState.Restart)
+                if ( scene.name == "MainStage")
                 {
-                    GameManager.instance.CurrentState = GameState.Search;
-                }*/
+                    //GameManager.instance.RespawnPlayer(false);
+                    GameManager.instance.Back2Search();
+                    Debug.Log("Restart 2 ");
+                    /*if (GameManager.instance.CurrentState == GameState.Restart)
+                    {
+                        GameManager.instance.CurrentState = GameState.Search;
+                    }*/
+                }
             }
+      
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
                 Debug.Log("Restart 3 ");
@@ -80,6 +84,7 @@ namespace System
               //  GameManager.instance.Back2Search();
                 GameManager.instance.CurrentState = GameState.Search;
             }
+            
             GameManager.instance.PlayerUnLock();
             m_beforeSceneName = null;
 

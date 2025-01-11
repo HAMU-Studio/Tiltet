@@ -6,7 +6,8 @@ using TMPro;
 
 public class CoinManager : MonoBehaviour
 {
-    [Header("コインオブジェクト(取る順番で入れる)")]
+    [SerializeField] private GameObject coin;
+    [Header("コインオブジェクトをインスタンスする場所(取る順番で入れる)")]
     [SerializeField] private GameObject[] coins;
     [Header("インスタンスするパーツオブジェクト")]
     [SerializeField] private GameObject parts;
@@ -18,24 +19,19 @@ public class CoinManager : MonoBehaviour
     void Start()
     {
         Set();
-        CoinSpawn();
+        Count();
     }
 
     // Update is called once per frame
     void Update()
     {
         InstanceParts();
-        Debug.Log(countCoin);
     }
 
     private void Set()
     {
         countCoin = 0;
 
-        for (int i = 0; i < coins.Length; i++)
-        {
-            coins[i].SetActive(false);
-        }
         parts.SetActive(false);
     }
 
@@ -50,7 +46,8 @@ public class CoinManager : MonoBehaviour
 
     private void CoinSpawn()
     {
-        coins[countCoin].SetActive(true);
+        GameObject newCoin = Instantiate(coin);
+        newCoin.transform.position = coins[countCoin].transform.position;
     }
 
     private void InstanceParts()

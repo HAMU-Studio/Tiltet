@@ -8,8 +8,8 @@ namespace System
     {
         // GameObject aircraft; 自機の半透明は時間的にむりそう
         [Header("表示場所")] [SerializeField] Image[] lifeImage = default!;
-        [Header("通常時画像")] [SerializeField] Sprite truelife = default!;
-        [Header("ダメージ時画像")] [SerializeField] Sprite falselife = default!;
+        [Header("通常時画像")] [SerializeField] Sprite[] truelife = default!;
+       // [Header("ダメージ時画像")] [SerializeField] Sprite falselife = default!;
         /*[Header("通常時マテリアル")] [SerializeField] Material trueMaterial = default!;
 
         [Header("ダメージ時マテリアル")] [SerializeField]
@@ -18,7 +18,7 @@ namespace System
         [Header("ダメージ時の表示間隔")] [SerializeField]
         float[] duration = default!;
 
-        private static int lifeCount = 3;
+        private static int lifeCount = 12;
 
         void Awake()
         {
@@ -28,10 +28,15 @@ namespace System
         private void InitializeLife()
         {
             // シーン切り替わった時とかのために体力状況を確認した初期化
-            for (int i = 0; i < GameManager.instance.Life; i++)
+            // 体力は3*4
+            for (int i = 0; i < 12; i += 4)
             {
-                //lifeImage[i].enabled = truelife;
-                lifeImage[i].sprite = truelife;
+                for (int j = 0; j < 4; j++)
+                {
+                    lifeImage[i + j].sprite = truelife[j];
+                }
+
+              //  i += 3;
             }
         }
 
@@ -40,18 +45,25 @@ namespace System
         {
             if (x % 2 == 0)
             {
-                lifeImage[number].sprite = falselife;
+                lifeImage[number].enabled = false;
             //    aircraft.gameObject.GetComponent<Renderer>().material = falseMaterial;
             }
             else
             {
-                lifeImage[number].sprite = truelife;
+                lifeImage[number].enabled = true;
                // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
             }
         }
 
+        private bool isInvicible;
         public IEnumerator DamageIndication(int i)
         {
+            if (!isInvicible)
+                isInvicible = true;
+            else
+            {
+                yield break;
+            }
             //  _MainGameManager.isInvincible = true;   //点滅中は無敵に
 
             yield return new WaitForSeconds(0.15f);
@@ -63,7 +75,7 @@ namespace System
             }
 
             //最後は減らさなければならないのでfalseに
-            lifeImage[i].sprite = falselife;
+            lifeImage[i].enabled = false;
 
             //プレイヤーのマテリアルを通常に。ハートのより点滅の回数が増えてしまう
             // yield return new WaitForSeconds(0.1f);
@@ -71,10 +83,11 @@ namespace System
             GameManager.instance.Life--;
             if (GameManager.instance.Life <= 0)
             {
-                GameManager.instance.GameOver();
+                StartCoroutine(GameManager.instance.GameOver());
             }
 
             //  _MainGameManager.isInvincible = false;
+            isInvicible = false;
             yield return null;
         }
     }

@@ -4,191 +4,203 @@ using UnityEngine;
 
 public class StageMovement : MonoBehaviour
 {
-    private Rigidbody m_rb;
-    private TiltControl m_tiltControl;
+    private Rigidbody m_rb; // Rigidbodyコンポーネントを格納
+    private TiltControl m_tiltControl; // TiltControlコンポーネントを格納
 
-    // 状態の列挙型
-    public enum State
+    public enum State // ステージの動作状態を定義
     {
-        Moving,
-        Stop,
-        Neutral // Neutral状態を追加
+        Moving, // 動いている状態
+        Stop,   // 停止状態
+        Neutral // 中立状態（動作なし）
     }
 
     private State state = State.Moving; // 初期状態をMovingに設定
 
-    // デバック用の制御フラグ
-    private bool debugStop = false;
-    private bool debugNeutral = false;
+    private bool debugStop = false; // デバッグ用のStop状態フラグ
+    private bool debugNeutral = false; // デバッグ用のNeutral状態フラグ
 
-    // 外部から制御可能なフラグ
-    private bool isStopActive = false;
-    private bool isNeutralActive = false;  
+    private bool isStopActive = false; // Stop状態が有効かどうか
+    private bool isNeutralActive = false; // Neutral状態が有効かどうか
 
-    public bool IsStopActive
+    // Stop状態のゲッターとセッター
+    public bool IsStopActive 
     {
         get { return isStopActive; }
         set
         {
             isStopActive = value;
-            UpdateState(); // フラグ変更時に状態を更新
+            UpdateState(); // 状態更新
         }
     }
 
-    public bool IsNeutralActive
+    // Neutral状態のゲッターとセッター
+    public bool IsNeutralActive 
     {
         get { return isNeutralActive; }
         set
         {
             isNeutralActive = value;
-            UpdateState(); // フラグ変更時に状態を更新
+            UpdateState(); // 状態更新
         }
     }
 
-    // 移動量を管理するための変数
-    private Vector3 m_beforePos;  // 前フレームの位置
-    private Vector3 m_currentPos; // 現在の位置
-    private Vector3 m_movementAmount; // 移動量
+    private Vector3 m_beforePos; // 前回の位置を格納
+    private Vector3 m_currentPos; // 現在の位置を格納
+    private Vector3 m_movementAmount; // 移動量を格納
 
-    // 移動量を外部から取得するためのプロパティ
-    public Vector3 MovementAmount
+    // 移動量を取得するプロパティ
+    public Vector3 MovementAmount 
     {
         get { return m_movementAmount; }
     }
-
-    // オブジェクトの移動速度のスケール
-    [SerializeField] private float movementScale = 1f;
+    
+    [Header("傾きが基準以下の時の加速度")]
+    [SerializeField] private float movementScaleLow = 0.5f; // 低いスケール（速度調整）
+    [Header("傾きが基準以上の時の加速度")]
+    [SerializeField] private float movementScaleHigh = 1.5f; // 高いスケール（速度調整）
+    [Header("高速と低速を分ける基準値(自機の傾きが最大15)")]
+    [SerializeField] private float rotationThreshold = 10f; // スケールを分ける基準となる回転角度
 
     void Start()
     {
-        // Rigidbodyコンポーネントを取得
-        m_rb = GetComponent<Rigidbody>();
+        m_rb = GetComponent<Rigidbody>(); // Rigidbodyコンポーネントを取得
         if (m_rb == null)
         {
             Debug.LogError("Rigidbodyが見つかりません。スクリプトを適切なオブジェクトにアタッチしてください。");
-            return;
+            return; // Rigidbodyが無い場合、処理を中止
         }
 
-        // TiltControlコンポーネントを取得
-        m_tiltControl = FindObjectOfType<TiltControl>();
+        m_tiltControl = FindObjectOfType<TiltControl>(); // TiltControlを探して取得
         if (m_tiltControl == null)
         {
             Debug.LogError("TiltControlが見つかりません。ステージのオブジェクトに正しくアタッチされているか確認してください。");
         }
 
-        m_currentPos = transform.position;
-        m_beforePos = transform.position;
+        m_currentPos = transform.position; // 現在位置を初期化
+        m_beforePos = transform.position; // 前回の位置を初期化
     }
 
     private void Update()
     {
-        // デバック用
-        // UキーでStop状態をトグル
+        // デバッグ用：MキーでStop状態を切り替え
         if (Input.GetKeyDown(KeyCode.M))
         {
-            debugStop = !debugStop;     // Stop状態のトグル
-            debugNeutral = false;            // Neutral状態は解除
-            UpdateState();                        // 状態を更新
+            debugStop = !debugStop;
+            debugNeutral = false; // Neutral状態を無効化
+            UpdateState(); // 状態更新
             Debug.Log($"Stop状態が{(debugStop ? "有効" : "無効")}になりました。");
         }
 
-        // デバック用
-        // NキーでNeutral状態をトグル
+        // デバッグ用：NキーでNeutral状態を切り替え
         if (Input.GetKeyDown(KeyCode.N))
         {
-            debugNeutral = !debugNeutral; // Neutral状態のトグル
-            debugStop = false;                 // Stop状態は解除
-            UpdateState();                          // 状態を更新
+            debugNeutral = !debugNeutral;
+            debugStop = false; // Stop状態を無効化
+            UpdateState(); // 状態更新
             Debug.Log($"Neutral状態が{(debugNeutral ? "有効" : "無効")}になりました。");
         }
     }
 
     void FixedUpdate()
     {
+        // 状態に応じて処理を分岐
         switch (state)
         {
             case State.Moving:
-                ApplyMovement();
+                ApplyMovement(); // 動いている状態の処理
                 break;
 
             case State.Stop:
-                StopMovement();
+                StopMovement(); // 停止状態の処理
                 break;
 
             case State.Neutral:
-                // Neutral状態では何もしない（外部スクリプトの力を優先）
+                // 中立状態は特に処理しない
                 break;
         }
-        CalculateMovementAmount();
+        CalculateMovementAmount(); // 移動量の計算
     }
 
     // 状態を更新するメソッド
     private void UpdateState()
     {
+        // Stop状態が有効ならStop状態に変更
         if (isStopActive || debugStop)
         {
             EnableStop();
         }
+        // Neutral状態が有効ならNeutral状態に変更
         else if (isNeutralActive || debugNeutral)
         {
             EnableNeutral();
         }
+        // それ以外はMoving状態に変更
         else
         {
             EnableMoving();
         }
     }
 
-    // Moving状態を有効にする処理
+    // Moving状態
     private void EnableMoving()
     {
-        if (state == State.Moving) return; // すでにMovingなら何もしない
-        state = State.Moving;
+        // すでにMoving状態なら変更しない
+        if (state == State.Moving) return;
+        state = State.Moving; // Moving状態に変更
         Debug.Log("State changed to Moving");
     }
 
-    // Stop状態を有効にする処理
+    // Stop状態
     private void EnableStop()
     {
-        if (state == State.Stop) return; // すでにStopなら何もしない
-        state = State.Stop;
+        // すでにStop状態なら変更しない
+        if (state == State.Stop) return;
+        state = State.Stop; // Stop状態に変更
         Debug.Log("State changed to Stop");
     }
 
-    // Neutral状態を有効にする処理
+    // Neutral状態
     private void EnableNeutral()
     {
-        if (state == State.Neutral) return; // すでにNeutralなら何もしない
-        state = State.Neutral;
-        m_rb.velocity = Vector3.zero;
+        // すでにNeutral状態なら変更しない
+        if (state == State.Neutral) return;
+        state = State.Neutral; // Neutral状態に変更
+        m_rb.velocity = Vector3.zero; // 速度をゼロにして停止
         Debug.Log("State changed to Neutral");
     }
 
-    // 移動を適用する処理
+    // 自機に移動力を与えるメソッド
     private void ApplyMovement()
     {
-        // TiltControlからRotationXとRotationZを取得
+        // 傾き情報を取得
         float rotationX = m_tiltControl.RotationX;
         float rotationZ = m_tiltControl.RotationZ;
 
-        // RotationXをvelocity.zに、RotationZをvelocity.xに適用
+        // 傾きが閾値を超えている場合、高い移動スケールを適用
+        float currentMovementScale = (Mathf.Abs(rotationX) > rotationThreshold || Mathf.Abs(rotationZ) > rotationThreshold) 
+            ? movementScaleHigh 
+            : movementScaleLow;
+
+        // 速度ベクトルを設定
         Vector3 velocity = m_rb.velocity;
-        velocity.z = rotationX * movementScale; // X軸の回転をZ方向の速度に適用
-        velocity.x = -rotationZ * movementScale; // Z軸の回転をX方向の速度に適用
-        m_rb.velocity = velocity;
+        velocity.z = rotationX * currentMovementScale;
+        velocity.x = -rotationZ * currentMovementScale;
+        m_rb.velocity = velocity; // Rigidbodyに速度を適用
     }
 
-    // 移動を停止させる処理
+    // 自機を停止させるメソッド
     private void StopMovement()
     {
-        m_rb.velocity = Vector3.zero; // 速度をゼロにする
+        // 停止状態では速度をゼロに設定
+        m_rb.velocity = Vector3.zero;
     }
 
-    // 移動量を計算するメソッド
+    // 自機の移動量を計算メソッド
     private void CalculateMovementAmount()
     {
+        // 現在位置と前回の位置の差分を計算
         m_currentPos = transform.position;
         m_movementAmount = m_currentPos - m_beforePos;
-        m_beforePos = m_currentPos;
+        m_beforePos = m_currentPos; // 前回位置を更新
     }
 }

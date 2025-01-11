@@ -59,6 +59,10 @@ public class PlayerManager : MonoBehaviour
 
         m_RB = GetComponent<Rigidbody>();
 
+        if (GameManager.instance.isConnected == false)
+        {
+            LockPos();
+        }
     }
 
     private ThrowawayMethod method;
@@ -92,7 +96,7 @@ public class PlayerManager : MonoBehaviour
             || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
         {
             SoundManager.instance.StopPlay("Struggle");
-            animator.Play("Wait_01");
+            animator.Play("Walk_01");
 
             if (rescCurrentState == RescueState.OutsideMove)
             {
@@ -108,6 +112,7 @@ public class PlayerManager : MonoBehaviour
         if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
         {
             SoundManager.instance.Play("Fly");
+            animator.Play("Walk_01");
         }
 
         if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
@@ -130,13 +135,15 @@ public class PlayerManager : MonoBehaviour
                     animator.SetTrigger("toLand");
                     ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                     SoundManager.instance.Play("SuperLanding");
-                    Debug.Log("SuperLanding");
+                    Debug.Log("SuperLanding"); 
+                    
                 }
             }
         }
 
         if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
         {
+            animator.ResetTrigger(animator.name);
             animator.SetTrigger("toSuperLand"); 
         }
 
@@ -217,9 +224,11 @@ public class PlayerManager : MonoBehaviour
     {
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.isKinematic = true;
-        Debug.Log("call Lock");
+      //  Debug.Log("call Lock");
         //GameManager.instance.ResetRBVelocity(m_RB);
     }
  
     public void UnLockPos() => m_RB.isKinematic = false;
+    
+    public bool IsLockPos() => m_RB.isKinematic;
 }

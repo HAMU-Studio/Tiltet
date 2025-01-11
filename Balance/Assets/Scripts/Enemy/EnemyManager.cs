@@ -5,10 +5,18 @@ using UnityEngine;
 using TMPro;
 using FadeSystem;
 using System;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
+    private enum Wave
+    {
+        WAVE1,
+        WAVE2,
+        WAVE3,
+    }
+
     [SerializeField] private FadeAndSceneTransition _transition;
 
     [Header("0...丸 1...楕円")]
@@ -25,8 +33,21 @@ public class EnemyManager : MonoBehaviour
     [Header("敵が一回にスポーンする数")]
     private int numSpawnAtOnce = 1;
 
+    [Header("FirstWaveの敵の数")]
+    [SerializeField] private int firstWave = 5;
+    [Header("SecondWaveの敵の数")]
+    [SerializeField] private int secondWave = 3;
+    [Header("FinalWaveの敵の数")]
+    [SerializeField] private int finalWave = 6;
+
     [Header("フェーズ表示用テキスト")]
     [SerializeField] TextMeshProUGUI phasesText;
+
+    [Header("戦闘UI")]
+    [SerializeField] private GameObject FightUI;
+
+    [Header("ゲージ")]
+    [SerializeField] Slider[] waveGauge;
 
     [Header("デバッグ用")]
     [SerializeField] private bool circleEnemyTest;
@@ -36,17 +57,22 @@ public class EnemyManager : MonoBehaviour
     public Vector3 minPos { get; set; }
     public Vector3 maxPos { get; set; }
 
-    //敵のリミット渡し→PhaseManagerへ
+    //敵のリミット渡し→WaveManagerへ
     public int CircleLimit {  get; set; }
     public int EllipseLimit {  get; set; }
     public int NumSpawnAtOnceLimit {  get; set; }
 
     private float spawnTime;
     private int m_EnemyNum = 0;
+    private Wave wave;
+    private int destroySphere;
+    private int destroyEllipse;
+    private int destroyEnemy;
 
     //敵の数検知
     private bool ableCircleSpawn;
     private bool ableEllipseSpawn;
+    private bool ableSpawn;
 
     //プレイヤーが二人いたら始まる
     private bool start;
@@ -62,18 +88,26 @@ public class EnemyManager : MonoBehaviour
     private int count3;
     private bool noSphere;
     private bool noEllipse;
+    private bool once;
+
+    private 
 
     // Start is called before the first frame update
     void Start()
     {
-        wave1 = false;
-        wave2 = false;
-        wave3 = false;
         count1 = 0;
         count2 = 0;
         count3 = 0;
         noSphere = true;
         noEllipse = true;
+        once = true;
+        wave = Wave.WAVE1;
+
+        for (int i = 0; i < waveGauge.Length; i++)
+        {
+            waveGauge[i] = waveGauge[i].GetComponent<Slider>();
+        }
+
         Set();
     }
 
@@ -81,18 +115,22 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //SoundManager.instance.Play(BGM);
+
         //デバッグ用
         //Pを押すと1人でも始められる
-        if(Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             start = true;
         }
 
         if (time >= 5.0f)
         {
-            if (!start)
+            if (once)
             {
+                FightUI.SetActive(true);
                 SoundManager.instance.Play(BGM);
+                once = false;
             }
 
             if (start)
@@ -108,74 +146,88 @@ public class EnemyManager : MonoBehaviour
                     {
                         //デバッグ用
                         /*if (ableCircleSpawn)
-                         {
-                             SpawnCircleEnemy();
-                         }
-                         else if (ableEllipseSpawn)
-                         {
-                             SpawnEllipseEnemy();
-                         }*/
-
-                        //β用
-                        if(!wave1)
                         {
-                            phasesText.text = "FirstWave";
-                            count1++;
-                            if (count1 >= 5)
-                            {
-                                if (noSphere)
-                                {
-                                    wave1 = true;
-                                }
-                            }
-                            else
-                            {
-                                SpawnCircleEnemy();
-                            }
+                            SpawnCircleEnemy();
                         }
-                        else
+                        else if (ableEllipseSpawn)
                         {
-                            if(!wave2)
-                            {
-                                phasesText.text = "SecondWave";
-                                count2++;
-                                if (count2 >= 3)
+                            SpawnEllipseEnemy();
+                        }*/
+
+                        switch (wave)
+                        {
+                            case Wave.WAVE1:
+                                phasesText.text = "FirstWave";
+                                if (count1 >= firstWave)
                                 {
-                                    if (noEllipse)
+                                    if (noSphere && noEllipse)
                                     {
-                                        wave2 = true;
+                                        wave = Wave.WAVE2;
+                                        destroyEnemy = 0;
+                                        spawnTime = spawnInterval;
+                                    }
+                                }
+                                else
+                                {
+                                    SpawnCircleEnemy();
+                                    count1++;
+                                    spawnTime = 0;
+                                }
+                                break;
+                            case Wave.WAVE2:
+                                phasesText.text = "SecondWave";
+                                if (count2 >= secondWave)
+                                {
+                                    if (noSphere && noEllipse)
+                                    {
+                                        wave = Wave.WAVE3;
+                                        destroyEnemy = 0;
+                                        spawnTime = spawnInterval;
                                     }
                                 }
                                 else
                                 {
                                     SpawnEllipseEnemy();
+                                    count2++;
+                                    spawnTime = 0;
                                 }
-                            }
-                            else
-                            {
-                                if (!wave3)
+                                break;
+                            case Wave.WAVE3:
+                                phasesText.text = "LastWave";
+                                if (count3 >= finalWave)
                                 {
-                                    phasesText.text = "LastWave";
-                                    count3++;
-                                    if (count3 >= 8)
+                                    if (noSphere && noEllipse)
                                     {
-                                        if (noSphere && noEllipse)
-                                        {
-                                            wave3 = true;
-                                            _transition.FadeStart();
-                                            GameManager.instance.CurrentState = GameState.Search;
-                                        }
+                                        GameManager.instance.SceneManager.FadeStart("MainStage");
+                                        GameManager.instance.CurrentState = GameState.Search;
                                     }
-                                    else
-                                    {
-                                        EnemySpawn();
-                                    }
-
                                 }
-                            }
+                                else
+                                {
+                                    EnemySpawn();
+                                    count3++;
+                                    spawnTime = 0;
+                                }
+                                break;
                         }
                     }
-                    spawnTime = 0;
+
+                }
+
+                //ゲージの管理
+                switch (wave)
+                {
+                    case Wave.WAVE1:
+                        waveGauge[0].value = 1.0f - ((1.0f / firstWave) * destroyEnemy);
+                        break;
+                    case Wave.WAVE2:
+                        waveGauge[0].value = 0f;
+                        waveGauge[1].value = 1.0f - ((1.0f / secondWave) * destroyEnemy);
+                        break;
+                    case Wave.WAVE3:
+                        waveGauge[1].value = 0f;
+                        waveGauge[2].value = 1.0f - ((1.0f / finalWave) * destroyEnemy);
+                        break;
                 }
             }
             else
@@ -194,9 +246,11 @@ public class EnemyManager : MonoBehaviour
         start = false;
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
+        destroyEnemy = 0;
 
         ableCircleSpawn = true;
         ableEllipseSpawn = true;
+        ableSpawn = true;
 
         //敵がスポーンする範囲
         GameObject stage = GameObject.FindWithTag("Ground");
@@ -254,7 +308,7 @@ public class EnemyManager : MonoBehaviour
             ableCircleSpawn = true;
         }
 
-        if(SphereNum.Length==0)
+        if (SphereNum.Length == 0)
         {
             noSphere = true;
         }
@@ -262,7 +316,6 @@ public class EnemyManager : MonoBehaviour
         {
             noSphere = false;
         }
-
     }
     private void CheckEllipseEnemy()
     {
@@ -299,7 +352,12 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void SpawnCircleEnemy()
+    public void DestroyEnemy()
+    {
+        destroyEnemy++;
+    }
+
+    public void SpawnCircleEnemy()
     {
         int enemySpawnPos;
 
@@ -309,7 +367,7 @@ public class EnemyManager : MonoBehaviour
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
 
-    private void SpawnEllipseEnemy()
+    public void SpawnEllipseEnemy()
     {
         int enemySpawnPos;
 

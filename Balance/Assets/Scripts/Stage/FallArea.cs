@@ -66,7 +66,7 @@ public class FallArea : MonoBehaviour
             {
                 if (Player2Check(other) == true)
                 {
-                    GameManager.instance.GameOver();
+                   StartCoroutine(GameManager.instance.GameOver());
                 }
             }
         }
