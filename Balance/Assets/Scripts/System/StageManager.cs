@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
