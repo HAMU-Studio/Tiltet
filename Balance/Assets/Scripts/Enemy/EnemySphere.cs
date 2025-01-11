@@ -56,10 +56,14 @@ public class EnemySphere : MonoBehaviour
     Vector3 m_direction = new Vector3();
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
+    EnemyManager enemymanager;
+    
     // Start is called before the first frame update
     void Start()
     {
         Set();
+        GameObject enemyManager = GameObject.Find("EnemyManager");
+        enemymanager = enemyManager.GetComponent<EnemyManager>();
     }
 
     // Update is called once per frame
@@ -131,6 +135,7 @@ public class EnemySphere : MonoBehaviour
 
             if (explosionTime > 7.5f)
             {
+                enemymanager.DestroyEnemy();
                 Destroy(this.gameObject);
             }
         }
@@ -317,11 +322,11 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Destroy"))
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 }

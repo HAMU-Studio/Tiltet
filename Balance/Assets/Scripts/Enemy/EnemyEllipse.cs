@@ -181,13 +181,13 @@ public class EnemyEllipse : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+   /* private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Destroy"))
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 
     //探査機に乗っている時しか攻撃しない
     private void OnTriggerStay(Collider other)
