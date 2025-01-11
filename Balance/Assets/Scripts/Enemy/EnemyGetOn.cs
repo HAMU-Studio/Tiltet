@@ -5,6 +5,15 @@ using UnityEngine;
 
 public class EnemyGetOn : MonoBehaviour
 {
+    private enum EnemyType
+    {
+        SPHERE,
+        ELLIPSE
+    }
+
+    [Header("敵のタイプ")]
+    [SerializeField] private EnemyType enemyType;
+
     Vector3 stagePos = new Vector3();
 
     [Header("飛ぶときの最高点")] 
@@ -68,6 +77,14 @@ public class EnemyGetOn : MonoBehaviour
     private void GetOn()
     {
         //着地地点を見る
+        /*if (enemyType == EnemyType.SPHERE)
+        {
+            transform.LookAt(destination);
+        }
+        else if(enemyType == EnemyType.ELLIPSE)
+        {
+            transform.LookAt(new Vector3(destination.x, transform.position.y, destination.z));
+        }*/
         transform.LookAt(destination);
 
         t += enemySpeed * Time.deltaTime;

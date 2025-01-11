@@ -29,6 +29,7 @@ public class EnemyEllipse : MonoBehaviour
     private bool m_arrived;
     private bool ableAssault;
     private bool assault;
+    private bool floating;
 
     Vector3 _Direction = new Vector3();
     Vector3 _prePosition = new Vector3();// 前の位置
@@ -52,11 +53,18 @@ public class EnemyEllipse : MonoBehaviour
     {
         if (m_arrived)
         {
+            if(floating)
+            {
+                transform.position += new Vector3(0f, 1.0f, 0f);
+                floating = false;
+            }
+            //Vector3 myRotation = transform.localEulerAngles;
+
             if (!ablemove)
             {
                 time += Time.deltaTime;
 
-                if (time <= 0.5f)
+                if (time <= 0.1f)
                 {
                     enemyRb.constraints = RigidbodyConstraints.FreezeAll;
                 }
@@ -99,7 +107,14 @@ public class EnemyEllipse : MonoBehaviour
 
     void FixedUpdate()
     {
-        CheckDirection();
+        if (m_arrived)
+        {
+            if (ablemove)
+            {
+                CheckDirection();
+            }
+        
+        }
     }
 
     private void Set()
@@ -117,6 +132,7 @@ public class EnemyEllipse : MonoBehaviour
         m_arrived= false;
         assault = false;
         ableAssault = true;
+        floating = true;
 
         _position = Vector3.zero;
         _prePosition = transform.position;
@@ -124,6 +140,10 @@ public class EnemyEllipse : MonoBehaviour
         enemyRb = GetComponent<Rigidbody>();
 
         ablemove = false;
+
+        /*Vector3 myRotation = transform.localEulerAngles;
+        transform.rotation = Quaternion.Euler(0.0f, myRotation.y, myRotation.z);
+        enemyRb.constraints = RigidbodyConstraints.FreezeRotationX;*/
     }
 
     private void CheckDirection()
@@ -161,19 +181,23 @@ public class EnemyEllipse : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Ground"))
-        {
-            m_arrived = true;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
+   /* private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Destroy"))
         {
             Destroy(gameObject);
+        }
+    }*/
+
+    //探査機に乗っている時しか攻撃しない
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.CompareTag("Ground"))
+        {
+            if (!m_arrived)
+            {
+                m_arrived = true;
+            }
         }
     }
 }

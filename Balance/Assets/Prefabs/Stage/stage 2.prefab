@@ -1552,8 +1552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallArea: {fileID: 4412704955265268026}
-  knockbackForce: 5
-  knockbackUpForce: 2
 --- !u!114 &6936819068640883211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1566,11 +1564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143e1c8b1db88134c853f97dbb58e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 0}
-  stands: []
-  parts: []
-  coinPositions: []
-  numCoin: 5
+  coins: []
+  parts: {fileID: 0}
 --- !u!1 &5758922443895204696
 GameObject:
   m_ObjectHideFlags: 0
@@ -2715,7 +2710,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7718403305144200206}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4412704955265268031}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2bbcbe49bb7a464dbd9d990aa702234, type: 3}
@@ -2727,6 +2722,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7718403305144200206}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4412704955265268031 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6206053948904903985, guid: bbcd87fcf13652f40bd7b118b48dc32d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7718403305144200206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8053930744868059427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412704955265268031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8670975019b8e54439a7276a8c421b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FieldType: 0
+  firstWave: 5
+  secondWave: 3
+  finalWave: 6
+  waveGauge: []
+  phasesText: {fileID: 0}
 --- !u!1001 &8778206271859176007
 PrefabInstance:
   m_ObjectHideFlags: 0
