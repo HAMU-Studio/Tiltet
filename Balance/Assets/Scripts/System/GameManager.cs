@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         isConnected = false;
         playerInstances = new GameObject[2];
         _timeArray = new int[4] { 0, 0, 0, 0 };
-        Debug.Log("isConnected = " + GameManager.instance.isConnected);
+        isSkip = false;
         // SavePointの初期化はどうせ上書きされるから必要
     }
 
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
         {
             PlayerDestroy();
             InitGame();
+            isSkip = true;
         }
         else
         {

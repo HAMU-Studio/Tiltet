@@ -43,6 +43,8 @@ public class ConnectionScreen : MonoBehaviour
             GameManager.instance.AircraftMoveSwitch(true);
             UISystems.StartTimer();
         }
+
+        //  GameManager.instance.isSkip = true;
     }
 
     private bool once;
@@ -95,9 +97,12 @@ public class ConnectionScreen : MonoBehaviour
         
         connectionScreen.SetActive(false);
         GameManager.instance.PlayerLock();
-        
-        OPDialogue();
-        yield return new WaitForSeconds(15.5f);
+
+        if (GameManager.instance.isSkip == false)
+        {
+            OPDialogue();
+            yield return new WaitForSeconds(15.5f);
+        }
         
         GameManager.instance.isConnected = true;
  
@@ -109,11 +114,15 @@ public class ConnectionScreen : MonoBehaviour
         
         GameManager.instance.AircraftMoveSwitch(true);
         UISystems.StartTimer();
-        
-        yield return new WaitForSeconds(2f);
-      
-        StartDialogue();
 
+        if (GameManager.instance.isSkip == false)
+        {
+            yield return new WaitForSeconds(2f);
+        
+            StartDialogue();
+        }
+
+        yield return null;
     }
 
     private void OPDialogue()

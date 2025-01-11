@@ -41,7 +41,6 @@ namespace System
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
                 GameManager.instance.RestartAtSavePoint(true);
-                Debug.Log("Restart 1 ");
             }
             
             
