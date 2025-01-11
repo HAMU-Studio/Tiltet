@@ -134,7 +134,7 @@ public class JointManager : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
     }
 
-  　private float lowerLimit = 10f;
+  　private float lowerLimit = 15f;
    /// <summary>
    /// ある程度離れていたら飛ばす
    /// </summary>

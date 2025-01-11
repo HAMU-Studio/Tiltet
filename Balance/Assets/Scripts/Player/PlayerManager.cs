@@ -65,6 +65,16 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        /*if (GameManager.instance.P1Spawn == false || GameManager.instance.P2Spawn == false)
+        {
+            GameManager.instance.SavePlayerInstance(gameObject);
+            GameManager.instance.P1Spawn = true;
+            GameManager.instance.P2Spawn = true;
+        }*/
+    }
+
     private ThrowawayMethod method;
     private bool temp;
     private void FixedUpdate()
@@ -86,8 +96,7 @@ public class PlayerManager : MonoBehaviour
             if (GameManager.instance.IsRescue == false)
             {
                 GameManager.instance.IsRescue = true;
-                SoundManager.instance.Play("Struggle");
-                animator.SetTrigger("toStruggle");
+                PlayStruggle();
             }
         }
 
@@ -154,6 +163,12 @@ public class PlayerManager : MonoBehaviour
          
         }
         m_beforeState = rescCurrentState;
+    }
+
+    public void PlayStruggle()
+    {
+        SoundManager.instance.Play("Struggle");
+        animator.SetTrigger("toStruggle");
     }
     
     /// <summary>
