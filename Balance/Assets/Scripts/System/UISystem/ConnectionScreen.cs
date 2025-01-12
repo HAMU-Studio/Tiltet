@@ -14,6 +14,8 @@ public class ConnectionScreen : MonoBehaviour
     [SerializeField] private InGameUISystems UISystems;
   //  [SerializeField] private DisplayDialogue systemMessege;
  //   [SerializeField] private DisplayDialogue dialogue;
+
+    [SerializeField] private bool DebugDiaogue;
     
     
     [SerializeField] private GameObject m_1PImage;
@@ -30,6 +32,9 @@ public class ConnectionScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (DebugDiaogue)
+            GameManager.instance.isSkip = true;
+        
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;

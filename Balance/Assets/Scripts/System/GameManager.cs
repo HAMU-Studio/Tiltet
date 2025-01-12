@@ -19,7 +19,7 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-
+    
     [SerializeField] private GameState m_currentState;
     [SerializeField] private RescueState currentRescue;
 
@@ -50,9 +50,10 @@ public class GameManager : MonoBehaviour
             // 他のシーン遷移した時の二重生成防ぐ
             Destroy(this.gameObject);
         }
+        
         InitGame();
     }
-    private void InitGame()
+    public void InitGame()
     {
         m_life = initialLife;
         m_mainParts = 0;
@@ -64,15 +65,9 @@ public class GameManager : MonoBehaviour
         playerInstances = new GameObject[2];
         _timeArray = new int[4] { 0, 0, 0, 0 };
         isSkip = false;
-        // SavePointの初期化はどうせ上書きされるから必要
+        // SavePointの初期化はどうせ上書きされるから必要ない
     }
-
-    public void StartGame()
-    {
-        /*_sceneManager.FadeStart("GreenStage");
-        CurrentState = GameState.Search;*/
-    }
-
+    
     public void Restart()
     {
         _sceneManager.FadeStart("MainStage");
@@ -252,8 +247,10 @@ public class GameManager : MonoBehaviour
     }
     
     
+    /// <summary>
+    /// ステートが切り替わると呼ばれる シーンのロード前
+    /// </summary>
     private GameState m_beforeState;
-    // ここで呼んでるコルーチンを
     private void OnStateChange()
     {
        // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
@@ -271,21 +268,17 @@ public class GameManager : MonoBehaviour
         {
           //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
+            
         }
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.GameOver) // 探索->ゲームオーバー
         {
-          //  SaveAircraftPos(m_aircraftInstance.transform.position);
+            SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
-        /*
-        else if (m_beforeState != GameState.Restart ||
-                 m_currentState == GameState.Restart)
-        {
+        
+        if (m_beforeState == GameState.Search && CurrentState == GameState.Restart)
             SaveAircraftPos(m_aircraftInstance.transform.position);
-            AircraftMoveSwitch(false);            
-        }
-        */
         
         m_beforeState = m_currentState;
     }
