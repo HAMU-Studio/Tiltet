@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,11 +35,12 @@ public class Gate : MonoBehaviour
             if (nowNumber == gateNumber)
             {
                 gatemanager.GateNumber = gateNumber + 1;
+                SoundManager.instance.Play("Connected");
                 //Debug.Log("正解");
             }
             else
             {
-                gatemanager.GateNumber = 1;
+               // gatemanager.GateNumber = 1;
                 //Debug.Log("残念");
             }
         }

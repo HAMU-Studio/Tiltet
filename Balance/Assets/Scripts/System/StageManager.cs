@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -45,7 +44,8 @@ public class StageManager : MonoBehaviour
         GameManager.instance.SaveAircraftInstance(gameObject);
 
         // スタート時の位置を設定
-        transform.position = new Vector3(transform.position.x, 50f, transform.position.z);
+      //  if (GameManager.instance.CurrentState == GameState.Search)
+           // transform.position = new Vector3(transform.position.x, 50f, transform.position.z);
     }
 
     private void Update()

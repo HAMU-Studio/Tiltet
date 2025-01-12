@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Dialogue;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,6 +81,12 @@ namespace System
             //プレイヤーのマテリアルを通常に。ハートのより点滅の回数が増えてしまう
             // yield return new WaitForSeconds(0.1f);
            // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
+           if (GameManager.instance.Life == 12)
+           {
+               DisplayDialogue.dialogue.EnqueueDialogue("hyo");
+               DisplayDialogue.dialogue.EnqueueDialogue("wa");
+           }
+           
             GameManager.instance.Life--;
             if (GameManager.instance.Life <= 0)
             {

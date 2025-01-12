@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class sub : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             GameManager.instance.AddSubPartsNum();
-            
+            SoundManager.instance.Play("GetSubPart");
             Destroy(gameObject);
         }
     }
