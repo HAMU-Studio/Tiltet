@@ -146,10 +146,16 @@ public class GameManager : MonoBehaviour
             method.RunOnce(Restart);
         }
         
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             _sceneManager.FadeStart("MainStage");
             instance.CurrentState = GameState.Search;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            _sceneManager.FadeStart("MainStage");
+            instance.CurrentState = GameState.Restart;
         }
         
         if (Input.GetKeyDown(KeyCode.Y))

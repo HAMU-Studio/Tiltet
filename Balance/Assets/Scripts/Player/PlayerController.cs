@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour
         canRescueAct = false;
         isChanged = false;
         animator.SetTrigger("toIdle");
+        isFleezing = false;
     }
 
     /// <summary>

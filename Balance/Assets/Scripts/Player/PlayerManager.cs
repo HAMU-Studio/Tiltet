@@ -225,7 +225,7 @@ public class PlayerManager : MonoBehaviour
     public void ResetPlayer_Loaded()
     {
         animator.Play("Wait_01");
-        // GetComponent<Rigidbody>().isKinematic = false;
+       
         GetComponent<JointManager>().Reset();
         GameManager.instance.SetPlayerPos();
         _playerController.Initialize();

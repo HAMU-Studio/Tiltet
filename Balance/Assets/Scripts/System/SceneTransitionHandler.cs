@@ -36,6 +36,7 @@ namespace System
             {
                 GameManager.instance.RespawnPlayer(true);
                 ParticleManager.instance.RemoveAll();
+               // GameManager.instance.PlayerUnLock();
             }
 
             if (GameManager.instance.CurrentState == GameState.Restart)
@@ -58,6 +59,7 @@ namespace System
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 GameManager.instance.RespawnPlayer(false); 
+              
             }
             
             // 戦闘->探索
