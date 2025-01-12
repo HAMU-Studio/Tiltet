@@ -100,7 +100,7 @@ public class EnemyManager : MonoBehaviour
         count3 = 0;
         noSphere = true;
         noEllipse = true;
-        once = true;
+        once = false;
         wave = Wave.WAVE1;
 
         for (int i = 0; i < waveGauge.Length; i++)
@@ -109,6 +109,7 @@ public class EnemyManager : MonoBehaviour
         }
 
         Set();
+       
     }
 
     private ThrowawayMethod medhod;
@@ -124,8 +125,15 @@ public class EnemyManager : MonoBehaviour
             start = true;
         }
 
+        if (time >= 0.5f && time <= 2f && once == false)
+        {
+            SoundManager.instance.Play("Siren");
+            once = true;
+        }
+
         if (time >= 5.0f)
         {
+            
             if (once)
             {
                 FightUI.SetActive(true);

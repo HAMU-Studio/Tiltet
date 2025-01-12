@@ -19367,10 +19367,10 @@ Transform:
   - {fileID: 299507716}
   - {fileID: 1052878379}
   - {fileID: 1118737661}
-  - {fileID: 1372254438}
-  - {fileID: 1064446730}
   - {fileID: 1044647402}
   - {fileID: 1058888932}
+  - {fileID: 1372254438}
+  - {fileID: 1064446730}
   m_Father: {fileID: 569033050}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21673,6 +21673,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2739903895625598195, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
+      propertyPath: debugSkip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739903895625598195, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
       propertyPath: m_nextState
       value: 2
       objectReference: {fileID: 0}
@@ -21871,7 +21876,8 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6332224790708523968, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32, type: 3}
 --- !u!114 &1643728749 stripped
 MonoBehaviour:
@@ -23792,6 +23798,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 14537070102028871, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_text
+      value: 'Press A Button
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 14537070150068896, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_IsActive
@@ -23917,6 +23930,11 @@ PrefabInstance:
       propertyPath: UISystems
       value: 
       objectReference: {fileID: 1643728749}
+    - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: DebugDiaogue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: systemMessege
@@ -25563,12 +25581,12 @@ PrefabInstance:
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0000000228801
+      value: -0.00000002288009
       objectReference: {fileID: 0}
     - target: {fileID: 632443261924561367, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000008283737
+      value: 0.000000008283735
       objectReference: {fileID: 0}
     - target: {fileID: 1770166811159384395, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
@@ -29131,9 +29149,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: BugRespawnArea
       objectReference: {fileID: 0}
+    - target: {fileID: 5586910210129442020, guid: 25efe5b6c7a75364f812aa933ce1cc1f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
+      objectReference: {fileID: 0}
     - target: {fileID: 5586910210129442043, guid: 25efe5b6c7a75364f812aa933ce1cc1f,
         type: 3}
       propertyPath: isRestart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586910210129442043, guid: 25efe5b6c7a75364f812aa933ce1cc1f,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5586910210129442047, guid: 25efe5b6c7a75364f812aa933ce1cc1f,

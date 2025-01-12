@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -121,19 +122,21 @@ public class EnemySphere : MonoBehaviour
         {
             //Explosion();
 
-            if (explosionTime > 6.0f)
+            if (explosionTime > 6.0f && stop == false)
             {
                 enemyRb.constraints = RigidbodyConstraints.FreezeAll;
                 stop = true;
                 anim.SetBool("explosion", true);
             }
 
-            if (explosionTime > 7.0f)
+            if (explosionTime > 7.0f && explosionEffect.activeSelf == false)
             {
-                explosionEffect.SetActive(true);
+                explosionEffect.SetActive(true);    // 爆発エフェクト再生
+                gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;  //敵を視覚的にオフ
+                SoundManager.instance.Play("Explosion");
             }
 
-            if (explosionTime > 7.5f)
+            if (explosionTime > 8f)
             {
                 enemymanager.DestroyEnemy();
                 Destroy(this.gameObject);

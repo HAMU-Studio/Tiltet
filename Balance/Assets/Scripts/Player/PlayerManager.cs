@@ -59,7 +59,7 @@ public class PlayerManager : MonoBehaviour
 
         m_RB = GetComponent<Rigidbody>();
 
-        if (GameManager.instance.isConnected == false)
+        if (GameManager.instance.isConnected == false && GameManager.instance.CurrentState == GameState.Search)
         {
             LockPos();
         }
