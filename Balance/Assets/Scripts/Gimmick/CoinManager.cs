@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
@@ -25,8 +26,9 @@ public class CoinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InstanceParts();
-    }
+        if (parts != null)
+         InstanceParts();
+    }   
 
     private void Set()
     {
@@ -41,6 +43,9 @@ public class CoinManager : MonoBehaviour
         if (countCoin < coins.Length)
         {
             CoinSpawn();
+            if (countCoin > 1)
+             SoundManager.instance.Play("GetCoin");
+            
         }
     }
 
@@ -52,9 +57,10 @@ public class CoinManager : MonoBehaviour
 
     private void InstanceParts()
     {
-        if (countCoin >= coins.Length)
+        if (countCoin >= coins.Length && parts.activeSelf == false)
         {
             parts.SetActive(true);
+            SoundManager.instance.Play("Arrival");
         }
     }
 }
