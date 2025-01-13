@@ -68,7 +68,7 @@ namespace System
             }
             else
             {
-                Debug.LogAssertion("The item does not exist");
+                Debug.LogAssertion("The item does not exist : " + name);
             }
         }
 
@@ -79,7 +79,7 @@ namespace System
                 return acquired;
             }
             
-            Debug.LogAssertion("The item does not exist");
+            Debug.LogAssertion("The item does not exist : " + name);
             return false;
         }
         

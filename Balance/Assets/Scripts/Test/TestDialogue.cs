@@ -18,7 +18,7 @@ namespace Test
                 {
                     foreach (var data in dialogueDatas[i].data)
                     {
-                        _displayDialogue.EnqueueDialogue(data.Name);
+                        _displayDialogue.Enqueue(data.Name);
                     }
                 }
             }

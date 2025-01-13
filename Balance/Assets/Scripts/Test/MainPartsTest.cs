@@ -21,7 +21,7 @@ public class MainPartsTest : MonoBehaviour
     {
         if (gameObject.activeSelf && once == false)
         {
-            DisplayDialogue.dialogue.EnqueueDialogue("ActiveMainPart");
+            DisplayDialogue.dialogue.Enqueue("ActiveMainPart");
             once = true;
         }
     }

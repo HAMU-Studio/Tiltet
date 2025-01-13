@@ -102,12 +102,41 @@ namespace Dialogue
            　// image.sprite = null;
         }
         
-        public void EnqueueDialogue(string name)
+        public void Enqueue(string name)
         {
             DialogueData _data = GetDialogueData(name);
             if (_data == null) return;
-            
+
+            if (_task.Count != 0)   // 他のセリフが表示待機
+            {
+                if (DamageDialogueCheck(name) == false || CoinDialogueCheck(name) == false)
+                    return;
+                
+            }
             _task.Enqueue(_data);
+        }
+
+        private bool DamageDialogueCheck(string name)
+        {
+            if (name == "hyo" || name == "wa")
+            {
+                // 他のセリフ表示中に初ダメージ食らったら入れない
+                if (GameManager.instance.Life == 11)
+                {
+                    Debug.Log("Damage dialogue is Skipped");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool CoinDialogueCheck(string name)
+        {
+            if (name == "FindCoinGimmick"　|| name == "SubPartGimmick")
+                return false;
+            
+            return true;
         }
 
         private DialogueData GetDialogueData(string name)

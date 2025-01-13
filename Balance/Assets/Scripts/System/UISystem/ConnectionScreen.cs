@@ -111,7 +111,7 @@ public class ConnectionScreen : MonoBehaviour
         
         GameManager.instance.isConnected = true;
  
-        DisplayDialogue.system.EnqueueDialogue("Start");
+        DisplayDialogue.system.Enqueue("Start");
         
         SoundManager.instance.Play("GreenStage");
         SoundManager.instance.Play("Start");
@@ -134,7 +134,7 @@ public class ConnectionScreen : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            DisplayDialogue.dialogue.EnqueueDialogue($"OP0{i + 1}");
+            DisplayDialogue.dialogue.Enqueue($"OP0{i + 1}");
         }
     }
 
@@ -142,7 +142,7 @@ public class ConnectionScreen : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            DisplayDialogue.dialogue.EnqueueDialogue($"InGame0{i + 1}");
+            DisplayDialogue.dialogue.Enqueue($"InGame0{i + 1}");
         }
     }
 }

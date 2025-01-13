@@ -71,12 +71,12 @@ public class GameManager : MonoBehaviour
         isPlayerSpawn = new bool [2];
         isConnected = false;
         playerInstances = new GameObject[2];
-        m_mainParts = 0;
-        m_subParts = 0;
         count = 0;
 
         if (isContinue == false)
         {
+            m_mainParts = 0;
+            m_subParts = 0;
             OnInitGame?.Invoke();   // フィールドアイテムの取得状況を初期化する関数を呼び出す
             isSkip = false;
         }
@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
    
     public IEnumerator GameOver()
     {
-        DisplayDialogue.system.EnqueueDialogue("Finish");
+        DisplayDialogue.system.Enqueue("Finish");
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator GameClear()
     {
-        DisplayDialogue.system.EnqueueDialogue("Finish");
+        DisplayDialogue.system.Enqueue("Finish");
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
@@ -546,13 +546,13 @@ public class GameManager : MonoBehaviour
         m_mainParts++;
         if (m_mainParts == 1)
         {
-            DisplayDialogue.dialogue.EnqueueDialogue("GetMainPart");
-            DisplayDialogue.dialogue.EnqueueDialogue("TwoLeft");
+            DisplayDialogue.dialogue.Enqueue("GetMainPart");
+            DisplayDialogue.dialogue.Enqueue("TwoLeft");
         }
         else if (m_mainParts == 2)
         {
-            DisplayDialogue.dialogue.EnqueueDialogue("GetMainPart");
-            DisplayDialogue.dialogue.EnqueueDialogue("OneLeft");
+            DisplayDialogue.dialogue.Enqueue("GetMainPart");
+            DisplayDialogue.dialogue.Enqueue("OneLeft");
         }
     }
     public int GetMainPartsNum()
@@ -567,7 +567,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 1; i < 4; i++)
             {
-                DisplayDialogue.dialogue.EnqueueDialogue($"GetSubPart0{i}");
+                DisplayDialogue.dialogue.Enqueue($"GetSubPart0{i}");
             }
         }
     }
