@@ -2687,7 +2687,7 @@ PrefabInstance:
     - target: {fileID: 5071772975576971674, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -83.10932
+      value: -83.10933
       objectReference: {fileID: 0}
     - target: {fileID: 5071772975576971674, guid: 75434909bf02b6543a8486cdad4777e6,
         type: 3}
@@ -7361,6 +7361,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 14537070150068899, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 14537070572405698, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_Name
@@ -7476,6 +7481,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1423281336234436473, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2089911003870972248, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2139418819416512740, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469465158633977540, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4285610233362766591, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774215495563360695, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9152841295481384516, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_IsActive
@@ -7484,7 +7519,7 @@ PrefabInstance:
     - target: {fileID: 9152841295481384517, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1415d81e42111c14ba0a0d1952421fb4, type: 3}
@@ -9873,7 +9908,12 @@ MonoBehaviour:
   spawnInterval: 3
   circleLimit: 5
   ellipseLimit: 2
+  firstWave: 5
+  secondWave: 3
+  finalWave: 6
   phasesText: {fileID: 0}
+  FightUI: {fileID: 0}
+  waveGauge: []
   circleEnemyTest: 0
   ellipseEnemyTest: 0
 --- !u!1 &1281012718

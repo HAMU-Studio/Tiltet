@@ -9,11 +9,18 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject title;
     [Header("オプション画面")]
     [SerializeField] private GameObject option;
+    [Header("ゲームをやめますか画面")]
+    [SerializeField] private GameObject question;
+    [SerializeField] private GameObject fadeImage;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        title.SetActive(true);
+        option.SetActive(false);
+        question.SetActive(false);
+        fadeImage.SetActive(true);
     }
 
     // Update is called once per frame
@@ -33,4 +40,15 @@ public class MenuManager : MonoBehaviour
         title.SetActive(false);
         option.SetActive(true);
     }
+
+    public void Question()
+    {
+        question.SetActive(true);
+    }
+
+    public void No()
+    {
+        question.SetActive(false);
+    }
+
 }
