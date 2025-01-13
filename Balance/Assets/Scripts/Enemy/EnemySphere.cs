@@ -136,7 +136,7 @@ public class EnemySphere : MonoBehaviour
                 SoundManager.instance.Play("Explosion");
             }
 
-            if (explosionTime > 8f)
+            if (explosionTime > 7.86f)
             {
                 enemymanager.DestroyEnemy();
                 Destroy(this.gameObject);

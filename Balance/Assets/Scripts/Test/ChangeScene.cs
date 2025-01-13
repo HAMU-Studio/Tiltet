@@ -9,7 +9,7 @@ public class ChangeScene : MonoBehaviour
 {
     public void ToGreenScene()
     {
-        GameManager.instance.Restart();
+        StartCoroutine(GameManager.instance.Restart());
         SoundManager.instance.Play("CursorDecision");
     }
 

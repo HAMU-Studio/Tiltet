@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
     
+    public event Action OnInitGame;
+    
     [SerializeField] private GameState m_currentState;
     [SerializeField] private RescueState currentRescue;
 
@@ -44,16 +46,23 @@ public class GameManager : MonoBehaviour
             transform.parent = null;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+            m_beforeState = m_currentState;
         }
         else
         {
             // 他のシーン遷移した時の二重生成防ぐ
             Destroy(this.gameObject);
         }
-        
-        InitGame();
+
+        // デバッグ用
+        if (CurrentState == GameState.EnemyBattle)
+            InitGame(true);
     }
-    public void InitGame()
+    /// <summary>
+    /// ゲームの初期化 セーブポイントからスタートなのか、最初からなのかによって処理を切り替え
+    /// </summary>
+    /// <param name="isContinue"> true : セーブポイントからスタート </param>
+    public void InitGame(bool isContinue)
     {
         m_life = initialLife;
         m_mainParts = 0;
@@ -64,16 +73,22 @@ public class GameManager : MonoBehaviour
         isConnected = false;
         playerInstances = new GameObject[2];
         _timeArray = new int[4] { 0, 0, 0, 0 };
-        isSkip = false;
+
+        if (isContinue == false)
+        {
+            OnInitGame?.Invoke();   // フィールドアイテムの取得状況を初期化する関数を呼び出す
+            isSkip = false;
+        }
         // SavePointの初期化はどうせ上書きされるから必要ない
     }
     
-    public void Restart()
+    public IEnumerator Restart()
     {
         _sceneManager.FadeStart("MainStage");
         m_currentState = GameState.Search;
         PlayerDestroy();
-        InitGame();
+        yield return new WaitForSeconds(1.7f);
+        InitGame(false);
     }
 
     /// <summary>
@@ -84,11 +99,10 @@ public class GameManager : MonoBehaviour
         if (beforeLoading)
         {
             PlayerDestroy();
-            InitGame();
-            isSkip = true;
         }
         else
         {
+            InitGame(true);
             SetAircraftPos();
             AircraftMoveSwitch(true);
         }
@@ -138,7 +152,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            method.RunOnce(Restart);
+            StartCoroutine(Restart());
         }
         
         if (Input.GetKeyDown(KeyCode.K))

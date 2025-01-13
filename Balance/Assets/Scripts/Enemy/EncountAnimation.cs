@@ -29,7 +29,7 @@ public class EncountAnimation : MonoBehaviour
     {
         if (time >= waitTime)
         {
-            Destroy(gameObject);
+          //  Destroy(gameObject);
             //anim.SetBool("AbleMove", true);
         }
         else
@@ -48,7 +48,7 @@ public class EncountAnimation : MonoBehaviour
     {
         if(reflected)
         {
-            Destroy(gameObject);
+          //  Destroy(gameObject);
         }
     }
 }
