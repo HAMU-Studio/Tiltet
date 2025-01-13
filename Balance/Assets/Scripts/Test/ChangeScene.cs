@@ -13,6 +13,13 @@ public class ChangeScene : MonoBehaviour
         SoundManager.instance.Play("CursorDecision");
     }
 
+    public void ToOpening()
+    {
+        GameManager.instance.SceneManager.FadeStart();
+        SoundManager.instance.Play("CursorDecision");
+    }
+    
+
     public void ToSavePoint()
     {
         GameManager.instance.SceneManager.FadeStart("MainStage");

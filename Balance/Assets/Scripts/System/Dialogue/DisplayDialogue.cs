@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 namespace Dialogue
@@ -150,6 +152,14 @@ namespace Dialogue
                 Debug.Log("Failed to get data");
                 return null;
             }
+        }
+
+        public IEnumerator DelayEnqueue(string name, float delayTime)
+        {
+            Debug.Log("Call delayEnqueue");
+            yield return new WaitForSeconds(delayTime);
+            Enqueue(name);
+            yield return null;
         }
     }
 }

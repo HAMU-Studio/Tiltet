@@ -33,13 +33,12 @@ namespace Test
 
             }
             
-            if (Input.GetKey(KeyCode.I))
+            if (Input.GetKey(KeyCode.Q))
             {
                 if (!once)
                 {
                     _transition.FadeStart();
                     GameManager.instance.CurrentState = GameState.Search;
-                    Debug.Log("書き換え");
                     once = true;
                 }
             }
