@@ -578,6 +578,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2341714438094220292, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2879315829045423266, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_RootOrder
@@ -644,6 +649,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2879315829299410737, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920540888023029645, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013377759173347978, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -729,7 +744,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 1d0956b65a7386c4facdd07ec539ae66, type: 2}
+  m_Texture: {fileID: 8400000, guid: 306e2528f2aa7fb4992f23a67fbf58ad, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -756,7 +771,7 @@ VideoPlayer:
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: 1d0956b65a7386c4facdd07ec539ae66, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 306e2528f2aa7fb4992f23a67fbf58ad, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
@@ -768,7 +783,7 @@ VideoPlayer:
   m_TargetAudioSources:
   - {fileID: 0}
   m_DirectAudioVolumes:
-  - 1
+  - 0
   m_Url: 
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
@@ -796,8 +811,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20.125122, y: 2.4559326}
-  m_SizeDelta: {x: 152.8362, y: 86.6887}
+  m_AnchoredPosition: {x: 0.79395, y: -0.8662}
+  m_SizeDelta: {x: 149.82, y: 86.9887}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2082536597
 GameObject:
@@ -950,4 +965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c78cbd1a0ddc34f8433914903efafe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseImage: {fileID: 0}
   titleScene: 
+  firstPlayerImage: {fileID: 0}
+  secondPlayerImage: {fileID: 0}
+  questionImage: {fileID: 0}
