@@ -54,7 +54,10 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        // デバッグ用
+        // ここで体力初期化しないとMainStageから開始した時UIバグる
+        InitLifeAndTime();
+        
+        // デバッグ用 戦闘からでもプレイヤーが動く
         if (CurrentState == GameState.EnemyBattle)
             InitGame(true);
     }
@@ -64,15 +67,13 @@ public class GameManager : MonoBehaviour
     /// <param name="isContinue"> true : セーブポイントからスタート </param>
     public void InitGame(bool isContinue)
     {
-        m_life = initialLife;
-        m_mainParts = 0;
-        m_subParts = 0;
+        InitLifeAndTime();
         isPlayerSpawn = new bool [2];
-        method = new ThrowawayMethod();
-        count = 0;
         isConnected = false;
         playerInstances = new GameObject[2];
-        _timeArray = new int[4] { 0, 0, 0, 0 };
+        m_mainParts = 0;
+        m_subParts = 0;
+        count = 0;
 
         if (isContinue == false)
         {
@@ -80,6 +81,15 @@ public class GameManager : MonoBehaviour
             isSkip = false;
         }
         // SavePointの初期化はどうせ上書きされるから必要ない
+    }
+
+    /// <summary>
+    /// いつ初期化してもエラーが起きない変数のみ
+    /// </summary>
+    public void InitLifeAndTime()
+    {
+        _timeArray = new int[4] { 0, 0, 0, 0 };
+        m_life = initialLife;
     }
     
     public IEnumerator Restart()
@@ -99,6 +109,7 @@ public class GameManager : MonoBehaviour
         if (beforeLoading)
         {
             PlayerDestroy();
+            InitLifeAndTime();
         }
         else
         {
@@ -135,8 +146,6 @@ public class GameManager : MonoBehaviour
        Application.Quit();
 #endif
     }
-
-    private ThrowawayMethod method = new ThrowawayMethod();
   
     private void Update()
     {
