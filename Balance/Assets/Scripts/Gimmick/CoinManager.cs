@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dialogue;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -44,7 +45,18 @@ public class CoinManager : MonoBehaviour
         {
             CoinSpawn();
             if (countCoin > 1)
-             SoundManager.instance.Play("GetCoin");
+            {
+                SoundManager.instance.Play("GetCoin");
+                if (countCoin == 2)
+                {
+                    DisplayDialogue.dialogue.Enqueue("CoinExplain");
+                }
+
+                if (countCoin == 4)
+                {
+                    DisplayDialogue.dialogue.Enqueue("Good");
+                }
+            }
             
         }
     }
@@ -61,6 +73,7 @@ public class CoinManager : MonoBehaviour
         {
             parts.SetActive(true);
             SoundManager.instance.Play("Arrival");
+            DisplayDialogue.dialogue.Enqueue("Happy");
         }
     }
 }

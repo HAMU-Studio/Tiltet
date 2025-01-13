@@ -84,8 +84,21 @@ namespace System
            // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
            if (GameManager.instance.Life == 12)
            {
-               DisplayDialogue.dialogue.EnqueueDialogue("hyo");
-               DisplayDialogue.dialogue.EnqueueDialogue("wa");
+               DisplayDialogue.dialogue.Enqueue("hyo");
+               DisplayDialogue.dialogue.Enqueue("wa");
+           }
+
+           if (GameManager.instance.Life == 6)
+           {
+               DisplayDialogue.dialogue.Enqueue("wa");
+               DisplayDialogue.dialogue.Enqueue("HalfLife01");
+           }
+
+           if (GameManager.instance.Life == 3)
+           {
+               DisplayDialogue.dialogue.Enqueue("hyo");
+               DisplayDialogue.dialogue.Enqueue("LifePinch");
+               DisplayDialogue.dialogue.Enqueue("HalfLife02");
            }
            
             GameManager.instance.Life--;

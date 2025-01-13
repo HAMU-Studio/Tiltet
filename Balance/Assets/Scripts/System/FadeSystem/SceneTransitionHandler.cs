@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Dialogue;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace System
@@ -72,6 +73,10 @@ namespace System
                 if ( scene.name == "MainStage")
                 {
                     GameManager.instance.Back2Search();
+                    for (int i = 1; i < 4; i++)
+                    {
+                        DisplayDialogue.dialogue.Enqueue($"AfterBattle0{i}");
+                    }
                 }
             }
 

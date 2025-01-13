@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: Explain
+  m_EditorClassIdentifier: 
+  data:
+  - Name: CoinExplain
+    Dialogue: {fileID: 21300000, guid: 2df8230083585ce46bbddbd0e12e8017, type: 3}
+    DisplayTime: 2.7
+  - Name: GateExplain
+    Dialogue: {fileID: 21300000, guid: dbbf4743d7ea2a34e8762a2c0da7aae8, type: 3}
+    DisplayTime: 2.7
+  - Name: SuperLand
+    Dialogue: {fileID: 21300000, guid: e96d445ede2ce7642862efc82ada1a81, type: 3}
+    DisplayTime: 2.7
+  - Name: Camera
+    Dialogue: {fileID: 21300000, guid: 86f73ebc523ade94aa0a6abc8fbf0f98, type: 3}
+    DisplayTime: 2.7
+  - Name: GreenPart
+    Dialogue: {fileID: 21300000, guid: 4e099e87b8d1fcb4198618c666d91010, type: 3}
+    DisplayTime: 2.5
+  - Name: Good
+    Dialogue: {fileID: 21300000, guid: 3d238bb3aef4e79498057b1de3707887, type: 3}
+    DisplayTime: 2
+  - Name: Happy
+    Dialogue: {fileID: 21300000, guid: 29a9a3f5ad0e01e458661c34424e2b12, type: 3}
+    DisplayTime: 2

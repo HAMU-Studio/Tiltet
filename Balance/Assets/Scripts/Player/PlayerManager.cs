@@ -1,3 +1,4 @@
+using Dialogue;
 using System;
 using System.Collections;
 using Unity.Mathematics;
@@ -106,7 +107,7 @@ public class PlayerManager : MonoBehaviour
         {
             SoundManager.instance.StopPlay("Struggle");
             animator.Play("Walk_01");
-
+            _method.RunOnce(SuperLandDialogue);
             if (rescCurrentState == RescueState.OutsideMove)
             {
                 // 外側に飛ばす音
@@ -163,6 +164,12 @@ public class PlayerManager : MonoBehaviour
          
         }
         m_beforeState = rescCurrentState;
+    }
+
+    private ThrowawayMethod _method = new ThrowawayMethod();
+    private void SuperLandDialogue()
+    {
+        DisplayDialogue.dialogue.Enqueue("SuperLand");
     }
 
     public void PlayStruggle()

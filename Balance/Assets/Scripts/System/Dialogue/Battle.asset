@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: Battle
+  m_EditorClassIdentifier: 
+  data:
+  - Name: Battle01
+    Dialogue: {fileID: 21300000, guid: a623c2b9cd3af9843b3afe1b24181416, type: 3}
+    DisplayTime: 2.5
+  - Name: Battle02
+    Dialogue: {fileID: 21300000, guid: 04fe9cbcf85592a4d84bdfba2ef16949, type: 3}
+    DisplayTime: 2.5
+  - Name: AfterBattle01
+    Dialogue: {fileID: 21300000, guid: e9384bc9ef48f024989373dbda35973d, type: 3}
+    DisplayTime: 2
+  - Name: AfterBattle02
+    Dialogue: {fileID: 21300000, guid: d6c0e3d583dc0f742aee499fc527d50b, type: 3}
+    DisplayTime: 2.5
+  - Name: AfterBattle03
+    Dialogue: {fileID: 21300000, guid: 86310292664bbef418f84bf4a7c503bf, type: 3}
+    DisplayTime: 2.5

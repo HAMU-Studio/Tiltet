@@ -7,11 +7,18 @@ namespace System
     public class FindSomething : MonoBehaviour
     {
         [SerializeField] private string[] dialogueNames;
+        [SerializeField] private bool aircraft;
 
         private void Start()
         {
             isCalled = false;
             GetComponent<MeshRenderer>().enabled = false;
+            
+            // すでにセリフを表示済みなら消す
+            if (FieldItemsManager.instance.GetIsAcquired(gameObject.name) == true)
+            {
+                Destroy(gameObject);
+            }
         }
 
         private bool isCalled = false;
@@ -19,15 +26,36 @@ namespace System
         {
             if (isCalled) return;
             
-            if (other.gameObject.CompareTag("Ground"))
+            if (aircraft == true)
             {
-                isCalled = true;
-                foreach (var name in dialogueNames)
+                if (other.gameObject.CompareTag("Player"))
                 {
-                    DisplayDialogue.dialogue.EnqueueDialogue(name);
+                    GetAndDisplayDialogue();
                 }
-                Destroy(gameObject);
             }
+            else
+            {
+                if (other.gameObject.CompareTag("Ground"))
+                {
+                    GetAndDisplayDialogue();
+                }
+            }
+        }
+
+        private void GetAndDisplayDialogue()
+        {
+            isCalled = true;
+            foreach (var name in dialogueNames)
+            {
+                DisplayDialogue.dialogue.Enqueue(name);
+            }
+                
+            if (FieldItemsManager.instance.GetIsAcquired(gameObject.name) == false)
+            {
+                FieldItemsManager.instance.GetItem(gameObject.name);
+            }
+                
+            Destroy(gameObject);
         }
     }
 }
