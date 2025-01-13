@@ -52,8 +52,15 @@ public class BugRespawn : MonoBehaviour
             }
             else
             {
-                GameManager.instance.RespawnPlayer(other.gameObject);
+                Debug.Log("Call Respawn");
+                GameManager.instance.SetPlayerPos();
             }
+        }
+
+        if (other.gameObject.CompareTag("SphereEnemy") ||
+            other.gameObject.CompareTag("EllipseEnemy"))
+        {
+            Destroy(other.gameObject);
         }
    
     }

@@ -19,7 +19,9 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-
+    
+    public event Action OnInitGame;
+    
     [SerializeField] private GameState m_currentState;
     [SerializeField] private RescueState currentRescue;
 
@@ -44,41 +46,59 @@ public class GameManager : MonoBehaviour
             transform.parent = null;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+            m_beforeState = m_currentState;
         }
         else
         {
             // 他のシーン遷移した時の二重生成防ぐ
             Destroy(this.gameObject);
         }
-        InitGame();
+
+        // ここで体力初期化しないとMainStageから開始した時UIバグる
+        InitLifeAndTime();
+        
+        // デバッグ用 戦闘からでもプレイヤーが動く
+        if (CurrentState == GameState.EnemyBattle)
+            InitGame(true);
     }
-    private void InitGame()
+    /// <summary>
+    /// ゲームの初期化 セーブポイントからスタートなのか、最初からなのかによって処理を切り替え
+    /// </summary>
+    /// <param name="isContinue"> true : セーブポイントからスタート </param>
+    public void InitGame(bool isContinue)
     {
-        m_life = initialLife;
-        m_mainParts = 0;
-        m_subParts = 0;
+        InitLifeAndTime();
         isPlayerSpawn = new bool [2];
-        method = new ThrowawayMethod();
-        count = 0;
         isConnected = false;
         playerInstances = new GameObject[2];
-        _timeArray = new int[4] { 0, 0, 0, 0 };
-        isSkip = false;
-        // SavePointの初期化はどうせ上書きされるから必要
+        m_mainParts = 0;
+        m_subParts = 0;
+        count = 0;
+
+        if (isContinue == false)
+        {
+            OnInitGame?.Invoke();   // フィールドアイテムの取得状況を初期化する関数を呼び出す
+            isSkip = false;
+        }
+        // SavePointの初期化はどうせ上書きされるから必要ない
     }
 
-    public void StartGame()
+    /// <summary>
+    /// いつ初期化してもエラーが起きない変数のみ
+    /// </summary>
+    public void InitLifeAndTime()
     {
-        /*_sceneManager.FadeStart("GreenStage");
-        CurrentState = GameState.Search;*/
+        _timeArray = new int[4] { 0, 0, 0, 0 };
+        m_life = initialLife;
     }
-
-    public void Restart()
+    
+    public IEnumerator Restart()
     {
         _sceneManager.FadeStart("MainStage");
         m_currentState = GameState.Search;
         PlayerDestroy();
-        InitGame();
+        yield return new WaitForSeconds(1.7f);
+        InitGame(false);
     }
 
     /// <summary>
@@ -89,11 +109,11 @@ public class GameManager : MonoBehaviour
         if (beforeLoading)
         {
             PlayerDestroy();
-            InitGame();
-            isSkip = true;
+            InitLifeAndTime();
         }
         else
         {
+            InitGame(true);
             SetAircraftPos();
             AircraftMoveSwitch(true);
         }
@@ -126,8 +146,6 @@ public class GameManager : MonoBehaviour
        Application.Quit();
 #endif
     }
-
-    private ThrowawayMethod method = new ThrowawayMethod();
   
     private void Update()
     {
@@ -143,7 +161,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            method.RunOnce(Restart);
+            StartCoroutine(Restart());
         }
         
         if (Input.GetKeyDown(KeyCode.K))
@@ -252,8 +270,10 @@ public class GameManager : MonoBehaviour
     }
     
     
+    /// <summary>
+    /// ステートが切り替わると呼ばれる シーンのロード前
+    /// </summary>
     private GameState m_beforeState;
-    // ここで呼んでるコルーチンを
     private void OnStateChange()
     {
        // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
@@ -271,21 +291,17 @@ public class GameManager : MonoBehaviour
         {
           //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
+            
         }
         else if (m_beforeState == GameState.Search &&
                  m_currentState == GameState.GameOver) // 探索->ゲームオーバー
         {
-          //  SaveAircraftPos(m_aircraftInstance.transform.position);
+            SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
         }
-        /*
-        else if (m_beforeState != GameState.Restart ||
-                 m_currentState == GameState.Restart)
-        {
+        
+        if (m_beforeState == GameState.Search && CurrentState == GameState.Restart)
             SaveAircraftPos(m_aircraftInstance.transform.position);
-            AircraftMoveSwitch(false);            
-        }
-        */
         
         m_beforeState = m_currentState;
     }

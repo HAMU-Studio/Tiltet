@@ -100,7 +100,7 @@ public class EnemyManager : MonoBehaviour
         count3 = 0;
         noSphere = true;
         noEllipse = true;
-        once = true;
+        once = false;
         wave = Wave.WAVE1;
 
         for (int i = 0; i < waveGauge.Length; i++)
@@ -109,6 +109,7 @@ public class EnemyManager : MonoBehaviour
         }
 
         Set();
+       
     }
 
     private ThrowawayMethod medhod;
@@ -124,8 +125,15 @@ public class EnemyManager : MonoBehaviour
             start = true;
         }
 
+        if (time >= 0.5f && time <= 2f && once == false)
+        {
+            SoundManager.instance.Play("Siren");
+            once = true;
+        }
+
         if (time >= 5.0f)
         {
+            
             if (once)
             {
                 FightUI.SetActive(true);
@@ -362,7 +370,7 @@ public class EnemyManager : MonoBehaviour
         int enemySpawnPos;
 
         GameObject newEnemy = Instantiate(enemys[0]);
-
+        SoundManager.instance.Play("EnemyFly");
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
@@ -372,7 +380,7 @@ public class EnemyManager : MonoBehaviour
         int enemySpawnPos;
 
         GameObject newEnemy = Instantiate(enemys[1]);
-
+        SoundManager.instance.Play("EnemyFly");
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }

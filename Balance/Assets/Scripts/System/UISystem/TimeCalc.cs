@@ -20,18 +20,24 @@ namespace System
             timeArray = new int[4] { 0, 0, 0, 0 };
             time = 0f;
             isStopTimer = true;
+         
+        }
+
+        private void Start()
+        {
+            // GameMangerのAwakeが最優先だからここでInitializeしないとNullエラー出る
             InitializeTimer();
         }
 
         private void InitializeTimer()
         {
-            Debug.Log("InitializeTimer");
+       //     Debug.Log("InitializeTimer");
             timeArray = GameManager.instance.SetTimeArray(timeArray);
         }
 
         private void SaveCurrentTime()
         {
-            Debug.Log("SaveTimer");
+          //  Debug.Log("SaveTimer");
             GameManager.instance.SaveCurrentTime(timeArray);
         }
 

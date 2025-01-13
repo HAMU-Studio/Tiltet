@@ -50,7 +50,6 @@ public class Coin : MonoBehaviour
         if(count)
         {
             coinmanager.Count();
-            SoundManager.instance.Play("GetCoin");
             Destroy(gameObject);
         }
     }

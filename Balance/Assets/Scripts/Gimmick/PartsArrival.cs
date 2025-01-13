@@ -37,7 +37,7 @@ public class PartsArrival : MonoBehaviour
         m_leaveTime = 0.0f;
         isStay = false;
     }
-
+    
     private void Update()
     {
         CheckMove();
@@ -50,8 +50,10 @@ public class PartsArrival : MonoBehaviour
                 gauge.SetActive(true);
                 TimeGauge();
                 m_stayTime += Time.deltaTime; // 滞在時間を減少させる
+             
                 if (m_stayTime >= needStayTime)
                 {
+                    SoundManager.instance.Play("Arrival");
                     part.SetActive(true); // サブパーツを表示
                     Destroy(gameObject); // エリアを削除
                     Destroy(gauge);
@@ -101,13 +103,19 @@ public class PartsArrival : MonoBehaviour
         }
     }
 
+    private int beforeFrameTime;
     private void TimeGauge()
     {
         //double displaytext = Math.Floor(m_stayTime);
         int displaytext = (int)m_stayTime;
+        if (beforeFrameTime != displaytext)
+        {
+            SoundManager.instance.Play("Connected");
+        }
         gaugeText.text = displaytext.ToString();
 
         gauge.GetComponent<Image>().fillAmount = m_stayTime - displaytext;
+        beforeFrameTime = displaytext;
     }
 
     private void OnTriggerEnter(Collider other)

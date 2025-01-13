@@ -34,10 +34,11 @@ namespace System
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    lifeImage[i + j].sprite = truelife[j];
+                    if (i + j < GameManager.instance.Life) // 体力状況を加味
+                    {
+                        lifeImage[i + j].sprite = truelife[j];
+                    }
                 }
-
-              //  i += 3;
             }
         }
 
