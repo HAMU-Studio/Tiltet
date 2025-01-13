@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using System;
 
 public class Encount : MonoBehaviour
 { 
@@ -32,7 +33,7 @@ public class Encount : MonoBehaviour
                 return;
             
             encountmanager.Encount(fightSceneName);
-
+            SoundManager.instance.Play("Encount");
             if (cameraManager != null)
             {
                 // 現在アクティブなカメラを取得

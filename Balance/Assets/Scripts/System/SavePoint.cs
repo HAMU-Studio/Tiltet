@@ -7,7 +7,7 @@ namespace System
         [SerializeField] private GameObject savePoint;
         private void Start()
         {
-            // すでにこのアイテムを取得済みなら消す
+            // すでにこのアイテムを取得済みorエンカウント済みなら消す
             if (FieldItemsManager.instance.GetIsAcquired(gameObject.name) == true)
             {
                 Destroy(gameObject);
@@ -16,10 +16,9 @@ namespace System
         private void Save()
         {
             GameManager.instance.SaveAircraftPos(savePoint.transform.position);
-          
         }
 
-        private void GetItem()
+        private void GetItemOrEncount()
         {
             if (FieldItemsManager.instance.GetIsAcquired(gameObject.name) == false)
             {
@@ -32,7 +31,7 @@ namespace System
         private void OnTriggerEnter(Collider other)
         {
             method1.RunOnce(Save); 
-            method2.RunOnce(GetItem);
+            method2.RunOnce(GetItemOrEncount);
         }
     }
 }
