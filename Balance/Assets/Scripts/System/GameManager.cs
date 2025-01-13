@@ -152,8 +152,12 @@ public class GameManager : MonoBehaviour
     {
         if (m_beforeState != m_currentState)
         {
-            if (m_beforeState == GameState.Search || m_beforeState == GameState.EnemyBattle)
-                OnStateChange();
+            if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
+            {
+                m_beforeState = m_currentState;
+                return;
+            }
+            OnStateChange();
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -290,7 +294,10 @@ public class GameManager : MonoBehaviour
     private void OnStateChange()
     {
        // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
-       
+       if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
+       {
+           return;
+       }
         instance.PlayerLock();
        
         if (m_beforeState == GameState.EnemyBattle &&
@@ -445,7 +452,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetPlayerPos()
     {
-        if (playerInstances[0] == null)
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
         {
             return;
         }
@@ -466,7 +473,7 @@ public class GameManager : MonoBehaviour
     /// <param name="beforeLoading">シーンロード前とロード後で処理を呼び分け</param>
     public void RespawnPlayer(bool beforeLoading)
     {
-        if (playerInstances[0] == null)
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
         {
             return;
         }
@@ -491,7 +498,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLock()
     {
-        if (playerInstances[0] == null)
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
         {
             return;
         }

@@ -108,12 +108,14 @@ namespace Dialogue
         {
             DialogueData _data = GetDialogueData(name);
             if (_data == null) return;
+            
+            if (BattleDialogueCheck(name) == false)
+                return;
 
             if (_task.Count != 0)   // 他のセリフが表示待機
             {
                 if (DamageDialogueCheck(name) == false || CoinDialogueCheck(name) == false)
                     return;
-                
             }
             _task.Enqueue(_data);
         }
@@ -137,6 +139,20 @@ namespace Dialogue
         {
             if (name == "FindCoinGimmick"　|| name == "SubPartGimmick")
                 return false;
+            
+            return true;
+        }
+        
+        private bool BattleDialogueCheck(string name)
+        {
+            if (name == "Battle01"　|| name == "Battle02")
+            {
+                if (GameManager.instance.CurrentState != GameState.EnemyBattle)
+                {
+                    return false;
+                }
+            }
+               
             
             return true;
         }
