@@ -20,6 +20,12 @@ namespace System
             timeArray = new int[4] { 0, 0, 0, 0 };
             time = 0f;
             isStopTimer = true;
+         
+        }
+
+        private void Start()
+        {
+            // GameMangerのAwakeが最優先だからここでInitializeしないとNullエラー出る
             InitializeTimer();
         }
 

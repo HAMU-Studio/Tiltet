@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public class GateManager : MonoBehaviour
         if(GateNumber==clearNum)
         {
             parts.SetActive(true);
+            SoundManager.instance.Play("Arrival");
         }
 
     }

@@ -58,10 +58,12 @@ namespace System
             Debug.Log("BeforeScene = " + m_beforeSceneName);
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
-                GameManager.instance.PlayerUnLock();
-                GameManager.instance.RespawnPlayer(false);
-                GameManager.instance.SetPlayerPos();
-                Debug.Log("リスポーン");
+                if (GameManager.instance.isConnected)
+                {
+                    GameManager.instance.PlayerUnLock();
+                    GameManager.instance.RespawnPlayer(false);
+                    GameManager.instance.SetPlayerPos();
+                }
             }
             
             // 戦闘->探索
@@ -69,12 +71,7 @@ namespace System
             {
                 if ( scene.name == "MainStage")
                 {
-                    //GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.Back2Search();
-                    /*if (GameManager.instance.CurrentState == GameState.Restart)
-                    {
-                        GameManager.instance.CurrentState = GameState.Search;
-                    }*/
                 }
             }
 
@@ -82,7 +79,7 @@ namespace System
             {
                 if (scene.name == "MainStage")
                 {
-                    GameManager.instance.InitGame();
+                    GameManager.instance.InitGame(false);
                 }
             }
       

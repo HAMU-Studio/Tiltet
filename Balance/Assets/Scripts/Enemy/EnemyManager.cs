@@ -370,7 +370,7 @@ public class EnemyManager : MonoBehaviour
         int enemySpawnPos;
 
         GameObject newEnemy = Instantiate(enemys[0]);
-
+        SoundManager.instance.Play("EnemyFly");
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
@@ -380,7 +380,7 @@ public class EnemyManager : MonoBehaviour
         int enemySpawnPos;
 
         GameObject newEnemy = Instantiate(enemys[1]);
-
+        SoundManager.instance.Play("EnemyFly");
         enemySpawnPos = Random.Range(0, enemySpawnPoints.Length);
         newEnemy.transform.position = enemySpawnPoints[enemySpawnPos].transform.position;
     }
