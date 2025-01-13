@@ -64,9 +64,13 @@ namespace System
                     GameManager.instance.PlayerUnLock();
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
+
+                    StartCoroutine(DisplayDialogue.dialogue.DelayEnqueue("Battle01", 4.5f));
+                    StartCoroutine(DisplayDialogue.dialogue.DelayEnqueue("Battle02", 4.5f));
                 }
             }
-            
+
+      
             // 戦闘->探索
             if (m_beforeSceneName == "Fight" || m_beforeSceneName == "VolcanoFight" || m_beforeSceneName == "SnowFight")
             {
@@ -75,7 +79,7 @@ namespace System
                     GameManager.instance.Back2Search();
                     for (int i = 1; i < 4; i++)
                     {
-                        DisplayDialogue.dialogue.Enqueue($"AfterBattle0{i}");
+                       StartCoroutine(DisplayDialogue.dialogue.DelayEnqueue($"AfterBattle0{i}", 1f));
                     }
                 }
             }

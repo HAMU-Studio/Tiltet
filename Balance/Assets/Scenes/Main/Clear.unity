@@ -658,7 +658,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c78cbd1a0ddc34f8433914903efafe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseImage: {fileID: 0}
   titleScene: Start
+  firstPlayerImage: {fileID: 0}
+  secondPlayerImage: {fileID: 0}
+  questionImage: {fileID: 0}
 --- !u!1 &1076461360
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,7 +680,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1076461361
 RectTransform:
   m_ObjectHideFlags: 0
@@ -918,7 +922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1258984167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1055,7 +1059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1305063181
 RectTransform:
   m_ObjectHideFlags: 0

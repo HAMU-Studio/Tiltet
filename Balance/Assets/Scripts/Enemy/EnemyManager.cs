@@ -206,8 +206,7 @@ public class EnemyManager : MonoBehaviour
                                 {
                                     if (noSphere && noEllipse)
                                     {
-                                        GameManager.instance.SceneManager.FadeStart("MainStage");
-                                        GameManager.instance.CurrentState = GameState.Search;
+                                        StartCoroutine(GameManager.instance.FightClear());
                                     }
                                 }
                                 else

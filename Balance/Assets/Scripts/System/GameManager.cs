@@ -96,7 +96,8 @@ public class GameManager : MonoBehaviour
     {
         _sceneManager.FadeStart("MainStage");
         m_currentState = GameState.Search;
-        PlayerDestroy();
+        if (m_beforeState != GameState.StartMenu)
+         PlayerDestroy();
         yield return new WaitForSeconds(1.7f);
         InitGame(false);
     }
@@ -151,6 +152,11 @@ public class GameManager : MonoBehaviour
     {
         if (m_beforeState != m_currentState)
         {
+            if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
+            {
+                m_beforeState = m_currentState;
+                return;
+            }
             OnStateChange();
         }
 
@@ -166,8 +172,7 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.K))
         {
-            _sceneManager.FadeStart("MainStage");
-            instance.CurrentState = GameState.Search;
+            StartCoroutine(instance.FightClear());
         }
         
         if (Input.GetKeyDown(KeyCode.G))
@@ -222,15 +227,27 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator GameClear()
     {
-        DisplayDialogue.system.Enqueue("Finish");
+        CurrentState = GameState.Clear;
+        DisplayDialogue.system.Enqueue("Clear");
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
         _sceneManager.FadeStart("Clear");
-        CurrentState = GameState.Clear;
+       
         yield return new WaitForSeconds(1.5f);
         PlayerDestroy();
+        InitGame(false);
         yield return null;
+    }
+
+    public IEnumerator FightClear()
+    {
+        DisplayDialogue.system.Enqueue("Clear");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
+        instance.SceneManager.FadeStart("MainStage");
+        instance.CurrentState = GameState.Search;
     }
 
     public void Back2StartMenu()
@@ -277,7 +294,10 @@ public class GameManager : MonoBehaviour
     private void OnStateChange()
     {
        // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
-       
+       if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
+       {
+           return;
+       }
         instance.PlayerLock();
        
         if (m_beforeState == GameState.EnemyBattle &&
@@ -432,6 +452,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetPlayerPos()
     {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
         foreach (GameObject player in playerInstances)
         {
             if (player == null)
@@ -449,6 +473,10 @@ public class GameManager : MonoBehaviour
     /// <param name="beforeLoading">シーンロード前とロード後で処理を呼び分け</param>
     public void RespawnPlayer(bool beforeLoading)
     {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
         foreach (GameObject player in playerInstances)
         {
             if (player == null)
@@ -470,6 +498,10 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLock()
     {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
         foreach (GameObject player in playerInstances)
         {
             if (player == null)

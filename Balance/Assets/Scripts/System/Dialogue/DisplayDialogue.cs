@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 namespace Dialogue
@@ -106,12 +108,14 @@ namespace Dialogue
         {
             DialogueData _data = GetDialogueData(name);
             if (_data == null) return;
+            
+            if (BattleDialogueCheck(name) == false)
+                return;
 
             if (_task.Count != 0)   // 他のセリフが表示待機
             {
                 if (DamageDialogueCheck(name) == false || CoinDialogueCheck(name) == false)
                     return;
-                
             }
             _task.Enqueue(_data);
         }
@@ -138,6 +142,20 @@ namespace Dialogue
             
             return true;
         }
+        
+        private bool BattleDialogueCheck(string name)
+        {
+            if (name == "Battle01"　|| name == "Battle02")
+            {
+                if (GameManager.instance.CurrentState != GameState.EnemyBattle)
+                {
+                    return false;
+                }
+            }
+               
+            
+            return true;
+        }
 
         private DialogueData GetDialogueData(string name)
         {
@@ -150,6 +168,14 @@ namespace Dialogue
                 Debug.Log("Failed to get data");
                 return null;
             }
+        }
+
+        public IEnumerator DelayEnqueue(string name, float delayTime)
+        {
+            Debug.Log("Call delayEnqueue");
+            yield return new WaitForSeconds(delayTime);
+            Enqueue(name);
+            yield return null;
         }
     }
 }
