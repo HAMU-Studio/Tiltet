@@ -6,7 +6,7 @@ namespace System
     {
         public GameObject[] fieldItems;
 
-        private void Awake()
+        private void Start()
         {
             if (GameManager.instance != null)
                 GameManager.instance.OnInitGame += Init;

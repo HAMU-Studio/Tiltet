@@ -1,6 +1,7 @@
 ﻿using FadeSystem;
 using System;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Test
 {
@@ -32,8 +33,15 @@ namespace Test
                 }
 
             }
-            
-            if (Input.GetKey(KeyCode.Q))
+
+            OnFinishVideo();
+
+        }
+
+       [SerializeField] private VideoPlayer m_videoPlayer;
+        private void OnFinishVideo()
+        {
+            if (m_videoPlayer.isPaused == true)
             {
                 if (!once)
                 {
@@ -42,7 +50,7 @@ namespace Test
                     once = true;
                 }
             }
-
+                
         }
     }
 }
