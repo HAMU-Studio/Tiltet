@@ -16,6 +16,7 @@ public class ChangeScene : MonoBehaviour
     public void ToOpening()
     {
         GameManager.instance.SceneManager.FadeStart();
+        GameManager.instance.CurrentState = GameState.None;
         SoundManager.instance.Play("CursorDecision");
     }
     

@@ -152,11 +152,6 @@ public class GameManager : MonoBehaviour
     {
         if (m_beforeState != m_currentState)
         {
-            if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
-            {
-                m_beforeState = m_currentState;
-                return;
-            }
             OnStateChange();
         }
 
@@ -296,8 +291,10 @@ public class GameManager : MonoBehaviour
        // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
        if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
        {
+           m_beforeState = m_currentState;
            return;
        }
+       
         instance.PlayerLock();
        
         if (m_beforeState == GameState.EnemyBattle &&
