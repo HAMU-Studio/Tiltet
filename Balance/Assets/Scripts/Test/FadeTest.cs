@@ -1,5 +1,6 @@
 ﻿using FadeSystem;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -18,6 +19,7 @@ namespace Test
         private void Start() 
         {
             once = false;
+            StartCoroutine(DelayStartOpning());
         }
 
         private void Update()
@@ -36,6 +38,13 @@ namespace Test
 
             OnFinishVideo();
 
+        }
+
+        private IEnumerator DelayStartOpning()
+        {
+            m_videoPlayer.Prepare();
+            yield return new WaitForSeconds(0.8f);
+            m_videoPlayer.Play();
         }
 
        [SerializeField] private VideoPlayer m_videoPlayer;
