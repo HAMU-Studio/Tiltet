@@ -14,7 +14,7 @@ public class EncountAnimation : MonoBehaviour
     private int waitTime;
     private bool reflected;
 
-    // Start is called before the first frame update
+  
     void Start()
     {
         time = 0f;
@@ -24,12 +24,13 @@ public class EncountAnimation : MonoBehaviour
         reflected = false;
     }
 
-    // Update is called once per frame
+    private ThrowawayMethod m_method = new ThrowawayMethod();
     void Update()
     {
         if (time >= waitTime)
         {
             Destroy(gameObject);
+            m_method.RunOnce(GameManager.instance.PlayerUnLock); 
             //anim.SetBool("AbleMove", true);
         }
         else
