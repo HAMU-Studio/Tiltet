@@ -1,4 +1,5 @@
 ﻿using Dialogue;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,10 +62,14 @@ namespace System
             {
                 if (GameManager.instance.isConnected)
                 {
-                    GameManager.instance.PlayerUnLock();
+                  //  GameManager.instance.PlayerUnLock(); プレイヤーのアンロックは開始アニメーション流し終わってから
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
-
+                    if (scene.name == "Fight")
+                    {
+                        // エンカウントアニメーション再生中は動けないように
+                        StartCoroutine(DelayLock());
+                    }
                     StartCoroutine(DisplayDialogue.dialogue.DelayEnqueue("Battle01", 4.5f));
                     StartCoroutine(DisplayDialogue.dialogue.DelayEnqueue("Battle02", 4.5f));
                 }
@@ -106,6 +111,16 @@ namespace System
         private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
         {
             Debug.Log($"アクティブシーンが変更されました : {oldScene.name} -> {newScene.name}");
+        }
+
+        /// <summary>
+        /// jointManagerで時間差でロック解除されちゃうから、ロック自体に遅延をかけて解決
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator DelayLock()
+        {
+            yield return new WaitForSeconds(0.2f);
+            GameManager.instance.PlayerLock();
         }
     }
 }

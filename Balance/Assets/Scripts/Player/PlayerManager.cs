@@ -1,4 +1,5 @@
 using Dialogue;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using Unity.Mathematics;
@@ -59,6 +60,7 @@ public class PlayerManager : MonoBehaviour
         GameManager.instance.SavePlayerInstance(gameObject);
 
         m_RB = GetComponent<Rigidbody>();
+        _playerController = GetComponent<PlayerController>();
 
         if (GameManager.instance.isConnected == false && GameManager.instance.CurrentState == GameState.Search)
         {
@@ -223,7 +225,7 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        _playerController = GetComponent<PlayerController>();
+        
         _playerController.enabled = false;
         GameManager.instance.IsRescue = false;
         rescState = RescueState.None;
@@ -244,13 +246,18 @@ public class PlayerManager : MonoBehaviour
 
     public void LockPos()
     {
+        _playerController.ForceStop();
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.isKinematic = true;
-      //  Debug.Log("call Lock");
+        Debug.Log("call Lock");
         //GameManager.instance.ResetRBVelocity(m_RB);
     }
  
-    public void UnLockPos() => m_RB.isKinematic = false;
+    public void UnLockPos()
+    {
+        m_RB.isKinematic = false; 
+        Debug.Log("Call UnLock");
+    } 
     
     public bool IsLockPos() => m_RB.isKinematic;
 }

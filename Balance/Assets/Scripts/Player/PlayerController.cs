@@ -593,7 +593,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private const float controlPower = 0.1f;
-    void MoveCalc()
+    private void MoveCalc()
     {
 
         //プレイヤーの正面を基準に移動方向を決めるとぐるぐる回り続ける
@@ -695,6 +695,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void ForceStop()
+    {
+        m_inputMove = Vector2.zero;
     }
 
     private bool is1P;
