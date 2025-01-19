@@ -41,7 +41,9 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private int finalWave = 6;
 
     [Header("フェーズ表示用テキスト")]
-    [SerializeField] TextMeshProUGUI phasesText;
+    [SerializeField] Image waveText;
+    [Header("スプライト格納配列")]
+    [SerializeField] Sprite[] waveSprite;
 
     [Header("戦闘UI")]
     [SerializeField] private GameObject FightUI;
@@ -90,26 +92,10 @@ public class EnemyManager : MonoBehaviour
     private bool noEllipse;
     private bool once;
 
-    private 
-
     // Start is called before the first frame update
     void Start()
     {
-        count1 = 0;
-        count2 = 0;
-        count3 = 0;
-        noSphere = true;
-        noEllipse = true;
-        once = false;
-        wave = Wave.WAVE1;
-
-        for (int i = 0; i < waveGauge.Length; i++)
-        {
-            waveGauge[i] = waveGauge[i].GetComponent<Slider>();
-        }
-
         Set();
-       
     }
 
     private ThrowawayMethod medhod;
@@ -165,7 +151,7 @@ public class EnemyManager : MonoBehaviour
                         switch (wave)
                         {
                             case Wave.WAVE1:
-                                phasesText.text = "FirstWave";
+                                waveText.sprite = waveSprite[0];
                                 if (count1 >= firstWave)
                                 {
                                     if (noSphere && noEllipse)
@@ -183,7 +169,7 @@ public class EnemyManager : MonoBehaviour
                                 }
                                 break;
                             case Wave.WAVE2:
-                                phasesText.text = "SecondWave";
+                                waveText.sprite = waveSprite[1]; ;
                                 if (count2 >= secondWave)
                                 {
                                     if (noSphere && noEllipse)
@@ -201,7 +187,7 @@ public class EnemyManager : MonoBehaviour
                                 }
                                 break;
                             case Wave.WAVE3:
-                                phasesText.text = "LastWave";
+                                waveText.sprite = waveSprite[2];
                                 if (count3 >= finalWave)
                                 {
                                     if (noSphere && noEllipse)
@@ -250,6 +236,8 @@ public class EnemyManager : MonoBehaviour
 
     private void Set()
     {
+        FightUI.SetActive(false);
+
         start = false;
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
@@ -270,6 +258,19 @@ public class EnemyManager : MonoBehaviour
         maxPos = new Vector3(stagePos.x + 7.0f,
                              stagePos.y + 2.05f,
                              stagePos.z + 6.0f);
+
+        count1 = 0;
+        count2 = 0;
+        count3 = 0;
+        noSphere = true;
+        noEllipse = true;
+        once = false;
+        wave = Wave.WAVE1;
+
+        for (int i = 0; i < waveGauge.Length; i++)
+        {
+            waveGauge[i] = waveGauge[i].GetComponent<Slider>();
+        }
     }
 
     private void EnemySpawn()
