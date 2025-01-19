@@ -14,7 +14,7 @@ public class SubPartsUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ten.SetActive(false);
     }
 
     // Update is called once per frame
@@ -25,6 +25,7 @@ public class SubPartsUI : MonoBehaviour
         if (subparts == 10)
         {
             ten.SetActive(true);
+            number.sprite = numbers[0];
         }
         else
         {
