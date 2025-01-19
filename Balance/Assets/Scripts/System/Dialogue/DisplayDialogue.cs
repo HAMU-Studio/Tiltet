@@ -19,6 +19,8 @@ namespace Dialogue
         private Dictionary<string, DialogueData> dataDictionary = new();
 
         [SerializeField] private Image image;
+
+        [SerializeField] private Animator dialogueAnim;
         
         private void Awake()
         {
@@ -60,6 +62,7 @@ namespace Dialogue
                  _data = _task.Dequeue();
                 Display(_data.Dialogue);
                 isShowing = true;
+                dialogueAnim.SetBool("Open", true);
             }
             
             
@@ -69,6 +72,7 @@ namespace Dialogue
 
                 if (elapsedTime > _data.DisplayTime / 2f)
                 {
+                    dialogueAnim.SetBool("Open", false);
                     // 表示時間の半分でしゃべり停止
                     SoundManager.instance.StopPlay("Speak");
                 }
@@ -78,6 +82,7 @@ namespace Dialogue
                     CheckHide();
                     isShowing = false;
                     elapsedTime = 0f;
+                    //dialogueAnim.SetBool("Open", false);
                 }
             }
         }
@@ -85,7 +90,11 @@ namespace Dialogue
         private void Display(Sprite dialogue)
         {
             image.sprite = dialogue;
-            if (!image.enabled) image.enabled = true;
+            if (!image.enabled)
+            {
+                dialogueAnim.SetBool("Open", true);
+                image.enabled = true;
+            }
             
             if (isDialogue)
              SoundManager.instance.Play("Speak");   // しゃべるのはセリフの時だけ
