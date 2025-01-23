@@ -9,7 +9,7 @@ public class SubPartsUI : MonoBehaviour
     [SerializeField] private GameObject ten;
     [SerializeField] private Sprite[] numbers;
 
-    private int subparts;
+    private int subParts;
 
     // Start is called before the first frame update
     void Start()
@@ -20,17 +20,17 @@ public class SubPartsUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        subparts = GameManager.instance.GetSubPartsNum();
+        subParts = GameManager.instance.GetSubPartsNum();
 
-        if (subparts == 10)
+        if (subParts == 10)
         {
             ten.SetActive(true);
             number.sprite = numbers[0];
         }
         else
         {
-            number.sprite = numbers[subparts];
+            number.sprite = numbers[subParts];
+            Debug.Log("SubPartsNum = " + GameManager.instance.GetSubPartsNum());
         }
-
     }
 }

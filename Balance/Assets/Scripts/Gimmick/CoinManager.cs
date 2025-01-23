@@ -41,7 +41,7 @@ public class CoinManager : MonoBehaviour
     public void Count()
     {
         countCoin++;
-        if (countCoin < coins.Length)
+        if (countCoin <= coins.Length)
         {
             CoinSpawn();
             if (countCoin > 1)
@@ -64,12 +64,12 @@ public class CoinManager : MonoBehaviour
     private void CoinSpawn()
     {
         GameObject newCoin = Instantiate(coin);
-        newCoin.transform.position = coins[countCoin].transform.position;
+        newCoin.transform.position = coins[countCoin - 1].transform.position;
     }
 
     private void InstanceParts()
     {
-        if (countCoin >= coins.Length && parts.activeSelf == false)
+        if (countCoin > coins.Length && parts.activeSelf == false)
         {
             parts.SetActive(true);
             SoundManager.instance.Play("Arrival");

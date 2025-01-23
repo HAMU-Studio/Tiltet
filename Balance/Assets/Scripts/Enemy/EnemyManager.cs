@@ -91,6 +91,7 @@ public class EnemyManager : MonoBehaviour
     private bool noSphere;
     private bool noEllipse;
     private bool once;
+    private bool isClear;
 
     // Start is called before the first frame update
     void Start()
@@ -190,9 +191,10 @@ public class EnemyManager : MonoBehaviour
                                 waveText.sprite = waveSprite[2];
                                 if (count3 >= finalWave)
                                 {
-                                    if (noSphere && noEllipse)
+                                    if (noSphere && noEllipse && !isClear)
                                     {
                                         StartCoroutine(GameManager.instance.FightClear());
+                                        isClear = true;
                                     }
                                 }
                                 else

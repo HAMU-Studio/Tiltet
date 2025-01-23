@@ -21,6 +21,7 @@ namespace Dialogue
         [SerializeField] private Image image;
 
         [SerializeField] private Animator dialogueAnim;
+        [SerializeField] private bool SystemMessage;
         
         private void Awake()
         {
@@ -62,7 +63,7 @@ namespace Dialogue
                  _data = _task.Dequeue();
                 Display(_data.Dialogue);
                 isShowing = true;
-                dialogueAnim.SetBool("Open", true);
+              //  dialogueAnim.SetBool("Open", true);
             }
             
             
@@ -72,7 +73,6 @@ namespace Dialogue
 
                 if (elapsedTime > _data.DisplayTime / 2f)
                 {
-                    dialogueAnim.SetBool("Open", false);
                     // 表示時間の半分でしゃべり停止
                     SoundManager.instance.StopPlay("Speak");
                 }
@@ -92,13 +92,18 @@ namespace Dialogue
             image.sprite = dialogue;
             if (!image.enabled)
             {
-                dialogueAnim.SetBool("Open", true);
+                if (!SystemMessage)
+                {
+                    dialogueAnim.SetBool("Open", true);
+                    SoundManager.instance.DelayPlay("Speak", 0.4f);   // アニメーションに合わせてセリフのサウンドも遅延かける
+                }
+                
                 image.enabled = true;
             }
-            
-            if (isDialogue)
-             SoundManager.instance.Play("Speak");   // しゃべるのはセリフの時だけ
-        
+            else if (isDialogue)
+            {
+                SoundManager.instance.Play("Speak");   // しゃべるのはセリフの時だけ
+            }
         }
 
         private void CheckHide()
@@ -108,9 +113,15 @@ namespace Dialogue
             
             // 一連のセリフ表示の最後ならimageの表示off
             if (_task.Count == 0)
-             image.enabled = false;
-          
-           　// image.sprite = null;
+            {
+                if (!SystemMessage)
+                 dialogueAnim.SetBool("Open", false);
+                
+                StartCoroutine(DelayHide());
+            }
+                
+
+            // image.sprite = null;
         }
         
         public void Enqueue(string name)
@@ -185,6 +196,12 @@ namespace Dialogue
             yield return new WaitForSeconds(delayTime);
             Enqueue(name);
             yield return null;
+        }
+
+        private IEnumerator DelayHide()
+        {
+            yield return new WaitForSeconds(0.8f);
+            image.enabled = false;
         }
     }
 }

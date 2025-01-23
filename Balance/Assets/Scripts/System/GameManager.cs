@@ -124,7 +124,12 @@ public class GameManager : MonoBehaviour
     public bool isSkip
     {
         get { return skipStartDialogue; }
-        set { skipStartDialogue = value; }
+        set
+        {
+           
+            skipStartDialogue = value;
+            Debug.Log("isSkip = " + GameManager.instance.isSkip);
+        }
     }
     
     private void PlayerDestroy()

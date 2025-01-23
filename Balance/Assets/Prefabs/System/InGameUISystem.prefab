@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9e407c8f7544d9bf00e87b2b36bd65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDialogue: 0
   dialogueDatas:
   - {fileID: 0}
   image: {fileID: 0}
+  dialogueAnim: {fileID: 0}
+  SystemMessage: 1
 --- !u!1 &4889702901943937170
 GameObject:
   m_ObjectHideFlags: 0

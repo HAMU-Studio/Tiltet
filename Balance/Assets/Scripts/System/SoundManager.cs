@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using System;
+using System.Collections;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
 
@@ -251,6 +252,21 @@ namespace System
                     audioSource.Stop();
                 }
             }
+        }
+
+        
+        /// <summary>
+        /// 普通の関数を作って外部から呼び出しをしやすく
+        /// </summary>
+        public void DelayPlay(string name, float DelayTime)
+        {
+            StartCoroutine(DelayPlayProcess(name, DelayTime));
+        }
+        private IEnumerator DelayPlayProcess(string name, float DelayTime)
+        {
+            // 遅延かけて再生
+            yield return new WaitForSeconds(DelayTime);
+            Play(name);
         }
     }
 }

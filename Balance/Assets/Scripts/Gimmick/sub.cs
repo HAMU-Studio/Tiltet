@@ -16,14 +16,16 @@ public class sub : MonoBehaviour
     {
         
     }
-    
+
+    private bool once;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") && once == false)
         {
             GameManager.instance.AddSubPartsNum();
             SoundManager.instance.Play("GetSubPart");
             Destroy(gameObject);
+            once = true;
         }
     }
 }

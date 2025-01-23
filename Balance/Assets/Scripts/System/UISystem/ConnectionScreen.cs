@@ -128,6 +128,12 @@ public class ConnectionScreen : MonoBehaviour
             StartDialogue();
         }
 
+        if (GameManager.instance.isSkip == false)
+        {
+            GameManager.instance.isSkip = true;
+            Debug.Log("isSkip = " + GameManager.instance.isSkip);
+        }
+            
         yield return null;
     }
 
