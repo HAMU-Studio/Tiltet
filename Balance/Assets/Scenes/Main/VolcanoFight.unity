@@ -18597,6 +18597,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1563923829 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1625948904355648593, guid: eb3b2626e36b88847b38bc6132618ad6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1563923826}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1568265800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19048,6 +19054,11 @@ PrefabInstance:
       propertyPath: m_currentState
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2860282044426847650, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2879315827955468967, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_Enabled
@@ -19148,6 +19159,11 @@ PrefabInstance:
       propertyPath: image
       value: 
       objectReference: {fileID: 1563923828}
+    - target: {fileID: 6718063636726860262, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: dialogueAnim
+      value: 
+      objectReference: {fileID: 1563923829}
     - target: {fileID: 7002411443313462220, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive

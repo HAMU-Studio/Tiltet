@@ -1788,6 +1788,11 @@ PrefabInstance:
       propertyPath: m_nextState
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2860282044426847650, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2879315829045423266, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_RootOrder
@@ -2151,6 +2156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 0}
   option: {fileID: 0}
+  question: {fileID: 0}
+  fadeImage: {fileID: 0}
 --- !u!4 &1837891838
 Transform:
   m_ObjectHideFlags: 0

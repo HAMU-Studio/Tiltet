@@ -64,7 +64,7 @@ public class CoinManager : MonoBehaviour
     private void CoinSpawn()
     {
         GameObject newCoin = Instantiate(coin);
-        newCoin.transform.position = coins[countCoin].transform.position;
+        newCoin.transform.position = coins[countCoin - 1].transform.position;
     }
 
     private void InstanceParts()

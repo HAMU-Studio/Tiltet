@@ -23,6 +23,8 @@ public class Encount : MonoBehaviour
         {
             Debug.LogError("CameraManagerがシーンに見つかりません。");
         }
+
+        GetComponent<Collider>().isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)
