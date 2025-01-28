@@ -15,21 +15,22 @@ public class EncountManager : MonoBehaviour
  
     void Update()
     {
-       if (isEncount)
+       /*if (isEncount)
        {
            _transition.FadeStart();
-           GameManager.instance.NextState = GameState.EnemyBattle;
-       }
+           GameManager.instance.CurrentState = GameState.EnemyBattle;
+       }*/
 
        if (Input.GetKeyDown(KeyCode.E))
        {
-           Encount();
+          // Encount();
        }
     }
 
-    void Encount()
+    public void Encount(string sceneName)
     {
-        _transition.FadeStart("Fight");
-        GameManager.instance.NextState = GameState.EnemyBattle;
+        _transition.FadeStart(sceneName);
+        GameManager.instance.CurrentState = GameState.EnemyBattle;
+        isEncount = true;
     }
 }

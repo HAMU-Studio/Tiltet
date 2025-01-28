@@ -771,10 +771,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1479778025}
+    m_SelectOnDown: {fileID: 1447783019}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -935,6 +935,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 231369550}
     m_Modifications:
+    - target: {fileID: 4952703685579114285, guid: c7964c97ebd5c4c449c4b4021373fa88,
+        type: 3}
+      propertyPath: firstFadeInComp
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4952703685579114286, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1044,6 +1049,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FadeImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952703685579114287, guid: c7964c97ebd5c4c449c4b4021373fa88,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7964c97ebd5c4c449c4b4021373fa88, type: 3}
@@ -1530,9 +1540,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 589153419}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -1665,10 +1675,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 589153419}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -1778,6 +1788,11 @@ PrefabInstance:
       propertyPath: m_nextState
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2860282044426847650, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2879315829045423266, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_RootOrder
@@ -1843,6 +1858,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2879315829225732433, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 1479778023}
     - target: {fileID: 2879315829299410737, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive
@@ -1873,12 +1893,28 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6124964549295651373, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7002411443313462220, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7918381100083697753, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8191710121022440214, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6332224790708523968, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32, type: 3}
 --- !u!1 &1590732614
 GameObject:
@@ -2118,6 +2154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b5a0d8b76d4ca46aa4e2d96568bb05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  title: {fileID: 0}
+  option: {fileID: 0}
+  question: {fileID: 0}
+  fadeImage: {fileID: 0}
 --- !u!4 &1837891838
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,8 @@
-﻿using FadeSystem;
+﻿using Dialogue;
+using FadeSystem;
 using System;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using System.Collections;
-using UnityEngine.Rendering;
+using UnityEngine;
 
 public enum GameState
 {
@@ -15,22 +13,23 @@ public enum GameState
    EnemyBattle,
    //Pose,
    Clear,
+   Restart,
    GameOver,
 }
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-
-    [FormerlySerializedAs("currentGamestate")] [SerializeField] private GameState m_nextState;
+    
+    public event Action OnInitGame;
+    
+    [SerializeField] private GameState m_currentState;
     [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
-    [SerializeField] private int initialWave = default!;
 
     private bool connectFlag = false;
   
     private int m_life;
-   // private int m_wave;
     private int m_mainParts;
     private int m_subParts;
 
@@ -44,63 +43,95 @@ public class GameManager : MonoBehaviour
 
         if (instance == null)
         {
-            gameObject.transform.parent = null;
+            transform.parent = null;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+            m_beforeState = m_currentState;
         }
         else
         {
-            Debug.LogError("GameManager is already exists");
+            // 他のシーン遷移した時の二重生成防ぐ
             Destroy(this.gameObject);
         }
-        InitGame();
+
+        // ここで体力初期化しないとMainStageから開始した時UIバグる
+        InitLifeAndTime();
+        
+        // デバッグ用 戦闘からでもプレイヤーが動く
+        if (CurrentState == GameState.EnemyBattle)
+            InitGame(true);
     }
-    private void InitGame()
+    /// <summary>
+    /// ゲームの初期化 セーブポイントからスタートなのか、最初からなのかによって処理を切り替え
+    /// </summary>
+    /// <param name="isContinue"> true : セーブポイントからスタート </param>
+    public void InitGame(bool isContinue)
     {
-        m_life = initialLife;
-        m_mainParts = 0;
-        m_subParts = 0;
+        InitLifeAndTime();
         isPlayerSpawn = new bool [2];
-        method = new ThrowawayMethod();
-        count = 0;
         isConnected = false;
         playerInstances = new GameObject[2];
-        // SavePointの初期化はどうせ上書きされるから必要
+        count = 0;
+
+        if (isContinue == false)
+        {
+            m_mainParts = 0;
+            m_subParts = 0;
+            OnInitGame?.Invoke();   // フィールドアイテムの取得状況を初期化する関数を呼び出す
+            isSkip = false;
+        }
+        // SavePointの初期化はどうせ上書きされるから必要ない
     }
 
-    public void StartGame()
+    /// <summary>
+    /// いつ初期化してもエラーが起きない変数のみ
+    /// </summary>
+    public void InitLifeAndTime()
     {
-        _sceneManager.FadeStart("GreenStage");
-        NextState = GameState.Search;
+        _timeArray = new int[4] { 0, 0, 0, 0 };
+        m_life = initialLife;
     }
-
-    public void Restart()
+    
+    public IEnumerator Restart()
     {
-        _sceneManager.FadeStart("GreenStage");
-        m_nextState = GameState.Search;
-        PlayerDestroy();
-        InitGame();
+        _sceneManager.FadeStart("MainStage");
+        m_currentState = GameState.Search;
+        if (m_beforeState != GameState.StartMenu)
+         PlayerDestroy();
+        yield return new WaitForSeconds(1.7f);
+        InitGame(false);
     }
 
     /// <summary>
     /// セーブポイントから再スタート GameManagerは基本ボタンから呼び出せなさそう
     /// </summary>
-    public void RestartAtSavePoint()
+    public void RestartAtSavePoint(bool beforeLoading)
     {
-       instance.StartCoroutine(RestartCorutine());
+        if (beforeLoading)
+        {
+            PlayerDestroy();
+            InitLifeAndTime();
+        }
+        else
+        {
+            InitGame(true);
+            SetAircraftPos();
+            AircraftMoveSwitch(true);
+        }
     }
 
-    private IEnumerator RestartCorutine()
+    private bool skipStartDialogue;
+    public bool isSkip
     {
-        _sceneManager.FadeStart("GreenStage");
-        m_nextState = GameState.Search;
-        PlayerDestroy();
-        InitGame();
-        yield return new WaitForSeconds(1.7f);
-        SetAircraftPos();
-        AircraftMoveSwitch(true);
+        get { return skipStartDialogue; }
+        set
+        {
+           
+            skipStartDialogue = value;
+            Debug.Log("isSkip = " + GameManager.instance.isSkip);
+        }
     }
-
+    
     private void PlayerDestroy()
     {
         foreach (var player in playerInstances)
@@ -121,30 +152,51 @@ public class GameManager : MonoBehaviour
        Application.Quit();
 #endif
     }
-
-    private ThrowawayMethod method = new ThrowawayMethod();
   
     private void Update()
     {
-        if (m_cuurentState != m_nextState)
+        if (m_beforeState != m_currentState)
         {
             OnStateChange();
         }
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            method.RunOnce(GameClear); 
+            StartCoroutine(GameClear());
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            method.RunOnce(Restart);
+            StartCoroutine(Restart());
+        }
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            StartCoroutine(instance.FightClear());
         }
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.FadeStart("GreenStage");
-            instance.NextState = GameState.Search;
+            _sceneManager.FadeStart("MainStage");
+            instance.CurrentState = GameState.Restart;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            _sceneManager.FadeStart("Fight");
+            instance.CurrentState = GameState.EnemyBattle;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            _sceneManager.FadeStart("SnowFight");
+            instance.CurrentState = GameState.EnemyBattle;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            _sceneManager.FadeStart("VolcanoFight");
+            instance.CurrentState = GameState.EnemyBattle;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -152,53 +204,78 @@ public class GameManager : MonoBehaviour
             EndGame();
         }
         
-        if (m_mainParts >= 1)
+        if (m_mainParts >= 3)
         {
-            if (NextState != GameState.Clear)
+            if (CurrentState != GameState.Clear)
             {
-                GameClear();
+                StartCoroutine(GameClear());
             }
         }
     }
    
-    public void GameOver()
+    public IEnumerator GameOver()
     {
+        DisplayDialogue.system.Enqueue("Finish");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("GameOver");
-        NextState = GameState.GameOver;
+        CurrentState = GameState.GameOver;
+        
+        yield return null;
     }
 
-    public void GameClear()
+    public IEnumerator GameClear()
     {
+        CurrentState = GameState.Clear;
+        DisplayDialogue.system.Enqueue("Clear");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
         _sceneManager.FadeStart("Clear");
-        NextState = GameState.Clear;
+       
+        yield return new WaitForSeconds(1.5f);
         PlayerDestroy();
+        InitGame(false);
+        yield return null;
+    }
+
+    public IEnumerator FightClear()
+    {
+        DisplayDialogue.system.Enqueue("Clear");
+        SoundManager.instance.Play("Finish");
+        yield return new WaitForSeconds(1.5f);
+        
+        instance.SceneManager.FadeStart("MainStage");
+        instance.CurrentState = GameState.Search;
     }
 
     public void Back2StartMenu()
     {
         _sceneManager.FadeStart("Start");
-        NextState = GameState.StartMenu;
+        CurrentState = GameState.StartMenu;
         
         //ゲーム中から戻った時のためにプレイヤーいたら消す
         PlayerDestroy();
     }
 
     private FadeAndSceneTransition _sceneManager;
-    public void SetSceneManager(FadeAndSceneTransition sceneManager)
+    public FadeAndSceneTransition SceneManager
     {
-        _sceneManager = sceneManager;
-    }
-
-    public GameState NextState
-    {
-        set { m_nextState = value; }
-        get { return m_nextState; }
+        set { _sceneManager = value; }
+        get { return _sceneManager; }
     }
 
     public GameState CurrentState
     {
-        set { m_cuurentState = value; }
-        get { return m_cuurentState; }
+        set { m_currentState = value; }
+        get { return m_currentState; }
+    }
+
+    public GameState BeforeState
+    {
+        set { m_beforeState = value; }
+        get { return m_beforeState; }
     }
     
 
@@ -210,39 +287,50 @@ public class GameManager : MonoBehaviour
     }
     
     
-    private GameState m_cuurentState;
+    /// <summary>
+    /// ステートが切り替わると呼ばれる シーンのロード前
+    /// </summary>
+    private GameState m_beforeState;
     private void OnStateChange()
     {
-      //  Debug.Log("stateChange " + m_cuurentState + " to " + m_nextState);
-        if (m_cuurentState == GameState.EnemyBattle &&
-            m_nextState == GameState.Search)   // 戦闘->探索
+       // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
+       if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
+       {
+           m_beforeState = m_currentState;
+           return;
+       }
+       
+        instance.PlayerLock();
+       
+        if (m_beforeState == GameState.EnemyBattle &&
+            m_currentState == GameState.Search)   // 戦闘->探索
         {
-            RespawnPlayer();
-            StartCoroutine(BetaDelayRun(1.7f));
+            //     RespawnPlayer_Unloaded();
+            //StartCoroutine(Back2Search(1.7f));
         }
-
-        if (m_cuurentState == GameState.Search &&
-            m_nextState == GameState.EnemyBattle) // 探索->戦闘
+        else if (m_beforeState == GameState.Search &&
+                 m_currentState == GameState.EnemyBattle) // 探索->戦闘
+        {
+          //  SaveAircraftPos(m_aircraftInstance.transform.position);
+            AircraftMoveSwitch(false);
+            
+        }
+        else if (m_beforeState == GameState.Search &&
+                 m_currentState == GameState.GameOver) // 探索->ゲームオーバー
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
-            RespawnPlayer();
         }
         
-        if (m_cuurentState == GameState.Search &&
-            m_nextState == GameState.GameOver) // 探索->ゲームオーバー
-        {
+        if (m_beforeState == GameState.Search && CurrentState == GameState.Restart)
             SaveAircraftPos(m_aircraftInstance.transform.position);
-            AircraftMoveSwitch(false);
-        }
-
-        if (m_cuurentState == GameState.GameOver &&
-            m_nextState == GameState.Search)
-        {
-            //StartCoroutine(BetaDelayRun(1.7f));
-        }
         
-        m_cuurentState = m_nextState;
+        m_beforeState = m_currentState;
+    }
+
+    public GameObject Aircraft
+    {
+        get { return m_aircraftInstance; }
     }
 
     /// <summary>
@@ -256,7 +344,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 自機の場所保存 探索->戦闘に切り替わったとき呼びたい
     /// </summary>
-    private void SaveAircraftPos(Vector3 position)
+    public void SaveAircraftPos(Vector3 position)
     {
         m_aircraftPos = position;
     }
@@ -266,36 +354,65 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SetAircraftPos()
     {
-        if (m_aircraftInstance == null)
-        {
-            Debug.LogAssertion("m_aircraftInstance is null!");
-            return;
-        }
-        m_aircraftInstance.transform.position = m_aircraftPos;
+        StartCoroutine(DelaySetAirCraft());
     }
 
+
+    private StageMovement _stageStageMovement;
     /// <summary>
     /// 自機が移動するかどうかの切り替え 戦闘と探索の切り替えで使用
     /// </summary>
     /// <param name="activate"></param>
     public void AircraftMoveSwitch(bool activate)
     {
-        StageMovement stageMovement = m_aircraftInstance.GetComponent<StageMovement>();
+        if (m_aircraftInstance == null)
+            return;
+        
+        StageMovement = m_aircraftInstance.GetComponent<StageMovement>();
 
         if (activate)
         {
-            stageMovement.enabled = true;
+            _stageStageMovement.enabled = true;
         }
         else
         {
-            stageMovement.enabled = false;
+            _stageStageMovement.enabled = false;
             ResetRBVelocity(m_aircraftInstance);
         }
     }
 
+    int[] _timeArray;
+
+    public int[] SetTimeArray(int[] timeArray)
+    {
+        for (int i = 0; i < timeArray.Length; i++)
+        {
+            timeArray[i] = _timeArray[i];
+        }
+        return timeArray;
+    }
+    public void SaveCurrentTime(int[] timeArray)
+    {
+        for (int i = 0; i < timeArray.Length; i++)
+        {
+            _timeArray[i] = timeArray[i];
+        }
+    }
+
+    public void HitObstacle()
+    { 
+        // blinkingScript.StartCoroutine(blinkingScript.DamageIndication(i));
+    }
+
+    public StageMovement StageMovement
+    {
+        get { return _stageStageMovement; }
+        set { _stageStageMovement = value; }
+    }
+
     private Vector3 m_axis;
     private GameObject m_pivot;
-    private bool m_rescue;
+    private bool m_isRescue;
     /// <summary>
     /// 振り子の方向制御用
     /// </summary>
@@ -317,11 +434,11 @@ public class GameManager : MonoBehaviour
        // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
         if (count == 0)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundName("PlayerMove", "PlayerHit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("PlayerMove", "PlayerHit", "RunDust1");
         }
         else if (count == 1)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundName("Player2Move", "Player2Hit");
+            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("Player2Move", "Player2Hit", "RunDust2");
         }
         
         count++;
@@ -337,6 +454,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetPlayerPos()
     {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
         foreach (GameObject player in playerInstances)
         {
             if (player == null)
@@ -344,12 +465,58 @@ public class GameManager : MonoBehaviour
                 Debug.LogError("playerInstance is null!");
                 return;
             }
-      
             player.transform.position = Vector3.zero;
         }
     }
 
-    public void RespawnPlayer()
+    /// <summary>
+    /// プレイヤーを自機に再スポーンさせる処理 
+    /// </summary>
+    /// <param name="beforeLoading">シーンロード前とロード後で処理を呼び分け</param>
+    public void RespawnPlayer(bool beforeLoading)
+    {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            if (beforeLoading)
+            {
+                player.GetComponent<PlayerManager>().ResetPlayer_Unloaded();
+            }
+            else
+            {
+                player.GetComponent<PlayerManager>().ResetPlayer_Loaded();
+            }
+        }
+    }
+
+    public void PlayerLock()
+    {
+        if (BeforeState != GameState.Search && BeforeState != GameState.EnemyBattle)
+        {
+            return;
+        }
+        foreach (GameObject player in playerInstances)
+        {
+            if (player == null)
+            {
+                Debug.Log("PlayerInstance is null");
+                return;
+            }
+
+            player.GetComponent<PlayerManager>().LockPos();
+        }
+    }
+    
+    public void PlayerUnLock()
     {
         foreach (GameObject player in playerInstances)
         {
@@ -358,9 +525,17 @@ public class GameManager : MonoBehaviour
                 Debug.Log("PlayerInstance is null");
                 return;
             }
-         
-            StartCoroutine(player.GetComponent<PlayerManager>().ResetPlayerState());
+
+            player.GetComponent<PlayerManager>().UnLockPos();
+
         }
+    }
+    /// <summary>
+    /// 戦闘->探索に戻った時の処理
+    /// </summary>
+    public void Back2Search()
+    {
+        SetAircraftPos();
     }
     
     public GameObject Pivot
@@ -377,11 +552,11 @@ public class GameManager : MonoBehaviour
         set { m_life = value;}
     }
 
-    public bool Rescue
+    public bool IsRescue
     {
-       get { return m_rescue; }
+       get { return m_isRescue; }
        
-       set { m_rescue = value;}
+       set { m_isRescue = value;}
     }
     
     private bool[] isPlayerSpawn;
@@ -401,7 +576,18 @@ public class GameManager : MonoBehaviour
 
     public void AddMainPartsNum()
     {
+        Debug.Log("get main part");
         m_mainParts++;
+        if (m_mainParts == 1)
+        {
+            DisplayDialogue.dialogue.Enqueue("GetMainPart");
+            DisplayDialogue.dialogue.Enqueue("TwoLeft");
+        }
+        else if (m_mainParts == 2)
+        {
+            DisplayDialogue.dialogue.Enqueue("GetMainPart");
+            DisplayDialogue.dialogue.Enqueue("OneLeft");
+        }
     }
     public int GetMainPartsNum()
     {
@@ -411,6 +597,13 @@ public class GameManager : MonoBehaviour
     public void AddSubPartsNum()
     {
         m_subParts++;
+        if (m_subParts == 1)
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                DisplayDialogue.dialogue.Enqueue($"GetSubPart0{i}");
+            }
+        }
     }
     public int GetSubPartsNum()
     {
@@ -431,11 +624,19 @@ public class GameManager : MonoBehaviour
         RB.angularVelocity = Vector3.zero;
     }
 
-    private IEnumerator BetaDelayRun(float waitTime)
+    private IEnumerator DelaySetAirCraft()
     {
-        yield return new WaitForSeconds(waitTime);
-        SetAircraftPos();
+        yield return new WaitForSeconds(0.1f);
+        if (m_aircraftInstance == null)
+        {
+            Debug.LogAssertion("m_aircraftInstance is null!");
+            yield break;
+        } 
+        
+        m_aircraftInstance.transform.position = m_aircraftPos;
+        
         SetPlayerPos();
         AircraftMoveSwitch(true);
+        
     }
 }

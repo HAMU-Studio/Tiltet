@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7437572811976753935}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ice_Obj_locator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,8 +44,7 @@ GameObject:
   - component: {fileID: 655586091217812362}
   - component: {fileID: 2739482706038256631}
   - component: {fileID: 2421452750543283214}
-  - component: {fileID: 3586018415359357918}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ice_cover_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,20 +116,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3586018415359357918
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1061045727043011230}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1536092527873917605, guid: 59b409ed1d524834097e9b2b7701bb26, type: 3}
 --- !u!1 &6546985258615135483
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,9 +125,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5877268755880937025}
-  m_Layer: 0
+  - component: {fileID: 311208836448695643}
+  m_Layer: 11
   m_Name: IceMountain
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -163,6 +149,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &311208836448695643
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6546985258615135483}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.14576252
+  m_Height: 0.8013368
+  m_Direction: 1
+  m_Center: {x: 0.052041028, y: 0.2565825, z: 0.09933965}
 --- !u!1 &7430761339386134307
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,8 +174,7 @@ GameObject:
   - component: {fileID: 2564173895120376520}
   - component: {fileID: 7397639165414368240}
   - component: {fileID: 1894993125874315982}
-  - component: {fileID: 498674391677172656}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ice_pillar_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,17 +246,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &498674391677172656
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7430761339386134307}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4584022817867906311, guid: 59b409ed1d524834097e9b2b7701bb26, type: 3}

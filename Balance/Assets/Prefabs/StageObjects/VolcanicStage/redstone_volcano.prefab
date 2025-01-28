@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521061523620163329}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Red_stone_locator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,8 +43,7 @@ GameObject:
   - component: {fileID: 2067706816898015020}
   - component: {fileID: 5995958240774800992}
   - component: {fileID: 5999572382308791030}
-  - component: {fileID: 4361014034133245138}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Red_stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,20 +115,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4361014034133245138
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7861515886654689580}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7295504384187646727, guid: f9b03a6208f18d14f998cea444effc12, type: 3}
 --- !u!1 &8355041375753737683
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,9 +125,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8698915375096418153}
   - component: {fileID: 2848340376932499992}
-  m_Layer: 0
+  - component: {fileID: 7030484818521734863}
+  m_Layer: 11
   m_Name: redstone_volcano
-  m_TagString: Untagged
+  m_TagString: StageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 8355041375753737683}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 70, y: 70, z: 70}
+  m_LocalScale: {x: 200, y: 200, z: 200}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 521061523620163329}
@@ -177,8 +163,21 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.033471104
+  - screenRelativeHeight: 0.011058161
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 5999572382308791030}
   m_Enabled: 1
+--- !u!65 &7030484818521734863
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8355041375753737683}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06713767, y: 0.06256008, z: 0.06483851}
+  m_Center: {x: -0.0072882436, y: 0.029782861, z: 0.0006577277}

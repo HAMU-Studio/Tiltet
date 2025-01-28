@@ -9,13 +9,24 @@ public class ChangeScene : MonoBehaviour
 {
     public void ToGreenScene()
     {
-        GameManager.instance.Restart();
+        StartCoroutine(GameManager.instance.Restart());
         SoundManager.instance.Play("CursorDecision");
     }
 
+    public void ToOpening()
+    {
+        GameManager.instance.SceneManager.FadeStart();
+        GameManager.instance.CurrentState = GameState.None;
+        SoundManager.instance.Play("CursorDecision");
+    }
+    
+
     public void ToSavePoint()
     {
-        GameManager.instance.RestartAtSavePoint();
+        GameManager.instance.SceneManager.FadeStart("MainStage");
+        GameManager.instance.RestartAtSavePoint(true);
+        GameManager.instance.CurrentState = GameState.Restart;
         SoundManager.instance.Play("CursorDecision");
+        Debug.Log("State = " + GameManager.instance.CurrentState);
     }
 }

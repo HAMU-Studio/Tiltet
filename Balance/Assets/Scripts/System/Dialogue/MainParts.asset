@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18268253f1942f897184f80d5cde845, type: 3}
+  m_Name: MainParts
+  m_EditorClassIdentifier: 
+  data:
+  - Name: OneLeft
+    Dialogue: {fileID: 21300000, guid: 125891784ae644240b39454ff50524fc, type: 3}
+    DisplayTime: 2.5
+  - Name: TwoLeft
+    Dialogue: {fileID: 21300000, guid: 17930beffc8c15b478298723b925ae6d, type: 3}
+    DisplayTime: 2.5
+  - Name: GetMainPart
+    Dialogue: {fileID: 21300000, guid: f0109d175968882438258b2b1ecdacfe, type: 3}
+    DisplayTime: 2.5
+  - Name: NearMainPart
+    Dialogue: {fileID: 21300000, guid: 6096bcc795684ee499118ee979437c30, type: 3}
+    DisplayTime: 2.5
+  - Name: ActiveMainPart
+    Dialogue: {fileID: 21300000, guid: 58798af2b31622e4ab12d13061737936, type: 3}
+    DisplayTime: 2.5

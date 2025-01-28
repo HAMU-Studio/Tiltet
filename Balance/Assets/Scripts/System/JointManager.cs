@@ -134,7 +134,7 @@ public class JointManager : MonoBehaviour
         m_PM = GetComponent<PlayerManager>();
     }
 
-  　private float lowerLimit = 10f;
+  　private float lowerLimit = 15f;
    /// <summary>
    /// ある程度離れていたら飛ばす
    /// </summary>
@@ -212,7 +212,7 @@ public class JointManager : MonoBehaviour
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
-        if (m_PM.rescState == RescueState.Move)
+        if (m_PM.rescState == RescueState.OutsideMove)
         {
             if (CheckDistanceFromStage() > lowerLimit)
             {

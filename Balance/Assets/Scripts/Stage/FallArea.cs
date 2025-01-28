@@ -23,6 +23,7 @@ public class FallArea : MonoBehaviour
         shortestDist = 0;
         foreach (GameObject area in RescueActAreas)
         {
+            area.GetComponent<MeshRenderer>().enabled = false;
             area.SetActive(false);
             area.GetComponent<Renderer>().enabled = false;
         }
@@ -38,12 +39,6 @@ public class FallArea : MonoBehaviour
                 ResetFlag();
                 PostProcess();
             }
-
-            /*
-            if (m_PM.RescueState == RescueState.SuperLand)
-            {
-                PostProcess();
-            }*/
         }
     }
 
@@ -53,17 +48,22 @@ public class FallArea : MonoBehaviour
     }
 
     //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
+    //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //ここ絶対エラー出るからどうにかしたい
-           // if ( m_PM.RescueState != RescueState.None )
-               // return;
+            /*if (m_PM.rescState == RescueState.SuperLand)
+            {
+                Debug.Log("スーパー着地中に落下しました");
+                m_PM.rescState = RescueState.None;
+                ResetFlag();
+                PostProcess();
+            }*/
 
             if (!waitRescue)
             {
-                Debug.Log("callHItPlayerProcess");
+                //    Debug.Log("callHItPlayerProcess");
                 HitPlayerProcess(other);
                 waitRescue = true;
             }
@@ -71,7 +71,9 @@ public class FallArea : MonoBehaviour
             {
                 if (Player2Check(other) == true)
                 {
-                    GameManager.instance.GameOver();
+                    m_PM.PlayStruggle();
+                    HitPlayerProcess(other);
+                    StartCoroutine(GameManager.instance.GameOver());
                 }
             }
         }
@@ -151,7 +153,6 @@ public class FallArea : MonoBehaviour
         
         if (shortestDistArea == null)
             Debug.LogError("shortestDistCube are null");
-        
      
         
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
@@ -163,25 +164,28 @@ public class FallArea : MonoBehaviour
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         //最短距離のオブジェクトだけon
-        shortestDistArea.GetComponentInChildren<Renderer>().enabled = true;
+        MeshRenderer[] childrens=  shortestDistArea.GetComponentsInChildren<MeshRenderer>();
+        childrens[0].enabled = false;
+        childrens[1].enabled = false;
         shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
         shortestDistArea.SetActive(true);
-        
-     //   shortestDistCube.GetComponent<Rescue>().SaveTarget(fallPlayerInstance.transform.position);
+  
     }
 
+    Renderer[] children = new Renderer[2];
     private void PostProcess()
     {
-      //  shortestDistCube.GetComponent<Renderer>().enabled = false;
-      //  shortestDistCube.SetActive(false);
-      m_PM = null;
-      shortestDistArea = null;
-      shortestDist = 0;
-      foreach (GameObject area in RescueActAreas)
-      {
-        //  area.SetActive(false);
-          area.GetComponent<Renderer>().enabled = false;
-          area.GetComponentInChildren<Renderer>().enabled = false;
-      }
+        m_PM = null;
+        shortestDistArea = null;
+        shortestDist = 0;
+        
+        foreach (GameObject area in RescueActAreas)
+        {
+            //  area.SetActive(false);
+            area.GetComponent<Renderer>().enabled = false;
+            children = area.GetComponentsInChildren<Renderer>();
+            children[0].enabled = false;
+            children[1].enabled = false;
+        }
     }
 }

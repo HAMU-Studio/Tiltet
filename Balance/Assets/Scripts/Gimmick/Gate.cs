@@ -1,45 +1,47 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
+    [Header("このゲートの通る順番(1から)")]
     [SerializeField] private int gateNumber;
 
-    private GateManager gatemanager;
-    private int nextNumber;
+    private int nowNumber;
+
+    GateManager gatemanager;
 
     // Start is called before the first frame update
     void Start()
     {
-        //gatemanagerから変数を共有
-        this.gatemanager = FindObjectOfType<GateManager>();
-        gatemanager.Order = gateNumber;
-        //GameObject obj = GameOblect.Find("GateManager");
-        //gatemanager = obj.GetComponent<GateManager>();
-
-        gateNumber = 0;
+        GameObject gateManager = GameObject.Find("GateManager");
+        gatemanager = gateManager.GetComponent<GateManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log(nowNumber);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerExit(Collider other)
     {
-        if(collision.gameObject.name=="Floor")
+        if (other.gameObject.CompareTag("Ground"))
         {
-            nextNumber = gatemanager.Order + 1;
+            nowNumber = gatemanager.GateNumber;
+            //Debug.Log("ぶつかった");
 
-            if (gateNumber == nextNumber)
+            if (nowNumber == gateNumber)
             {
-                gatemanager.Order = gateNumber;
+                gatemanager.GateNumber = gateNumber + 1;
+                SoundManager.instance.Play("Connected");
+                //Debug.Log("正解");
             }
             else
             {
-                gatemanager.Order = 0;
+               // gatemanager.GateNumber = 1;
+                //Debug.Log("残念");
             }
         }
     }

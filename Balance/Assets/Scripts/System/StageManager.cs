@@ -1,31 +1,37 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    private StageMovement m_stageMovement;
-    private Rigidbody m_rb;
+    private TiltControl m_tiltControl; // TiltControl の参照
+    private StageMovement m_stageMovement; // StageMovement の参照
+    private Rigidbody m_rb; // Rigidbody の参照
 
     // FallArea への参照を追加
-    [SerializeField] private FallArea fallArea;
-
-    [SerializeField] private float knockbackForce = 5f; // 横ノックバックの強さ
-    [SerializeField] private float knockbackUpForce = 2f; // 縦ノックバックの強さ
+    [SerializeField] private FallArea fallArea; // 落下エリアを管理するクラス
 
     private void Start()
     {
+        // TiltControl コンポーネントを取得
+        m_tiltControl = GetComponent<TiltControl>();
+        if (m_tiltControl == null)
+        {
+            Debug.LogError("TiltControl コンポーネントが見つかりません。");
+        }
+
         // StageMovement コンポーネントを取得
         m_stageMovement = GetComponent<StageMovement>();
         if (m_stageMovement == null)
         {
-            Debug.LogError("StageMovement コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+            Debug.LogError("StageMovement コンポーネントが見つかりません。");
         }
 
         // Rigidbody コンポーネントを取得
         m_rb = GetComponent<Rigidbody>();
         if (m_rb == null)
         {
-            Debug.LogError("Rigidbody コンポーネントが見つかりません。このスクリプトは同じオブジェクトにアタッチされる必要があります。");
+            Debug.LogError("Rigidbody コンポーネントが見つかりません。");
         }
 
         // FallArea コンポーネントを取得
@@ -33,8 +39,13 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogError("FallArea コンポーネントが見つかりません。");
         }
-        
+
+        // ゲーム管理システムに航空機インスタンスを保存
         GameManager.instance.SaveAircraftInstance(gameObject);
+
+        // スタート時の位置を設定
+        if (GameManager.instance.CurrentState == GameState.Search)
+            transform.position = new Vector3(transform.position.x, 50f, transform.position.z);
     }
 
     private void Update()
@@ -49,20 +60,40 @@ public class StageManager : MonoBehaviour
         // 衝突相手のタグが "StageObject" の場合
         if (collision.gameObject.CompareTag("StageObject"))
         {
-            m_stageMovement.IsStopActive = true; // Stop 状態を有効にする
-            Debug.Log("StageMovement の Stop 状態を有効にしました。");
+            m_stageMovement.IsNeutralActive = true; // Neutral 状態を有効にする
+            Debug.Log("StageMovement の Neutral 状態を有効にしました。");
 
-            // ノックバック方向の計算
-            Vector3 direction = (transform.position - collision.gameObject.transform.position).normalized;
-            direction.y = 0; // 水平方向のみに制限
+            // 衝突点からオブジェクトの中心方向を計算
+            Vector3 contactPoint = collision.contacts[0].point; // 衝突点
+            Vector3 forceDirection = (transform.position - contactPoint).normalized; // オブジェクトの中心方向を計算
 
-            // 水平方向のノックバック
-            m_rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+            float forceMagnitude = 100f; // 力の大きさ
+            Vector3 force = forceDirection * forceMagnitude; // 力のベクトルを生成
 
-            // 上方向のノックバック
-            m_rb.AddForce(transform.up * knockbackUpForce, ForceMode.Impulse);
+            m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
 
-            Debug.Log("ノックバック処理を適用しました。");
+            m_tiltControl.SetTiltResetState(true); // 傾きをリセットする状態に切り替え
+            Debug.Log("TiltReset を有効にしました。");
+
+            // 衝突時にUIや音を処理
+            InGameUISystems.instance.HitObstacle();
+            SoundManager.instance.Play("AircraftHit");
+
+            // Neutral 状態を数秒後に無効にする処理を開始
+            StartCoroutine(DisableNeutralStateAfterDelay(2f));
         }
+    }
+
+    // Neutral 状態を遅延して無効にするコルーチン
+    private IEnumerator DisableNeutralStateAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Neutral 状態を無効にする
+        m_stageMovement.IsNeutralActive = false;
+        Debug.Log("StageMovement の Neutral 状態を無効にしました。");
+
+        m_tiltControl.SetTiltResetState(false); // 傾きリセットを無効にする
+        Debug.Log("TiltReset を無効にしました。");
     }
 }

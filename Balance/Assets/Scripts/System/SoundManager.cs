@@ -2,6 +2,11 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System;
+using System.Collections;
+using UnityEngine.Audio;
+using UnityEngine.Serialization;
+
 
 namespace System
 {
@@ -27,6 +32,14 @@ namespace System
             [Range(0f, 1f)]
             public float     volume;
         }
+        
+        [Serializable]
+        private class AudioMixerGroups
+        {
+            public AudioMixerGroup BGM;
+            public AudioMixerGroup SE;
+        }
+        [SerializeField] private AudioMixerGroups audioMixerGroups;
 
         [SerializeField] private BGMData[] bgmDatas;
         [SerializeField] private SEData[]  SEDatas;
@@ -47,11 +60,11 @@ namespace System
             if (instance == null)
             {
                 instance = this;
-              //  DontDestroyOnLoad(gameObject);
+                //  DontDestroyOnLoad(gameObject);
             }
             else
             {
-              //  Destroy(gameObject);
+                //  Destroy(gameObject);
             }
         }
         private void Awake()
@@ -111,6 +124,7 @@ namespace System
             audioSource.volume = volume;
             audioSource.loop = true;
             audioSource.clip = bgm;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.BGM;
             audioSource.Play();
         }
 
@@ -129,6 +143,7 @@ namespace System
             audioSource.playOnAwake = false;
             audioSource.loop = false;
             audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = audioMixerGroups.SE;
             audioSource.PlayOneShot(clip);
         }
 
@@ -192,7 +207,7 @@ namespace System
                 }
             }
            
-            Debug.Log("そのAudioClipは現在使われていません");
+            //  Debug.Log("そのAudioClipは現在使われていません");
             return null;
             
         }
@@ -237,6 +252,21 @@ namespace System
                     audioSource.Stop();
                 }
             }
+        }
+
+        
+        /// <summary>
+        /// 普通の関数を作って外部から呼び出しをしやすく
+        /// </summary>
+        public void DelayPlay(string name, float DelayTime)
+        {
+            StartCoroutine(DelayPlayProcess(name, DelayTime));
+        }
+        private IEnumerator DelayPlayProcess(string name, float DelayTime)
+        {
+            // 遅延かけて再生
+            yield return new WaitForSeconds(DelayTime);
+            Play(name);
         }
     }
 }

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using System;
 
 public class Encount : MonoBehaviour
 { 
     private CameraManager cameraManager;
 
     EncountManager encountmanager;
+    [SerializeField] private string fightSceneName;
 
     void Start()
     {
@@ -21,14 +23,19 @@ public class Encount : MonoBehaviour
         {
             Debug.LogError("CameraManagerがシーンに見つかりません。");
         }
+
+        GetComponent<Collider>().isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            encountmanager.isEncount = true;
-
+            if (encountmanager.isEncount)
+                return;
+            
+            encountmanager.Encount(fightSceneName);
+            SoundManager.instance.Play("Encount");
             if (cameraManager != null)
             {
                 // 現在アクティブなカメラを取得

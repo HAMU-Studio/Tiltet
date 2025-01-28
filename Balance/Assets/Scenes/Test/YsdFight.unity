@@ -7639,25 +7639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367aa7733b1036b4080e9cd33744533a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPattern: 0
-  forward: 3
-  backward: -3
-  left: -3
-  right: 3
-  forwardTiltX: 5
-  backwardTiltX: -5
-  leftTiltZ: 5
-  rightTiltZ: -5
-  frontLeftTilt: 5
-  rearLeftTilt: -5
-  standardLeftTilt: 5
-  frontRightTilt: 5
-  rearRightTilt: -5
-  standardRightTilt: -5
-  tiltMinX: -7.5
-  tiltMaxX: 7.5
-  tiltMinZ: -7.5
-  tiltMaxZ: 7.5
+  movementScale: 1
 --- !u!4 &1376594452 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4825779168266221563, guid: d2acd71dc52e0a94aa9b51eb7127722b,
@@ -9032,10 +9014,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _transition: {fileID: 0}
   enemys: []
   enemySpawnPoints: []
   spawnInterval: 3
-  spawnLimit: 2
+  circleLimit: 5
+  ellipseLimit: 2
   phasesText: {fileID: 0}
   circleEnemyTest: 0
   ellipseEnemyTest: 0
@@ -9075,6 +9059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78063e8b49a61d4aa25323f9c02c6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _transition: {fileID: 0}
   enemys:
   - {fileID: 7359282681462766789, guid: a81489aaec5607e438714e971a569d75, type: 3}
   - {fileID: 1654121995944958511, guid: 4749abd0e06658c45bb95db8f1640ddc, type: 3}
@@ -9084,7 +9069,8 @@ MonoBehaviour:
   - {fileID: 1042376086}
   - {fileID: 437129183}
   spawnInterval: 2
-  spawnLimit: 6
+  circleLimit: 5
+  ellipseLimit: 2
   phasesText: {fileID: 0}
   circleEnemyTest: 0
   ellipseEnemyTest: 0

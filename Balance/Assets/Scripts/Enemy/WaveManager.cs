@@ -2,37 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
-    public enum FIELD_TYPE
-    {
-        GREEN,    //緑地帯
-        VOLCANIC, //火山帯
-        SNOW      //寒冷帯
-    }
-    [Header("今のいる場所")]
-    [SerializeField] private FIELD_TYPE FieldType;
-    [Header("FirstWaveの敵の数")]
-    [SerializeField] private int firstWave = 10;
-    [Header("SecondWaveの敵の数")]
-    [SerializeField] private int secondWave = 5;
-    [Header("FinalWaveの敵の数")]
-    [SerializeField] private int finalWave = 20;
-
-    [Header("戦闘UI")]
-    [SerializeField] GameObject waveGauge;
-    [Header("テキスト")]
-    [SerializeField] TextMeshProUGUI phasesText;
-    [Header("ゲージ")]
-
-
     EnemyManager enemymanager;
-    //enemymanager.CircleLimit;
-    //enemymanager.EllipseLimit;
-    //enemymanager.NumSpawnAtOnce;
-
-    private float time;
 
     // Start is called before the first frame update
     void Start()
@@ -42,29 +16,27 @@ public class WaveManager : MonoBehaviour
     
     private void Set()
     {
-        enemymanager = this.GetComponent<EnemyManager>();
-        time = 0f;
-        waveGauge.SetActive(false);
+        GameObject enemyManager = GameObject.Find("EnemyManager");
+        enemymanager = enemyManager.GetComponent<EnemyManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        if (time >= 5.0f)
-        {
-            waveGauge.SetActive(true);
-        }
+
     }
 
-    private void FirstWave()
+    private void OnTriggerEnter(Collider other)
     {
-        enemymanager.CircleLimit = firstWave;
-        enemymanager.EllipseLimit = 0;
-    }
-    private void SecondWave()
-    {
-        enemymanager.CircleLimit = firstWave;
-        enemymanager.EllipseLimit = 0;
+        if (other.gameObject.CompareTag("SphereEnemy"))
+        {
+            enemymanager.DestroyEnemy();
+            Destroy(other.gameObject);
+        }
+        else if(other.gameObject.CompareTag("EllipseEnemy"))
+        {
+            enemymanager.DestroyEnemy();
+            Destroy(other.gameObject);
+        }
     }
 }
