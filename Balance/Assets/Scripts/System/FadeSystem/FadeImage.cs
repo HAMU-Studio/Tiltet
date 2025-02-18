@@ -12,7 +12,6 @@ namespace FadeSystem
         public bool firstFadeInComp;
 
         private Image img = null;
-      //  private bool fadeComplete = false;
         private float timer = 0.0f;
         private FadeState m_fadeState = FadeState.None;
         
@@ -76,7 +75,7 @@ namespace FadeSystem
         }
 
         /// <summary>
-        /// フェード終了時にα値が0 = フェードイン終了 上手く動くか注意
+        /// フェード終了時にα値が 0 = フェードイン終了 上手く動くか注意
         /// </summary>
         public bool IsFadeInComplete() => m_fadeState == FadeState.None && img.color.a == 0;
 

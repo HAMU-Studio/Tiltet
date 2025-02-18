@@ -12,7 +12,7 @@ namespace System
         /// </summary>
         private void OnEnable()
         {
-            // イベントに登録 引数どうなってるのかよくわからん
+            // イベントに登録 
             SceneManager.sceneUnloaded += OnSceneUnloaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
@@ -38,7 +38,6 @@ namespace System
             {
                 GameManager.instance.RespawnPlayer(true);
                 ParticleManager.instance.RemoveAll();
-               // GameManager.instance.PlayerUnLock();
             }
 
             if (GameManager.instance.CurrentState == GameState.Restart)
@@ -46,8 +45,6 @@ namespace System
                 GameManager.instance.RestartAtSavePoint(true);
             }
             
-            
-
             m_beforeSceneName = scene.name;
         }
 
@@ -62,7 +59,7 @@ namespace System
             {
                 if (GameManager.instance.isConnected)
                 {
-                  //  GameManager.instance.PlayerUnLock(); プレイヤーのアンロックは開始アニメーション流し終わってから
+                
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
                     if (scene.name == "Fight")

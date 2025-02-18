@@ -212,8 +212,7 @@ namespace System
                 particle.Instance.transform.position = movementAmount;
             }
         }
-
-        // 動作未確認
+        
         public void GenerateAndPlay(string name, Transform transform,  Quaternion quaternion)
         {
             Register(name, transform, quaternion);

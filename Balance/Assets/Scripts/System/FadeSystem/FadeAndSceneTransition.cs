@@ -35,9 +35,6 @@ namespace FadeSystem
 
             isSceneTransitioning = true;
             SoundManager.instance.StopAllSound();
-            
-            //リセットは戦闘と探索の切り替えのみ
-            //     GameManager.instance.RespawnPlayer_Unloaded();
          
             m_fade.StartFadeOut();
             StartCoroutine(LoadNextSceneAsync());

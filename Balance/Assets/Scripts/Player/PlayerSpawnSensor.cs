@@ -21,10 +21,7 @@ public class PlayerSpawnSensor : MonoBehaviour
             GameObject player = other.gameObject;
             Material playerMat = player.GetComponentInChildren<Renderer>().materials[1];
 
-            //Debug.Log("playerMat = " + playerMat);
-            //Debug.Log("P1mat = " + P1mat);
-
-            //普通に比較するとInstanceか通常かで比較が通らないから名前追加で無理やり通す(不本意)
+            //普通に比較するとInstanceか通常かで比較が通らないから名前追加で無理やり通す
             if (playerMat.name == P1mat.name + " (Instance)")
             {
                 player.transform.position = P1Spawn.position;
@@ -38,7 +35,6 @@ public class PlayerSpawnSensor : MonoBehaviour
                 {
                     Debug.Log("player1 spawn success");
                     GameManager.instance.P1Spawn = true;
-                   // GameManager.instance.SetPlayerInstance(player);
                 }
                 else
                 {
