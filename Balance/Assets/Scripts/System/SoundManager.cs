@@ -207,9 +207,7 @@ namespace System
                 }
             }
            
-            //  Debug.Log("そのAudioClipは現在使われていません");
             return null;
-            
         }
 
         public bool GetIsPlaying(string name)
@@ -253,7 +251,6 @@ namespace System
                 }
             }
         }
-
         
         /// <summary>
         /// 普通の関数を作って外部から呼び出しをしやすく

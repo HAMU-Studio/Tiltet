@@ -7,32 +7,16 @@ using UnityEngine.Serialization;
 
 public class ConnectionScreen : MonoBehaviour
 {
-    //このあたりはプロトタイプのみ
-    /*[SerializeField] private TextMeshProUGUI startText;
-    [SerializeField] private Button startButton;*/
     [SerializeField] private GameObject connectionScreen;
     [SerializeField] private InGameUISystems UISystems;
-  //  [SerializeField] private DisplayDialogue systemMessege;
- //   [SerializeField] private DisplayDialogue dialogue;
 
     [SerializeField] private bool DebugDiaogue;
     
-    
     [SerializeField] private GameObject m_1PImage;
     [SerializeField] private GameObject m_2PImage;
-    public void StartButton()
-    {
-        /*startText.gameObject.SetActive(false);
-        startButton.gameObject.SetActive(false);*/
-        /*m_1PImage.SetActive(false);
-        m_2PImage.SetActive(false);
-        GameManager.instance.StartGame();*/
-    }
     
-    // Start is called before the first frame update
     void Start()
     {
-       
         m_1PImage.SetActive(false);
         m_2PImage.SetActive(false);
         once = false;
@@ -46,8 +30,6 @@ public class ConnectionScreen : MonoBehaviour
             GameManager.instance.AircraftMoveSwitch(true);
             UISystems.StartTimer();
         }
-
-        //  GameManager.instance.isSkip = true;
     }
 
     private bool once;

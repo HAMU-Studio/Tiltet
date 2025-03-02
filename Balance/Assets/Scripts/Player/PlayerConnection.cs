@@ -2,10 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// SpawnSensorと合体させたい
-/// </summary>
-public class ReceiveNotificationExample : MonoBehaviour
+public class PlayerConnection : MonoBehaviour
 {
     [SerializeField] private PlayerInputManager _playerInputManager = default!;
     [SerializeField] private PlayerController _playerController = default!;
@@ -39,7 +36,6 @@ public class ReceiveNotificationExample : MonoBehaviour
     {
         Renderer _renderer = _playerInputManager.playerPrefab.gameObject.GetComponentInChildren<Renderer>();
         Material[] newMaterials = _renderer.sharedMaterials;
-    //    newMaterials[0] = m_defaultMaterial;
         newMaterials[1] = m_defaultMaterial;
         _renderer.sharedMaterials = newMaterials;
     }

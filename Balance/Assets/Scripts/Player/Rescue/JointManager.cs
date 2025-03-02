@@ -10,7 +10,7 @@ public class JointManager : MonoBehaviour
     private Rigidbody m_pivotRB;
 
     private PlayerManager m_PM; 　 //インスタンスから取得、操作
-    private Direction m_direction;
+   
 
     //private RopeLine m_ropeLine;
     void Start()
@@ -123,8 +123,6 @@ public class JointManager : MonoBehaviour
     private void SetAxis(Vector3 velocity)
     {
         //二点間のベクトル利用してaxisを設定すると手前と奥だけ挙動がおかしくなる -> axisを全部0にすると動いてくれる
-        
-        m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
      
         m_hingeJoint.axis = Vector3.zero;
     }
@@ -146,54 +144,6 @@ public class JointManager : MonoBehaviour
 
         return dist;
     }
-
-    /// <summary>
-    /// AnchorのXとZを徐々に減らしていけば真下にぶら下げれそう->その影響を受けてなのか大暴れしだす
-    /// </summary>
-    private Vector3 temp;
-    private void DecreaseAnchorXZ()
-    {
-        /*if (m_springJoint.autoConfigureConnectedAnchor)
-        {
-            temp = m_springJoint.connectedAnchor;
-
-            m_springJoint.anchor = temp;
-         
-            m_springJoint.autoConfigureConnectedAnchor = false;
-        }
-        else
-        {
-            temp = m_springJoint.anchor;
-        }
-   
-        
-        if (temp.x < 0)
-        {
-            temp.x += 0.1f;
-        }
-        else if (temp.x > 0)
-        {
-            temp.x -= 0.1f;
-        }
-        
-        if (temp.z < 0)
-        {
-            temp.z += 0.1f;
-        }
-        else if (temp.z > 0)
-        {
-            temp.z -= 0.1f;
-        }
-        
-        Vector3 originalVelocity = m_RB.velocity;
-        m_RB.isKinematic = true;
-
-        m_springJoint.anchor = temp;
-        
-        m_RB.isKinematic = false;
-        m_RB.velocity = originalVelocity;*/
-    }
-
     private void FixedUpdate()
     {
         RescueAdjust();
@@ -222,9 +172,6 @@ public class JointManager : MonoBehaviour
             if (onceForce)
                 return;
             
-            m_direction = GameManager.instance.Pivot.GetComponent<DirectionManager>().direction;
-            
-
             SetOutsideForce();
             
             if (CheckDistanceFromStage() <= 4f)

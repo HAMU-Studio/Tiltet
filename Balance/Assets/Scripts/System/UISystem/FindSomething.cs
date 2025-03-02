@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace System
 {
+    
+    /// <summary>
+    /// アイテムの発見、敵のエンカウント、パーツの取得などイベント発生時にセリフ表示や進捗率の更新をするクラス
+    /// </summary>
     public class FindSomething : MonoBehaviour
     {
         [SerializeField] private string[] dialogueNames;
