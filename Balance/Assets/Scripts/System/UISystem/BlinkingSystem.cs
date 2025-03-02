@@ -7,14 +7,8 @@ namespace System
 {
     public class BlinkingSystem : MonoBehaviour
     {
-        // GameObject aircraft; 自機の半透明は時間的にむりそう
         [Header("表示場所")] [SerializeField] Image[] lifeImage = default!;
         [Header("通常時画像")] [SerializeField] Sprite[] truelife = default!;
-       // [Header("ダメージ時画像")] [SerializeField] Sprite falselife = default!;
-        /*[Header("通常時マテリアル")] [SerializeField] Material trueMaterial = default!;
-
-        [Header("ダメージ時マテリアル")] [SerializeField]
-        Material falseMaterial = default!;*/
 
         [Header("ダメージ時の表示間隔")] [SerializeField]
         float[] duration = default!;
@@ -78,10 +72,8 @@ namespace System
 
             //最後は減らさなければならないのでfalseに
             lifeImage[i].enabled = false;
-
-            //プレイヤーのマテリアルを通常に。ハートのより点滅の回数が増えてしまう
-            // yield return new WaitForSeconds(0.1f);
-           // aircraft.gameObject.GetComponent<Renderer>().material = trueMaterial;
+            
+         
            if (GameManager.instance.Life == 12)
            {
                DisplayDialogue.dialogue.Enqueue("hyo");
@@ -106,8 +98,7 @@ namespace System
             {
                 StartCoroutine(GameManager.instance.GameOver());
             }
-
-            //  _MainGameManager.isInvincible = false;
+            
             isInvicible = false;
             yield return null;
         }

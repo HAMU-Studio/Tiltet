@@ -13,8 +13,6 @@ namespace System
         public Score _score;
         public TimeCalc _timeCalc;
 
-        //[SerializeField] private GameObject[] systemMessege;
-
         private int hitCount = 0;
 
         private void Awake()
@@ -26,15 +24,7 @@ namespace System
                 instance = this;
             }
         }
-
-        private void Update()
-        {
-            /*if (Input.GetKeyDown(KeyCode.P))
-            {
-                HitObstacle();
-            }*/
-        }
-
+        
         public void HitObstacle()
         {
             if (GameManager.instance.Life <= 0) return;
@@ -52,7 +42,5 @@ namespace System
         {
             _timeCalc.IsStop = true;
         }
-
-     
     }
 }

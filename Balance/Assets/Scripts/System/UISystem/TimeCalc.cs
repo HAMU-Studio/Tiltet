@@ -20,7 +20,6 @@ namespace System
             timeArray = new int[4] { 0, 0, 0, 0 };
             time = 0f;
             isStopTimer = true;
-         
         }
 
         private void Start()
@@ -31,13 +30,11 @@ namespace System
 
         private void InitializeTimer()
         {
-       //     Debug.Log("InitializeTimer");
             timeArray = GameManager.instance.SetTimeArray(timeArray);
         }
 
         private void SaveCurrentTime()
         {
-          //  Debug.Log("SaveTimer");
             GameManager.instance.SaveCurrentTime(timeArray);
         }
 
@@ -62,9 +59,7 @@ namespace System
             time += Time.deltaTime;
 
             floorTime = Mathf.Floor(time);   //切り捨て
-
-            //Debug.Log("floarTime" + floarTime);
-
+            
             elapsedTime = floorTime - beforeFrameTime;
 
             if (elapsedTime >= 1.0f) //1フレーム前の時間から変化していたら(1秒経過したら)繰り上げ処理

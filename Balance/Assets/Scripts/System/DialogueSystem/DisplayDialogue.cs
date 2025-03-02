@@ -63,7 +63,6 @@ namespace Dialogue
                  _data = _task.Dequeue();
                 Display(_data.Dialogue);
                 isShowing = true;
-              //  dialogueAnim.SetBool("Open", true);
             }
             
             
@@ -82,7 +81,6 @@ namespace Dialogue
                     CheckHide();
                     isShowing = false;
                     elapsedTime = 0f;
-                    //dialogueAnim.SetBool("Open", false);
                 }
             }
         }
@@ -119,9 +117,6 @@ namespace Dialogue
                 
                 StartCoroutine(DelayHide());
             }
-                
-
-            // image.sprite = null;
         }
         
         public void Enqueue(string name)
@@ -172,8 +167,6 @@ namespace Dialogue
                     return false;
                 }
             }
-               
-            
             return true;
         }
 
@@ -192,7 +185,6 @@ namespace Dialogue
 
         public IEnumerator DelayEnqueue(string name, float delayTime)
         {
-            Debug.Log("Call delayEnqueue");
             yield return new WaitForSeconds(delayTime);
             Enqueue(name);
             yield return null;
