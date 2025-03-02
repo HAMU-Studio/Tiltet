@@ -1,3 +1,6 @@
 # Tiltet
-チーム制作応用新企画  
-・developをdefaultブランチに変更、リリース時はreleaseブランチにマージすること。
+二人協力アクションゲームTiltetリポジトリ  
+- [ビルドデータ](https://github.com/HAMU-Studio/Tiltet/actions/runs/12951349672)
+- [作品資料等ドキュメント](https://github.com/HAMU-Studio/docs)
+- プレイ動画(後日追加予定)
+
