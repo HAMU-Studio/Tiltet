@@ -8,7 +8,7 @@ namespace FadeSystem
 {
     public class FadeAndSceneTransition : MonoBehaviour
     {
-        [Header("フェード処理")] public FadeImage fadeHandler;
+        [Header("フェード処理")] public GameObject fadeHandler;
         [Header("移動するシーンの名前")] public string nextSceneName;
         [Header("現在のState")] [SerializeField] private GameState _state; 
 
@@ -28,12 +28,17 @@ namespace FadeSystem
             GameManager.instance.BeforeState = _state;
         }
 
-        public void FadeStart()
+        /// <summary>
+        /// 遷移の開始 余計な音を止める->フェードアウト->シーン遷移
+        /// </summary>
+        public void StartTransition()
         {
             if (isSceneTransitioning || m_fade == null)
                 return;
 
             isSceneTransitioning = true;
+            
+            //余計なサウンド停止 
             SoundManager.instance.StopAllSound();
          
             m_fade.StartFadeOut();
@@ -44,10 +49,10 @@ namespace FadeSystem
         /// 名前指定してシーン移動
         /// </summary>
         /// <param name="nextSceneName"></param>
-        public void FadeStart(string nextSceneName)
+        public void StartTransition(string nextSceneName)
         {
             this.nextSceneName = nextSceneName;
-            FadeStart();
+            StartTransition();
         }
 
         [SerializeField] private GameObject m_stage;

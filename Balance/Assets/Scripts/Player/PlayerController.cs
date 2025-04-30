@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,22 +34,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpPower = 5f; 
     
     [Header("1Pカラー")]
-    [SerializeField] Material m_material_1P = default!;
+    [SerializeField] Material material_1P = default!;
     
     [Header("2Pカラー")]
-    [SerializeField] private Material m_material_2P = default!;
+    [SerializeField] private Material material_2P = default!;
     
     [Header("通常時のワイヤー")]
-    [SerializeField] private Material m_material_wire = default!;
+    [SerializeField] private Material material_wire = default!;
     
     [Header("凍りやられ1P")]
-    [SerializeField] private Material m_ice_1P = default!;
+    [SerializeField] private Material ice_1P = default!;
     
     [Header("凍りやられ2P")]
-    [SerializeField] private Material m_ice_2P = default!;
+    [SerializeField] private Material ice_2P = default!;
     
     [Header("凍りやられwire")]
-    [SerializeField] private Material m_ice_wire = default!;
+    [SerializeField] private Material ice_wire = default!;
     
     
     [Header("ノックバックの強さ")]
@@ -257,6 +258,11 @@ public class PlayerController : MonoBehaviour
             m_inputTrigger_L = 0;
         }
     }
+   
+    /// <summary>
+    /// ジャンプ機能廃止
+    /// </summary>
+    /// <param name="context"></param>
     public void Jump(InputAction.CallbackContext context)
     {
         /*//落下中と攻撃中はジャンプをさせない
@@ -534,12 +540,12 @@ public class PlayerController : MonoBehaviour
     {
         SoundManager.instance.Play("Ice");
         ChangePlayerState(true);
-        ChangeMaterial(m_ice_1P, m_ice_2P, m_ice_wire);
-        m_playerRenderer.materials[0] = m_ice_wire;
+        ChangeMaterial(ice_1P, ice_2P, ice_wire);
+        m_playerRenderer.materials[0] = ice_wire;
 
         yield return new WaitForSeconds(iceTime);
         
-        ChangeMaterial(m_material_1P, m_material_2P, m_material_wire);
+        ChangeMaterial(material_1P, material_2P, material_wire);
         ChangePlayerState(false);
         canMove = true;
 
@@ -549,7 +555,7 @@ public class PlayerController : MonoBehaviour
     {
         Material[] newMaterials = m_playerRenderer.sharedMaterials;
 
-        if (newMaterials[1].mainTexture == m_material_1P.mainTexture)
+        if (newMaterials[1].mainTexture == material_1P.mainTexture)
         {
             is1P = true;
             Debug.Log("is 1P");
@@ -692,14 +698,14 @@ public class PlayerController : MonoBehaviour
         if (index == 0)
         {
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            newMaterials[1] = m_material_2P;
+            newMaterials[1] = material_2P;
             m_playerRenderer.sharedMaterials = newMaterials;
         }
         // 2P湧いたら元に戻す
         else if (index == 1)
         {
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            newMaterials[1] = m_material_1P;
+            newMaterials[1] = material_1P;
             m_playerRenderer.sharedMaterials = newMaterials;
         }
     }

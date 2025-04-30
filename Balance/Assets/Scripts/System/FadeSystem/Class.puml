@@ -1,0 +1,25 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+interface IFadeHandler
+{
+    +StartFadeOut() : void
+    +IsFadeOutComplete() : bool
+}
+class ImageFader
+{
+    +StartFadeOut() : void
+    +IsFadeOutComplete() : bool
+    -UpdateFade() : void
+    -SetImageProperties() : void
+}
+class FadeAndSceneTransition
+{
+    +StartTransition() : void
+}
+IFadeHandler <|.. ImageFader
+
+IFadeHandler <. FadeAndSceneTransition
+
+
+@enduml

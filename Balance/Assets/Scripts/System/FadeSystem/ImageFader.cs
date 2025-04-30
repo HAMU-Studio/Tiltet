@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace FadeSystem
 {
   
-    public class FadeImage : MonoBehaviour, IFadeHandler
+    public class ImageFader : MonoBehaviour, IFadeHandler
     {
         [Header("フェードインなし(デバッグ用)")]
         public bool firstFadeInComp;
@@ -65,7 +65,9 @@ namespace FadeSystem
             if (m_fadeState != FadeState.None)
                 return;
             
-            Debug.Log("Start FadeOut");
+    #if UNITY_EDITOR
+            Debug.Log("フェードアウト開始");
+    #endif
 
             m_fadeState = FadeState.FadingOut;
             ResetTimer();
@@ -75,7 +77,7 @@ namespace FadeSystem
         }
 
         /// <summary>
-        /// フェード終了時にα値が 0 = フェードイン終了 上手く動くか注意
+        /// フェード終了時にα値が 0 = フェードイン終了 
         /// </summary>
         public bool IsFadeInComplete() => m_fadeState == FadeState.None && img.color.a == 0;
 
@@ -137,6 +139,5 @@ namespace FadeSystem
             yield return new WaitForSeconds(waitTime);
             StartFadeIn();
         }
-        
     }
 }

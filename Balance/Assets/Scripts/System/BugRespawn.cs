@@ -27,7 +27,7 @@ public class BugRespawn : MonoBehaviour
         {
             if (isRestart)
             {
-                GameManager.instance.SceneManager.FadeStart("MainStage");
+                GameManager.instance.SceneManager.StartTransition("MainStage");
                 GameManager.instance.CurrentState = GameState.Restart;
             }
             else
@@ -47,7 +47,7 @@ public class BugRespawn : MonoBehaviour
             if (isRestart)
             {
                
-                GameManager.instance.SceneManager.FadeStart("MainStage");
+                GameManager.instance.SceneManager.StartTransition("MainStage");
                 GameManager.instance.CurrentState = GameState.Restart;
             }
             else

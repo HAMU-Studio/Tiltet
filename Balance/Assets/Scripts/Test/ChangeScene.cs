@@ -15,7 +15,7 @@ public class ChangeScene : MonoBehaviour
 
     public void ToOpening()
     {
-        GameManager.instance.SceneManager.FadeStart();
+        GameManager.instance.SceneManager.StartTransition();
         GameManager.instance.CurrentState = GameState.None;
         SoundManager.instance.Play("CursorDecision");
     }
@@ -23,7 +23,7 @@ public class ChangeScene : MonoBehaviour
 
     public void ToSavePoint()
     {
-        GameManager.instance.SceneManager.FadeStart("MainStage");
+        GameManager.instance.SceneManager.StartTransition("MainStage");
         GameManager.instance.RestartAtSavePoint(true);
         GameManager.instance.CurrentState = GameState.Restart;
         SoundManager.instance.Play("CursorDecision");

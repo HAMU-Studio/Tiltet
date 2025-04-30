@@ -28,7 +28,7 @@ namespace Test
             {
                 if (!once)
                 {
-                    _transition.FadeStart();
+                    _transition.StartTransition();
                     GameManager.instance.CurrentState = GameState.EnemyBattle;
                     Debug.Log("書き換え");
                     once = true;
@@ -54,7 +54,7 @@ namespace Test
             {
                 if (!once)
                 {
-                    _transition.FadeStart();
+                    _transition.StartTransition();
                     GameManager.instance.CurrentState = GameState.Search;
                     once = true;
                 }
