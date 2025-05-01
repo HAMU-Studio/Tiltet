@@ -55,11 +55,11 @@ namespace System
         {
             Debug.Log($"シーンがロードされました: {scene.name} | モード: {mode}");
             Debug.Log("BeforeScene = " + m_beforeSceneName);
+            
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 if (GameManager.instance.isConnected)
                 {
-                
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
                     if (scene.name == "Fight")
@@ -99,7 +99,6 @@ namespace System
                 GameManager.instance.RestartAtSavePoint(false);
                 GameManager.instance.CurrentState = GameState.Search;
             }
-            
           
             m_beforeSceneName = null;
 
@@ -113,7 +112,6 @@ namespace System
         /// <summary>
         /// jointManagerで時間差でロック解除されちゃうから、ロック自体に遅延をかけて解決
         /// </summary>
-        /// <returns></returns>
         private IEnumerator DelayLock()
         {
             yield return new WaitForSeconds(0.2f);

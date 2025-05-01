@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace FadeSystem
 {
   
-    public class FadeImage : MonoBehaviour, IFadeHandler
+    public class ImageFader : MonoBehaviour, IFadeHandler
     {
         [Header("フェードインなし(デバッグ用)")]
         public bool firstFadeInComp;

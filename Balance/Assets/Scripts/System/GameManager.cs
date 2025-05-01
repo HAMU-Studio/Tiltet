@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     
     public IEnumerator Restart()
     {
-        _sceneManager.FadeStart("MainStage");
+        _sceneManager.StartTransition("MainStage");
         m_currentState = GameState.Search;
         if (m_beforeState != GameState.StartMenu)
          PlayerDestroy();
@@ -177,25 +177,25 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.FadeStart("MainStage");
+            _sceneManager.StartTransition("MainStage");
             instance.CurrentState = GameState.Restart;
         }
         
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            _sceneManager.FadeStart("Fight");
+            _sceneManager.StartTransition("Fight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.H))
         {
-            _sceneManager.FadeStart("SnowFight");
+            _sceneManager.StartTransition("SnowFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.N))
         {
-            _sceneManager.FadeStart("VolcanoFight");
+            _sceneManager.StartTransition("VolcanoFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
 
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.FadeStart("GameOver");
+        _sceneManager.StartTransition("GameOver");
         CurrentState = GameState.GameOver;
         
         yield return null;
@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.FadeStart("Clear");
+        _sceneManager.StartTransition("Clear");
        
         yield return new WaitForSeconds(1.5f);
         PlayerDestroy();
@@ -246,13 +246,13 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.Play("Finish");
         yield return new WaitForSeconds(1.5f);
         
-        instance.SceneManager.FadeStart("MainStage");
+        instance.SceneManager.StartTransition("MainStage");
         instance.CurrentState = GameState.Search;
     }
 
     public void Back2StartMenu()
     {
-        _sceneManager.FadeStart("Start");
+        _sceneManager.StartTransition("Start");
         CurrentState = GameState.StartMenu;
         
         //ゲーム中から戻った時のためにプレイヤーいたら消す
