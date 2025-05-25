@@ -1,33 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 物理挙動がおかしくなり、落ちるはずのない場面で自機から落ちた場合の処理
+/// </summary>
 public class BugRespawn : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
    [SerializeField] private bool isRestart;
 
     private void OnCollisionEnter(Collision other)
     {
-        
-        Debug.Log("自機から落ちました");
+        Debug.LogAssertion("自機から落ちました");
         if (other.gameObject.CompareTag("Player")) 
         {
             if (isRestart)
             {
-                GameManager.instance.SceneManager.FadeStart("MainStage");
+                GameManager.instance.SceneManager.StartTransition("MainStage");
                 GameManager.instance.CurrentState = GameState.Restart;
             }
             else
@@ -39,15 +26,13 @@ public class BugRespawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        Debug.Log("自機から落ちました");
+        Debug.LogAssertion("自機から落ちました");
 
         if (other.gameObject.CompareTag("Player"))
         {
             if (isRestart)
             {
-               
-                GameManager.instance.SceneManager.FadeStart("MainStage");
+                GameManager.instance.SceneManager.StartTransition("MainStage");
                 GameManager.instance.CurrentState = GameState.Restart;
             }
             else
@@ -62,6 +47,5 @@ public class BugRespawn : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
-   
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,27 +29,27 @@ public class PlayerController : MonoBehaviour
     [Header("トリガーの反応タイミング")]
     [SerializeField]　private float triggerTiming = 0.5f;         //トリガーがどこまで押し込まれたら反応するか 要調整 
     [Header("回転時間")]
-    [SerializeField] private　float smoothTime = 0.3f;                //進行方向への回転にかかる時間
+    [SerializeField] private　float smoothTime = 0.3f;            //進行方向への回転にかかる時間
     [Header("ジャンプの強さ")]
     [SerializeField] private float jumpPower = 5f; 
     
     [Header("1Pカラー")]
-    [SerializeField] Material m_material_1P = default!;
+    [SerializeField] Material material_1P = default!;
     
     [Header("2Pカラー")]
-    [SerializeField] private Material m_material_2P = default!;
+    [SerializeField] private Material material_2P = default!;
     
     [Header("通常時のワイヤー")]
-    [SerializeField] private Material m_material_wire = default!;
+    [SerializeField] private Material material_wire = default!;
     
     [Header("凍りやられ1P")]
-    [SerializeField] private Material m_ice_1P = default!;
+    [SerializeField] private Material ice_1P = default!;
     
     [Header("凍りやられ2P")]
-    [SerializeField] private Material m_ice_2P = default!;
+    [SerializeField] private Material ice_2P = default!;
     
     [Header("凍りやられwire")]
-    [SerializeField] private Material m_ice_wire = default!;
+    [SerializeField] private Material ice_wire = default!;
     
     
     [Header("ノックバックの強さ")]
@@ -91,7 +92,6 @@ public class PlayerController : MonoBehaviour
         runParticleName = run;
     }
 
-
     private StageMovement m_stageMovement;
     void Awake()
     {
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。->同じマテリアルだから配列必要なかった...
+    /// マテリアル関連の初期化処理　プレイヤーのマテリアルは胴体としっぽで二つ。-> 同じマテリアルだから配列必要なかった
     /// </summary>
     private void GetMaterialProcess()
     {
@@ -132,13 +132,7 @@ public class PlayerController : MonoBehaviour
         
         if ( m_playerRenderer != null)
         {
-            if (m_playerRenderer.materials.Length > 1)
-            {
-               // m_defaultMaterial = new Material[2]; 
-         
-               // m_defaultMaterial[1] = m_playerRenderer.materials[1];
-            }
-            else 
+            if (m_playerRenderer.materials.Length <= 1)
             {
                 Debug.LogError("Not enough materials assigned to the Renderer.");
             }
@@ -147,35 +141,28 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("Renderer component is missing on the player object.");
         }
-
     }
 
-    private float elapsedTime;
+    private float m_elapsedTime;
     [Header("ノックバックされてから動けるようになるまでの時間")]
     [SerializeField] private float canMoveTime = 0.5f; 
     void Update()
     {
         if (isKnockBack && canMove == false)
         {
-            elapsedTime += Time.deltaTime;
+            m_elapsedTime += Time.deltaTime;
 
-            if (elapsedTime >= canMoveTime)
+            if (m_elapsedTime >= canMoveTime)
             {
                 //移動不能だけ解除、低減した重力は着地までそのまま
                 canMove = true;
-                elapsedTime = 0;
+                m_elapsedTime = 0;
             }
         }
-
-        if (isFleezing)
-        {
-            //PlayerFreeze();
-        }
-
+        
+        // スーパー着地
         if (m_PM.rescState == RescueState.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            //スーパー着地
-            //   Debug.Log("Call 1");
            StartCoroutine(SuperLanding());
         }
         
@@ -208,25 +195,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private float time;
+    private float m_time;
     private void TransitionAnim()
     {
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         
         if (m_inputMove != Vector2.zero)
         {
-            time += Time.deltaTime;
+            m_time += Time.deltaTime;
             animator.ResetTrigger("toIdle");       
         }
         else if (m_inputMove == Vector2.zero && stateInfo.IsName("Walk_01"))
         {
-            time = 0f;
+            m_time = 0f;
             if (m_PM.rescState == RescueState.None)
             {
                 animator.SetTrigger("toIdle"); 
             }
         }
-        animator.SetFloat("time", (float)time);
+        animator.SetFloat("time", (float)m_time);
 
     }
 
@@ -257,9 +244,14 @@ public class PlayerController : MonoBehaviour
             m_inputTrigger_L = 0;
         }
     }
-    public void Jump(InputAction.CallbackContext context)
+   
+    /// <summary>
+    /// ジャンプ機能廃止
+    /// </summary>
+    /// <param name="context"></param>
+    /*public void Jump(InputAction.CallbackContext context)
     {
-        /*//落下中と攻撃中はジャンプをさせない
+        //落下中と攻撃中はジャンプをさせない
         if (isFlying|| canMove == false || isKnockBack) return;
 
         if (m_RB == null)
@@ -280,8 +272,8 @@ public class PlayerController : MonoBehaviour
             m_RB.AddForce(transform.up * jumpPower, ForceMode.Impulse);
            // canMove = false;
             isFlying = true;
-        }*/
-    }
+        }
+    }*/
 
     private GameObject m_rescueCube;
     private bool canRescueAct;
@@ -392,7 +384,6 @@ public class PlayerController : MonoBehaviour
                     m_PM.rescState == RescueState.SuperLand)
                 {
                     m_PM.rescState = RescueState.None;
-                 //   Debug.Log("pm = " + m_PM.State);
                 }
             }
         }
@@ -432,7 +423,6 @@ public class PlayerController : MonoBehaviour
         {
             KnockBack(col.gameObject.GetComponentInParent<Collision>());
         }
-       
     }
 
     /// <summary>
@@ -522,43 +512,28 @@ public class PlayerController : MonoBehaviour
         m_RB.AddForce(transform.up * knockBackUpP, ForceMode.Impulse);   //若干上方向にも飛ばす
         SoundManager.instance.Play(hitSoundName);
     }
-
-    private void BombDamage()
-    {
-        
-    }
-
+    
     [Header("凍る時間")]
     [SerializeField] private float iceTime;
     private IEnumerator IceDamage()
     {
         SoundManager.instance.Play("Ice");
         ChangePlayerState(true);
-        ChangeMaterial(m_ice_1P, m_ice_2P, m_ice_wire);
-        m_playerRenderer.materials[0] = m_ice_wire;
+        ChangeMaterial(ice_1P, ice_2P, ice_wire);
+        m_playerRenderer.materials[0] = ice_wire;
 
         yield return new WaitForSeconds(iceTime);
         
-        ChangeMaterial(m_material_1P, m_material_2P, m_material_wire);
+        ChangeMaterial(material_1P, material_2P, material_wire);
         ChangePlayerState(false);
         canMove = true;
-
     }
 
     private void CheckPlayer()
     {
         Material[] newMaterials = m_playerRenderer.sharedMaterials;
 
-        if (newMaterials[1].mainTexture == m_material_1P.mainTexture)
-        {
-            is1P = true;
-            Debug.Log("is 1P");
-        }
-        else
-        {
-            is1P = false;
-            Debug.Log("is 2P");
-        }
+        is1P = newMaterials[1].mainTexture == material_1P.mainTexture ? true : false;
     }
 
     private void ChangeMaterial(Material P1, Material P2, Material wire)
@@ -692,14 +667,14 @@ public class PlayerController : MonoBehaviour
         if (index == 0)
         {
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            newMaterials[1] = m_material_2P;
+            newMaterials[1] = material_2P;
             m_playerRenderer.sharedMaterials = newMaterials;
         }
         // 2P湧いたら元に戻す
         else if (index == 1)
         {
             Material[] newMaterials = m_playerRenderer.sharedMaterials;
-            newMaterials[1] = m_material_1P;
+            newMaterials[1] = material_1P;
             m_playerRenderer.sharedMaterials = newMaterials;
         }
     }

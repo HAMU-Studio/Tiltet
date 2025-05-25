@@ -10,9 +10,8 @@ public class JointManager : MonoBehaviour
     private Rigidbody m_pivotRB;
 
     private PlayerManager m_PM; 　 //インスタンスから取得、操作
-   
-
-    //private RopeLine m_ropeLine;
+    private Rigidbody m_RB;
+    
     void Start()
     {
         GetPlayerManager();
@@ -21,10 +20,9 @@ public class JointManager : MonoBehaviour
     }
 
     //最初からHingejointがあるとエラーが出るため、落下してからjointを追加する
-    private Rigidbody m_RB;
+   
     public void SetJointAndLine()
     {
-       
         m_RB.freezeRotation = false;
 
         AddJoint();
@@ -32,16 +30,14 @@ public class JointManager : MonoBehaviour
         SetPivot();
         
         //この値によって挙動が変わってしまう。要注意 ->AutoConnectedAnchorだから関係ないかも
-       // m_hingeJoint.anchor = new Vector3(0f, m_hingeJoint.connectedBody.position.y, 0f);
         m_hingeJoint.anchor = m_hingeJoint.connectedAnchor;
         SetLimit();
 
         m_springJoint.connectedBody = GameManager.instance.Pivot.GetComponent<Rigidbody>();
-      //  m_springJoint.anchor = new Vector3(0f, m_springJoint.connectedBody.position.y, 0f);
         m_springJoint.spring = 30f;
         m_springJoint.damper = 0.2f;
        
-        //GameManagerのAxisは二点間のベクトル、それを軸とすると手前側と奥側の挙動がおかしくなる
+        // GameManagerのAxisは二点間のベクトル、それを軸とすると手前側と奥側の挙動がおかしくなる
         Vector3 velocity = Vector3.Scale(GameManager.instance.Axis, new Vector3(5f, -10f, 5f));
         SetAxis(velocity);
         
@@ -176,12 +172,12 @@ public class JointManager : MonoBehaviour
             
             if (CheckDistanceFromStage() <= 4f)
             {
-                //距離がかなり近い時はさらに飛ばす
+                // 距離がかなり近い時はさらに飛ばす
                 force =  new Vector3(force.x, Mathf.Pow(force.y, 0), force.z);
                 direction = Vector3.Scale(direction, force);
             }
             
-            //Yは0乗して1に、力の調整しない
+            // Yは0乗して1に、力の調整しない
             force =  new Vector3(force.x, Mathf.Pow(force.y, 0), force.z);
             direction = Vector3.Scale(direction, force);
 
@@ -198,39 +194,38 @@ public class JointManager : MonoBehaviour
             Debug.LogError("pivot is null! ");
             return;
         }
-
         direction = GameManager.instance.Pivot.GetComponentInParent<Rescue>().CalcOutsideForce();
-        
     }
-    //axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
-    //一時的にisKinematicをonにすれば直った
+    
+    // axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
+    // 一時的にisKinematicをonにすれば直った
     private IEnumerator ReleaseAndAddForce()
     {
-        yield return new WaitForSeconds(0.1f); 　//物理挙動がおかしくならないように少し待つ
+        yield return new WaitForSeconds(0.1f); 　// 物理挙動がおかしくならないように少し待つ
 
         if (m_RB.isKinematic == false)
         {
-            //弾く必要なし
+            // 弾く必要なし
             yield break;
         }
         
-        m_RB.isKinematic = false; 　//再度物理的に解放
+        m_RB.isKinematic = false; 　// 再度物理的に解放
       
-        //ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
+        // ステージの反対方向に、上方向は徐々に力加える。 呼ばれる場所が違うの要修正
         m_RB.AddForce(direction, ForceMode.Impulse);
     }
 
     private IEnumerator WaitAndRelease()
     {
-        yield return new WaitForSeconds(0.1f); //物理挙動がおかしくならないように少し待つ
+        yield return new WaitForSeconds(0.1f); // 物理挙動がおかしくならないように少し待つ
 
         if (m_RB.isKinematic == false)
         {
-            //弾く必要なし
+            // 弾く必要なし
             yield break;
         }
 
-        m_RB.isKinematic = false; //再度物理的に解放
+        m_RB.isKinematic = false; // 再度物理的に解放
     }
 
     private IEnumerator DelayFly()

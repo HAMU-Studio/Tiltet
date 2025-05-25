@@ -130,8 +130,6 @@ namespace System
                 particle.Transform =  transform;
             }
         }
-        
-       // private void OnDestroy() => RemoveAll();
 
         public void ForceRemove(ParticleInstance part)
         { 
@@ -197,7 +195,7 @@ namespace System
         /// <summary>
         /// 自機の移動に合わせてパーティクルを移動 　※ simulation spaceをLocalにしないと動かない
         /// </summary>
-        private Vector3 movementAmount;
+        private Vector3 m_movementAmount;
         private void FollowAircraftMovement()
         {
             if (GameManager.instance.CurrentState != GameState.Search)
@@ -208,8 +206,8 @@ namespace System
                 if (particle.Instance == null || !particle.IsPlay || !particle.List.IsFollowAircraft || GameManager.instance.StageMovement == null)
                     continue;
                
-                movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
-                particle.Instance.transform.position = movementAmount;
+                m_movementAmount = particle.Instance.transform.position + GameManager.instance.StageMovement.MovementAmount;
+                particle.Instance.transform.position = m_movementAmount;
             }
         }
         
@@ -235,7 +233,8 @@ namespace System
 
         private void Play(ParticleInstance part)
         {
-            if (part == null) return;
+            if (part == null)
+                return;
             
             part.Particle.Play();
             part.IsPlay = true;
@@ -245,8 +244,10 @@ namespace System
         {
             foreach (var particle in particleInstances)
             {
-                if (particle.Instance == null) return particle;
+                if (particle.Instance == null)
+                    return particle;
             }
+            
             Debug.LogError("There is no room in the array");
             return null;
         }
@@ -256,7 +257,7 @@ namespace System
             if (instance._lists.TryGetValue(name, out ParticleList particle))
                 return particle;
             
-            Debug.LogError("The particle does not exist");
+            Debug.LogAssertion("The particle does not exist");
             return null;
         }
     }

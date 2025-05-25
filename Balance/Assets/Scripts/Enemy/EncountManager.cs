@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using FadeSystem;
+using System.FadeSystem;
 
 public class EncountManager : MonoBehaviour
 {
@@ -29,7 +29,7 @@ public class EncountManager : MonoBehaviour
 
     public void Encount(string sceneName)
     {
-        _transition.FadeStart(sceneName);
+        _transition.StartTransition(sceneName);
         GameManager.instance.CurrentState = GameState.EnemyBattle;
         isEncount = true;
     }

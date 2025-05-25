@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace System
+namespace System.FadeSystem
 {
     public class SceneTransitionHandler : MonoBehaviour
     {
@@ -33,7 +33,9 @@ namespace System
         private string m_beforeSceneName;
         private void OnSceneUnloaded(Scene scene)
         {
+#if UNITY_EDITOR
             Debug.Log($"シーンが破棄されました : {scene.name}");
+#endif
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 GameManager.instance.RespawnPlayer(true);
@@ -53,13 +55,15 @@ namespace System
         /// </summary>
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+#if UNITY_EDITOR
             Debug.Log($"シーンがロードされました: {scene.name} | モード: {mode}");
             Debug.Log("BeforeScene = " + m_beforeSceneName);
+#endif
+            
             if (scene.name == "Fight" || scene.name == "MainStage" || scene.name == "SnowFight" || scene.name == "VolcanoFight")
             {
                 if (GameManager.instance.isConnected)
                 {
-                
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
                     if (scene.name == "Fight")
@@ -99,7 +103,6 @@ namespace System
                 GameManager.instance.RestartAtSavePoint(false);
                 GameManager.instance.CurrentState = GameState.Search;
             }
-            
           
             m_beforeSceneName = null;
 
@@ -107,13 +110,14 @@ namespace System
 
         private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
         {
+#if UNITY_EDITOR
             Debug.Log($"アクティブシーンが変更されました : {oldScene.name} -> {newScene.name}");
+#endif
         }
 
         /// <summary>
         /// jointManagerで時間差でロック解除されちゃうから、ロック自体に遅延をかけて解決
         /// </summary>
-        /// <returns></returns>
         private IEnumerator DelayLock()
         {
             yield return new WaitForSeconds(0.2f);

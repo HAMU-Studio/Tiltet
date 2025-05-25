@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FadeSystem
+namespace System.FadeSystem
 {
   
-    public class FadeImage : MonoBehaviour, IFadeHandler
+    public class ImageFader : MonoBehaviour, IFadeHandler
     {
         [Header("フェードインなし(デバッグ用)")]
         public bool firstFadeInComp;
@@ -65,17 +65,18 @@ namespace FadeSystem
             if (m_fadeState != FadeState.None)
                 return;
             
-            Debug.Log("Start FadeOut");
+    #if UNITY_EDITOR
+            Debug.Log("フェードアウト開始");
+    #endif
 
             m_fadeState = FadeState.FadingOut;
             ResetTimer();
             SetImageProperties(0,0, true);
-          //  StartCoroutine(FadeOut());
             
         }
 
         /// <summary>
-        /// フェード終了時にα値が 0 = フェードイン終了 上手く動くか注意
+        /// フェード終了時にα値が 0 = フェードイン終了 
         /// </summary>
         public bool IsFadeInComplete() => m_fadeState == FadeState.None && img.color.a == 0;
 
@@ -130,13 +131,12 @@ namespace FadeSystem
         }
 
         /// <summary>
-        /// フェード処理開始前に一定フレーム待機 いらないかも
+        /// フェード処理開始前に一定フレーム待機
         /// </summary>
         private IEnumerator WaitForFadeStart(float waitTime)
         {
             yield return new WaitForSeconds(waitTime);
             StartFadeIn();
         }
-        
     }
 }

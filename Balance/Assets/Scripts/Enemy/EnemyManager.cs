@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using UnityEngine;
-using TMPro;
-using FadeSystem;
+﻿using UnityEngine;
+using System.FadeSystem;
 using System;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;

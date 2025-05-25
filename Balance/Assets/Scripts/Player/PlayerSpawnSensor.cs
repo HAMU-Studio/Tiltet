@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+
+/// <summary>
+/// PlayerInputManagerはスポーン地点の指定ができないため、
+/// 座標0,0,0にセンサーとしてTriggerを配置して、プレイヤーを自機の上に転送する
+/// </summary>
 public class PlayerSpawnSensor : MonoBehaviour
 {
     [Header("各プレイヤーのマテリアル")]
@@ -21,7 +26,7 @@ public class PlayerSpawnSensor : MonoBehaviour
             GameObject player = other.gameObject;
             Material playerMat = player.GetComponentInChildren<Renderer>().materials[1];
 
-            //普通に比較するとInstanceか通常かで比較が通らないから名前追加で無理やり通す
+            // 普通に比較するとInstanceか通常かで比較が通らないから名前追加で通す
             if (playerMat.name == P1mat.name + " (Instance)")
             {
                 player.transform.position = P1Spawn.position;
@@ -33,12 +38,11 @@ public class PlayerSpawnSensor : MonoBehaviour
                 
                 if (player.transform.position == P1Spawn.position)
                 {
-                    Debug.Log("player1 spawn success");
                     GameManager.instance.P1Spawn = true;
                 }
                 else
                 {
-                    Debug.Log("player1 spawn fail");
+                    Debug.LogAssertion("player1 spawn fail");
                 }
             }
             else if (playerMat.name == P2mat.name + " (Instance)")
@@ -51,12 +55,11 @@ public class PlayerSpawnSensor : MonoBehaviour
                 DontDestroyOnLoad(player);
                 if (player.transform.position == P2Spawn.position)
                 {
-                    Debug.Log("player2 spawn success");
                     GameManager.instance.P2Spawn = true;
                 }
                 else
                 {
-                    Debug.Log("player2 spawn fail");
+                    Debug.LogAssertion("player2 spawn fail");
                 }
             }
         }

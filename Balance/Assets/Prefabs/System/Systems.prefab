@@ -98,7 +98,8 @@ MonoBehaviour:
   firstWave: 5
   secondWave: 3
   finalWave: 6
-  phasesText: {fileID: 0}
+  waveText: {fileID: 0}
+  waveSprite: []
   FightUI: {fileID: 0}
   waveGauge: []
   circleEnemyTest: 0
@@ -246,6 +247,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f69818a3d96f9c64cb6db4a98f1973f7, type: 2}
   - {fileID: 11400000, guid: 2221ce0fb3bb2a540a19004cfb059913, type: 2}
   image: {fileID: 0}
+  dialogueAnim: {fileID: 0}
+  systemMessage: 0
 --- !u!1001 &2879315828032255487
 PrefabInstance:
   m_ObjectHideFlags: 0
