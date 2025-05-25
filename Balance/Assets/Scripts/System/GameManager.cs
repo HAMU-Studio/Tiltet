@@ -1,12 +1,12 @@
 ﻿using Dialogue;
-using FadeSystem;
+using System.FadeSystem;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum GameState
 {
-    //制作の進捗具合によって逐次追加
    None,
    StartMenu,
    Search,
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     
     public event Action OnInitGame;
     
-    [SerializeField] private GameState m_currentState;
+    [SerializeField] private GameState currentState;
     [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
@@ -34,19 +34,17 @@ public class GameManager : MonoBehaviour
     private int m_subParts;
 
     private GameObject m_aircraftInstance;
-    private Vector3 m_aircraftPos; //探索に復帰した時用 自機の座標
+    private Vector3    m_aircraftPos;       //探索に復帰した時用 自機の座標
 
-    private GameObject[] playerInstances;
+    private GameObject[] m_playerInstances;
     private void Awake()
     {
-       // CurrentState = GameState.WaitStart;
-
         if (instance == null)
         {
             transform.parent = null;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
-            m_beforeState = m_currentState;
+            m_beforeState = currentState;
         }
         else
         {
@@ -70,7 +68,7 @@ public class GameManager : MonoBehaviour
         InitLifeAndTime();
         isPlayerSpawn = new bool [2];
         isConnected = false;
-        playerInstances = new GameObject[2];
+        m_playerInstances = new GameObject[2];
         count = 0;
 
         if (isContinue == false)
@@ -86,18 +84,20 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// いつ初期化してもエラーが起きない変数のみ
     /// </summary>
-    public void InitLifeAndTime()
+    private void InitLifeAndTime()
     {
-        _timeArray = new int[4] { 0, 0, 0, 0 };
+        m_timeArray = new int[4] { 0, 0, 0, 0 };
         m_life = initialLife;
     }
     
     public IEnumerator Restart()
     {
         _sceneManager.StartTransition("MainStage");
-        m_currentState = GameState.Search;
+        currentState = GameState.Search;
+        
         if (m_beforeState != GameState.StartMenu)
          PlayerDestroy();
+        
         yield return new WaitForSeconds(1.7f);
         InitGame(false);
     }
@@ -124,17 +124,12 @@ public class GameManager : MonoBehaviour
     public bool isSkip
     {
         get { return skipStartDialogue; }
-        set
-        {
-           
-            skipStartDialogue = value;
-            Debug.Log("isSkip = " + GameManager.instance.isSkip);
-        }
+        set { skipStartDialogue = value; }
     }
     
     private void PlayerDestroy()
     {
-        foreach (var player in playerInstances)
+        foreach (var player in m_playerInstances)
         {
             if (player == null)
                 return;
@@ -145,7 +140,6 @@ public class GameManager : MonoBehaviour
     
     public void EndGame()
     {
-        //ゲームプレイ終了
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false; 
 #else
@@ -155,7 +149,7 @@ public class GameManager : MonoBehaviour
   
     private void Update()
     {
-        if (m_beforeState != m_currentState)
+        if (m_beforeState != currentState)
         {
             OnStateChange();
         }
@@ -217,11 +211,11 @@ public class GameManager : MonoBehaviour
     {
         DisplayDialogue.system.Enqueue("Finish");
         SoundManager.instance.Play("Finish");
+        
         yield return new WaitForSeconds(1.5f);
         
         _sceneManager.StartTransition("GameOver");
         CurrentState = GameState.GameOver;
-        
         yield return null;
     }
 
@@ -230,11 +224,13 @@ public class GameManager : MonoBehaviour
         CurrentState = GameState.Clear;
         DisplayDialogue.system.Enqueue("Clear");
         SoundManager.instance.Play("Finish");
+        
         yield return new WaitForSeconds(1.5f);
         
         _sceneManager.StartTransition("Clear");
        
         yield return new WaitForSeconds(1.5f);
+        
         PlayerDestroy();
         InitGame(false);
         yield return null;
@@ -244,6 +240,7 @@ public class GameManager : MonoBehaviour
     {
         DisplayDialogue.system.Enqueue("Clear");
         SoundManager.instance.Play("Finish");
+        
         yield return new WaitForSeconds(1.5f);
         
         instance.SceneManager.StartTransition("MainStage");
@@ -268,8 +265,8 @@ public class GameManager : MonoBehaviour
 
     public GameState CurrentState
     {
-        set { m_currentState = value; }
-        get { return m_currentState; }
+        set { currentState = value; }
+        get { return currentState; }
     }
 
     public GameState BeforeState
@@ -293,30 +290,21 @@ public class GameManager : MonoBehaviour
     private GameState m_beforeState;
     private void OnStateChange()
     {
-       // Debug.Log("stateChange " + m_beforeState + " to " + m_currentState);
        if (m_beforeState != GameState.Search && m_beforeState != GameState.EnemyBattle)
        {
-           m_beforeState = m_currentState;
+           m_beforeState = currentState;
            return;
        }
        
-        instance.PlayerLock();
+       instance.PlayerLock();
        
-        if (m_beforeState == GameState.EnemyBattle &&
-            m_currentState == GameState.Search)   // 戦闘->探索
+        if (m_beforeState == GameState.Search &&
+                 CurrentState == GameState.EnemyBattle) // 探索->戦闘
         {
-            //     RespawnPlayer_Unloaded();
-            //StartCoroutine(Back2Search(1.7f));
-        }
-        else if (m_beforeState == GameState.Search &&
-                 m_currentState == GameState.EnemyBattle) // 探索->戦闘
-        {
-          //  SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
-            
         }
         else if (m_beforeState == GameState.Search &&
-                 m_currentState == GameState.GameOver) // 探索->ゲームオーバー
+                 CurrentState == GameState.GameOver)   // 探索->ゲームオーバー
         {
             SaveAircraftPos(m_aircraftInstance.transform.position);
             AircraftMoveSwitch(false);
@@ -325,7 +313,7 @@ public class GameManager : MonoBehaviour
         if (m_beforeState == GameState.Search && CurrentState == GameState.Restart)
             SaveAircraftPos(m_aircraftInstance.transform.position);
         
-        m_beforeState = m_currentState;
+        m_beforeState = CurrentState;
     }
 
     public GameObject Aircraft
@@ -381,13 +369,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    int[] _timeArray;
+    int[] m_timeArray;
 
-    public int[] SetTimeArray(int[] timeArray)
+    public int[] SetTimer(int[] timeArray)
     {
         for (int i = 0; i < timeArray.Length; i++)
         {
-            timeArray[i] = _timeArray[i];
+            timeArray[i] = m_timeArray[i];
         }
         return timeArray;
     }
@@ -395,15 +383,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < timeArray.Length; i++)
         {
-            _timeArray[i] = timeArray[i];
+            m_timeArray[i] = timeArray[i];
         }
     }
-
-    public void HitObstacle()
-    { 
-        // blinkingScript.StartCoroutine(blinkingScript.DamageIndication(i));
-    }
-
+    
     public StageMovement StageMovement
     {
         get { return _stageStageMovement; }
@@ -426,19 +409,18 @@ public class GameManager : MonoBehaviour
     int count = 0;
     public void SavePlayerInstance(GameObject playerInstance)
     {
-        //プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
+        // プレイヤー二人とも保存されたら自動で呼び出す シーン読み込んだら呼び出すように改善したい
         if (count == 2)
             return;
         
-        playerInstances[count] = playerInstance;
-       // _playerManagers[i] =  playerInstances[i].GetComponent<PlayerManager>();
+        m_playerInstances[count] = playerInstance;
         if (count == 0)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("PlayerMove", "PlayerHit", "RunDust1");
+            m_playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("PlayerMove", "PlayerHit", "RunDust1");
         }
         else if (count == 1)
         {
-            playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("Player2Move", "Player2Hit", "RunDust2");
+            m_playerInstances[count].GetComponent<PlayerController>().SetSoundAndParticleName("Player2Move", "Player2Hit", "RunDust2");
         }
         
         count++;
@@ -446,7 +428,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayer()
     {
-        playerInstances = null;
+        m_playerInstances = null;
     }
 
     /// <summary>
@@ -458,7 +440,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        foreach (GameObject player in playerInstances)
+        foreach (GameObject player in m_playerInstances)
         {
             if (player == null)
             {
@@ -479,11 +461,11 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        foreach (GameObject player in playerInstances)
+        foreach (GameObject player in m_playerInstances)
         {
             if (player == null)
             {
-                Debug.Log("PlayerInstance is null");
+                Debug.LogError("PlayerInstance is null");
                 return;
             }
 
@@ -504,11 +486,11 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        foreach (GameObject player in playerInstances)
+        foreach (GameObject player in m_playerInstances)
         {
             if (player == null)
             {
-                Debug.Log("PlayerInstance is null");
+                Debug.LogAssertion("PlayerInstance is null");
                 return;
             }
 
@@ -518,11 +500,11 @@ public class GameManager : MonoBehaviour
     
     public void PlayerUnLock()
     {
-        foreach (GameObject player in playerInstances)
+        foreach (GameObject player in m_playerInstances)
         {
             if (player == null)
             {
-                Debug.Log("PlayerInstance is null");
+                Debug.LogError("PlayerInstance is null");
                 return;
             }
 
@@ -576,7 +558,6 @@ public class GameManager : MonoBehaviour
 
     public void AddMainPartsNum()
     {
-        Debug.Log("get main part");
         m_mainParts++;
         if (m_mainParts == 1)
         {
@@ -610,6 +591,7 @@ public class GameManager : MonoBehaviour
         return m_subParts;
     }
     
+    // RBからとGameObjectからどちらでも速度の初期化ができるように
     public void ResetRBVelocity(Rigidbody RB)
     {
         RB.velocity = Vector3.zero;
@@ -629,7 +611,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         if (m_aircraftInstance == null)
         {
-            Debug.LogAssertion("m_aircraftInstance is null!");
+            Debug.LogError("m_aircraftInstance is null!");
             yield break;
         } 
         

@@ -32,8 +32,8 @@ public class PartsArrival : MonoBehaviour
         gauge.SetActive(false);
         gaugeText.text = "";
 
-        part.SetActive(false); // サブパーツを見えないようにする
-        m_stayTime = 0f; // 現在の滞在時間を初期化
+        part.SetActive(false);  // サブパーツを見えないようにする
+        m_stayTime = 0f;        // 現在の滞在時間を初期化
         m_leaveTime = 0.0f;
         isStay = false;
     }
@@ -55,7 +55,7 @@ public class PartsArrival : MonoBehaviour
                 {
                     SoundManager.instance.Play("Arrival");
                     part.SetActive(true); // サブパーツを表示
-                    Destroy(gameObject); // エリアを削除
+                    Destroy(gameObject);  // エリアを削除
                     Destroy(gauge);
                     Destroy(gaugeText);
                 }

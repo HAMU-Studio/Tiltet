@@ -6556,6 +6556,8 @@ MonoBehaviour:
   part: {fileID: 857630209}
   needStayTime: 3
   gaugeDeleteTime: 2
+  gauge: {fileID: 0}
+  gaugeText: {fileID: 0}
 --- !u!65 &943497936
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7228,18 +7230,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1415d81e42111c14ba0a0d1952421fb4, type: 3}
---- !u!114 &1011111264 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9152841295481384518, guid: 1415d81e42111c14ba0a0d1952421fb4,
+--- !u!1 &1011111264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9152841295481384516, guid: 1415d81e42111c14ba0a0d1952421fb4,
     type: 3}
   m_PrefabInstance: {fileID: 1011111263}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16ff734738340c283056961035c0d3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1011111265 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2393592423251667157, guid: 1415d81e42111c14ba0a0d1952421fb4,

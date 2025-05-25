@@ -1,4 +1,4 @@
-﻿namespace FadeSystem
+﻿namespace System.FadeSystem
 {
     /// <summary>
     /// インターフェースは契約みたいなもの。"フェードアウトの開始処理"と"完了を確認するフラグ"を作ることを確約させることで

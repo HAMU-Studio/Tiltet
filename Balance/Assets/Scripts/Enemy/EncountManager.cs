@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using FadeSystem;
+using System.FadeSystem;
 
 public class EncountManager : MonoBehaviour
 {

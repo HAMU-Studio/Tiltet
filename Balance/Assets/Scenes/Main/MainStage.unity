@@ -2600,6 +2600,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 189577211}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &174229897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9152841295481384516, guid: 1415d81e42111c14ba0a0d1952421fb4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1803008130}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &177793131 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5629634072026540709, guid: a630edb9f4d6b7f4d8e4fed34e3433a1,
@@ -14366,7 +14372,7 @@ Terrain:
   m_GameObject: {fileID: 1026116183}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 65bdaccd0bf630f4a8fe12d583266d5f, type: 2}
+  m_TerrainData: {fileID: 0}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -17260,18 +17266,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1241874328}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1250418058 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9152841295481384518, guid: 1415d81e42111c14ba0a0d1952421fb4,
-    type: 3}
-  m_PrefabInstance: {fileID: 1803008130}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16ff734738340c283056961035c0d3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1274208632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22371,7 +22365,7 @@ PrefabInstance:
         type: 3}
       propertyPath: fadeHandler
       value: 
-      objectReference: {fileID: 1250418058}
+      objectReference: {fileID: 174229897}
     - target: {fileID: 5551500621265395336, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
         type: 3}
       propertyPath: P1Spawn

@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour
         animator = GetComponent<Animator>();
         if (GameManager.instance == null)
         {
-            Debug.Log("GameManager is null");
+            Debug.LogError("GameManager is null");
             return;
         }
         GameManager.instance.SavePlayerInstance(gameObject);
@@ -118,8 +118,6 @@ public class PlayerManager : MonoBehaviour
                     animator.SetTrigger("toLand");
                     ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
                     SoundManager.instance.Play("SuperLanding");
-                    Debug.Log("SuperLanding"); 
-                    
                 }
             }
         }
@@ -134,7 +132,6 @@ public class PlayerManager : MonoBehaviour
         {
             //飛んだらレイヤーですり抜けon
             SlipThroughOn();
-         
         }
         m_beforeState = rescCurrentState;
     }
@@ -159,13 +156,11 @@ public class PlayerManager : MonoBehaviour
         //NameToLayerは名前から数値への変換。本来Layerは数字
         StartCoroutine("AutoSlipThroughOff");
         gameObject.layer = LayerMask.NameToLayer("Fly");
-        Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
     }
 
     public void SlipThroughOff()
     {
         gameObject.layer = LayerMask.NameToLayer("Player");
-        Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
     }
     
     [Header("飛び始めてから〇秒ですり抜け機能はoffに")] 
@@ -178,7 +173,6 @@ public class PlayerManager : MonoBehaviour
         if (gameObject.layer == LayerMask.NameToLayer("Fly"))
         {
             gameObject.layer = LayerMask.NameToLayer("Player");
-            Debug.Log("Layer Change to " + LayerMask.LayerToName(gameObject.layer));
         }
     }
     
@@ -189,13 +183,11 @@ public class PlayerManager : MonoBehaviour
     private PlayerController _playerController;
     public void ResetPlayer_Unloaded()
     {
-              
         if (gameObject == null)
         {
             Debug.LogAssertion("this gameObject is null!");
             return;
         }
-
         
         _playerController.enabled = false;
         GameManager.instance.IsRescue = false;
@@ -220,14 +212,11 @@ public class PlayerManager : MonoBehaviour
         _playerController.ForceStop();
         GameManager.instance.ResetRBVelocity(m_RB);
         m_RB.isKinematic = true;
-        Debug.Log("call Lock");
-        //GameManager.instance.ResetRBVelocity(m_RB);
     }
  
     public void UnLockPos()
     {
         m_RB.isKinematic = false; 
-        Debug.Log("Call UnLock");
     } 
     
     public bool IsLockPos() => m_RB.isKinematic;

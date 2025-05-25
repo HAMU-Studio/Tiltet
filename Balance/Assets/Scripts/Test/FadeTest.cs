@@ -1,4 +1,4 @@
-﻿using FadeSystem;
+﻿using System.FadeSystem;
 using System;
 using System.Collections;
 using UnityEngine;

@@ -38,11 +38,9 @@ public class Rescue : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        //着地したらFreezePositionをオンオフし着地後の余計な動き抑制
-        //m_RB = rescuedPlayer.GetComponent<Rigidbody>();
+        // 着地したらFreezePositionをオンオフし着地後の余計な動き抑制
         if (collision.rigidbody == m_RB)
         {
-            //これ意味ない説
             RescPostProcess();
         }
     }
@@ -63,14 +61,11 @@ public class Rescue : MonoBehaviour
     [Header("射出角度")]
     [SerializeField] float m_Angle = 60;
     
-    public void RescueThrow()
+    private void RescueThrow()
     {
-        //この辺構造おかしいこの関数は救出アクション中着地するまで実行し続けるべき
-        if (canRescueAct == false)
-        {
+        if (canRescueAct == false) 
             return;
-        }
-      
+        
         ThrowPREP();
        　//射出速度を算出
         Vector3 velocity = CalclateVelocity( rescuedPlayer.transform.position,m_throwPoint.transform.position, m_Angle);
@@ -115,7 +110,7 @@ public class Rescue : MonoBehaviour
     }
     
     /// <summary>
-    /// 現状JointManagerで使用する、外側に弾く力を計算する関数。
+    /// JointManagerで使用する、外側に弾く力を計算する関数。
     /// </summary>
     /// <returns></returns>
     public Vector3 CalcOutsideForce()
@@ -134,17 +129,13 @@ public class Rescue : MonoBehaviour
     {
         //ロープ作成時に回転制限オフにしたため
         m_RB.freezeRotation = true;
-     //   GameManager.instance.ResetRBVelocity(m_RB);
     }
 
     private void RescPostProcess()
     {
-       // Debug.Log("call PostProcess");
         m_RB.constraints |= RigidbodyConstraints.FreezePosition;
        
         m_RB.constraints &= ~RigidbodyConstraints.FreezePosition;
-        
-       // rescuedPlayer.GetComponent<PlayerController>().ChangePlayerCanMove(false);
         
         canRescueAct = false;
         isThrowing = false;
@@ -164,7 +155,6 @@ public class Rescue : MonoBehaviour
     /// </summary>
     private void RescAreaDisable()
     {
-        // GetComponentsInChildrenはおそらく[0]が親、[1]以降がその子
         MeshRenderer[] childrens = GetComponentsInChildren<MeshRenderer>();
         childrens[1].enabled = false;
         childrens[2].enabled = false;

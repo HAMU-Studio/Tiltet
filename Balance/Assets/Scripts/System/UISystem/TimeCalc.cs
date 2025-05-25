@@ -30,7 +30,7 @@ namespace System
 
         private void InitializeTimer()
         {
-            timeArray = GameManager.instance.SetTimeArray(timeArray);
+            timeArray = GameManager.instance.SetTimer(timeArray);
         }
 
         private void SaveCurrentTime()

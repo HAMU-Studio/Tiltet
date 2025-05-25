@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace FadeSystem
+namespace System.FadeSystem
 {
     public class FadeAndSceneTransition : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace FadeSystem
 
         private void Start()
         {
-            //fadeHandlerがIFadeHandlerを実装していればIFadeHandler型に変換して代入
+            // fadeHandlerがIFadeHandlerを実装していればIFadeHandler型に変換して代入
             m_fade = fadeHandler.GetComponent<IFadeHandler>(); 
 
             if (m_fade == null)

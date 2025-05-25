@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FadeSystem
+namespace System.FadeSystem
 {
   
     public class ImageFader : MonoBehaviour, IFadeHandler
@@ -72,7 +72,6 @@ namespace FadeSystem
             m_fadeState = FadeState.FadingOut;
             ResetTimer();
             SetImageProperties(0,0, true);
-          //  StartCoroutine(FadeOut());
             
         }
 
@@ -132,7 +131,7 @@ namespace FadeSystem
         }
 
         /// <summary>
-        /// フェード処理開始前に一定フレーム待機 いらないかも
+        /// フェード処理開始前に一定フレーム待機
         /// </summary>
         private IEnumerator WaitForFadeStart(float waitTime)
         {
