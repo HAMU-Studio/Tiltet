@@ -5,19 +5,10 @@ using UnityEngine;
 
 public class EnemyGetOn : MonoBehaviour
 {
-    private enum EnemyType
-    {
-        SPHERE,
-        ELLIPSE
-    }
-
-    [Header("敵のタイプ")]
-    [SerializeField] private EnemyType enemyType;
-
-    Vector3 stagePos = new Vector3();
-
     [Header("飛ぶときの最高点")] 
     [SerializeField] private int addHight = 5;
+
+    private GameObject[] players;
 
     //ベジェ曲線用
     Vector3 spawnPosition = new Vector3();
@@ -29,21 +20,10 @@ public class EnemyGetOn : MonoBehaviour
     //探査機に到着したか否か
     private bool arrived;
 
-    private bool gotOff;
-
     // Start is called before the first frame update
     void Start()
     {
         Set(); 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-       if (!arrived)
-       {
-            GetOn();
-       }
     }
 
     private void Set()
@@ -56,7 +36,6 @@ public class EnemyGetOn : MonoBehaviour
         Vector3 maxPos = enemymanager.maxPos;
 
         arrived = false;
-        gotOff = false;
 
         //出発地点
         spawnPosition = transform.position;
@@ -74,17 +53,18 @@ public class EnemyGetOn : MonoBehaviour
         enemySpeed = 10 / Vector3.Distance(spawnPosition, destination);
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+       if (!arrived)
+       {
+            GetOn();
+       }
+    }
+
     private void GetOn()
     {
         //着地地点を見る
-        /*if (enemyType == EnemyType.SPHERE)
-        {
-            transform.LookAt(destination);
-        }
-        else if(enemyType == EnemyType.ELLIPSE)
-        {
-            transform.LookAt(new Vector3(destination.x, transform.position.y, destination.z));
-        }*/
         transform.LookAt(destination);
 
         t += enemySpeed * Time.deltaTime;
@@ -104,11 +84,6 @@ public class EnemyGetOn : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             arrived = true;
-        }
-
-        if(collision.gameObject.CompareTag("Destroy"))
-        {
-            gotOff = false;
         }
     }
 }

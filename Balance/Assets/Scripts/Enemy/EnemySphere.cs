@@ -13,38 +13,40 @@ public class EnemySphere : MonoBehaviour
         VOLCANO
     }
 
-    [Header("この敵がでるフィールド")]
-    [SerializeField] private  EnemyType enemyType;
+    private enum EnemyState
+    {
+        Ready,
+        //Set,
+        Go,
+        Dead
+    }
 
+    [Header("この敵がでるフィールド")]
+    [SerializeField] private EnemyType enemyType;
     [Header("動くスピード")]
     [SerializeField] private float m_moveSpeed = 1.0f;
-
     [Header("最低速度")]
     [SerializeField] private float m_minSpeed = 0.1f;
-
-    [Header("最高速度")]
-    [SerializeField] private float m_maxSpeed = 0.2f;
-
     [Header("踏ん張り始める角度")]
     [SerializeField] private float m_funbariAngle = 15.0f;
-
     [Header("爆発の範囲")]
     [SerializeField] private GameObject explosionRenge;
-
+    [Header("爆発のエフェクト")]
     [SerializeField] private GameObject explosionEffect;
 
     //[SerializeField] private GameObject[] home; 
 
+    private EnemyState enemyState;
     private Animator anim;
-    private float[] m_distance;
     private GameObject[] m_players;
     private GameObject m_target;
     private Rigidbody enemyRb;
+
+    private float[] m_distance;
     private float funbariTime = 0.0f;
     private float m_angle = 0.0f;
     private float explosionTime = 0.0f;
 
-    private bool arrived;
     private bool life;
     private bool escape;
     private bool brake;
@@ -53,12 +55,11 @@ public class EnemySphere : MonoBehaviour
     private bool stop;
 
     Vector3 m_nowPos = new Vector3();
-    Vector3 m_prePosition = new Vector3();
     Vector3 m_direction = new Vector3();
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
     EnemyManager enemymanager;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,56 +68,82 @@ public class EnemySphere : MonoBehaviour
         enemymanager = enemyManager.GetComponent<EnemyManager>();
     }
 
+    private void Set()
+    {
+        life = true;
+        escape = false;
+        brake = false;
+        funbari = false;
+        stop = false;
+        ableExplosion = false;
+
+        //敵の状態
+        enemyState = EnemyState.Ready;
+
+        //最初にこれでplayer初期化(消すな)
+        m_players = GameObject.FindGameObjectsWithTag("Player");
+
+        // players配列の長さに基づいてdistance配列を初期化
+        // どうせプレイヤーは二人なので二個で初期化
+        m_distance = new float[2];
+
+        enemyRb = GetComponent<Rigidbody>();
+        anim = gameObject.GetComponent<Animator>();
+    }
+
+    //
+    //
     // Update is called once per frame
     void Update()
     {
-        explosionTime += Time.deltaTime;
+        //animation
+        AnimManager();
 
-        if (life)
+        if (enemyState == EnemyState.Go)
         {
-            if (arrived)
+            if (!stop)
             {
-                if (!stop)
+                m_nowPos = transform.position;
+
+                SetMoveSpeed();
+                Funbari();
+
+                // targetがnullでないことを確認
+                if (m_target != null)
                 {
-                    m_nowPos = transform.position;
+                    //進行方向
+                    //方向に大きさはいらないので正規化
+                    m_direction = (m_target.transform.position - transform.position).normalized;
 
-                    SetMoveSpeed();
-                    Funbari();
 
-                    // targetがnullでないことを確認
-                    if (m_target != null)
+                }
+                /*else if (m_target == null)
+                {
+                    SetTarget();
+                }*/
+
+                if (funbari)
+                {
+                    funbariTime += Time.deltaTime;
+
+                    if (funbariTime > 1.0f)
                     {
-                        //進行方向
-                        //方向に大きさはいらないので正規化
-                        m_direction = (m_target.transform.position - transform.position).normalized;
-
-
-                    }
-                    /*else if (m_target == null)
-                    {
-                        SetTarget();
-                    }*/
-
-                    if (funbari)
-                    {
-                        funbariTime += Time.deltaTime;
-
-                        if (funbariTime > 1.0f)
-                        {
-                            funbari = false;
-                            funbariTime = 0.0f;
-                        }
+                        funbari = false;
+                        funbariTime = 0.0f;
                     }
                 }
             }
         }
+
         else
         {
-            if(escape)
+            if (escape)
             {
                 m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
             }
         }
+
+        explosionTime += Time.deltaTime;
 
         if (enemyType == EnemyType.VOLCANO)
         {
@@ -148,7 +175,7 @@ public class EnemySphere : MonoBehaviour
     {
         if (life)
         {
-            if (arrived)
+            if (enemyState == EnemyState.Go)
             {
                 /*if (funbari)
                 {
@@ -162,34 +189,23 @@ public class EnemySphere : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            if (escape)
-            {
-                //enemyRb.AddForce(m_direction * m_moveSpeed);
-            }
-        }
     }
 
-    private void Set()
+    private void AnimManager()
     {
-        arrived = false;
-        life = true;
-        escape= false;
-        brake = false;
-        funbari = false;
-        stop = false;
-        ableExplosion = false;
+        switch (enemyState)
+        {
+            case EnemyState.Ready:
+                break;
+            //case EnemyState.Set:
+            //break;
+            case EnemyState.Go:
+                anim.SetBool("Arrived", true);
+                break;
+            case EnemyState.Dead:
+                break;
 
-        //最初にこれでplayer初期化(消すな)
-        m_players = GameObject.FindGameObjectsWithTag("Player");
-
-        // players配列の長さに基づいてdistance配列を初期化
-        // どうせプレイヤーは二人なので二個で初期化
-        m_distance = new float[2];
-
-        enemyRb = GetComponent<Rigidbody>();
-        anim = gameObject.GetComponent<Animator>();
+        }
     }
 
     private void SetTarget()
@@ -206,10 +222,7 @@ public class EnemySphere : MonoBehaviour
         {
             m_target = m_players[1];
         }
-    }
-    private void DebugSetTarget()
-    {
-        m_target = m_players[0];
+        enemyState = EnemyState.Go;
     }
 
     private void SetMoveSpeed()
@@ -231,6 +244,9 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
+    Vector3 m_prePosition = new Vector3();
+    private float m_maxSpeed = 0.15f;
+    //スピードがmaxSpeedを超えたらブレーキがかかる
     private void Brake()
     {
         Vector3 nowPos = transform.position;
@@ -242,6 +258,7 @@ public class EnemySphere : MonoBehaviour
             enemyRb.AddForce(-enemyDirection * (m_moveSpeed + 1.5f));
         }
 
+        //Debug.Log(speed);
         m_prePosition = nowPos;
     }
 
@@ -258,13 +275,64 @@ public class EnemySphere : MonoBehaviour
             {
                 if (m_angle >= m_funbariAngle)
                 {
-                    Debug.Log("funbari");
+                    //Debug.Log("funbari");
                     funbari = true;
                 }
             }
         }
     }
 
+    //着地した時に近くにいたプレイヤーを追いかける
+    private void OnCollisionEnter(Collision collision)
+    {
+        //自機に着いたら
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            //目標を設定しているか
+            if (enemyState == EnemyState.Ready)
+            {
+                //目標を設定
+                SetTarget();
+                //Debug.Log("tuita!");
+
+                //今の場所を記録
+                m_prePosition = transform.position;
+            }
+        }
+
+        if(collision.gameObject.CompareTag("Terrain"))
+        {
+            if(!life)
+            {
+                escape = true;
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            life = false;
+        }
+    }
+
+    ////DontUse////
+    /*private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            arrived = true;
+            anim.SetBool("Arrived", true);
+        }
+    }*/
+    /*private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Destroy"))
+        {
+            Destroy(gameObject);
+        }
+    }*/
     /*private void Explosion()
     {
         explosionTime += Time.deltaTime;
@@ -284,52 +352,8 @@ public class EnemySphere : MonoBehaviour
             Destroy(gameObject);
         }
     }*/
-
-    //着地した時に近くにいたプレイヤーを追いかける
-    private void OnCollisionEnter(Collision collision)
+    /*private void DebugSetTarget()
     {
-        if (m_target == null)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                //DebugSetTarget();
-               SetTarget();
-                arrived = true;
-                m_prePosition = transform.position;
-            }
-        }
-
-        if(collision.gameObject.CompareTag("Terrain"))
-        {
-            if(!life)
-            {
-                escape = true;
-            }
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Ground"))
-        {
-            arrived = true;
-            anim.SetBool("Arrived", true);
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            life = false;
-        }
-    }
-
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Destroy"))
-        {
-            Destroy(gameObject);
-        }
+        m_target = m_players[0];
     }*/
 }
