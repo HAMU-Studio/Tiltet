@@ -461,10 +461,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268fb018eca8ebc4194900e54cea18cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 0.5
+  enemyType: 0
+  m_moveSpeed: 0
   m_minSpeed: 0.1
-  m_maxSpeed: 0.2
   m_funbariAngle: 15
+  explosionRenge: {fileID: 0}
+  explosionEffect: {fileID: 0}
 --- !u!114 &570973208083306955
 MonoBehaviour:
   m_ObjectHideFlags: 0

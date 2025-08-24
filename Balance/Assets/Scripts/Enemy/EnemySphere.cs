@@ -24,7 +24,7 @@ public class EnemySphere : MonoBehaviour
     [Header("この敵がでるフィールド")]
     [SerializeField] private EnemyType enemyType;
     [Header("動くスピード")]
-    [SerializeField] private float m_moveSpeed = 1.0f;
+    [SerializeField] private float m_moveSpeed;
     [Header("最低速度")]
     [SerializeField] private float m_minSpeed = 0.1f;
     [Header("踏ん張り始める角度")]
@@ -64,13 +64,10 @@ public class EnemySphere : MonoBehaviour
     void Start()
     {
         Set();
-        GameObject enemyManager = GameObject.Find("EnemyManager");
-        enemymanager = enemyManager.GetComponent<EnemyManager>();
     }
 
     private void Set()
     {
-        life = true;
         escape = false;
         brake = false;
         funbari = false;
@@ -89,6 +86,8 @@ public class EnemySphere : MonoBehaviour
 
         enemyRb = GetComponent<Rigidbody>();
         anim = gameObject.GetComponent<Animator>();
+        GameObject enemyManager = GameObject.Find("EnemyManager");
+        enemymanager = enemyManager.GetComponent<EnemyManager>();
     }
 
     //
@@ -122,6 +121,7 @@ public class EnemySphere : MonoBehaviour
                     SetTarget();
                 }*/
 
+                //一秒端っこで踏ん張る
                 if (funbari)
                 {
                     funbariTime += Time.deltaTime;
@@ -171,22 +171,22 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
+    private float funbariPower = 1.0f;
     void FixedUpdate()
     {
-        if (life)
+        if (enemyState == EnemyState.Go)
         {
-            if (enemyState == EnemyState.Go)
+            if (funbari)
             {
-                /*if (funbari)
-                {
-                    enemyRb.AddForce((m_stageCenter - transform.position).normalized * m_angle / 5.0f);
-                }*/
-                if (!stop)
-                {
-                    enemyRb.AddForce(m_direction * m_moveSpeed);
+                enemyRb.AddForce((m_stageCenter - transform.position).normalized * funbariPower);
+                //Debug.Log("funbari");
+            }
 
-                    Brake();
-                }
+            if (!stop)
+            {
+                enemyRb.AddForce(m_direction * m_moveSpeed);
+
+                //Brake();
             }
         }
     }
@@ -208,6 +208,8 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
+    //目標を設定
+    //playerが二人なことはエネミーマネージャーで感知済み
     private void SetTarget()
     {
         //距離を調査
@@ -222,6 +224,7 @@ public class EnemySphere : MonoBehaviour
         {
             m_target = m_players[1];
         }
+
         enemyState = EnemyState.Go;
     }
 
@@ -251,7 +254,7 @@ public class EnemySphere : MonoBehaviour
     {
         Vector3 nowPos = transform.position;
         Vector3 enemyDirection = (nowPos - m_prePosition).normalized;
-        float speed = (nowPos - m_prePosition).magnitude;
+        float speed = Vector3.Distance(nowPos, m_prePosition);
 
         if (speed > m_maxSpeed)
         {
@@ -264,14 +267,17 @@ public class EnemySphere : MonoBehaviour
 
     private void Funbari()
     {
-        float distance = (this.transform.position - m_stageCenter).magnitude;
+        float distance = Vector3.Distance(this.transform.position, m_stageCenter);
+        //Debug.Log(distance);
         Vector3 parallel = new Vector3(m_nowPos.x, m_stageCenter.y, m_nowPos.z);
 
-        m_angle = Vector3.Angle((parallel - m_stageCenter), (m_nowPos - m_stageCenter));
-
+        m_angle = Vector3.Angle(Vector3.forward, (m_nowPos - m_stageCenter));
+        //m_angle = Vector3.Angle((parallel - m_stageCenter), (m_nowPos - m_stageCenter));
+        //Debug.Log(m_angle);
         if (!funbari)
         {
-            if (distance > 10.0f)
+            //端っこがdistance=15くらい
+            if (distance > 13.0f)
             {
                 if (m_angle >= m_funbariAngle)
                 {
