@@ -15,6 +15,8 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private FadeAndSceneTransition _transition;
 
+    [Header("探査機")]
+    [SerializeField] private GameObject stage;
     [Header("0...丸 1...楕円")]
     [SerializeField] private GameObject[] enemys;
     [SerializeField] private GameObject[] enemySpawnPoints;
@@ -23,7 +25,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float spawnInterval = 3.0f;
 
     [Header("敵が存在できる最大数")]
-    [SerializeField] private int circleLimit = 5;
+    [SerializeField] private int circleLimit;
     [SerializeField] private int ellipseLimit = 2;
 
     [Header("敵が一回にスポーンする数")]
@@ -93,6 +95,44 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         Set();
+    }
+    private void Set()
+    {
+        FightUI.SetActive(false);
+
+        start = false;
+        // ゲームが始まったと同時にスポーン（なくてもいい）
+        spawnTime = spawnInterval;
+        destroyEnemy = 0;
+
+        ableCircleSpawn = true;
+        ableEllipseSpawn = true;
+        ableSpawn = true;
+
+        //敵がスポーンする範囲
+        GameObject stage = GameObject.FindWithTag("Ground");
+        Vector3 stagePos = stage.transform.position;
+
+        minPos = new Vector3(stagePos.x - 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z - 6.0f);
+
+        maxPos = new Vector3(stagePos.x + 7.0f,
+                             stagePos.y + 2.05f,
+                             stagePos.z + 6.0f);
+
+        count1 = 0;
+        count2 = 0;
+        count3 = 0;
+        noSphere = true;
+        noEllipse = true;
+        once = false;
+        wave = Wave.WAVE1;
+
+        for (int i = 0; i < waveGauge.Length; i++)
+        {
+            waveGauge[i] = waveGauge[i].GetComponent<Slider>();
+        }
     }
 
     private ThrowawayMethod medhod;
@@ -232,44 +272,17 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void Set()
+    public Vector3 GetStageTilt()
     {
-        FightUI.SetActive(false);
+        //ステージの傾き渡し
+        float tilt = Vector3.Angle(stage.transform.up, Vector3.up);
 
-        start = false;
-        // ゲームが始まったと同時にスポーン（なくてもいい）
-        spawnTime = spawnInterval;
-        destroyEnemy = 0;
+        //ステージの傾きに沿ったベクトル（下に傾いてるほうに向いてる）
+        Vector3 downOnBoard = Vector3.ProjectOnPlane(Vector3.down, stage.transform.up).normalized;
 
-        ableCircleSpawn = true;
-        ableEllipseSpawn = true;
-        ableSpawn = true;
-
-        //敵がスポーンする範囲
-        GameObject stage = GameObject.FindWithTag("Ground");
-        Vector3 stagePos = stage.transform.position;
-
-        minPos = new Vector3(stagePos.x - 7.0f,
-                             stagePos.y + 2.05f,
-                             stagePos.z - 6.0f);
-
-        maxPos = new Vector3(stagePos.x + 7.0f,
-                             stagePos.y + 2.05f,
-                             stagePos.z + 6.0f);
-
-        count1 = 0;
-        count2 = 0;
-        count3 = 0;
-        noSphere = true;
-        noEllipse = true;
-        once = false;
-        wave = Wave.WAVE1;
-
-        for (int i = 0; i < waveGauge.Length; i++)
-        {
-            waveGauge[i] = waveGauge[i].GetComponent<Slider>();
-        }
+        return downOnBoard;
     }
+    
 
     private void EnemySpawn()
     { 
