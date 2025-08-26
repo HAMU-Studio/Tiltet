@@ -272,15 +272,19 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public Vector3 GetStageTilt()
+    public Vector3 GetDownOnBoard()
+    {
+        //ステージの傾きに沿ったベクトル（下に傾いてるほうに向いてる）
+        Vector3 downOnBoard = Vector3.ProjectOnPlane(Vector3.down, stage.transform.up).normalized;
+        
+        return downOnBoard;
+    }
+    public float GetStageTilt()
     {
         //ステージの傾き渡し
         float tilt = Vector3.Angle(stage.transform.up, Vector3.up);
 
-        //ステージの傾きに沿ったベクトル（下に傾いてるほうに向いてる）
-        Vector3 downOnBoard = Vector3.ProjectOnPlane(Vector3.down, stage.transform.up).normalized;
-
-        return downOnBoard;
+        return tilt;
     }
     
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.ParticleSystem;
 
 public class EnemySphere : MonoBehaviour
 {
@@ -16,7 +18,7 @@ public class EnemySphere : MonoBehaviour
     private enum EnemyState
     {
         Ready,
-        //Set,
+        ReSet,
         Go,
         Dead
     }
@@ -25,8 +27,6 @@ public class EnemySphere : MonoBehaviour
     [SerializeField] private EnemyType enemyType;
     [Header("動くスピード")]
     [SerializeField] private float m_moveSpeed;
-    //[Header("最低速度")]
-    //[SerializeField] private float m_minSpeed;
     [Header("踏ん張り始める角度")]
     [SerializeField] private float m_funbariAngle;
     [Header("爆発の範囲")]
@@ -43,14 +43,10 @@ public class EnemySphere : MonoBehaviour
     private Rigidbody enemyRb;
 
     private float[] m_distance;
-    private float funbariTime = 0.0f;
-    private float m_angle = 0.0f;
     private float explosionTime = 0.0f;
 
     private bool life;
     private bool escape;
-    private bool brake;
-    private bool funbari;
     private bool ableExplosion;
     private bool stop;
 
@@ -59,6 +55,7 @@ public class EnemySphere : MonoBehaviour
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
     EnemyManager enemymanager;
+    PlayerManager[] getPlayerManagers;
 
     // Start is called before the first frame update
     void Start()
@@ -69,16 +66,19 @@ public class EnemySphere : MonoBehaviour
     private void Set()
     {
         escape = false;
-        brake = false;
-        funbari = false;
         stop = false;
         ableExplosion = false;
 
         //敵の状態
         enemyState = EnemyState.Ready;
 
-        //最初にこれでplayer初期化(消すな)
+        //最初にこれでplayer類初期化(消すな)
         m_players = GameObject.FindGameObjectsWithTag("Player");
+        getPlayerManagers = new PlayerManager[m_players.Length];
+        for (int i = 0; i < m_players.Length; i++)
+        {
+            getPlayerManagers[i] = m_players[i].GetComponent<PlayerManager>();
+        }
 
         // players配列の長さに基づいてdistance配列を初期化
         // どうせプレイヤーは二人なので二個で初期化
@@ -98,20 +98,17 @@ public class EnemySphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(enemyState);
         //animation
         AnimManager();
 
-        if (enemyState == EnemyState.Go)
+        if (!stop)
         {
-            if (!stop)
+            if (enemyState != EnemyState.Ready)
             {
+                SetTarget();
+
                 m_nowPos = transform.position;
-
-                //最大速度の調整
-                //SetMoveSpeed();
-                //スピード出しすぎ防止
-                Brake();
-
 
                 // targetがnullでないことを確認
                 if (m_target != null)
@@ -119,84 +116,35 @@ public class EnemySphere : MonoBehaviour
                     //進行方向
                     //方向に大きさはいらないので正規化
                     m_direction = (m_target.transform.position - transform.position).normalized;
-
-
-                }
-                /*else if (m_target == null)
-                {
-                    SetTarget();
-                }*/
-
-                //一秒端っこで踏ん張る
-                if (funbari)
-                {
-                    funbariTime += Time.deltaTime;
-
-                    if (funbariTime > 1.0f)
-                    {
-                        funbariTime = 0.0f;
-                        funbari = false;
-                    }
-                }
-                else
-                {
-                    Funbari();
                 }
             }
         }
 
-        else
+        if (escape)
         {
-            if (escape)
-            {
-                m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
-            }
+            m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
         }
 
         explosionTime += Time.deltaTime;
-
         if (enemyType == EnemyType.VOLCANO)
         {
-            //Explosion();
-
-            if (explosionTime > 6.0f && stop == false)
-            {
-                enemyRb.constraints = RigidbodyConstraints.FreezeAll;
-                stop = true;
-                anim.SetBool("explosion", true);
-            }
-
-            if (explosionTime > 7.0f && explosionEffect.activeSelf == false)
-            {
-                explosionEffect.SetActive(true);    // 爆発エフェクト再生
-                gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;  //敵を視覚的にオフ
-                SoundManager.instance.Play("Explosion");
-            }
-
-            if (explosionTime > 7.86f)
-            {
-                enemymanager.DestroyEnemy();
-                Destroy(this.gameObject);
-            }
+            Explosion();
         }
     }
 
-    private float funbariPower = 3.0f;
+
     void FixedUpdate()
     {
-        if (enemyState == EnemyState.Go)
+        if (!stop)
         {
-            if (funbari)
+            //落ちそうになったら端っこで踏ん張る
+            Funbari();
+            //スピード出しすぎ防止
+            Brake();
+
+            if (enemyState == EnemyState.Go)
             {
-                //enemyRb.AddForce((m_stageCenter - m_nowPos).normalized * funbariPower);
-                //Debug.Log("funbari");
-            }
-            else
-            {
-                if (!stop)
-                {
-                    enemyRb.AddForce(m_direction * m_moveSpeed);
-                }
+                enemyRb.AddForce(m_direction * m_moveSpeed);
             }
         }
     }
@@ -218,40 +166,97 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
-    //目標を設定
-    //playerが二人なことはエネミーマネージャーで感知済み
-    private void SetTarget()
+    private void Explosion()
     {
-        //距離を調査
-        for (int i = 0; i < m_players.Length; i++)
+        if (explosionTime > 6.0f && stop == false)
         {
-            m_distance[i] = Vector3.Distance(m_nowPos, m_players[i].transform.position);
+            enemyRb.constraints = RigidbodyConstraints.FreezeAll;
+            stop = true;
+            anim.SetBool("explosion", true);
         }
 
-        //どっちのplayerのほうが近いか
-        m_target = m_players[0];
-        if (m_distance[1] < m_distance[0])
+        if (explosionTime > 7.0f && explosionEffect.activeSelf == false)
         {
-            m_target = m_players[1];
+            explosionEffect.SetActive(true);    // 爆発エフェクト再生
+            gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;  //敵を視覚的にオフ
+            SoundManager.instance.Play("Explosion");
         }
 
-        enemyState = EnemyState.Go;
+        if (explosionTime > 7.86f)
+        {
+            enemymanager.DestroyEnemy();
+            Destroy(this.gameObject);
+        }
     }
 
-    private void SetMoveSpeed()
+    //目標を設定
+    //playerが二人なことはエネミーマネージャーで感知済み
+    private float time = 0f;
+    private float coolTime = 1f;
+    private bool targetNum;
+    PlayerManager playerManager;
+    //playernum =true:0, =false:1 に振り分け
+    private void ChangeTarget(bool playernum)
     {
-        //プレイヤーが端にいると追い打ちをかけてくる
-        //distance=0~2
-        float distance = Vector3.Distance(m_stageCenter, m_target.transform.position);
-        //Debug.Log(distance);
+        targetNum = playernum;
+        int idx = targetNum ? 0 : 1;
+        m_target = m_players[idx];
+        playerManager = getPlayerManagers[idx];
+    }
+    private void SetTarget()
+    {
+        //プレイヤーが二人いるか（再度確認）
+        if (m_players.Length == 2)
+        {
+            //最初の目標設定
+            if (enemyState == EnemyState.Ready)
+            {
+                //距離を調査
+                for (int i = 0; i < m_players.Length; i++)
+                {
+                    m_distance[i] = Vector3.Distance(m_nowPos, m_players[i].transform.position);
+                }
 
-        if (distance <= 1)
-        {
-            m_maxSpeed = 0.2f;
-        }
-        else if (1 < distance)
-        {
-            m_maxSpeed = 0.4f;
+                //どっちのplayerのほうが近いか
+                if (m_distance[1] > m_distance[0])
+                {
+                    ChangeTarget(true);
+                }
+                else
+                {
+                    ChangeTarget(false);
+                }
+                enemyState = EnemyState.Go;
+            }
+            //追いかけてるとき
+            else if(enemyState == EnemyState.Go)
+            {
+                // Debug.Log(playerManager.rescState);
+                //追いかけてた目標が落ちたら
+                if(playerManager.rescState == RescueState.Wait)
+                {
+                    //Debug.Log(playerManager.rescState);
+                    //もう一つへ
+                    ChangeTarget(!targetNum);
+                    enemyState = EnemyState.ReSet;
+                    //Debug.Log(enemyState);
+                }
+                /*if (playerManager.rescState != RescueState.None)
+                {
+                    Debug.Log(playerManager.rescState);
+                }*/
+            }
+            else if(enemyState == EnemyState.ReSet)
+            {
+                Debug.Log(enemyState);
+                time += Time.deltaTime;
+
+                if (time > coolTime)
+                {
+                    enemyState = EnemyState.Go;
+                    time = 0f;
+                }
+            }
         }
     }
 
@@ -278,39 +283,47 @@ public class EnemySphere : MonoBehaviour
                 m_moveSpeed = movespeed;
             }
         }
-            m_prePosition = m_nowPos;
+        m_prePosition = m_nowPos;
     }
 
-    /*private void Funbari()
-    {
-        float distance = Vector3.Distance(this.transform.position, m_stageCenter);
-        //Debug.Log(distance);
-        Vector3 parallel = new Vector3(m_nowPos.x, m_stageCenter.y, m_nowPos.z);
-
-        //
-        //m_angle = Vector3.Angle(Vector3.forward, (m_nowPos - m_stageCenter));
-        m_angle = Vector3.Angle((parallel - m_stageCenter), (m_nowPos - m_stageCenter));
-        //Debug.Log(m_angle);
-        //端っこがdistance=15くらい
-        if (distance > 13.0f)
-        {
-            if (m_angle >= m_funbariAngle)
-            {
-                Debug.Log("funbari");
-                funbari = true;
-            }
-        }
-    }*/
-
+    private float resistForce = 5f;
     private void Funbari()
     {
         //ステージの傾きに沿ったベクトルを取得
-        Vector3 downOnBoard = enemymanager.GetStageTilt();
+        float tilt = enemymanager.GetStageTilt();
+        Vector3 downOnBoard = enemymanager.GetDownOnBoard();
+
+        //敵がどれくらい端にいるか
         Vector3 localPos = transform.position - m_stageCenter;
         float distance = Vector3.Distance(this.transform.position, m_stageCenter);
 
         // 球が下り側にいるか判定
         float dot = Vector3.Dot(localPos.normalized, downOnBoard);
+
+        //ターゲットをリセットした時のクールタイム
+        if (enemyState == EnemyState.ReSet)
+        {
+            Vector3 resistDir = -localPos.normalized;
+            resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
+
+            enemyRb.AddForce(resistDir * resistForce, ForceMode.Force);
+            //Debug.Log(enemyState);
+        }
+        //探査機が10度以上傾いてて(20度未満)
+        //敵が中心から10離れてて
+        //敵が下り側にいるか
+        else if (tilt >= 10f && 20f > tilt && distance >= 13f && dot > 0)
+        {
+            Vector3 resistDir = -localPos.normalized;
+            resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
+
+            enemyRb.AddForce(resistDir * resistForce, ForceMode.Force);
+            //Debug.Log("踏ん張り！");
+        }
+        else if (tilt >= 20f && distance >= 13f && dot > 0)
+        {
+            //20度以上いったら踏ん張らない
+        }
     }
 
     private void Knockback()
@@ -336,15 +349,15 @@ public class EnemySphere : MonoBehaviour
             }
         }
 
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             //Debug.Log("atatta!");
 
         }
 
-        if(collision.gameObject.CompareTag("Terrain"))
+        if (collision.gameObject.CompareTag("Terrain"))
         {
-            if(!life)
+            if (!life)
             {
                 escape = true;
             }
@@ -358,44 +371,4 @@ public class EnemySphere : MonoBehaviour
             life = false;
         }
     }
-
-    ////DontUse////
-    /*private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Ground"))
-        {
-            arrived = true;
-            anim.SetBool("Arrived", true);
-        }
-    }*/
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Destroy"))
-        {
-            Destroy(gameObject);
-        }
-    }*/
-    /*private void Explosion()
-    {
-        explosionTime += Time.deltaTime;
-        if (time >= 2.0f)
-        {
-            enemyRb.constraints = RigidbodyConstraints.FreezeAll;
-            stop = true;
-            anim.SetBool("explosion", true);
-        }
-        if (time >= 3.0f)
-        {
-            explosionRenge.SetActive(true);
-            explosionEffect.SetActive(true);    
-        }
-        if (time >= 3.5f)
-        {
-            Destroy(gameObject);
-        }
-    }*/
-    /*private void DebugSetTarget()
-    {
-        m_target = m_players[0];
-    }*/
 }
