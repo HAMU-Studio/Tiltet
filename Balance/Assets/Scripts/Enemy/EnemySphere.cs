@@ -1,8 +1,8 @@
 ﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.ParticleSystem;
 
@@ -20,6 +20,7 @@ public class EnemySphere : MonoBehaviour
         Ready,
         ReSet,
         Go,
+        Stop,
         Dead
     }
 
@@ -34,7 +35,6 @@ public class EnemySphere : MonoBehaviour
     [Header("爆発のエフェクト")]
     [SerializeField] private GameObject explosionEffect;
 
-    //[SerializeField] private GameObject[] home; 
 
     private EnemyState enemyState;
     private Animator anim;
@@ -45,10 +45,9 @@ public class EnemySphere : MonoBehaviour
     private float[] m_distance;
     private float explosionTime = 0.0f;
 
-    private bool life;
     private bool escape;
     private bool ableExplosion;
-    private bool stop;
+    //private bool stop;
 
     Vector3 m_nowPos = new Vector3();
     Vector3 m_direction = new Vector3();
@@ -66,7 +65,7 @@ public class EnemySphere : MonoBehaviour
     private void Set()
     {
         escape = false;
-        stop = false;
+        //stop = false;
         ableExplosion = false;
 
         //敵の状態
@@ -102,21 +101,18 @@ public class EnemySphere : MonoBehaviour
         //animation
         AnimManager();
 
-        if (!stop)
+        if (enemyState == EnemyState.Go)
         {
-            if (enemyState != EnemyState.Ready)
+            SetTarget();
+
+            m_nowPos = transform.position;
+
+            // targetがnullでないことを確認
+            if (m_target != null)
             {
-                SetTarget();
-
-                m_nowPos = transform.position;
-
-                // targetがnullでないことを確認
-                if (m_target != null)
-                {
-                    //進行方向
-                    //方向に大きさはいらないので正規化
-                    m_direction = (m_target.transform.position - transform.position).normalized;
-                }
+                //進行方向
+                //方向に大きさはいらないので正規化
+                m_direction = (m_target.transform.position - transform.position).normalized;
             }
         }
 
@@ -132,10 +128,10 @@ public class EnemySphere : MonoBehaviour
         }
     }
 
-
     void FixedUpdate()
     {
-        if (!stop)
+        if (enemyState == EnemyState.Stop) { }
+        else
         {
             //落ちそうになったら端っこで踏ん張る
             Funbari();
@@ -168,10 +164,11 @@ public class EnemySphere : MonoBehaviour
 
     private void Explosion()
     {
-        if (explosionTime > 6.0f && stop == false)
+        if (explosionTime > 6.0f && enemyState == EnemyState.Stop)
         {
             enemyRb.constraints = RigidbodyConstraints.FreezeAll;
-            stop = true;
+            enemyState = EnemyState.Stop;
+            //stop = true;
             anim.SetBool("explosion", true);
         }
 
@@ -205,59 +202,55 @@ public class EnemySphere : MonoBehaviour
     }
     private void SetTarget()
     {
-        //プレイヤーが二人いるか（再度確認）
-        if (m_players.Length == 2)
+        //最初の目標設定
+        if (enemyState == EnemyState.Ready)
         {
-            //最初の目標設定
-            if (enemyState == EnemyState.Ready)
+            //距離を調査
+            for (int i = 0; i < m_players.Length; i++)
             {
-                //距離を調査
-                for (int i = 0; i < m_players.Length; i++)
-                {
-                    m_distance[i] = Vector3.Distance(m_nowPos, m_players[i].transform.position);
-                }
+                m_distance[i] = Vector3.Distance(m_nowPos, m_players[i].transform.position);
+            }
 
-                //どっちのplayerのほうが近いか
-                if (m_distance[1] > m_distance[0])
-                {
-                    ChangeTarget(true);
-                }
-                else
-                {
-                    ChangeTarget(false);
-                }
-                enemyState = EnemyState.Go;
-            }
-            //追いかけてるとき
-            else if(enemyState == EnemyState.Go)
+            //どっちのplayerのほうが近いか
+            if (m_distance[1] > m_distance[0])
             {
-                // Debug.Log(playerManager.rescState);
-                //追いかけてた目標が落ちたら
-                if(playerManager.rescState == RescueState.Wait)
-                {
-                    //Debug.Log(playerManager.rescState);
-                    //もう一つへ
-                    ChangeTarget(!targetNum);
-                    enemyState = EnemyState.ReSet;
-                    //Debug.Log(enemyState);
-                }
-                /*if (playerManager.rescState != RescueState.None)
-                {
-                    Debug.Log(playerManager.rescState);
-                }*/
+                ChangeTarget(true);
             }
-            else if(enemyState == EnemyState.ReSet)
+            else
             {
-                Debug.Log(enemyState);
-                time += Time.deltaTime;
-
-                if (time > coolTime)
-                {
-                    enemyState = EnemyState.Go;
-                    time = 0f;
-                }
+                ChangeTarget(false);
             }
+            enemyState = EnemyState.Go;
         }
+        //追いかけてるとき
+        else if (enemyState == EnemyState.Go)
+        {
+            // Debug.Log(playerManager.rescState);
+            //追いかけてた目標が落ちたら
+            if (playerManager.rescState == RescueState.Wait)
+            {
+                //Debug.Log(playerManager.rescState);
+                //もう一つへ
+                ChangeTarget(!targetNum);
+                //enemyState = EnemyState.ReSet;
+                //Debug.Log(enemyState);
+            }
+            /*if (playerManager.rescState != RescueState.None)
+            {
+                Debug.Log(playerManager.rescState);
+            }*/
+        }
+        /*else if (enemyState == EnemyState.ReSet)
+        {
+            Debug.Log(enemyState);
+            time += Time.deltaTime;
+
+            if (time > coolTime)
+            {
+                enemyState = EnemyState.Go;
+                time = 0f;
+            }
+        }*/
     }
 
     Vector3 m_prePosition = new Vector3();
@@ -312,7 +305,7 @@ public class EnemySphere : MonoBehaviour
         //探査機が10度以上傾いてて(20度未満)
         //敵が中心から10離れてて
         //敵が下り側にいるか
-        else if (tilt >= 10f && 20f > tilt && distance >= 13f && dot > 0)
+        if (tilt >= 10f && 20f > tilt && distance >= 13f && dot > 0)
         {
             Vector3 resistDir = -localPos.normalized;
             resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
@@ -355,20 +348,20 @@ public class EnemySphere : MonoBehaviour
 
         }
 
-        if (collision.gameObject.CompareTag("Terrain"))
+        /*if (collision.gameObject.CompareTag("Terrain"))
         {
             if (!life)
             {
                 escape = true;
             }
-        }
+        }*/
     }
 
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            life = false;
+            //life = false;
         }
     }
 }
