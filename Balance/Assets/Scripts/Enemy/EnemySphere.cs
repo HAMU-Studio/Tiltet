@@ -17,6 +17,7 @@ public class EnemySphere : MonoBehaviour
 
     private enum EnemyState
     {
+        GetOn,
         Ready,
         ReSet,
         Go,
@@ -26,8 +27,9 @@ public class EnemySphere : MonoBehaviour
 
     [Header("この敵がでるフィールド")]
     [SerializeField] private EnemyType enemyType;
+    //2ぐらいかなー
     [Header("動くスピード")]
-    [SerializeField] private float m_moveSpeed;
+    [SerializeField] private float getMoveSpeed;
     [Header("踏ん張り始める角度")]
     [SerializeField] private float m_funbariAngle;
     [Header("爆発の範囲")]
@@ -44,12 +46,12 @@ public class EnemySphere : MonoBehaviour
 
     private float[] m_distance;
     private float explosionTime = 0.0f;
+    private float m_distanceFromCenter;
+    private float m_moveSpeed;
 
     private bool escape;
     private bool ableExplosion;
-    //private bool stop;
 
-    Vector3 m_nowPos = new Vector3();
     Vector3 m_direction = new Vector3();
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
@@ -65,11 +67,10 @@ public class EnemySphere : MonoBehaviour
     private void Set()
     {
         escape = false;
-        //stop = false;
         ableExplosion = false;
 
         //敵の状態
-        enemyState = EnemyState.Ready;
+        enemyState = EnemyState.GetOn;
 
         //最初にこれでplayer類初期化(消すな)
         m_players = GameObject.FindGameObjectsWithTag("Player");
@@ -88,8 +89,8 @@ public class EnemySphere : MonoBehaviour
         GameObject enemyManager = GameObject.Find("EnemyManager");
         enemymanager = enemyManager.GetComponent<EnemyManager>();
 
-        //inspectorで設定した値を取得(dontuse)
-        movespeed = m_moveSpeed;
+        //inspectorで設定した値を取得
+        m_moveSpeed = getMoveSpeed;
     }
 
     //
@@ -101,18 +102,29 @@ public class EnemySphere : MonoBehaviour
         //animation
         AnimManager();
 
-        if (enemyState == EnemyState.Go)
+        m_distanceFromCenter = Vector3.Distance(this.transform.position, m_stageCenter);
+
+        //着陸した後の処理
+        if (enemyState != EnemyState.GetOn)
         {
-            SetTarget();
-
-            m_nowPos = transform.position;
-
-            // targetがnullでないことを確認
-            if (m_target != null)
+            if (enemyState != EnemyState.Stop)
             {
-                //進行方向
-                //方向に大きさはいらないので正規化
-                m_direction = (m_target.transform.position - transform.position).normalized;
+                SetTarget();
+                Die();
+
+                if (enemyState == EnemyState.Go)
+                {
+                    // targetがnullでないことを確認
+                    //進行方向
+                    //方向に大きさはいらないので正規化
+                    //Debug.Log(enemyState);
+                    m_direction = (m_target.transform.position - transform.position).normalized;
+                }
+            }
+            //爆発準備or探査機から出た
+            else
+            {
+
             }
         }
 
@@ -130,17 +142,25 @@ public class EnemySphere : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (enemyState == EnemyState.Stop) { }
-        else
+        //着陸した後の処理   
+        if (enemyState != EnemyState.GetOn)
         {
-            //落ちそうになったら端っこで踏ん張る
-            Funbari();
-            //スピード出しすぎ防止
-            Brake();
-
-            if (enemyState == EnemyState.Go)
+            if (enemyState == EnemyState.Stop) 
             {
-                enemyRb.AddForce(m_direction * m_moveSpeed);
+                //爆発準備or探査機から出た
+            }
+            else
+            {
+                //落ちそうになったら端っこで踏ん張る
+                Funbari();
+                //スピード出しすぎ防止
+                Brake();
+
+                if (enemyState == EnemyState.Go)
+                {
+                    //Debug.Log(m_moveSpeed);
+                    enemyRb.AddForce(m_direction * m_moveSpeed);
+                }
             }
         }
     }
@@ -188,10 +208,10 @@ public class EnemySphere : MonoBehaviour
 
     //目標を設定
     //playerが二人なことはエネミーマネージャーで感知済み
-    private float time = 0f;
-    private float coolTime = 1f;
     private bool targetNum;
     PlayerManager playerManager;
+    private float time = 0f;
+    private float coolTime = 1f;
     //playernum =true:0, =false:1 に振り分け
     private void ChangeTarget(bool playernum)
     {
@@ -208,7 +228,7 @@ public class EnemySphere : MonoBehaviour
             //距離を調査
             for (int i = 0; i < m_players.Length; i++)
             {
-                m_distance[i] = Vector3.Distance(m_nowPos, m_players[i].transform.position);
+                m_distance[i] = Vector3.Distance(transform.position, m_players[i].transform.position);
             }
 
             //どっちのplayerのほうが近いか
@@ -220,26 +240,29 @@ public class EnemySphere : MonoBehaviour
             {
                 ChangeTarget(false);
             }
-            enemyState = EnemyState.Go;
+
+            if (m_target != null)
+            {
+                Debug.Log(enemyState);
+                enemyState = EnemyState.Go;
+            }
         }
         //追いかけてるとき
         else if (enemyState == EnemyState.Go)
         {
-            // Debug.Log(playerManager.rescState);
             //追いかけてた目標が落ちたら
             if (playerManager.rescState == RescueState.Wait)
             {
-                //Debug.Log(playerManager.rescState);
                 //もう一つへ
                 ChangeTarget(!targetNum);
                 //enemyState = EnemyState.ReSet;
-                //Debug.Log(enemyState);
             }
             /*if (playerManager.rescState != RescueState.None)
             {
                 Debug.Log(playerManager.rescState);
             }*/
         }
+        //クールタイムが必要なら追加
         /*else if (enemyState == EnemyState.ReSet)
         {
             Debug.Log(enemyState);
@@ -253,30 +276,30 @@ public class EnemySphere : MonoBehaviour
         }*/
     }
 
-    Vector3 m_prePosition = new Vector3();
-    private float m_maxSpeed = 0.15f;
-    private float movespeed;
+    Vector3 prePosition = new Vector3();
+    private float maxSpeed = 0.20f;
     //スピードがmaxSpeedを超えたらブレーキがかかる
     private void Brake()
     {
-        Vector3 enemyDirection = (m_nowPos - m_prePosition).normalized;
-        float speed = Vector3.Distance(m_nowPos, m_prePosition);
+        Vector3 enemyDirection = (transform.position - prePosition).normalized;
+        float speed = Vector3.Distance(transform.position, prePosition);
 
         //Debug.Log("スピード"+speed);
-        if (speed >= m_maxSpeed)
+        if (speed >= maxSpeed)
         {
-            m_moveSpeed = 0f;
-            enemyRb.AddForce(-enemyDirection * (movespeed * 2f));
+            //m_moveSpeed = 0f;
+            enemyRb.AddForce(-enemyDirection * (m_moveSpeed * 1.5f));
         }
         else
         {
-            //ブレーキの無効か
-            if (m_moveSpeed == 0f)
+            //ブレーキの無効か(dontuse)
+            /*if (getMoveSpeed == 0f)
             {
-                m_moveSpeed = movespeed;
-            }
+                m_moveSpeed = getMoveSpeed;
+            }*/
         }
-        m_prePosition = m_nowPos;
+
+        prePosition = transform.position;
     }
 
     private float resistForce = 5f;
@@ -288,40 +311,43 @@ public class EnemySphere : MonoBehaviour
 
         //敵がどれくらい端にいるか
         Vector3 localPos = transform.position - m_stageCenter;
-        float distance = Vector3.Distance(this.transform.position, m_stageCenter);
 
         // 球が下り側にいるか判定
         float dot = Vector3.Dot(localPos.normalized, downOnBoard);
 
-        //ターゲットをリセットした時のクールタイム
-        if (enemyState == EnemyState.ReSet)
+        //ターゲットをリセットした時のクールタイム(必要なら)
+        /*if (enemyState == EnemyState.ReSet)
         {
             Vector3 resistDir = -localPos.normalized;
             resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
 
             enemyRb.AddForce(resistDir * resistForce, ForceMode.Force);
             //Debug.Log(enemyState);
-        }
+        }*/
         //探査機が10度以上傾いてて(20度未満)
         //敵が中心から10離れてて
         //敵が下り側にいるか
-        if (tilt >= 10f && 20f > tilt && distance >= 13f && dot > 0)
+        if (tilt >= 10f && 20f > tilt && m_distanceFromCenter >= 13f && dot > 0)
         {
             Vector3 resistDir = -localPos.normalized;
-            resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
+            //resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
 
             enemyRb.AddForce(resistDir * resistForce, ForceMode.Force);
-            //Debug.Log("踏ん張り！");
+            Debug.Log("踏ん張り！");
         }
-        else if (tilt >= 20f && distance >= 13f && dot > 0)
+        else if (tilt >= 20f && m_distanceFromCenter >= 13f && dot > 0)
         {
             //20度以上いったら踏ん張らない
         }
     }
 
-    private void Knockback()
+    private void Die()
     {
-
+        //探索気よりも外に出た、下に行ったら
+        if (m_distanceFromCenter >= 17f|| transform.position.y < -2f)
+        {
+            enemyState = EnemyState.Stop;
+        }
     }
 
     //着地した時に近くにいたプレイヤーを追いかける
@@ -331,14 +357,16 @@ public class EnemySphere : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             //目標を設定しているか
-            if (enemyState == EnemyState.Ready)
+            if (enemyState == EnemyState.GetOn)
             {
+                Debug.Log(enemyState);
+                enemyState = EnemyState.Ready;
                 //目標を設定
-                SetTarget();
+                //SetTarget();
                 //Debug.Log("tuita!");
 
                 //今の場所を記録
-                m_prePosition = transform.position;
+                prePosition = transform.position;
             }
         }
 
@@ -347,21 +375,10 @@ public class EnemySphere : MonoBehaviour
             //Debug.Log("atatta!");
 
         }
-
-        /*if (collision.gameObject.CompareTag("Terrain"))
-        {
-            if (!life)
-            {
-                escape = true;
-            }
-        }*/
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            //life = false;
-        }
+
     }
 }
