@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5743175399931025174}
   - component: {fileID: 1006102747300972865}
   m_Layer: 0
-  m_Name: grass_long 1
+  m_Name: EnemyEllipse
   m_TagString: EllipseEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,14 +30,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1654121995944958511}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 40, y: 40, z: 40}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3031085316196454192
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -130,7 +130,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865dab51bbec9864c90dc898e40a173e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 50
+  enemyType: 0
+  moveSpeed: 5
+  guide: {fileID: 2798115942121385692, guid: 7d0b45985aa937c4aaca2c0000ca91a3, type: 3}
 --- !u!114 &5743175399931025174
 MonoBehaviour:
   m_ObjectHideFlags: 0
