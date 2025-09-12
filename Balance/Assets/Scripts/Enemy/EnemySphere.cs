@@ -178,7 +178,6 @@ public class EnemySphere : MonoBehaviour
                 break;
             case EnemyState.Dead:
                 break;
-
         }
     }
 
@@ -201,7 +200,7 @@ public class EnemySphere : MonoBehaviour
 
         if (explosionTime > 7.86f)
         {
-            enemymanager.DestroyEnemy();
+            //enemymanager.DestroyEnemy();
             Destroy(this.gameObject);
         }
     }
@@ -243,7 +242,7 @@ public class EnemySphere : MonoBehaviour
 
             if (m_target != null)
             {
-                Debug.Log(enemyState);
+                //Debug.Log(enemyState);
                 enemyState = EnemyState.Go;
             }
         }
@@ -346,6 +345,8 @@ public class EnemySphere : MonoBehaviour
         //探索気よりも外に出た、下に行ったら
         if (m_distanceFromCenter >= 17f|| transform.position.y < -2f)
         {
+            anim.SetBool("Arrived", false);
+            enemymanager.DestroySphere();
             enemyState = EnemyState.Stop;
         }
     }
@@ -373,7 +374,6 @@ public class EnemySphere : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             //Debug.Log("atatta!");
-
         }
     }
 

@@ -7057,6 +7057,7 @@ GameObject:
   - component: {fileID: 1223397419}
   - component: {fileID: 1223397420}
   - component: {fileID: 1223397421}
+  - component: {fileID: 1223397422}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -7218,6 +7219,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1223397422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223397415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3528fcffb37e7384f850d6e1b279401a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1223649353
 GameObject:
   m_ObjectHideFlags: 0
@@ -9489,12 +9502,6 @@ MonoBehaviour:
   - {fileID: 1992701128}
   - {fileID: 1042376086}
   - {fileID: 437129183}
-  spawnInterval: 2
-  circleLimit: 1
-  ellipseLimit: 2
-  firstWave: 5
-  secondWave: 3
-  finalWave: 8
   waveText: {fileID: 1431233510}
   waveSprite:
   - {fileID: 21300000, guid: 18b48d53fd01fc34ca0b19a6fa5adf0c, type: 3}
@@ -9505,6 +9512,10 @@ MonoBehaviour:
   - {fileID: 2058791712}
   - {fileID: 124696617}
   - {fileID: 1967100641}
+  waveNom: 3
+  spawnInterval: 2
+  sphereLimit: 050000000000000003000000
+  ellipseLimit: 000000000300000003000000
   circleEnemyTest: 0
   ellipseEnemyTest: 0
 --- !u!4 &1648347495

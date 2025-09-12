@@ -27,19 +27,19 @@ public class EnemyEllipse : MonoBehaviour
 
     [Header("この敵がでるフィールド")]
     [SerializeField] private EnemyType enemyType;
-
     [Header("突撃する強さ")]
     [SerializeField] private float moveSpeed = 50.0f;
-
     [Header("ray飛ばす方向ガイド")]
     [SerializeField] private GameObject guide;
 
+    Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
     private EnemyState enemyState;
 
     private GameObject[] players;
     private Rigidbody enemyRb;
     private float _speed;
     private float time;
+    private float m_distanceFromCenter;
     private bool ableAttack;
 
     Vector3 _Direction = new Vector3();
@@ -88,7 +88,10 @@ public class EnemyEllipse : MonoBehaviour
     {
         if (enemyState == EnemyState.Arrive)
         {
+            m_distanceFromCenter = Vector3.Distance(this.transform.position, m_stageCenter);
+
             CheckDirection();
+            Die();
 
             if (!ablemove)
             {
@@ -233,6 +236,15 @@ public class EnemyEllipse : MonoBehaviour
             enemyState = EnemyState.Attack;
         }
     }
+    private void Die()
+    {
+        //探索気よりも外に出た、下に行ったら
+        if (m_distanceFromCenter >= 17f || transform.position.y < -2f)
+        {
+            enemymanager.DestroyEllipse();
+            enemyState = EnemyState.Dead;
+        }
+    }
 
     //探査機に乗ったら攻撃開始
     private void OnCollisionEnter(Collision collision)
@@ -245,7 +257,9 @@ public class EnemyEllipse : MonoBehaviour
         }
     }
 
+
     //dontuse//
+
     /*private void SetGuidePosition()
     {
         Vector3 nowpos = transform.position;
