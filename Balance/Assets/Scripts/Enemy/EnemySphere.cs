@@ -302,6 +302,7 @@ public class EnemySphere : MonoBehaviour
     }
 
     private float resistForce = 5f;
+    private float resisttilt = 15f;
     private void Funbari()
     {
         //ステージの傾きに沿ったベクトルを取得
@@ -326,27 +327,27 @@ public class EnemySphere : MonoBehaviour
         //探査機が10度以上傾いてて(20度未満)
         //敵が中心から10離れてて
         //敵が下り側にいるか
-        if (tilt >= 10f && 20f > tilt && m_distanceFromCenter >= 13f && dot > 0)
+        if (tilt >= 10f && resisttilt > tilt && m_distanceFromCenter >= 13f && dot > 0)
         {
             Vector3 resistDir = -localPos.normalized;
             //resistDir += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), 0, UnityEngine.Random.Range(-0.3f, 0.3f));
 
             enemyRb.AddForce(resistDir * resistForce, ForceMode.Force);
-            Debug.Log("踏ん張り！");
+            //Debug.Log("踏ん張り！");
         }
-        else if (tilt >= 20f && m_distanceFromCenter >= 13f && dot > 0)
+        /*else if (tilt >= resisttilt && m_distanceFromCenter >= 13f && dot > 0)
         {
-            //20度以上いったら踏ん張らない
-        }
+            //resisttiltの角度以上いったら踏ん張らない
+        }*/
     }
 
     private void Die()
     {
         //探索気よりも外に出た、下に行ったら
-        if (m_distanceFromCenter >= 17f|| transform.position.y < -2f)
+        if (m_distanceFromCenter >= 17f|| transform.position.y < -1f)
         {
             anim.SetBool("Arrived", false);
-            enemymanager.DestroySphere();
+            //enemymanager.DestroySphere();
             enemyState = EnemyState.Stop;
         }
     }

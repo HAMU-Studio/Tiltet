@@ -30,12 +30,12 @@ public class WaveManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("SphereEnemy"))
         {
-            //enemymanager.DestroyEnemy();
+            enemymanager.DestroySphere();
             Destroy(other.gameObject);
         }
         else if(other.gameObject.CompareTag("EllipseEnemy"))
         {
-            //enemymanager.DestroyEnemy();
+            enemymanager.DestroyEllipse();
             Destroy(other.gameObject);
         }
     }

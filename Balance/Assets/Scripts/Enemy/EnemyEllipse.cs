@@ -198,7 +198,7 @@ public class EnemyEllipse : MonoBehaviour
         {
             if (hitFR.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("前右Rayが当たった: " + hitFR.collider.name);
+                //Debug.Log("前右Rayが当たった: " + hitFR.collider.name);
                 flontAttack = true;
             }
         }
@@ -207,7 +207,7 @@ public class EnemyEllipse : MonoBehaviour
         {
             if (hitFL.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("前左Rayが当たった: " + hitFR.collider.name);
+                //Debug.Log("前左Rayが当たった: " + hitFR.collider.name);
                 flontAttack = true;
             }
         }
@@ -216,7 +216,7 @@ public class EnemyEllipse : MonoBehaviour
         {
             if (hitBR.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("後ろ右Rayが当たった: " + hitFR.collider.name);
+                //Debug.Log("後ろ右Rayが当たった: " + hitFR.collider.name);
                 backAttack = true;
             }
         }
@@ -225,23 +225,23 @@ public class EnemyEllipse : MonoBehaviour
         {
             if (hitBL.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("後ろ左Rayが当たった: " + hitFR.collider.name);
+                //Debug.Log("後ろ左Rayが当たった: " + hitFR.collider.name);
                 backAttack = true;
             }
         }
 
         if (flontAttack || backAttack)
         {
-            Debug.Log("attack");
+            //Debug.Log("attack");
             enemyState = EnemyState.Attack;
         }
     }
     private void Die()
     {
         //探索気よりも外に出た、下に行ったら
-        if (m_distanceFromCenter >= 17f || transform.position.y < -2f)
+        if (m_distanceFromCenter >= 17f || transform.position.y < -1f)
         {
-            enemymanager.DestroyEllipse();
+            //enemymanager.DestroyEllipse();
             enemyState = EnemyState.Dead;
         }
     }

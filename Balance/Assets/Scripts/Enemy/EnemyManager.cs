@@ -31,7 +31,6 @@ public class EnemyManager : MonoBehaviour
     [Header("ゲージ")]
     [SerializeField] Slider[] waveGauge;
 
-
     [Header("ウェーブの合計")]
     [SerializeField] private int waveNom;
     private int nowWave;
@@ -65,7 +64,6 @@ public class EnemyManager : MonoBehaviour
     public int NumSpawnAtOnceLimit {  get; set; }
 
     private float spawnTime;
-    private int m_EnemyNum = 0;
     private int destroyEnemy;
 
     //敵の数検知
@@ -104,6 +102,9 @@ public class EnemyManager : MonoBehaviour
         // ゲームが始まったと同時にスポーン（なくてもいい）
         spawnTime = spawnInterval;
         destroyEnemy = 0;
+        nowWave = 0;
+        countSpawnEllipse = 0;
+        countSpawnSphere = 0;
 
         ableSphereSpawn = true;
         ableEllipseSpawn = true;
@@ -134,8 +135,6 @@ public class EnemyManager : MonoBehaviour
 
         //初期化
         totalEnemyNum = new int[waveNom];
-        sphereLimit=new int[waveNom];
-        ellipseLimit = new int[waveNom];
         //敵の出てくる数
         for (int i = 0; i < waveNom; i++)
         {
@@ -153,7 +152,12 @@ public class EnemyManager : MonoBehaviour
         //Pを押すと1人でも始められる
         if (Input.GetKeyDown(KeyCode.P))
         {
-            start = true;
+            Debug.Log(destroyEnemy);
+            /*for (int i = 0; i < waveNom; i++)
+            {
+                Debug.Log(totalEnemyNum[i]);
+            }*/
+            //start = true;
         }
 
         if (finishAnimation)
@@ -177,6 +181,7 @@ public class EnemyManager : MonoBehaviour
                 if (destroyEnemy >= totalEnemyNum[nowWave])
                 {
                     NextWave();
+                    Debug.Log(nowWave);
                 }
 
                 if (spawnTime > spawnInterval)
@@ -213,7 +218,7 @@ public class EnemyManager : MonoBehaviour
 
     private void ableSpawn()
     {
-        if (countSpawnSphere <= sphereLimit[nowWave])
+        if (countSpawnSphere < sphereLimit[nowWave])
         {
             ableSphereSpawn = true;
         }
@@ -221,7 +226,7 @@ public class EnemyManager : MonoBehaviour
         {
             ableSphereSpawn = false;
         }
-        if (countSpawnEllipse <= ellipseLimit[nowWave])
+        if (countSpawnEllipse < ellipseLimit[nowWave])
         {
             ableEllipseSpawn = true;
         }
