@@ -30,7 +30,6 @@ public class SubPartsUI : MonoBehaviour
         else
         {
             number.sprite = numbers[subParts];
-            Debug.Log("SubPartsNum = " + GameManager.instance.GetSubPartsNum());
         }
     }
 }

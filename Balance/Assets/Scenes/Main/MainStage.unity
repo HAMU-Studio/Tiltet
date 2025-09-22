@@ -6253,7 +6253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143e1c8b1db88134c853f97dbb58e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 2656793014852561063, guid: b0e739b20247b4f4998982b1e1f09f91, type: 3}
+  coinPrefab: {fileID: 2656793014852561063, guid: b0e739b20247b4f4998982b1e1f09f91,
+    type: 3}
   coins:
   - {fileID: 1900158469}
   - {fileID: 1508328266}
@@ -6262,6 +6263,7 @@ MonoBehaviour:
   - {fileID: 743480232}
   - {fileID: 621791065}
   parts: {fileID: 400497331}
+  gimmickType: 1
 --- !u!1001 &391448473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23647,7 +23649,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143e1c8b1db88134c853f97dbb58e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 2656793014852561063, guid: c658cda76d780124f9bf22804a088e7b, type: 3}
+  coinPrefab: {fileID: 2656793014852561063, guid: c658cda76d780124f9bf22804a088e7b,
+    type: 3}
   coins:
   - {fileID: 1475827500}
   - {fileID: 1771569226}
@@ -23656,6 +23659,7 @@ MonoBehaviour:
   - {fileID: 1636563806}
   - {fileID: 1573543599}
   parts: {fileID: 2087081583}
+  gimmickType: 3
 --- !u!1001 &1756631498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24473,7 +24477,7 @@ PrefabInstance:
     - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: DebugDiaogue
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
@@ -28273,7 +28277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143e1c8b1db88134c853f97dbb58e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 2656793014852561063, guid: db59e916d68b27341b319adbe971e847, type: 3}
+  coinPrefab: {fileID: 2656793014852561063, guid: db59e916d68b27341b319adbe971e847,
+    type: 3}
   coins:
   - {fileID: 1030662029}
   - {fileID: 545435917}
@@ -28282,6 +28287,7 @@ MonoBehaviour:
   - {fileID: 1848536035}
   - {fileID: 1216894913}
   parts: {fileID: 1417842048}
+  gimmickType: 2
 --- !u!1001 &2040580566
 PrefabInstance:
   m_ObjectHideFlags: 0

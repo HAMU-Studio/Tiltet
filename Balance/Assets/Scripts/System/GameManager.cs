@@ -16,6 +16,16 @@ public enum GameState
    Restart,
    GameOver,
 }
+
+public enum GimmickState
+{
+    Normal,
+    GreenCoin,
+    VolcanicCoin,
+    SnowCoin,
+    VolcanicParts,
+    SnowParts,
+}
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
@@ -37,6 +47,8 @@ public class GameManager : MonoBehaviour
     private Vector3    m_aircraftPos;       //探索に復帰した時用 自機の座標
 
     private GameObject[] m_playerInstances;
+
+    private GimmickState m_gimmickState;
     private void Awake()
     {
         if (instance == null)
@@ -59,6 +71,7 @@ public class GameManager : MonoBehaviour
         if (CurrentState == GameState.EnemyBattle)
             InitGame(true);
     }
+    
     /// <summary>
     /// ゲームの初期化 セーブポイントからスタートなのか、最初からなのかによって処理を切り替え
     /// </summary>
@@ -70,6 +83,7 @@ public class GameManager : MonoBehaviour
         isConnected = false;
         m_playerInstances = new GameObject[2];
         count = 0;
+        GimmickState = GimmickState.Normal;
 
         if (isContinue == false)
         {
@@ -274,7 +288,12 @@ public class GameManager : MonoBehaviour
         set { m_beforeState = value; }
         get { return m_beforeState; }
     }
-    
+
+    public GimmickState GimmickState
+    {
+        set { m_gimmickState = value; }
+        get { return m_gimmickState; }
+    }
 
     public bool isConnected
     {
@@ -282,7 +301,6 @@ public class GameManager : MonoBehaviour
 
         set { connectFlag = value; }
     }
-    
     
     /// <summary>
     /// ステートが切り替わると呼ばれる シーンのロード前
