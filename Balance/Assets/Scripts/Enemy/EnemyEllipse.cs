@@ -21,6 +21,7 @@ public class EnemyEllipse : MonoBehaviour
     {
         GetOn,
         Arrive,
+        Ready,
         Attack,
         Dead
     }
@@ -33,14 +34,15 @@ public class EnemyEllipse : MonoBehaviour
     [SerializeField] private GameObject guide;
 
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
+    private Animator anim;
     private EnemyState enemyState;
 
     private GameObject[] players;
     private Rigidbody enemyRb;
-    private float _speed;
+    private float freezeTime;
     private float time;
     private float m_distanceFromCenter;
-    private bool ableAttack;
+    private bool turn;
 
     Vector3 _Direction = new Vector3();
     Vector3 _prePosition = new Vector3();// 前の位置
@@ -48,8 +50,6 @@ public class EnemyEllipse : MonoBehaviour
     private GameObject target;
 
     EnemyManager enemymanager;
-
-    private bool ablemove;
 
     // Start is called before the first frame update
     void Start()
@@ -62,20 +62,21 @@ public class EnemyEllipse : MonoBehaviour
         //playerのタグがついているオブジェクトを代入
         players = GameObject.FindGameObjectsWithTag("Player");
 
+        anim = gameObject.GetComponent<Animator>();
+
         // players配列の長さに基づいてdistance配列を初期化
         if (players.Length > 0)
         {
             distance = new float[players.Length];
         }
 
+        freezeTime = 0;
         time = 0;
-        ableAttack = true;
+        turn = true;
 
         _prePosition = transform.position;
         _Direction = Vector3.forward;
         enemyRb = GetComponent<Rigidbody>();
-
-        ablemove = false;
 
         enemyState = EnemyState.GetOn;
 
@@ -88,41 +89,44 @@ public class EnemyEllipse : MonoBehaviour
     {
         if (enemyState == EnemyState.Arrive)
         {
-            m_distanceFromCenter = Vector3.Distance(this.transform.position, m_stageCenter);
+            freezeTime += Time.deltaTime;
 
-            CheckDirection();
-            Die();
-
-            if (!ablemove)
+            //止まったらok
+            if (freezeTime > 1f)
             {
-                //止まったらok
-                if (_speed < 0.001f)
-                {
-                    enemyRb.constraints = RigidbodyConstraints.None;
-                    ablemove = true;
-                }
-                else
-                {
-                    enemyRb.constraints = RigidbodyConstraints.FreezeAll;
-                }
+                enemyRb.constraints = RigidbodyConstraints.None;
+                anim.SetBool("Serch", true);
+                enemyState = EnemyState.Ready;
             }
             else
             {
-                if (enemyState == EnemyState.Attack)
-                {
-                    time += Time.deltaTime;
-
-                    if (time >= 2.0f)
-                    {
-                        time = 0.0f;
-                        enemyState = EnemyState.Arrive;
-                    }
-                }
-                else
-                {
-                    CheckPlayer();
-                }
+                enemyRb.constraints = RigidbodyConstraints.FreezeAll;
             }
+        }
+        else if (enemyState == EnemyState.Ready)
+        {
+            /*if (turn)
+            {
+                transform.Rotate(0, 10, 0);
+            }*/
+
+            m_distanceFromCenter = Vector3.Distance(this.transform.position, m_stageCenter);
+            CheckDirection();
+            Die();
+        }
+        else if (enemyState == EnemyState.Attack)
+        {
+            time += Time.deltaTime;
+
+            if (time >= 2.0f)
+            {
+                time = 0.0f;
+                enemyState = EnemyState.Arrive;
+            }
+        }
+        else
+        {
+            CheckPlayer();
         }
     }
 
@@ -137,15 +141,13 @@ public class EnemyEllipse : MonoBehaviour
                 flontAttack = false;
                 backAttack = false;
             }
-            else
+
+            if (backAttack)
             {
-                if(backAttack)
-                {
-                    enemyRb.AddForce(-_Direction * moveSpeed, ForceMode.Impulse);
-                    //Debug.Log("attack");
-                    flontAttack = false;
-                    backAttack = false;
-                }
+                enemyRb.AddForce(-_Direction * moveSpeed, ForceMode.Impulse);
+                //Debug.Log("attack");
+                flontAttack = false;
+                backAttack = false;
             }
         }
     }
@@ -165,7 +167,6 @@ public class EnemyEllipse : MonoBehaviour
             //Vector3 direction = (nowposition - _prePosition).normalized;
             //enemyRb.constraints = RigidbodyConstraints.None;
             _Direction = downOnBoard;
-
         }
         else
         {
@@ -176,12 +177,12 @@ public class EnemyEllipse : MonoBehaviour
 
         //前の位置を代入
         _prePosition = nowposition;
-        _speed = speed;
+        freezeTime = speed;
     }
 
     private bool flontAttack = false;
     private bool backAttack = false;
-    float rayLength = 5f;
+    float rayLength = 10f;
     private void CheckPlayer()
     {
         Vector3 launchsiteR = new Vector3(transform.position.x + 2f, transform.position.y, transform.position.z);
@@ -255,6 +256,13 @@ public class EnemyEllipse : MonoBehaviour
             _prePosition = transform.position;
             enemyState = EnemyState.Arrive;
         }
+    }
+
+    public void OnAnimationEnd()
+    {
+        //Debug.Log("終わった！");
+        enemyRb.WakeUp();
+        anim.SetBool("Serch", false);
     }
 
 

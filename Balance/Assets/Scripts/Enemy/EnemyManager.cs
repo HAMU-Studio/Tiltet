@@ -152,12 +152,12 @@ public class EnemyManager : MonoBehaviour
         //Pを押すと1人でも始められる
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log(destroyEnemy);
+            //Debug.Log(destroyEnemy);
             /*for (int i = 0; i < waveNom; i++)
             {
                 Debug.Log(totalEnemyNum[i]);
             }*/
-            //start = true;
+            start = true;
         }
 
         if (finishAnimation)
