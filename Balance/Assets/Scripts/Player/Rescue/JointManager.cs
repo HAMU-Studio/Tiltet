@@ -1,4 +1,6 @@
+using Player;
 using System;
+using Player.Rescue;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,7 +11,7 @@ public class JointManager : MonoBehaviour
     private SpringJoint m_springJoint;
     private Rigidbody m_pivotRB;
 
-    private PlayerManager m_PM; 　 //インスタンスから取得、操作
+    private PlayerCondition m_condition; 　 //インスタンスから取得、操作
     private Rigidbody m_RB;
     
     void Start()
@@ -125,7 +127,7 @@ public class JointManager : MonoBehaviour
     
     private void GetPlayerManager()
     {
-        m_PM = GetComponent<PlayerManager>();
+        m_condition = GetComponent<PlayerCondition>();
     }
 
   　private float lowerLimit = 15f;
@@ -158,7 +160,7 @@ public class JointManager : MonoBehaviour
     private void RescueAdjust()
     {
         //もう少し細かく分けたい
-        if (m_PM.rescState == RescueState.OutsideMove)
+        if (m_condition.RescueState == State.OutsideMove)
         {
             if (CheckDistanceFromStage() > lowerLimit)
             {
@@ -194,7 +196,7 @@ public class JointManager : MonoBehaviour
             Debug.LogError("pivot is null! ");
             return;
         }
-        direction = GameManager.instance.Pivot.GetComponentInParent<Rescue>().CalcOutsideForce();
+        direction = GameManager.instance.Pivot.GetComponentInParent<RescueMovement>().CalcOutsideForce();
     }
     
     // axisを0にすると最初の揺れは合ってるけど外側に力を加えた時正しく動いてくれない -> 消したはずのjointの影響が残っていたせいだった。
@@ -230,7 +232,7 @@ public class JointManager : MonoBehaviour
 
     private IEnumerator DelayFly()
     {
-        m_PM.rescState = RescueState.Fly;
+        m_condition.RescueState = State.Fly;
         
         yield return new WaitForSeconds(0.7f);
       

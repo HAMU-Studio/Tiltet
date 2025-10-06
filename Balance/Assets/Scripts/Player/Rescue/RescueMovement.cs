@@ -1,12 +1,18 @@
+using Player;
+using Player.Rescue;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Rescue : MonoBehaviour
+public class RescueMovement : MonoBehaviour
 {
     private Rigidbody m_RB;
     private GameObject rescuePlayer;
     private bool canRescueAct;
     private Vector3 direction;
+    
+    private GameObject rescuedPlayer;
+    private PlayerCondition m_condition;
  
     void Start()
     {
@@ -16,7 +22,13 @@ public class Rescue : MonoBehaviour
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<Renderer>().enabled = false;
     }
-    
+
+    // 念のためOnDestroyでも登録解除 エラー出るかも
+    private void OnDestroy()
+    {
+        m_condition.OnStateChange -= OnStateChange;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -28,7 +40,7 @@ public class Rescue : MonoBehaviour
   
     private void OnTriggerExit(Collider other)
     {
-        if (m_PM.rescState == RescueState.Wait)
+        if (m_condition.RescueState == State.Wait)
         {
             if (other.gameObject.CompareTag("Player"))
             {
@@ -44,13 +56,12 @@ public class Rescue : MonoBehaviour
             RescPostProcess();
         }
     }
-
-    private GameObject rescuedPlayer;
-    private PlayerManager m_PM;
+    
     public void SetRescuedPlayer(GameObject Player)
     {
         rescuedPlayer = Player;
-        m_PM = rescuedPlayer.GetComponent<PlayerManager>();
+        m_condition = rescuedPlayer.GetComponent<PlayerCondition>();
+        m_condition.OnStateChange += OnStateChange; 
         m_RB = rescuedPlayer.GetComponent<Rigidbody>();
     }
     
@@ -140,13 +151,14 @@ public class Rescue : MonoBehaviour
         canRescueAct = false;
         isThrowing = false;
         once = false;
-        m_PM = null;
+        m_condition.OnStateChange -= OnStateChange;
+        m_condition = null;
         gameObject.SetActive(false);
     }
 
     public void StartRescue()
     {
-        m_PM.rescState = RescueState.OutsideMove;
+        m_condition.RescueState = State.OutsideMove;
         RescAreaDisable();
     }
 
@@ -160,31 +172,36 @@ public class Rescue : MonoBehaviour
         childrens[2].enabled = false;
     }
 
+    private void OnStateChange(RescueEventArgs args)
+    {
+        
+    }
+
     private bool once;
     private void Update()
     {
         if (once)
         {
-            if (m_PM.rescState == RescueState.SuperLand || m_PM.rescState == RescueState.None)
+            if (m_condition.RescueState == State.SuperLand || m_condition.RescueState == State.None)
             {
                 RescPostProcess();
             }
             return;
         }
         
-        if (m_PM.rescState == RescueState.Fly)
+        if (m_condition.RescueState == State.Fly)
         {
             RescueThrow();
             once = true;
         }
     }
     
-    [Header("上方向の力加える倍率")] [SerializeField] private float upPowoer = 2f;
+    [FormerlySerializedAs("upPowoer")] [Header("上方向の力加える倍率")] [SerializeField] private float upPower = 2f;
     private void FixedUpdate()
     {
-        if (m_PM.rescState == RescueState.OutsideMove)
+        if (m_condition.RescueState == State.OutsideMove)
         {
-            Vector3 force = Vector3.up * upPowoer / Time.fixedDeltaTime;
+            Vector3 force = Vector3.up * upPower / Time.fixedDeltaTime;
             m_RB.AddForce(force);
         }
     }

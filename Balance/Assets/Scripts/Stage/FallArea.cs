@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
+using Player;
+using Player.Rescue;
 
 /// <summary>
 /// 落ちた敵を消す、救出アクションの準備
 /// </summary>
 public class FallArea : MonoBehaviour
 {
-   
     [SerializeField] private GameObject[] RescueActAreas;
     private GameObject fallPlayerInstance;
-    private PlayerManager m_PM;
+    private PlayerCondition playerCondition;
    
     public bool waitRescue;
 
@@ -34,20 +35,19 @@ public class FallArea : MonoBehaviour
         if (waitRescue)
         {
             //救出アクション終わった時（多分）
-            if (m_PM.rescState == RescueState.None)
+            if (playerCondition.RescueState == State.None)
             {
                 ResetFlag();
-                PostProcess();
+                PlayerFallPostProcess();
             }
         }
     }
 
-    private void SetPlayerManager()
+    private void SetPlayerCondition()
     {
-        m_PM = fallPlayerInstance.GetComponent<PlayerManager>();
+        playerCondition = fallPlayerInstance.GetComponent<PlayerCondition>();
     }
 
-    //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     //DestroyAreaに触れたら敵は消え、プレイヤーはその場で固定し救出待ちに
     private void OnTriggerEnter(Collider other)
     {
@@ -71,7 +71,7 @@ public class FallArea : MonoBehaviour
             {
                 if (Player2Check(other) == true)
                 {
-                    m_PM.PlayStruggle();
+                    other.GetComponent<PlayerCondition>().RescueState = State.Wait;
                     HitPlayerProcess(other);
                     StartCoroutine(GameManager.instance.GameOver());
                 }
@@ -93,10 +93,10 @@ public class FallArea : MonoBehaviour
         SetFallInstance(playerCol);
        
         //紐が二本つかないように
-        if (m_PM.rescState != RescueState.None)
+        if (playerCondition.RescueState != State.None)
             return;
      
-        m_PM.rescState = RescueState.Wait;
+        playerCondition.RescueState = State.Wait;
         CalcShortestDist();
       //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
@@ -106,8 +106,8 @@ public class FallArea : MonoBehaviour
     private bool Player2Check(Collider playerCol)
     {
         SetFallInstance(playerCol);
-        SetPlayerManager();
-        if (m_PM.rescState == RescueState.None)
+        SetPlayerCondition();
+        if (playerCondition.RescueState == State.None)
         {
             return true;
         }
@@ -122,7 +122,7 @@ public class FallArea : MonoBehaviour
         fallPlayerInstance = col.gameObject;
      //   Debug.Log("FPI = " + fallPlayerInstance);
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
-        SetPlayerManager();
+        SetPlayerCondition();
     }
 
     private Vector3 playerPos;
@@ -167,15 +167,15 @@ public class FallArea : MonoBehaviour
         MeshRenderer[] childrens=  shortestDistArea.GetComponentsInChildren<MeshRenderer>();
         childrens[0].enabled = false;
         childrens[1].enabled = false;
-        shortestDistArea.GetComponent<Rescue>().SetRescuedPlayer(fallPlayerInstance);
+        shortestDistArea.GetComponent<RescueMovement>().SetRescuedPlayer(fallPlayerInstance);
         shortestDistArea.SetActive(true);
   
     }
 
     Renderer[] children = new Renderer[2];
-    private void PostProcess()
+    private void PlayerFallPostProcess()
     {
-        m_PM = null;
+        playerCondition = null;
         shortestDistArea = null;
         shortestDist = 0;
         
