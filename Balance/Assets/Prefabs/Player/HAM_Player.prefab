@@ -689,6 +689,7 @@ GameObject:
   - component: {fileID: 8095124163189911120}
   - component: {fileID: 7888758050877370913}
   - component: {fileID: 4234192005737666924}
+  - component: {fileID: 4695173461609206248}
   - component: {fileID: 2781894748016751198}
   - component: {fileID: 2280751616360117683}
   m_Layer: 7
@@ -778,6 +779,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14af4fdbcc74f454e995f186dfe954df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_condition: {fileID: 4234192005737666924}
+  m_PM: {fileID: 7888758050877370913}
   walkSpeed: 8
   dashSpeed: 12
   gravityPower: -5
@@ -821,6 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772794dbc9871444e978fdc3225b1ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: -2555470081294695687}
   condition: {fileID: 4234192005737666924}
   waitTime: 3
 --- !u!114 &4234192005737666924
@@ -842,6 +846,19 @@ MonoBehaviour:
   canMove: 0
   moveSpeed: 0
   rescueState: 0
+--- !u!114 &4695173461609206248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567397155698116036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56aae9a118b641a493ec03813f2409b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  condition: {fileID: 4234192005737666924}
 --- !u!114 &2781894748016751198
 MonoBehaviour:
   m_ObjectHideFlags: 0

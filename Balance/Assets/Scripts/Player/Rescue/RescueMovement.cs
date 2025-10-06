@@ -24,10 +24,10 @@ public class RescueMovement : MonoBehaviour
     }
 
     // 念のためOnDestroyでも登録解除 エラー出るかも
-    private void OnDestroy()
+    /*private void OnDestroy()
     {
         m_condition.OnStateChange -= OnStateChange;
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {

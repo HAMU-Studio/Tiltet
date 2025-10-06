@@ -8,8 +8,8 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerCondition m_condition;
-    private PlayerManager m_PM;
+    [SerializeField] private PlayerCondition m_condition;
+    [SerializeField] private PlayerManager m_PM;
     
     private Rigidbody m_RB;
     private Vector3 m_Velocity;
@@ -105,8 +105,6 @@ public class PlayerController : MonoBehaviour
         is1P = false;
     
         GetMaterialProcess();
-        
-        m_condition = GetComponent<PlayerCondition>();
         
         animator = GetComponent<Animator>();
         animator.SetTrigger("toIdle");

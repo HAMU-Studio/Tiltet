@@ -24,11 +24,6 @@ namespace Player.Rescue
         }
 
         private void OnDestroy() => condition.OnStateChange -= OnStateChange;
-        
-        private ThrowawayMethod method;
-        private bool temp;
-
-        private State PreviousState;
 
         private void OnStateChange(RescueEventArgs args)
         {
@@ -48,7 +43,7 @@ namespace Player.Rescue
             {
                 SoundManager.instance.StopPlay("Struggle");
                 animator.Play("Walk_01");
-                method.RunOnce(SuperLandDialogue);
+                SuperLandDialogue();
                 if (args.CurrentState == State.OutsideMove)
                 {
                     // 外側に飛ばす音

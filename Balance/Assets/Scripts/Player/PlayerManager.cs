@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private Animator animator;
+    [SerializeField] private Animator animator;
     [SerializeField] private PlayerCondition condition;
     private void Awake()
     {
