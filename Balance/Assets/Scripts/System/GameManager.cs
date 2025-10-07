@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
     public event Action OnInitGame;
     
     [SerializeField] private GameState currentState;
-    [SerializeField] private RescueState currentRescue;
 
     [SerializeField] private int initialLife = default!;
 

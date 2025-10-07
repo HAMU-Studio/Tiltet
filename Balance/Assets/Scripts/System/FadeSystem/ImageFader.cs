@@ -28,6 +28,9 @@ namespace System.FadeSystem
                 return;
             }
 
+            if (img.IsActive() == false)
+                img.enabled = true;
+
             if (firstFadeInComp)
             {
                 FadeInComplete();

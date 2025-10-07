@@ -1,40 +1,17 @@
 using Dialogue;
 using JetBrains.Annotations;
+using Player;
 using System;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-/// <summary>
-/// 元はGamaManagerにstateを置いていたが、インスタンスが一つなのでエラーが多発したので移動。
-/// </summary>
-
-public enum RescueState
-{
-    //紐を無くすタイミングのためThrowingとFlyに分ける
-    //飛ばす直前の位置に移動させるためMove追加
-    None,
-    Wait,
-    OutsideMove,   
-    Fly,
-    SuperLand
-}
-
 public class PlayerManager : MonoBehaviour
 {
-    private RescueState rescCurrentState;
-    
-    public RescueState rescState
-    {
-        set { rescCurrentState = value; }
-        get { return rescCurrentState; }
-    }
-    
-    Animator animator;
+    [SerializeField] private Animator animator;
+    [SerializeField] private PlayerCondition condition;
     private void Awake()
     {
-        m_beforeState = rescCurrentState;
-        animator = GetComponent<Animator>();
         if (GameManager.instance == null)
         {
             Debug.LogError("GameManager is null");
@@ -50,108 +27,11 @@ public class PlayerManager : MonoBehaviour
             LockPos();
         }
     }
-
-    private ThrowawayMethod method;
-    private bool temp;
-    private void FixedUpdate()
-    {
-        if (rescCurrentState != m_beforeState)
-        {
-            OnStateChange();
-        }
-    }
-    
-    private RescueState m_beforeState;
-    private void OnStateChange()
-    {
-        if (m_beforeState == RescueState.None && rescCurrentState == RescueState.Wait)
-        {
-            //落ちたら救出開始
-            if (GameManager.instance.IsRescue == false)
-            {
-                GameManager.instance.IsRescue = true;
-                PlayStruggle();
-            }
-        }
-
-        // Wait to Move or Wait to Fly
-        if (m_beforeState == RescueState.Wait && rescCurrentState == RescueState.OutsideMove
-            || m_beforeState == RescueState.Wait && rescCurrentState == RescueState.Fly)
-        {
-            SoundManager.instance.StopPlay("Struggle");
-            animator.Play("Walk_01");
-            _method.RunOnce(SuperLandDialogue);
-            if (rescCurrentState == RescueState.OutsideMove)
-            {
-                // 外側に飛ばす音
-            }
-            else
-            {
-                SoundManager.instance.Play("Fly");
-            }
-        }
-        
-        // Move to Fly
-        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
-        {
-            SoundManager.instance.Play("Fly");
-            animator.Play("Walk_01");
-        }
-
-        if (m_beforeState == RescueState.Fly || m_beforeState == RescueState.SuperLand)
-        {
-            //着地したら救出終了
-            if (rescCurrentState == RescueState.None)
-            {
-                GameManager.instance.IsRescue = false;
-                
-                if (m_beforeState == RescueState.Fly)   //通常着地
-                {
-                   ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
-                   SoundManager.instance.Play("NormalLanding");
-                   animator.SetTrigger("toLand");
-                   Debug.Log("NormalLanding");
-                }
-                else
-                {
-                    // スーパー着地
-                    animator.SetTrigger("toLand");
-                    ParticleManager.instance.GenerateAndPlay("Landing", this.transform);
-                    SoundManager.instance.Play("SuperLanding");
-                }
-            }
-        }
-
-        if (m_beforeState == RescueState.Fly && rescCurrentState == RescueState.SuperLand)
-        {
-            animator.ResetTrigger(animator.name);
-            animator.SetTrigger("toSuperLand"); 
-        }
-
-        if (m_beforeState == RescueState.OutsideMove && rescCurrentState == RescueState.Fly)
-        {
-            //飛んだらレイヤーですり抜けon
-            SlipThroughOn();
-        }
-        m_beforeState = rescCurrentState;
-    }
-
-    private ThrowawayMethod _method = new ThrowawayMethod();
-    private void SuperLandDialogue()
-    {
-        DisplayDialogue.dialogue.Enqueue("SuperLand");
-    }
-
-    public void PlayStruggle()
-    {
-        SoundManager.instance.Play("Struggle");
-        animator.SetTrigger("toStruggle");
-    }
     
     /// <summary>
     /// 救出アクション中進行不可能にならないようにLayerを変更して念のため貫通するように
     /// </summary>
-    private void SlipThroughOn()
+    public void SlipThroughOn()
     {
         //NameToLayerは名前から数値への変換。本来Layerは数字
         StartCoroutine("AutoSlipThroughOff");
@@ -165,7 +45,7 @@ public class PlayerManager : MonoBehaviour
     
     [Header("飛び始めてから〇秒ですり抜け機能はoffに")] 
     [SerializeField] private float waitTime = 3f;
-    private IEnumerator AutoSlipThroughOff()
+    public IEnumerator AutoSlipThroughOff()
     {
         yield return new WaitForSeconds(waitTime);
         //NameToLayerは名前から数値への変換。本来Layerは数字
@@ -191,7 +71,7 @@ public class PlayerManager : MonoBehaviour
         
         _playerController.enabled = false;
         GameManager.instance.IsRescue = false;
-        rescState = RescueState.None;
+        condition.RescueState = State.None;
     }
 
     public void ResetPlayer_Loaded()

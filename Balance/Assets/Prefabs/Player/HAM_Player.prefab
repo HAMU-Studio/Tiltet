@@ -684,11 +684,13 @@ GameObject:
   - component: {fileID: 3758666408019648382}
   - component: {fileID: 1194043445011875777}
   - component: {fileID: -2555470081294695687}
+  - component: {fileID: 5737747868831223211}
   - component: {fileID: 2630224644554453943}
   - component: {fileID: 8095124163189911120}
   - component: {fileID: 7888758050877370913}
+  - component: {fileID: 4234192005737666924}
+  - component: {fileID: 4695173461609206248}
   - component: {fileID: 2781894748016751198}
-  - component: {fileID: 5737747868831223211}
   - component: {fileID: 2280751616360117683}
   m_Layer: 7
   m_Name: HAM_Player
@@ -751,6 +753,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &5737747868831223211
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567397155698116036}
+  m_Material: {fileID: 13400000, guid: 0ea75a41ba4531c40b136acb0e1e0dfc, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.04
+  m_Height: 0.12
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0.05, z: 0.01}
 --- !u!114 &2630224644554453943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,6 +779,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14af4fdbcc74f454e995f186dfe954df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_condition: {fileID: 4234192005737666924}
+  m_PM: {fileID: 7888758050877370913}
   walkSpeed: 8
   dashSpeed: 12
   gravityPower: -5
@@ -778,7 +796,7 @@ MonoBehaviour:
   knockBackP: 10
   knockBackUpP: 6
   m_playerRenderer: {fileID: 1799587478452266771}
-  canMoveTime: 0.5
+  timeUntilMovable: 0.5
   scalePow: {x: 0, y: 20, z: 0}
   iceTime: 1.5
 --- !u!114 &8095124163189911120
@@ -806,7 +824,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772794dbc9871444e978fdc3225b1ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: -2555470081294695687}
+  condition: {fileID: 4234192005737666924}
   waitTime: 3
+--- !u!114 &4234192005737666924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567397155698116036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc1dc60f85742ee9a4b5ec97394b3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayer1: 0
+  isFlying: 0
+  isDashing: 0
+  isFreezing: 0
+  canMove: 0
+  moveSpeed: 0
+  rescueState: 0
+--- !u!114 &4695173461609206248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567397155698116036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56aae9a118b641a493ec03813f2409b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  condition: {fileID: 4234192005737666924}
 --- !u!114 &2781894748016751198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -962,20 +1014,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!136 &5737747868831223211
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4567397155698116036}
-  m_Material: {fileID: 13400000, guid: 0ea75a41ba4531c40b136acb0e1e0dfc, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.04
-  m_Height: 0.12
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0.05, z: 0.01}
 --- !u!114 &2280751616360117683
 MonoBehaviour:
   m_ObjectHideFlags: 0

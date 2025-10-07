@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Player;
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine.AI;
 using static UnityEngine.ParticleSystem;
+using Unity.VisualScripting;
+using State = Player.State;
 
 public class EnemySphere : MonoBehaviour
 {
@@ -56,7 +58,7 @@ public class EnemySphere : MonoBehaviour
     Vector3 m_stageCenter = new Vector3(0.0f, 2.0f, 0.0f);
 
     EnemyManager enemymanager;
-    PlayerManager[] getPlayerManagers;
+    PlayerCondition[] getPlayerConditions;
 
     // Start is called before the first frame update
     void Start()
@@ -74,10 +76,10 @@ public class EnemySphere : MonoBehaviour
 
         //最初にこれでplayer類初期化(消すな)
         m_players = GameObject.FindGameObjectsWithTag("Player");
-        getPlayerManagers = new PlayerManager[m_players.Length];
+        getPlayerConditions = new PlayerCondition[m_players.Length];
         for (int i = 0; i < m_players.Length; i++)
         {
-            getPlayerManagers[i] = m_players[i].GetComponent<PlayerManager>();
+            getPlayerConditions[i] = m_players[i].GetComponent<PlayerCondition>();
         }
 
         // players配列の長さに基づいてdistance配列を初期化
@@ -208,7 +210,7 @@ public class EnemySphere : MonoBehaviour
     //目標を設定
     //playerが二人なことはエネミーマネージャーで感知済み
     private bool targetNum;
-    PlayerManager playerManager;
+    PlayerCondition playerCondition;
     private float time = 0f;
     private float coolTime = 1f;
     //playernum =true:0, =false:1 に振り分け
@@ -217,7 +219,7 @@ public class EnemySphere : MonoBehaviour
         targetNum = playernum;
         int idx = targetNum ? 0 : 1;
         m_target = m_players[idx];
-        playerManager = getPlayerManagers[idx];
+        playerCondition = getPlayerConditions[idx];
     }
     private void SetTarget()
     {
@@ -250,7 +252,7 @@ public class EnemySphere : MonoBehaviour
         else if (enemyState == EnemyState.Go)
         {
             //追いかけてた目標が落ちたら
-            if (playerManager.rescState == RescueState.Wait)
+            if (playerCondition.RescueState == State.Wait)
             {
                 //もう一つへ
                 ChangeTarget(!targetNum);
