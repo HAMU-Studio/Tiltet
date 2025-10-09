@@ -114,6 +114,12 @@ public class EnemySphere : MonoBehaviour
                 SetTarget();
                 Die();
 
+                if (enemyType == EnemyType.VOLCANO)
+                {
+                    explosionTime += Time.deltaTime;
+                    Explosion();
+                }
+
                 if (enemyState == EnemyState.Go)
                 {
                     // targetがnullでないことを確認
@@ -133,12 +139,6 @@ public class EnemySphere : MonoBehaviour
         if (escape)
         {
             m_direction = (new Vector3(25.0f, -9.3f, 34.2f) - transform.position).normalized;
-        }
-
-        explosionTime += Time.deltaTime;
-        if (enemyType == EnemyType.VOLCANO)
-        {
-            Explosion();
         }
     }
 
@@ -182,29 +182,36 @@ public class EnemySphere : MonoBehaviour
                 break;
         }
     }
-
+    private float freezeTime = 5.0f;
     private void Explosion()
     {
-        if (explosionTime > 6.0f && enemyState == EnemyState.Stop)
+        if (explosionTime > freezeTime)
         {
             enemyRb.constraints = RigidbodyConstraints.FreezeAll;
-            enemyState = EnemyState.Stop;
-            //stop = true;
             anim.SetBool("explosion", true);
         }
 
-        if (explosionTime > 7.0f && explosionEffect.activeSelf == false)
+        //下のonAnimationendに処理を移行
+        /*if (explosionTime > 7.0f && explosionEffect.activeSelf == false)
         {
             explosionEffect.SetActive(true);    // 爆発エフェクト再生
             gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;  //敵を視覚的にオフ
             SoundManager.instance.Play("Explosion");
-        }
+        }*/
 
-        if (explosionTime > 7.86f)
+        //消す処理はエフェクト側へ　死んだ処理も
+        /*if (explosionTime > 7.86f)
         {
             //enemymanager.DestroyEnemy();
             Destroy(this.gameObject);
-        }
+        }*/
+    }
+
+    public void OnAnimationEnd()
+    {
+        explosionEffect.SetActive(true);    // 爆発エフェクト再生
+        gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;  //敵を視覚的にオフ
+        SoundManager.instance.Play("Explosion");
     }
 
     //目標を設定
@@ -363,7 +370,7 @@ public class EnemySphere : MonoBehaviour
             //目標を設定しているか
             if (enemyState == EnemyState.GetOn)
             {
-                Debug.Log(enemyState);
+                //Debug.Log(enemyState);
                 enemyState = EnemyState.Ready;
                 //目標を設定
                 //SetTarget();

@@ -113,9 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  m_moveSpeed: 1
-  m_minSpeed: 0.1
-  m_maxSpeed: 0.2
+  getMoveSpeed: 1
   m_funbariAngle: 15
   explosionRenge: {fileID: 0}
   explosionEffect: {fileID: 486386374942283355}
@@ -131,7 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7ef1d8c8cbdca4c846b4bc3023b1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
   addHight: 8
 --- !u!95 &9138093708659964199
 Animator:
@@ -691,6 +688,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 700310834013683581}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3480248491094251979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486386374942283355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608e9420cba772f44a33c21d4fe15da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &486386374942283356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1083112594446248225, guid: 916fa782e74eefa4686fe400c1b95415,
