@@ -318,7 +318,7 @@ PrefabInstance:
     - target: {fileID: 4952703685579114287, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7964c97ebd5c4c449c4b4021373fa88, type: 3}
@@ -4892,6 +4892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _transition: {fileID: 0}
+  stage: {fileID: 1242643358}
   enemys:
   - {fileID: 5165597486920338915, guid: 79cd4a5bd7367ea4c8468089a4f2d504, type: 3}
   - {fileID: 6570879881633907808, guid: 7cc6c0e166b24b448a6794219b94dacc, type: 3}
@@ -4900,12 +4901,6 @@ MonoBehaviour:
   - {fileID: 1992701128}
   - {fileID: 1042376086}
   - {fileID: 437129183}
-  spawnInterval: 2
-  circleLimit: 5
-  ellipseLimit: 2
-  firstWave: 5
-  secondWave: 3
-  finalWave: 10
   waveText: {fileID: 1601096475}
   waveSprite:
   - {fileID: 21300000, guid: 18b48d53fd01fc34ca0b19a6fa5adf0c, type: 3}
@@ -4916,6 +4911,10 @@ MonoBehaviour:
   - {fileID: 2058791712}
   - {fileID: 124696617}
   - {fileID: 1967100641}
+  waveNom: 3
+  spawnInterval: 2
+  sphereLimit: 050000000000000003000000
+  ellipseLimit: 000000000300000003000000
   circleEnemyTest: 0
   ellipseEnemyTest: 0
 --- !u!4 &1648347495

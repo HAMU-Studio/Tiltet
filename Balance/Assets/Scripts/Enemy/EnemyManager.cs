@@ -28,7 +28,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] Sprite[] waveSprite;
     [Header("戦闘UI")]
     [SerializeField] private GameObject FightUI;
-    [Header("ゲージ")]
+    [Header("ゲージ(4つにする)")]
     [SerializeField] Slider[] waveGauge;
 
     [Header("ウェーブの合計")]
@@ -45,7 +45,7 @@ public class EnemyManager : MonoBehaviour
 
     [Header("敵が一回にスポーンする数")]
     private int numSpawnAtOnce = 1;
-    [Header("ウェーブごとの敵が出てくる数")]
+    [Header("ウェーブごとの敵が出てくる数(4つにする)")]
     [SerializeField] private int[] sphereLimit;
     [SerializeField] private int[] ellipseLimit;
 
@@ -150,20 +150,21 @@ public class EnemyManager : MonoBehaviour
 
         //デバッグ用
         //Pを押すと1人でも始められる
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) )
         {
-            Debug.Log(destroyEnemy);
+            //Debug.Log(destroyEnemy);
             /*for (int i = 0; i < waveNom; i++)
             {
                 Debug.Log(totalEnemyNum[i]);
             }*/
-            //start = true;
+            start = true;
         }
 
         if (finishAnimation)
         {
             if (once)
             {
+                waveNom--;
                 FightUI.SetActive(true);
                 SoundManager.instance.Play(BGM);
                 once = false;
@@ -330,9 +331,13 @@ public class EnemyManager : MonoBehaviour
         //敵が一人も残ってない状態
         if (noSphere && noEllipse)
         {
-            nowWave++;
-            if (nowWave == waveNom)
+            if(nowWave < waveNom)
             {
+                nowWave++;
+            }
+            else if (nowWave == waveNom)
+            {
+                start = false;
                 StartCoroutine(GameManager.instance.FightClear());
             }
             waveGauge[nowWave - 1].value = 0f;
