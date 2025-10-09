@@ -72,7 +72,7 @@ public class EnemyEllipse : MonoBehaviour
 
         freezeTime = 0;
         time = 0;
-        turn = true;
+        turn = false;
 
         _prePosition = transform.position;
         _Direction = Vector3.forward;
@@ -95,7 +95,7 @@ public class EnemyEllipse : MonoBehaviour
             if (freezeTime > 1f)
             {
                 enemyRb.constraints = RigidbodyConstraints.None;
-                anim.SetBool("Serch", true);
+                turn = true;
                 enemyState = EnemyState.Ready;
             }
             else
@@ -105,9 +105,10 @@ public class EnemyEllipse : MonoBehaviour
         }
         else if (enemyState == EnemyState.Ready)
         {
-            /*if (turn)
+            AttackAnimation();
+            /*if(Input.GetKeyDown(KeyCode.Z))
             {
-                transform.Rotate(0, 10, 0);
+                turn = true;
             }*/
 
             m_distanceFromCenter = Vector3.Distance(this.transform.position, m_stageCenter);
@@ -237,6 +238,31 @@ public class EnemyEllipse : MonoBehaviour
             enemyState = EnemyState.Attack;
         }
     }
+
+    float var;
+    private void AttackAnimation()
+    {
+        if (turn)
+        {
+            var += Time.deltaTime;
+
+            if (var < 1f)
+            {
+                float angle = Mathf.Lerp(0f, 360f, var);
+                Quaternion rot = Quaternion.Euler(0f, angle, 0f);
+                transform.rotation = rot;
+            }
+            else
+            {
+                turn = false;
+            }
+        }
+        else
+        {
+            var = 0f;
+        }
+
+    }
     private void Die()
     {
         //探索気よりも外に出た、下に行ったら
@@ -258,12 +284,12 @@ public class EnemyEllipse : MonoBehaviour
         }
     }
 
-    public void OnAnimationEnd()
+    /*public void OnAnimationEnd()
     {
         //Debug.Log("終わった！");
         enemyRb.WakeUp();
         anim.SetBool("Serch", false);
-    }
+    }*/
 
 
     //dontuse//
