@@ -79,7 +79,7 @@ namespace System
                 return acquired;
             }
             
-            Debug.LogAssertion("The item does not exist : " + name);
+            Debug.Log("アイテムが見つかりません : " + name);
             return false;
         }
         

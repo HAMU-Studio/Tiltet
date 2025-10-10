@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace Dialogue
 {
@@ -23,6 +22,8 @@ namespace Dialogue
 
         [SerializeField] private Animator dialogueAnim;
         [SerializeField] private bool systemMessage;
+
+        public event Action OnDialogueSkipped;
         
         private void Awake()
         {
@@ -134,6 +135,26 @@ namespace Dialogue
                     return;
             }
             m_task.Enqueue(_data);
+        }
+
+        public void ClearQueue()
+        {
+            if (isShowing)
+            {
+                SoundManager.instance.StopPlay("Speak");
+                if (!systemMessage)
+                    dialogueAnim.SetBool("Open", false);
+                
+                StartCoroutine(DelayHide());
+                isShowing = false;
+                m_elapsedTime = 0f;
+            }
+            
+            m_task.Clear();
+            OnDialogueSkipped?.Invoke();
+            
+            Debug.Log("セリフがスキップされました。");
+         
         }
 
         private bool DamageDialogueCheck(string name)

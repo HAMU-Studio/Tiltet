@@ -922,19 +922,7 @@ MonoBehaviour:
     m_ActionId: 8895d6bd-31b7-460e-ab40-989aaeb3d6f0
     m_ActionName: Player/Left Trigger[/XInputControllerWindows/leftTrigger,/XInputControllerWindows1/leftTrigger]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2630224644554453943}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Jump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 65b32b5d-21ee-40a6-99dc-5c76c35d25eb
     m_ActionName: Player/Jump[/XInputControllerWindows/buttonEast,/XInputControllerWindows1/buttonEast]
   - m_PersistentCalls:
@@ -1009,6 +997,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9fb7a17c-af72-4dff-a800-ddde5b85a4e6
     m_ActionName: Player/Menu[/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f3fe9288-6475-4fc7-b29c-5299c19bf47d
+    m_ActionName: UI/Skip[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2630224644554453943}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Skip
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 263a6064-ce53-4393-991e-07d9cc1559ec
+    m_ActionName: Player/Skip[/XInputControllerWindows/buttonEast,/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

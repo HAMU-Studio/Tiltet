@@ -26,7 +26,7 @@ namespace System
 
         private void Init()
         {
-            Debug.Log("Item acquisition status has been reset");
+            Debug.Log("アイテムの獲得状況がリセットされました。");
             FieldItemsManager.instance.Initialize(fieldItems);
         }
     }

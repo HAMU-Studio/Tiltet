@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using Dialogue;
+using Player;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -283,6 +284,18 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void Skip(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            var dialogueObj = GameObject.Find("DialogueManager");
+            DisplayDialogue dialogue = dialogueObj.GetComponent<DisplayDialogue>();
+            dialogue.ClearQueue();
+            Debug.Log("call skip");
+        }
+    }
+
 
     /*public void MenuInput(InputAction.CallbackContext context)
     {
