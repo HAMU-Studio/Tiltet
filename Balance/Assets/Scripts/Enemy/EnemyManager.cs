@@ -28,7 +28,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] Sprite[] waveSprite;
     [Header("戦闘UI")]
     [SerializeField] private GameObject FightUI;
-    [Header("ゲージ(4つにする)")]
+    [Header("ゲージ")]
     [SerializeField] Slider[] waveGauge;
 
     [Header("ウェーブの合計")]
@@ -45,7 +45,7 @@ public class EnemyManager : MonoBehaviour
 
     [Header("敵が一回にスポーンする数")]
     private int numSpawnAtOnce = 1;
-    [Header("ウェーブごとの敵が出てくる数(4つにする)")]
+    [Header("ウェーブごとの敵が出てくる数")]
     [SerializeField] private int[] sphereLimit;
     [SerializeField] private int[] ellipseLimit;
 

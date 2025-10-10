@@ -318,7 +318,7 @@ PrefabInstance:
     - target: {fileID: 4952703685579114287, guid: c7964c97ebd5c4c449c4b4021373fa88,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7964c97ebd5c4c449c4b4021373fa88, type: 3}
@@ -3739,6 +3739,7 @@ GameObject:
   - component: {fileID: 1223397419}
   - component: {fileID: 1223397420}
   - component: {fileID: 1223397421}
+  - component: {fileID: 1223397422}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3900,6 +3901,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1223397422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223397415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3528fcffb37e7384f850d6e1b279401a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1236497621
 PrefabInstance:
   m_ObjectHideFlags: 0
