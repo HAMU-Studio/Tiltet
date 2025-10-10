@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     
     public void Restart()
     {
-        _sceneManager.StartTransition("MainStage");
+        instance.SceneManager.StartTransition("MainStage");
         currentState = GameState.Search;
         
         if (m_beforeState != GameState.StartMenu)
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
     {
         if (m_playerInstances == null)
         {
-            Debug.Log("プレイヤインスタンスがnullです");
+            Debug.Log("プレイヤーインスタンスがnullです");
             return;
         }
         foreach (var player in m_playerInstances)
@@ -188,25 +188,25 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.StartTransition("MainStage");
+            instance.SceneManager.StartTransition("MainStage");
             instance.CurrentState = GameState.Restart;
         }
         
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            _sceneManager.StartTransition("Fight");
+            instance.SceneManager.StartTransition("Fight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.H))
         {
-            _sceneManager.StartTransition("SnowFight");
+            instance.SceneManager.StartTransition("SnowFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.N))
         {
-            _sceneManager.StartTransition("VolcanoFight");
+            instance.SceneManager.StartTransition("VolcanoFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
 
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.StartTransition("GameOver");
+        instance.SceneManager.StartTransition("GameOver");
         CurrentState = GameState.GameOver;
         yield return null;
     }
@@ -244,7 +244,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.StartTransition("Clear");
+        instance.SceneManager.StartTransition("Clear");
        
         yield return new WaitForSeconds(1.5f);
         
@@ -266,7 +266,7 @@ public class GameManager : MonoBehaviour
 
     public void Back2StartMenu()
     {
-        _sceneManager.StartTransition("Start");
+        instance.SceneManager.StartTransition("Start");
         CurrentState = GameState.StartMenu;
         
         //ゲーム中から戻った時のためにプレイヤーいたら消す

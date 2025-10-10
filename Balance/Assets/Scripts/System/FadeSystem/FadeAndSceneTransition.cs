@@ -24,7 +24,8 @@ namespace System.FadeSystem
             {
                 Debug.LogError("No IFadeHandler attached to fadeHandler");
             }
-            GameManager.instance.SceneManager = GetComponent<FadeAndSceneTransition>();
+
+            GameManager.instance.SceneManager = this;
             GameManager.instance.BeforeState = _state;
         }
 
