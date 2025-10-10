@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Player;
-using Player.Rescue;
 
 /// <summary>
 /// 落ちた敵を消す、救出アクションの準備
@@ -53,25 +52,22 @@ public class FallArea : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            /*if (m_PM.rescState == RescueState.SuperLand)
-            {
-                Debug.Log("スーパー着地中に落下しました");
-                m_PM.rescState = RescueState.None;
-                ResetFlag();
-                PostProcess();
-            }*/
-
             if (!waitRescue)
             {
-                HitPlayerProcess(other);
+                FallPlayerProcess(other);
                 waitRescue = true;
             }
             else
             {
-                if (Player2Check(other) == true)
+                if (Player2Check(other))
                 {
-                    other.GetComponent<PlayerCondition>().RescueState = State.Wait;
-                    HitPlayerProcess(other);
+                    if (playerCondition.RescueState != State.Wait)
+                    {
+                        FallPlayerProcess(other);
+                        return;
+                    }
+
+                    FallPlayerProcess(other);
                     StartCoroutine(GameManager.instance.GameOver());
                 }
             }
@@ -81,13 +77,12 @@ public class FallArea : MonoBehaviour
     private void ResetFlag()
     {
         waitRescue = false;
-     //   Debug.Log("reset waitRescue");
     }
 
     /// <summary>
     /// OnTriggerEnterでプレイヤーが触れた時の一連の処理 もう少し細かく分けたい
     /// </summary>
-    private void HitPlayerProcess(Collider playerCol)
+    private void FallPlayerProcess(Collider playerCol)
     {
         SetFallInstance(playerCol);
        
@@ -97,16 +92,13 @@ public class FallArea : MonoBehaviour
      
         playerCondition.RescueState = State.Wait;
         CalcShortestDist();
-      //  Debug.Log("state is " + m_PM.State);
         JointManager jointManager =  fallPlayerInstance.GetComponent<JointManager>();
         jointManager.SetJointAndLine();
     }
 
     private bool Player2Check(Collider playerCol)
     {
-        SetFallInstance(playerCol);
-        SetPlayerCondition();
-        if (playerCondition.RescueState == State.None)
+        if (playerCol.GetComponent<PlayerCondition>().RescueState == State.None)
         {
             return true;
         }
@@ -125,6 +117,7 @@ public class FallArea : MonoBehaviour
 
     private Vector3 playerPos;
     private GameObject shortestDistArea;
+    private GameObject nextShortestDistArea;
     private float shortestDist = 0;
     private float dist;
     private void CalcShortestDist()
@@ -145,13 +138,22 @@ public class FallArea : MonoBehaviour
             else if (dist < shortestDist)
             {
                 shortestDist = dist;
+                
+                nextShortestDistArea = shortestDistArea;
                 shortestDistArea = area;
             }
         }
         
         if (shortestDistArea == null)
             Debug.LogError("shortestDistCube are null");
-     
+
+
+        // もうプレイヤーが付いている(fly中など)場合は二番目に近いPivotにぶら下げる
+        if (shortestDistArea.GetComponent<RescueMovement>().CanAccepted == false)
+        {
+            shortestDistArea = nextShortestDistArea;
+            Debug.Log("最短距離のAreaは使用中です");
+        }
         
         //最短距離の救出アクションエリアに対応するpivotを取得->振り子のためにRBと方向をセット
         GameObject childPivot = shortestDistArea.transform.GetChild(0).gameObject;
@@ -162,12 +164,13 @@ public class FallArea : MonoBehaviour
         GameManager.instance.Axis = (playerPos - childPivot.transform.position).normalized;
         
         //最短距離のオブジェクトだけon
-        MeshRenderer[] childrens=  shortestDistArea.GetComponentsInChildren<MeshRenderer>();
-        childrens[0].enabled = false;
-        childrens[1].enabled = false;
-        shortestDistArea.GetComponent<RescueMovement>().SetRescuedPlayer(fallPlayerInstance);
+        MeshRenderer[] childrens =  shortestDistArea.GetComponentsInChildren<MeshRenderer>();
+        //childrens[0].enabled = true;
+        childrens[1].enabled = true;
+        RescueMovement rescue = shortestDistArea.GetComponent<RescueMovement>();
+        rescue.SetRescuedPlayer(fallPlayerInstance);
+        rescue.CanAccepted = false;
         shortestDistArea.SetActive(true);
-  
     }
 
     Renderer[] children = new Renderer[2];
@@ -179,7 +182,6 @@ public class FallArea : MonoBehaviour
         
         foreach (GameObject area in RescueActAreas)
         {
-            //  area.SetActive(false);
             area.GetComponent<Renderer>().enabled = false;
             children = area.GetComponentsInChildren<Renderer>();
             children[0].enabled = false;
