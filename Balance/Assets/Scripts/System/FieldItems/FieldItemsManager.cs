@@ -59,16 +59,17 @@ namespace System
         /// 自機が触れてパーツなどのItemを取得した時呼び出す Destroy
         /// </summary>
         /// <param name="name">gameObject.name</param>
-        public void GetItem(string name)
+        public void ItemGet(string name)
         {
             // TryGetValueはコピーだから直接更新できない
             if (list.ContainsKey(name))
             {
                 list[name] = true; // 直接更新
+                Debug.Log("Item取得: " + name);
             }
             else
             {
-                Debug.LogAssertion("The item does not exist : " + name);
+                Debug.LogAssertion("アイテムが見つかりません : " + name);
             }
         }
 

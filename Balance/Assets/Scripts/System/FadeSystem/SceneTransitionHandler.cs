@@ -44,6 +44,7 @@ namespace System.FadeSystem
 
             if (GameManager.instance.CurrentState == GameState.Restart)
             {
+                Debug.Log("Call Res");
                 GameManager.instance.RestartAtSavePoint(true);
             }
             
@@ -66,7 +67,7 @@ namespace System.FadeSystem
                 {
                     GameManager.instance.RespawnPlayer(false);
                     GameManager.instance.SetPlayerPos();
-                    if (scene.name == "Fight")
+                    if (scene.name != "MainStage")
                     {
                         // エンカウントアニメーション再生中は動けないように
                         StartCoroutine(DelayLock());

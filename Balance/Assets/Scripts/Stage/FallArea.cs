@@ -63,7 +63,6 @@ public class FallArea : MonoBehaviour
 
             if (!waitRescue)
             {
-                //    Debug.Log("callHItPlayerProcess");
                 HitPlayerProcess(other);
                 waitRescue = true;
             }
@@ -120,7 +119,6 @@ public class FallArea : MonoBehaviour
     private void SetFallInstance(Collider col)
     {
         fallPlayerInstance = col.gameObject;
-     //   Debug.Log("FPI = " + fallPlayerInstance);
         fallPlayerInstance.GetComponent<PlayerController>().ChangePlayerState(true);
         SetPlayerCondition();
     }

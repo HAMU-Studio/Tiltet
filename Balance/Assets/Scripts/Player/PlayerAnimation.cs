@@ -20,6 +20,11 @@ namespace Player
             {
                 animator.Play("SuperLand");
             }
+
+            if (args.CurrentState == State.Wait)
+            {
+                SoundManager.instance.Play("Struggle");
+            }
         }
     }
 }

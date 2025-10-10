@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using Dialogue;
-using UnityEngine.Serialization;
 
 namespace Player.Rescue
 {
@@ -19,7 +18,6 @@ namespace Player.Rescue
             if (GameManager.instance == null)
             {
                 Debug.LogError("GameManager is null");
-                return;
             }
         }
 
@@ -93,7 +91,6 @@ namespace Player.Rescue
 
         public void PlayStruggle()
         {
-            SoundManager.instance.Play("Struggle");
             animator.SetTrigger("toStruggle");
         }
 
