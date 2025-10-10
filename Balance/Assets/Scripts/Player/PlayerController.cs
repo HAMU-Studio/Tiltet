@@ -145,7 +145,6 @@ public class PlayerController : MonoBehaviour
 
     private float m_elapsedTime;
     [Header("ノックバックされてから動けるようになるまでの時間")]
-    [Header("ノックバックされてから動けるようになるまでの時間")]
     [SerializeField] private float timeUntilMovable = 0.5f; 
     void Update()
     {

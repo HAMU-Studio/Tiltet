@@ -155,6 +155,7 @@ public class RescueMovement : MonoBehaviour
         m_condition.OnStateChange -= OnStateChange;
         m_condition = null;
         gameObject.SetActive(false);
+        canAccepted = true;
     }
 
     public void StartRescue()
