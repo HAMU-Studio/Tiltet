@@ -319,7 +319,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  moveSpeed: 50
+  moveSpeed: 5
+  guide: {fileID: 0}
 --- !u!114 &3789773555915456929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7ef1d8c8cbdca4c846b4bc3023b1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addHight: 8
+  addHight: 5
 --- !u!54 &703358576959506627
 Rigidbody:
   m_ObjectHideFlags: 0

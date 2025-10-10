@@ -29,7 +29,7 @@ public class EnemyEllipse : MonoBehaviour
     [Header("この敵がでるフィールド")]
     [SerializeField] private EnemyType enemyType;
     [Header("突撃する強さ")]
-    [SerializeField] private float moveSpeed = 50.0f;
+    [SerializeField] private float moveSpeed;
     [Header("ray飛ばす方向ガイド")]
     [SerializeField] private GameObject guide;
 
@@ -42,6 +42,7 @@ public class EnemyEllipse : MonoBehaviour
     private float freezeTime;
     private float time;
     private float m_distanceFromCenter;
+    private bool Arrived;
     private bool turn;
 
     Vector3 _Direction = new Vector3();
@@ -73,6 +74,7 @@ public class EnemyEllipse : MonoBehaviour
         freezeTime = 0;
         time = 0;
         turn = false;
+        Arrived = false;
 
         _prePosition = transform.position;
         _Direction = Vector3.forward;
@@ -87,6 +89,7 @@ public class EnemyEllipse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(enemyState);
         if (enemyState == EnemyState.Arrive)
         {
             freezeTime += Time.deltaTime;
@@ -105,7 +108,8 @@ public class EnemyEllipse : MonoBehaviour
         }
         else if (enemyState == EnemyState.Ready)
         {
-            AttackAnimation();
+
+            CheckPlayer();
             /*if(Input.GetKeyDown(KeyCode.Z))
             {
                 turn = true;
@@ -122,18 +126,22 @@ public class EnemyEllipse : MonoBehaviour
             if (time >= 2.0f)
             {
                 time = 0.0f;
-                enemyState = EnemyState.Arrive;
+                enemyState = EnemyState.Ready;
             }
         }
         else
         {
-            CheckPlayer();
+            //CheckPlayer();
         }
     }
 
     void FixedUpdate()
     {
-        if (enemyState == EnemyState.Attack)
+        if(enemyState == EnemyState.Ready)
+        {
+            //AttackAnimation();
+        }
+        else if (enemyState == EnemyState.Attack)
         {
             if (flontAttack)
             {
@@ -240,13 +248,27 @@ public class EnemyEllipse : MonoBehaviour
     }
 
     float var;
+    float rotateTime = 1f;
+    float rotateSpeed = 360f;
     private void AttackAnimation()
     {
         if (turn)
         {
             var += Time.deltaTime;
 
-            if (var < 1f)
+            transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
+
+            if (var >= rotateTime)
+            {
+                turn = false;
+                var = 0f;
+            }
+        }
+        /*if (turn)
+        {
+            var += Time.deltaTime;
+
+            if (var <= 1f)
             {
                 float angle = Mathf.Lerp(0f, 360f, var);
                 Quaternion rot = Quaternion.Euler(0f, angle, 0f);
@@ -254,13 +276,14 @@ public class EnemyEllipse : MonoBehaviour
             }
             else
             {
+                var = 0f;
                 turn = false;
             }
         }
         else
         {
-            var = 0f;
-        }
+            //var = 0f;
+        }*/
 
     }
     private void Die()
@@ -278,9 +301,13 @@ public class EnemyEllipse : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
-            //Debug.Log("到着");
-            _prePosition = transform.position;
-            enemyState = EnemyState.Arrive;
+            if (!Arrived)
+            {
+                //Debug.Log("到着");
+                _prePosition = transform.position;
+                enemyState = EnemyState.Arrive;
+                Arrived = true;
+            }
         }
     }
 
