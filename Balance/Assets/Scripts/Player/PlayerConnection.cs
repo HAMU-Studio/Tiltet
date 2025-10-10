@@ -1,3 +1,4 @@
+using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,8 @@ public class PlayerConnection : MonoBehaviour
     public void OnPlayerJoined(PlayerInput playerInput)
     {
         print($"プレイヤー#{playerInput.user.index}が入室！");
-        GameObject obj =  playerInput.gameObject.GetComponent<GameObject>();
+        PlayerCondition condition =  playerInput.gameObject.GetComponent<PlayerCondition>();
+        condition.PlayerNum = playerInput.user.index + 1;
        
         // 2Pならカラーを変える
         playerController.ChangePlayerColor(playerInput.user.index);

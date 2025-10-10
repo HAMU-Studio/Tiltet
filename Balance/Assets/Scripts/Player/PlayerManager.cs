@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private PlayerCondition condition;
+    
     private void Awake()
     {
         if (GameManager.instance == null)
