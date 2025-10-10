@@ -274,9 +274,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (cmswitch.IsPlayerInContact())
                 {
-                    cmswitch.SetSwitchPressed(true); // スイッチを押す
-                    SoundManager.instance.Play("Camera");
-                    animator.SetTrigger("toPush");
+                    if (cmswitch.SetSwitchPressed(m_condition.PlayerNum)) // スイッチを押す
+                    {
+                        SoundManager.instance.Play("Camera");
+                        animator.SetTrigger("toPush");
+                    }
                 }
             }
         }

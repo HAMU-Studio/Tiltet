@@ -1,5 +1,6 @@
 ﻿using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -30,7 +31,7 @@ namespace Player
     
     public class PlayerCondition : MonoBehaviour
     {
-        [SerializeField, ReadOnly] private bool isPlayer1;
+        [SerializeField, ReadOnly] private int playerNum;
         [SerializeField, ReadOnly] private bool isFlying;
         [SerializeField, ReadOnly] private bool isDashing;
         [SerializeField, ReadOnly] private bool isFreezing;
@@ -39,10 +40,10 @@ namespace Player
         [SerializeField, ReadOnly] private State rescueState;
         public event RescueEvent OnStateChange;
         
-        public bool IsPlayer1
+        public int PlayerNum
         {
-            get => isPlayer1;
-            set => isPlayer1 = value;
+            get => playerNum;
+            set => playerNum = value;
         }
         
         public bool IsFlying

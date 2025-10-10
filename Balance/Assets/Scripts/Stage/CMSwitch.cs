@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Player;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,9 @@ public class CMSwitch : MonoBehaviour
     private Material originalMaterial; // 元のマテリアルを保存
     private Renderer objectRenderer; // オブジェクトのRenderer
 
+    private int playerNumOnStanding;
+    private bool isStandingBoth;
+
     // 他のスクリプトからプレイヤーの接触の状態を取得できるプロパティ
     public bool IsPlayerInContact()
     {
@@ -36,7 +40,6 @@ public class CMSwitch : MonoBehaviour
 
     private void Start()
     {
-
         objectRenderer = GetComponent<Renderer>(); // Rendererを取得
         originalMaterial = objectRenderer.material; // 元のマテリアルを保存
 
@@ -50,15 +53,25 @@ public class CMSwitch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerInContact = true;
-        }
+        if (other.CompareTag("Player") == false)
+            return;
+
+        if (isPlayerInContact)      // 同時乗り対策
+            isStandingBoth = true;
+            
+        isPlayerInContact = true;
+        PlayerCondition condition = other.gameObject.GetComponent<PlayerCondition>();
+        playerNumOnStanding = condition.PlayerNum;
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.CompareTag("Player") == false)
+            return;
+        
         isPlayerInContact = false;
+        isStandingBoth = false;
     }
 
     //スイッチの状態を切り替えるメソッド
@@ -68,26 +81,31 @@ public class CMSwitch : MonoBehaviour
         {
             if (activeSwitch != null && activeSwitch != this) // 他のスイッチがアクティブな場合
             {
-                activeSwitch.SetSwitchState(false); // 他のスイッチをオフにする
+                activeSwitch.SetSwitchState(false);  // 他のスイッチをオフにする
             }
 
-            isSwitchOn = !isSwitchOn; // スイッチの状態を切り替える
-            activeSwitch = isSwitchOn ? this : null; // アクティブなスイッチを更新
+            isSwitchOn = !isSwitchOn;  // スイッチの状態を切り替える
+            activeSwitch = isSwitchOn ? this : null;  // アクティブなスイッチを更新
             Debug.Log("オン: " + switchType);
 
             // スイッチの状態に応じてマテリアルを切り替える
             objectRenderer.material = isSwitchOn ? redMaterial : originalMaterial;
+            isSwitchPressed = false;
         }
     }
 
     // isSwitchPressedがtrueになった時にSwitchPressedを呼ぶ
-    public void SetSwitchPressed(bool pressed)
+    public bool SetSwitchPressed(int playerNum)
     {
-        isSwitchPressed = pressed;
-        if (isSwitchPressed)
+        if (playerNum == playerNumOnStanding)
         {
+            isSwitchPressed = true;
             SwitchPressed(); // フラグがtrueになったタイミングでSwitchPressedメソッドを呼ぶ
+            return true;
         }
+
+        Debug.Log("ボタン上のプレイヤーとボタンを押したプレイヤーが違います。");
+        return false;
     }
 
     // オン状態のスイッチをオフに更新するメソッド
