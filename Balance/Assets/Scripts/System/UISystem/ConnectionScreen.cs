@@ -9,12 +9,13 @@ public class ConnectionScreen : MonoBehaviour
 {
     [SerializeField] private GameObject connectionScreen;
     [SerializeField] private InGameUISystems UISystems;
-
-    [SerializeField] private bool DebugDiaogue;
-    
     [SerializeField] private GameObject m_1PImage;
     [SerializeField] private GameObject m_2PImage;
     
+    [SerializeField] private DisplayDialogue dialogue;
+
+    private float timer = 0f;
+
     void Start()
     {
         m_1PImage.SetActive(false);
@@ -52,7 +53,7 @@ public class ConnectionScreen : MonoBehaviour
         }
         
         //プレイヤーがスポーンしたら対応する画像オン、今後アニメーションに変わりそう
-        if (GameManager.instance.P1Spawn == true)
+        if (GameManager.instance.P1Spawn)
         {
            // Debug.Log("p1Spawn = " + GameManager.instance.P1Spawn);
            if (m_1PImage.activeSelf == false)
@@ -61,7 +62,7 @@ public class ConnectionScreen : MonoBehaviour
                SoundManager.instance.Play("Connected");
            }
         }
-        if (GameManager.instance.P2Spawn == true)
+        if (GameManager.instance.P2Spawn)
         {
            // Debug.Log("p2Spawn = " + GameManager.instance.P2Spawn);
            if (m_2PImage.activeSelf == false)
@@ -75,45 +76,48 @@ public class ConnectionScreen : MonoBehaviour
     /// <summary>
     /// 接続完了したら二秒待ってゲーム開始
     /// </summary>
-    /// <returns></returns>
     private IEnumerator ConnectSuccess()
     {
         yield return new WaitForSeconds(2f);
         
+        if (dialogue != null)
+            dialogue.OnDialogueSkipped += StartGame;
+        
         connectionScreen.SetActive(false);
         GameManager.instance.PlayerLock();
         
-        if (DebugDiaogue) GameManager.instance.isSkip = true;
-        
-        if (GameManager.instance.isSkip == false)
+        OPDialogue();       
+        yield return new WaitForSeconds(15.5f);
+
+        if (GameManager.instance.isConnected == false)  // スキップでStartGameが呼ばれてなければ
         {
-            OPDialogue();
-            yield return new WaitForSeconds(15.5f);
+            StartGame();
         }
-        
+    }
+
+    private void StartGame()
+    {
+        dialogue.OnDialogueSkipped -= StartGame;
         GameManager.instance.isConnected = true;
- 
+
+        StartCoroutine(StartProcess());
+    }
+
+    private IEnumerator StartProcess()
+    {
+        yield return new WaitForSeconds(1f);
         DisplayDialogue.system.Enqueue("Start");
-        
         SoundManager.instance.Play("GreenStage");
         SoundManager.instance.Play("Start");
         GameManager.instance.PlayerUnLock();
-        
         GameManager.instance.AircraftMoveSwitch(true);
         UISystems.StartTimer();
-
-       
-        if (GameManager.instance.isSkip == false)
-        {
-            yield return new WaitForSeconds(2f);
         
-            StartDialogue();
-        }
-
-        if (GameManager.instance.isSkip == false)
+        yield return new WaitForSeconds(2f);
+        
+        for (int i = 0; i < 3; i++)
         {
-            GameManager.instance.isSkip = true;
-            Debug.Log("isSkip = " + GameManager.instance.isSkip);
+            DisplayDialogue.dialogue.Enqueue($"InGame0{i + 1}");
         }
             
         yield return null;
@@ -124,14 +128,6 @@ public class ConnectionScreen : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             DisplayDialogue.dialogue.Enqueue($"OP0{i + 1}");
-        }
-    }
-
-    private void StartDialogue()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            DisplayDialogue.dialogue.Enqueue($"InGame0{i + 1}");
         }
     }
 }
