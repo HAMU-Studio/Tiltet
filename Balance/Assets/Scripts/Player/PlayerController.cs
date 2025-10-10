@@ -288,6 +288,11 @@ public class PlayerController : MonoBehaviour
 
     public void Skip(InputAction.CallbackContext context)
     {
+        // 戦闘か探索でしか入力受け付けない
+        if (GameManager.instance.CurrentState != GameState.Search &&
+            GameManager.instance.CurrentState != GameState.EnemyBattle)
+            return;
+        
         if (context.phase == InputActionPhase.Started)
         {
             var dialogueObj = GameObject.Find("DialogueManager");
