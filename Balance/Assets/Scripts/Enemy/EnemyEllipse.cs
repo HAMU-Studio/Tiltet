@@ -108,7 +108,6 @@ public class EnemyEllipse : MonoBehaviour
         }
         else if (enemyState == EnemyState.Ready)
         {
-
             CheckPlayer();
             /*if(Input.GetKeyDown(KeyCode.Z))
             {
@@ -250,7 +249,7 @@ public class EnemyEllipse : MonoBehaviour
     float var;
     float rotateTime = 1f;
     float rotateSpeed = 360f;
-    private void AttackAnimation()
+    /*private void AttackAnimation()
     {
         if (turn)
         {
@@ -264,7 +263,7 @@ public class EnemyEllipse : MonoBehaviour
                 var = 0f;
             }
         }
-        /*if (turn)
+        if (turn)
         {
             var += Time.deltaTime;
 
@@ -283,9 +282,9 @@ public class EnemyEllipse : MonoBehaviour
         else
         {
             //var = 0f;
-        }*/
+        }
 
-    }
+    }*/
     private void Die()
     {
         //探索気よりも外に出た、下に行ったら
