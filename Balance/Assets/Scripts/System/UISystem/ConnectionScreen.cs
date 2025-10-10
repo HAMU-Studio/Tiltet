@@ -1,6 +1,7 @@
 using Dialogue;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,6 +27,7 @@ public class ConnectionScreen : MonoBehaviour
         if (GameManager.instance.isConnected == true)
         {
             // すでに接続済み(戦闘から探索に戻った時など)
+            Debug.Log("スキップ");
             connectionScreen.SetActive(false);
             SoundManager.instance.Play("GreenStage");
             GameManager.instance.AircraftMoveSwitch(true);
@@ -85,6 +87,12 @@ public class ConnectionScreen : MonoBehaviour
         
         connectionScreen.SetActive(false);
         GameManager.instance.PlayerLock();
+
+        if (GameManager.instance.isSkip)
+        {
+            StartGame();
+            yield break;
+        }
         
         OPDialogue();       
         yield return new WaitForSeconds(15.5f);
@@ -106,12 +114,16 @@ public class ConnectionScreen : MonoBehaviour
     private IEnumerator StartProcess()
     {
         yield return new WaitForSeconds(1f);
+        
         DisplayDialogue.system.Enqueue("Start");
         SoundManager.instance.Play("GreenStage");
         SoundManager.instance.Play("Start");
         GameManager.instance.PlayerUnLock();
         GameManager.instance.AircraftMoveSwitch(true);
         UISystems.StartTimer();
+
+        if (GameManager.instance.isSkip)
+            yield break;
         
         yield return new WaitForSeconds(2f);
         

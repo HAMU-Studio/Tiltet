@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // スーパー着地
-        if (m_condition.RescueState== State.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (m_condition.RescueState == State.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
            StartCoroutine(SuperLanding());
         }
@@ -287,6 +287,11 @@ public class PlayerController : MonoBehaviour
 
     public void Skip(InputAction.CallbackContext context)
     {
+        // 戦闘か探索でしか入力受け付けない
+        if (GameManager.instance.CurrentState != GameState.Search &&
+            GameManager.instance.CurrentState != GameState.EnemyBattle)
+            return;
+        
         if (context.phase == InputActionPhase.Started)
         {
             var dialogueObj = GameObject.Find("DialogueManager");

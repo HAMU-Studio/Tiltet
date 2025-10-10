@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 
 public class RescueMovement : MonoBehaviour
 {
+    private bool canAccepted = true;   // 落下したプレイヤーを受付可能か
+    
     private Rigidbody m_RB;
     private GameObject rescuePlayer;
     private bool canRescueAct;
@@ -23,12 +25,11 @@ public class RescueMovement : MonoBehaviour
         GetComponent<Renderer>().enabled = false;
     }
 
-    // 念のためOnDestroyでも登録解除 エラー出るかも
-    /*private void OnDestroy()
+    public bool CanAccepted
     {
-        m_condition.OnStateChange -= OnStateChange;
-    }*/
-
+        get { return canAccepted; }
+        set { canAccepted = value; }
+    } 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -154,6 +155,7 @@ public class RescueMovement : MonoBehaviour
         m_condition.OnStateChange -= OnStateChange;
         m_condition = null;
         gameObject.SetActive(false);
+        canAccepted = true;
     }
 
     public void StartRescue()
@@ -174,7 +176,11 @@ public class RescueMovement : MonoBehaviour
 
     private void OnStateChange(RescueEventArgs args)
     {
-        
+        if (args.PreviousState == State.SuperLand || args.PreviousState == State.Fly)
+        {
+            if (args.CurrentState == State.None || args.CurrentState == State.Wait)
+                RescPostProcess();
+        }
     }
 
     private bool once;
@@ -182,10 +188,7 @@ public class RescueMovement : MonoBehaviour
     {
         if (once)
         {
-            if (m_condition.RescueState == State.SuperLand || m_condition.RescueState == State.None)
-            {
-                RescPostProcess();
-            }
+      
             return;
         }
         

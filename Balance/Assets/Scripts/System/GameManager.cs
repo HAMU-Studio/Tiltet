@@ -103,16 +103,14 @@ public class GameManager : MonoBehaviour
         m_life = initialLife;
     }
     
-    public IEnumerator Restart()
+    public void Restart()
     {
-        _sceneManager.StartTransition("MainStage");
+        instance.SceneManager.StartTransition("MainStage");
         currentState = GameState.Search;
         
         if (m_beforeState != GameState.StartMenu)
          PlayerDestroy();
-        
-        yield return new WaitForSeconds(1.7f);
-        InitGame(false);
+        Destroy(this);
     }
 
     /// <summary>
@@ -124,6 +122,7 @@ public class GameManager : MonoBehaviour
         {
             PlayerDestroy();
             InitLifeAndTime();
+            isSkip = true;
         }
         else
         {
@@ -142,6 +141,11 @@ public class GameManager : MonoBehaviour
     
     private void PlayerDestroy()
     {
+        if (m_playerInstances == null)
+        {
+            Debug.Log("プレイヤーインスタンスがnullです");
+            return;
+        }
         foreach (var player in m_playerInstances)
         {
             if (player == null)
@@ -174,7 +178,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            StartCoroutine(Restart());
+            Restart();
         }
         
         if (Input.GetKeyDown(KeyCode.K))
@@ -184,25 +188,25 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.G))
         {
-            _sceneManager.StartTransition("MainStage");
+            instance.SceneManager.StartTransition("MainStage");
             instance.CurrentState = GameState.Restart;
         }
         
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            _sceneManager.StartTransition("Fight");
+            instance.SceneManager.StartTransition("Fight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.H))
         {
-            _sceneManager.StartTransition("SnowFight");
+            instance.SceneManager.StartTransition("SnowFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
         
         if (Input.GetKeyDown(KeyCode.N))
         {
-            _sceneManager.StartTransition("VolcanoFight");
+            instance.SceneManager.StartTransition("VolcanoFight");
             instance.CurrentState = GameState.EnemyBattle;
         }
 
@@ -227,7 +231,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.StartTransition("GameOver");
+        instance.SceneManager.StartTransition("GameOver");
         CurrentState = GameState.GameOver;
         yield return null;
     }
@@ -240,7 +244,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         
-        _sceneManager.StartTransition("Clear");
+        instance.SceneManager.StartTransition("Clear");
        
         yield return new WaitForSeconds(1.5f);
         
@@ -262,7 +266,7 @@ public class GameManager : MonoBehaviour
 
     public void Back2StartMenu()
     {
-        _sceneManager.StartTransition("Start");
+        instance.SceneManager.StartTransition("Start");
         CurrentState = GameState.StartMenu;
         
         //ゲーム中から戻った時のためにプレイヤーいたら消す

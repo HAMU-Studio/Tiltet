@@ -56,7 +56,7 @@ namespace System
                 
             if (FieldItemsManager.instance.GetIsAcquired(gameObject.name) == false)
             {
-                FieldItemsManager.instance.GetItem(gameObject.name);
+                FieldItemsManager.instance.ItemGet(gameObject.name);
             }
                 
             Destroy(gameObject);

@@ -84,6 +84,37 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    private bool isInvisible;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isInvisible)
+            return;
+        
+        if (other.CompareTag("Volcano"))
+        {
+            m_stageMovement.IsNeutralActive = true; // Neutral 状態を有効にする
+            Debug.Log("StageMovement の Neutral 状態を有効にしました。");
+            
+            Vector3 forceDirection = -m_stageMovement.MovementAmount.normalized;    // 移動方向の反対
+
+            float forceMagnitude = 100f; 
+            Vector3 force = forceDirection * forceMagnitude; 
+
+            m_rb.AddForce(force, ForceMode.Impulse); // 力を瞬間的に加える
+
+            m_tiltControl.SetTiltResetState(true); // 傾きをリセットする状態に切り替え
+            Debug.Log("TiltReset を有効にしました。");
+
+            // 衝突時にUIや音を処理
+            InGameUISystems.instance.HitObstacle();
+            SoundManager.instance.Play("Explosion");
+
+            // Neutral 状態を数秒後に無効にする処理を開始
+            StartCoroutine(DisableNeutralStateAfterDelay(2f));
+            isInvisible = true;
+        }
+    }
+
     // Neutral 状態を遅延して無効にするコルーチン
     private IEnumerator DisableNeutralStateAfterDelay(float delay)
     {
@@ -95,5 +126,6 @@ public class StageManager : MonoBehaviour
 
         m_tiltControl.SetTiltResetState(false); // 傾きリセットを無効にする
         Debug.Log("TiltReset を無効にしました。");
+        isInvisible = false;
     }
 }
