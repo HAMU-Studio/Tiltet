@@ -497,10 +497,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  m_moveSpeed: 0.5
-  m_minSpeed: 0.1
-  m_maxSpeed: 0.2
-  m_funbariAngle: 15
+  getMoveSpeed: 2
+  m_funbariAngle: 10
   explosionRenge: {fileID: 0}
   explosionEffect: {fileID: 0}
 --- !u!114 &3363167055916773989
@@ -515,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7ef1d8c8cbdca4c846b4bc3023b1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addHight: 8
+  addHight: 5
 --- !u!95 &7191775285078264470
 Animator:
   serializedVersion: 5
