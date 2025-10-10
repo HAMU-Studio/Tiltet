@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // スーパー着地
-        if (m_condition.RescueState== State.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (m_condition.RescueState == State.Fly && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
            StartCoroutine(SuperLanding());
         }

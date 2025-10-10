@@ -692,6 +692,7 @@ GameObject:
   - component: {fileID: 4695173461609206248}
   - component: {fileID: 2781894748016751198}
   - component: {fileID: 2280751616360117683}
+  - component: {fileID: 475459523483758603}
   m_Layer: 7
   m_Name: HAM_Player
   m_TagString: Player
@@ -998,7 +999,19 @@ MonoBehaviour:
     m_ActionId: 9fb7a17c-af72-4dff-a800-ddde5b85a4e6
     m_ActionName: Player/Menu[/XInputControllerWindows/start]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2630224644554453943}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Skip
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f3fe9288-6475-4fc7-b29c-5299c19bf47d
     m_ActionName: UI/Skip[/XInputControllerWindows/buttonEast]
   - m_PersistentCalls:
@@ -1036,6 +1049,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   divisor: 2.5
   stopFixHeight: -2
+--- !u!114 &475459523483758603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4567397155698116036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65ac9d6ba8e7496c83d3c530d123bc91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  condition: {fileID: 4234192005737666924}
+  animator: {fileID: -2555470081294695687}
 --- !u!1 &4709483283158189041
 GameObject:
   m_ObjectHideFlags: 0

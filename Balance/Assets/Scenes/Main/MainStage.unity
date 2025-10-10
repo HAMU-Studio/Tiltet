@@ -6217,6 +6217,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 382668173}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &382911997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6718063636726860262, guid: 6192ff33f6d21ff46b5ef5e5ba7d1b32,
+    type: 3}
+  m_PrefabInstance: {fileID: 1643728748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef9e407c8f7544d9bf00e87b2b36bd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &383046400 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 799488921305469418, guid: aff068b163d7930498e2602051196171,
@@ -24777,6 +24789,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
+        type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 382911997}
     - target: {fileID: 14537070572405705, guid: 1415d81e42111c14ba0a0d1952421fb4,
         type: 3}
       propertyPath: UISystems
